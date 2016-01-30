@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" mode="on" history="on">
+    <description>Locality</description>
+    <caching>NO_CACHING</caching>
+    <xsltfile>forms/locality.xsl</xsltfile>
+    <element mode="ON" type="SCRIPT">
+        <events>
+            <doscript source="JAVA_CLASS">reference.page.form.LocalityForm</doscript>
+        </events>
+    </element>
+    <element mode="ON" type="INCLUDED_PAGE">
+        <value>outline</value>
+    </element>
+</rule>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary primary="RUS">
+	<sentence mode="on" keyword="Пользователь" code="20">
+		<entry lang="KAZ">Пайдаланушы</entry>
+		<entry lang="ENG">Username</entry>
+        <entry lang="CHN">用户</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Пароль" code="25">
+		<entry lang="KAZ">Құпия сөз</entry>
+		<entry lang="ENG">Password</entry>
+        <entry lang="CHN">密码</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Войти" codr="30">
+		<entry lang="KAZ">Кіру</entry>
+		<entry lang="ENG">Login</entry>
+        <entry lang="CHN">进入</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Чужой компьютер">
+		<entry lang="KAZ">Бөгде компьютер</entry>
+		<entry lang="ENG">Another's computer</entry>
+        <entry lang="CHN">别人的电脑</entry>		
+	</sentence>
+	<sentence mode="on"  keyword="Предупреждение">
+		<entry lang="KAZ">Ескерту</entry>
+		<entry lang="ENG">Warning</entry>
+        <entry lang="CHN">預防 </entry>		
+	</sentence>
+	<sentence mode="on" keyword="Отсутствует соединение с сервером">
+		<entry lang="KAZ">Сервермен байланыс орнатылмаған</entry>
+		<entry lang="ENG">No connection to the server</entry>
+        <entry lang="CHN">没有连接到服务器</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Введите имя пользователя">
+		<entry lang="KAZ">Қолданушының аты - жөнын енгізіңіз</entry>
+		<entry lang="ENG">Enter your user name</entry>
+        <entry lang="CHN">输入您的用户名</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Заполните пароль">
+		<entry lang="KAZ">Қүпия сөзын енгізіңіз</entry>
+		<entry lang="ENG">enter the password</entry>
+        <entry lang="CHN">输入密码</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Электронный докуменооборот">
+		<entry lang="KAZ">Электронды құжат айналымы</entry>
+		<entry lang="ENG">electronic document management</entry>
+        <entry lang="CHN">电子文档管理</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Завершить работу">
+		<entry lang="KAZ">Жұмысты бiтiру</entry>
+		<entry lang="ENG">Complete the work</entry>
+        <entry lang="CHN">完成工作</entry>		
+	</sentence>
+	<sentence mode="on" keyword="Запомнить пароль">
+		<entry lang="KAZ">парольнi еске сақтау</entry>
+		<entry lang="ENG">remember me</entry>
+        <entry lang="CHN">记得我</entry>		
+	</sentence>	
+</vocabulary>

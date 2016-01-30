@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" id="balanceholder" mode="on" history="off">
+	<description>Льготники</description>
+	<caching>NO_CACHING</caching>
+	<xsltfile>pages/balanceholder_list.xsl</xsltfile>
+	<element mode="ON" type="INCLUDED_PAGE">
+		<name>outline</name>
+		<value>outline</value>
+	</element>
+	<element mode="ON" type="SCRIPT">
+		<name>view_content</name>
+		<events>
+			<doscript source="file">workspace.page.workspace_balanceholder.DoScript</doscript>
+		</events>
+	</element>
+	<caption name="category" source="KEYWORD">Льготники</caption>
+	<caption name="viewnamecaption" source="KEYWORD">Льготники</caption>
+	<caption name="viewtext" source="KEYWORD">Наименование</caption>
+	<caption name="viewtext1" source="KEYWORD">Юридический адрес</caption>
+	<caption name="viewtext2" source="KEYWORD">БИН</caption>
+	<caption name="page" source="KEYWORD">Страница</caption>
+	<caption name="documents" source="KEYWORD">Документов</caption>
+	<caption name="updates" source="KEYWORD">Обновлено</caption>
+	<caption name="from" source="KEYWORD">из</caption>
+	<caption name="btnNewDocument" source="KEYWORD">Добавить</caption>
+	<caption name="btnDelete" source="KEYWORD">Удалить</caption>
+	<caption name="helpcaption" source="KEYWORD">Помощь</caption>
+	<caption name="logout" source="KEYWORD">Завершить работу</caption>
+	<caption name="view_userprofile" source ="KEYWORD">Посмотреть свойства текущего пользователя</caption>
+	<caption name="search" source ="KEYWORD">Поиск</caption>
+</rule>

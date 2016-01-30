@@ -1,0 +1,16 @@
+stini municipalproperty.init.FillReportTemplates
+stini reference.init.FillCountries
+stini reference.init.FillRegions
+stini reference.init.FillDistricts
+stini reference.init.FillLocalities
+stini reference.init.FillStreets
+stini reference.init.FillPositions
+stini reference.init.FillPropertyCode
+stini reference.init.FillReceivingReasons
+stini reference.init.FillBuildingMaterials
+stini reference.init.FillStructureTypes
+stini reference.init.FillTags
+stini staff.init.FillDefaultLabels
+stini staff.init.FillDefaultRoles
+stini staff.init.FillDefaultOrgs
+stini staff.init.FillTestUsers

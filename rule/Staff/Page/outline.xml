@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" mode="on">
+    <description>Outline</description>
+    <caching>NO_CACHING</caching>
+    <element mode="ON" type="SCRIPT">
+        <name>app_menu</name>
+        <events>
+            <doscript source="JAVA_CLASS">staff.navigator.MainNavigator</doscript>
+        </events>
+    </element>
+    <element mode="ON" type="INCLUDED_PAGE">
+        <value>common-captions</value>
+    </element>
+</rule>

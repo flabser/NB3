@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" id="downloadfile" mode="on" history="off" anonymous="on">
+    <rununderuser source="STATIC" type="TEXT">[supervisor]</rununderuser>
+    <caching>NO_CACHING</caching>
+	<element mode="ON" type="SCRIPT">
+		<name>view_content</name>
+		<events>
+			<doscript source="file">workspace.page.downloadfile.DoScript</doscript>
+		</events>
+	</element>
+</rule>
