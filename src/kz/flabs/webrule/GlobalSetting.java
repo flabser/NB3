@@ -302,62 +302,6 @@ public class GlobalSetting {
 				}
 			}
 
-			try {
-				String delay = XMLUtil.getTextContent(doc, "/rule/markdelaysec");
-				if (!delay.trim().equals("")) {
-					int delayInSec = Integer.parseInt(delay);
-					markAsReadMsDelay = delayInSec * 1000;
-				} else {
-					markAsReadMsDelay = 5000;
-				}
-			} catch (Exception e) {
-				markAsReadMsDelay = 5000;
-			}
-
-			NodeList schedProcList = XMLUtil.getNodeList(doc, "/rule/daemons/daemon");
-			for (int i = 0; i < schedProcList.getLength(); i++) {
-				Node node = schedProcList.item(i);
-				Node schedNode = XMLUtil.getNode(node, "scheduler", false);
-				ScheduleSettings ss = new ScheduleSettings(path, schedNode);
-				AppDaemonRule adr = new AppDaemonRule();
-				adr.handlerClass = XMLUtil.getTextContent(node, "class", false);
-				adr.scheduleSettings = ss;
-				adr.setScheduleMode(ss.isOn);
-				adr.init(env);
-
-				schedSettings.add(adr);
-			}
-
-			Node schedNode = XMLUtil.getNode(doc, "/rule/daemons/cyclecontrol/scheduler", false);
-			if (schedNode != null) {
-				cycleContrSchedSetings = new ScheduleSettings(path, schedNode);
-			} else {
-				cycleContrSchedSetings = new ScheduleSettings(360);
-				AppEnv.logger.warningLogEntry("CycleControl schedule has not set, it will use default parameters");
-			}
-
-			schedNode = XMLUtil.getNode(doc, "/rule/daemons/timewaiting/scheduler", false);
-			if (schedNode != null) {
-				timeWaitingSchedSettings = new ScheduleSettings(path, schedNode);
-			} else {
-				timeWaitingSchedSettings = new ScheduleSettings(360);
-				AppEnv.logger.warningLogEntry("TimeWaiting schedule has not set, it will use default parameters");
-			}
-
-			schedNode = XMLUtil.getNode(doc, "/rule/daemons/recalculator/scheduler", false);
-			if (schedNode != null) {
-				recalcualtorSchedSettings = new ScheduleSettings(path, schedNode);
-			} else {
-				recalcualtorSchedSettings = new ScheduleSettings(360);
-				AppEnv.logger.warningLogEntry("Recalcualtor schedule has not set, it will use default parameters");
-			}
-
-			Node syncNode = XMLUtil.getNode(doc, "/rule/ddb", false);
-			if (syncNode != null) {
-				syncroGlobalSettings = new SynchroGlobalSetting(syncNode);
-			} else {
-				syncroGlobalSettings = new SynchroGlobalSetting();
-			}
 		} catch (FileNotFoundException fnfe) {
 			AppEnv.logger.errorLogEntry(fnfe.toString());
 		} catch (Exception e) {

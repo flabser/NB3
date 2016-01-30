@@ -48,7 +48,7 @@ public class WebRuleProvider implements Const {
 	}
 
 	public void loadRules() {
-		loadHandlers();
+		// loadHandlers();
 	}
 
 	public IRule getRule(String ruleType, String ruleID) throws RuleException, QueryFormulaParserException {
@@ -132,7 +132,7 @@ public class WebRuleProvider implements Const {
 	public Collection<HandlerRule> getHandlerRules(boolean reload) throws RuleException {
 		if (reload) {
 			handlerRuleMap.clear();
-			loadHandlers();
+			// loadHandlers();
 		}
 		return handlerRuleMap.values();
 

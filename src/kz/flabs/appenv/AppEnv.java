@@ -91,10 +91,7 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	public void setDataBase(IDatabase db) {
 		if (!db.getDbID().equalsIgnoreCase("NoDatabase")) {
 			int cv = db.getVersion();
-			if (cv != Server.necessaryDbVersion) {
-				Server.logger.warningLogEntry("Database version do not accord to compatible version with core of the server (necessary:"
-				        + Server.necessaryDbVersion + ", current=" + cv + ")");
-			}
+
 			this.dataBase = db;
 			// checkLangsSupport();
 		} else {

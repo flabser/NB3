@@ -24,6 +24,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
+import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.DocumentAccessException;
@@ -42,16 +43,12 @@ import kz.flabs.webrule.module.ExternalModuleType;
 import kz.pchelka.daemon.system.LogsZipRule;
 import kz.pchelka.daemon.system.TempFileCleanerRule;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.messenger.ConnectManager;
-import kz.pchelka.messenger.InstMessageListener;
 import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import kz.pchelka.server.Server;
 
 import org.jivesoftware.smack.ChatManager;
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -135,6 +132,21 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		logger = Server.logger;
 		loadProperties();
 		initProcess();
+		try {
+			systemBase = new kz.flabs.dataengine.h2.SystemDatabase();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabasePoolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static void initProcess() {
@@ -175,14 +187,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 				}
 			} catch (Exception e) {
 				noWSAuth = false;
-			}
-
-			try {
-				if (XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/@mode").equalsIgnoreCase("on")) {
-					adminConsoleEnable = true;
-				}
-			} catch (Exception nfe) {
-				adminConsoleEnable = false;
 			}
 
 			delaySchedulerStart = XMLUtil.getNumberContent(xmlDocument, "/nextbase/scheduler/startdelaymin", 1);
@@ -253,67 +257,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 				logger.normalLogEntry("MailAgent is not set");
 				SMTPHost = "";
 				defaultSender = "";
-			}
-
-			try {
-				if (adminConsoleEnable) {
-					remoteConsole = XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/@mode").equalsIgnoreCase("on") ? true
-					        : false;
-					if (remoteConsole) {
-						remoteConsoleServer = XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/server");
-						remoteConsolePort = Integer.parseInt(XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/port"));
-						logger.normalLogEntry("RemoteConsole server: " + remoteConsoleServer + " port: " + remoteConsolePort);
-					} else {
-						logger.normalLogEntry("RemoteConsole disabled");
-					}
-				}
-			} catch (NumberFormatException nfe) {
-				logger.normalLogEntry("RemoteConsole is not set");
-				remoteConsole = false;
-				remoteConsoleServer = "";
-				remoteConsolePort = 0;
-			}
-
-			try {
-				xmppEnable = XMLUtil.getTextContent(xmlDocument, "/nextbase/instmsgagent/@mode").equalsIgnoreCase("on") ? true : false;
-				if (xmppEnable) {
-					XMPPServer = XMLUtil.getTextContent(xmlDocument, "/nextbase/instmsgagent/xmppserver");
-					XMPPServerPort = XMLUtil.getNumberContent(xmlDocument, "/nextbase/instmsgagent/xmppserverport", 5222);
-					XMPPLogin = XMLUtil.getTextContent(xmlDocument, "/nextbase/instmsgagent/xmpplogin");
-					XMPPPwd = XMLUtil.getTextContent(xmlDocument, "/nextbase/instmsgagent/xmpppwd");
-					logger.normalLogEntry("InstantMessengerAgent is going to connect to server: " + XMPPServer);
-
-					if (!XMPPServer.isEmpty() && !XMPPLogin.isEmpty()) {
-						ConnectManager chMan = new ConnectManager();
-						chMan.start();
-					}
-				}
-
-				XMPPServerEnable = true;
-
-				ConnectionConfiguration config = new ConnectionConfiguration(XMPPServer, XMPPServerPort);
-				SASLAuthentication.supportSASLMechanism("PLAIN");
-
-				config.setCompressionEnabled(true);
-				config.setSASLAuthenticationEnabled(true);
-
-				connection = new XMPPConnection(config);
-				connection.connect();
-				connection.login(XMPPLogin, XMPPPwd, XMPPLogin);
-				XMPPServerEnable = true;
-				InstMessageListener listener = new InstMessageListener();
-				chatmanager = connection.getChatManager();
-				chatmanager.addChatListener(listener);
-				/*
-				 * try{ RobotBorner l = new RobotBorner(); if (l.populate()){
-				 * vocabulary = l.getVocabulary(); } }catch(LocalizatorException
-				 * le){ AppEnv.logger.verboseLogEntry(le.getMessage()); }
-				 */
-
-			} catch (NumberFormatException nfe) {
-				logger.normalLogEntry("InstantMessengerAgent is not enabled");
-			} catch (Exception e) {
-				verboseLogging = false;
 			}
 
 			try {
