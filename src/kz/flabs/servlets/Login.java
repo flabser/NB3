@@ -31,8 +31,6 @@ import kz.flabs.users.UserSession;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLResponse;
-import kz.flabs.webrule.constants.RunMode;
-import kz.flabs.webrule.eds.EDSSetting;
 import kz.pchelka.env.Environment;
 
 import org.apache.catalina.realm.RealmBase;
@@ -153,11 +151,6 @@ public class Login extends HttpServlet implements Const {
 						AppEnv.logger.normalLogEntry(userID + " has connected");
 						IUsersActivity ua = env.getDataBase().getUserActivity();
 						ua.postLogin(userSession.browserType, user);
-
-						EDSSetting es = env.ruleProvider.global.edsSettings;
-						if (es.isOn == RunMode.ON) {
-							this.addEDSCookies(es, response);
-						}
 
 						String redirect = "";
 						if (userSession.browserType == BrowserType.APPLICATION) {
@@ -360,21 +353,6 @@ public class Login extends HttpServlet implements Const {
 				}
 			}
 		}
-	}
-
-	public static void addEDSCookies(EDSSetting es, HttpServletResponse response) {
-		Cookie providerCook = new Cookie("provider", es.provider != null ? es.provider.toString() : "");
-		providerCook.setMaxAge(99999);
-		providerCook.setPath("/");
-		response.addCookie(providerCook);
-		Cookie digestAlgoCook = new Cookie("digestAlgo", es.digestAlg != null ? es.digestAlg.toString() : "");
-		digestAlgoCook.setMaxAge(99999);
-		digestAlgoCook.setPath("/");
-		response.addCookie(digestAlgoCook);
-		Cookie signAlgoCook = new Cookie("signAlgo", es.signAlg != null ? es.signAlg.toString() : "");
-		signAlgoCook.setMaxAge(99999);
-		signAlgoCook.setPath("/");
-		response.addCookie(signAlgoCook);
 	}
 
 	private int getQuestionAttempCount(HttpSession jses) {

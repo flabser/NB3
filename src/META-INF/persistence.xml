@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="MunicipalProperty" transaction-type="RESOURCE_LOCAL">
+		<!-- Specific application entities -->
+		<class>municipalproperty.model.Property</class>
+		<class>municipalproperty.model.Vehicle</class>
+		<class>municipalproperty.model.RealEstate</class>
+		<class>municipalproperty.model.PersonalEstate</class>
+		<class>municipalproperty.model.Equipment</class>
+		<class>municipalproperty.model.EngineeringInfrastaff</class>
+		<class>municipalproperty.model.StrategicObject</class>
+		<class>municipalproperty.model.IntangibleAsset</class>
+		<class>municipalproperty.model.ReportTemplate</class>
+		<class>municipalproperty.model.Order</class>
+		<!-- Common Staff module entities -->
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<!-- Common Reference module entities -->
+		<class>reference.model.Country</class>	
+		<class>reference.model.Region</class>
+		<class>reference.model.District</class>
+		<class>reference.model.Locality</class>
+		<class>reference.model.Street</class>			
+		<class>reference.model.Position</class>	
+		<class>reference.model.Tag</class>	
+		<!-- Specific Reference module entities -->
+		<class>reference.model.PropertyCode</class>	
+		<class>reference.model.BuildingMaterial</class>	
+		<class>reference.model.StructureType</class>	
+		<class>reference.model.ReceivingReason</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>	
+	<persistence-unit name="Accountant" transaction-type="RESOURCE_LOCAL">
+		<!-- Specific application entities -->
+		<class>municipalproperty.model.Property</class>
+		<class>municipalproperty.model.Vehicle</class>
+		<class>municipalproperty.model.RealEstate</class>
+		<class>municipalproperty.model.PersonalEstate</class>
+		<class>municipalproperty.model.Equipment</class>
+		<class>municipalproperty.model.EngineeringInfrastaff</class>
+		<class>municipalproperty.model.StrategicObject</class>
+		<class>municipalproperty.model.IntangibleAsset</class>
+		<!-- Common Staff module entities -->			
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<!-- Common Reference module entities -->	
+		<class>reference.model.Country</class>	
+		<class>reference.model.Region</class>
+		<class>reference.model.District</class>
+		<class>reference.model.Locality</class>
+		<class>reference.model.Street</class>	
+		<class>reference.model.Position</class>
+		<class>reference.model.Tag</class>	
+		<!-- Specific Reference module entities -->
+		<class>reference.model.PropertyCode</class>	
+		<class>reference.model.BuildingMaterial</class>	
+		<class>reference.model.StructureType</class>
+		<class>reference.model.ReceivingReason</class>	
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>		
+	<persistence-unit name="Staff" transaction-type="RESOURCE_LOCAL">
+		<!-- Common Staff module entities -->		
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<!-- Common Reference module entities -->
+		<class>reference.model.Country</class>	
+		<class>reference.model.Region</class>
+		<class>reference.model.District</class>
+		<class>reference.model.Locality</class>
+		<class>reference.model.Street</class>	
+		<class>reference.model.Position</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>	
+	<persistence-unit name="Reference" transaction-type="RESOURCE_LOCAL">
+		<!-- Common Staff module entities -->		
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<!-- Common Reference module entities -->
+		<class>reference.model.Country</class>	
+		<class>reference.model.Region</class>
+		<class>reference.model.District</class>
+		<class>reference.model.Locality</class>
+		<class>reference.model.Street</class>	
+		<class>reference.model.Position</class>
+		<class>reference.model.Tag</class>	
+		<!-- Specific Reference module entities -->
+		<class>reference.model.PropertyCode</class>	
+		<class>reference.model.BuildingMaterial</class>	
+		<class>reference.model.StructureType</class>
+		<class>reference.model.ReceivingReason</class>	
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>	
+	<persistence-unit name="Workspace" transaction-type="RESOURCE_LOCAL">
+		<!-- Common Staff module entities -->		
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>	
+</persistence>

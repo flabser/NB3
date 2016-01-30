@@ -66,9 +66,9 @@ public class Form extends Content implements Const {
 		}
 	}
 
-	public String getDefaultFieldsAsXML(int parentDocID, int parentDocType, int page, String lang)
-			throws RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException,
-			QueryException, LocalizatorException, ClassNotFoundException, _Exception, ComplexObjectException {
+	public String getDefaultFieldsAsXML(int parentDocID, int parentDocType, int page, String lang) throws RuleException, DocumentException,
+	        DocumentAccessException, QueryFormulaParserException, QueryException, LocalizatorException, ClassNotFoundException, _Exception,
+	        ComplexObjectException {
 
 		StringBuffer xmlContent = new StringBuffer(1000);
 		StringBuffer fieldList = new StringBuffer(100);
@@ -106,8 +106,7 @@ public class Form extends Content implements Const {
 						}
 						fieldList.append("<entry " + attrVal + ">" + XMLUtil.getAsTagValue(val[0]) + "</entry>");
 					}
-					xmlContent
-							.append("<" + sf.name + caption + " islist=\"true\"\">" + fieldList + "</" + sf.name + ">");
+					xmlContent.append("<" + sf.name + caption + " islist=\"true\"\">" + fieldList + "</" + sf.name + ">");
 				} else {
 					if (vals.size() == 1) {
 						String val[] = vals.get(0);
@@ -125,16 +124,15 @@ public class Form extends Content implements Const {
 		String captions = getCaptions(captionTextSupplier, rule.captions);
 		String mode[] = getEditModeAttr(lang);
 
-		return "<document isvalid=\"true\"  " + "parentdocid=\"" + parentDocID + "\" parentdoctype=\"" + parentDocType
-				+ "\" doctype=\"" + rule.docType + "\" " + "openfrompage=\"" + page + "\" status=\"new\" viewtext=\"\" "
-				+ mode[0] + ">" + outlineContent + "<actions>" + actions + "</actions><fields>" + xmlContent
-				+ "</fields>" + mode[1] + captions + "</document>";
+		return "<document isvalid=\"true\"  " + "parentdocid=\"" + parentDocID + "\" parentdoctype=\"" + parentDocType + "\" doctype=\""
+		        + rule.docType + "\" " + "openfrompage=\"" + page + "\" status=\"new\" viewtext=\"\" " + mode[0] + ">" + outlineContent + "<actions>"
+		        + actions + "</actions><fields>" + xmlContent + "</fields>" + mode[1] + captions + "</document>";
 
 	}
 
-	public String getFormAsXML(BaseDocument doc, int page, int parentDocID, int parentDocType, String lang)
-			throws DocumentException, DocumentAccessException, RuleException, QueryFormulaParserException,
-			QueryException, LocalizatorException, ClassNotFoundException, _Exception, ComplexObjectException {
+	public String getFormAsXML(BaseDocument doc, int page, int parentDocID, int parentDocType, String lang) throws DocumentException,
+	        DocumentAccessException, RuleException, QueryFormulaParserException, QueryException, LocalizatorException, ClassNotFoundException,
+	        _Exception, ComplexObjectException {
 		StringBuffer fieldsXML = new StringBuffer(1000);
 		String actions = "";
 		SourceSupplier captionTextSupplier = new SourceSupplier(env, lang);
@@ -166,17 +164,16 @@ public class Form extends Content implements Const {
 
 		String mode[] = getEditModeAttr(doc, lang);
 
-		return "<document isvalid=\"" + doc.isValid + "\" isread=\"" + doc.isRead() + "\" id=\"" + doc.getDdbID()
-				+ "\" " + "docid=\"" + doc.getDocID() + "\" doctype=\"" + doc.docType + "\" hastopic=\""
-				+ (doc.hasDiscussion ? 1 : 0) + "\" " + "parentdocid=\"" + doc.parentDocID + "\" parentdoctype=\""
-				+ doc.parentDocType + "\" " + "openfrompage=\"" + page + "\" status=\"existing\" viewtext=\""
-				+ XMLUtil.getAsTagValue(viewText) + "\"" + mode[0] + ">" + outlineContent + "<actions>" + actions
-				+ "</actions>" + fieldsXML + mode[1] + captions + "</document>";
+		return "<document isvalid=\"" + doc.isValid + "\" isread=\"" + doc.isRead() + "\" id=\"" + doc.getDdbID() + "\" " + "docid=\""
+		        + doc.getDocID() + "\" doctype=\"" + doc.docType + "\" hastopic=\"" + (doc.hasDiscussion ? 1 : 0) + "\" " + "parentdocid=\""
+		        + doc.parentDocID + "\" parentdoctype=\"" + doc.parentDocType + "\" " + "openfrompage=\"" + page
+		        + "\" status=\"existing\" viewtext=\"" + XMLUtil.getAsTagValue(viewText) + "\"" + mode[0] + ">" + outlineContent + "<actions>"
+		        + actions + "</actions>" + fieldsXML + mode[1] + captions + "</document>";
 
 	}
 
-	public String getFormAsXML(BaseDocument doc, String lang) throws DocumentException, DocumentAccessException,
-			RuleException, QueryFormulaParserException, QueryException, ComplexObjectException {
+	public String getFormAsXML(BaseDocument doc, String lang) throws DocumentException, DocumentAccessException, RuleException,
+	        QueryFormulaParserException, QueryException, ComplexObjectException {
 		StringBuffer xmlText = new StringBuffer(1000);
 		SourceSupplier captionTextSupplier = new SourceSupplier(env, lang);
 
@@ -190,9 +187,8 @@ public class Form extends Content implements Const {
 			viewText = "";
 		}
 
-		return "<document isvalid=\"" + doc.isValid + "\" id=\"" + doc.getDdbID() + "\" " + "hastopic=\""
-				+ (doc.hasDiscussion ? 1 : 0) + "\" " + "viewtext=\"" + XMLUtil.getAsTagValue(viewText) + "\" >"
-				+ xmlText + "</document>";
+		return "<document isvalid=\"" + doc.isValid + "\" id=\"" + doc.getDdbID() + "\" " + "hastopic=\"" + (doc.hasDiscussion ? 1 : 0) + "\" "
+		        + "viewtext=\"" + XMLUtil.getAsTagValue(viewText) + "\" >" + xmlText + "</document>";
 	}
 
 	/**
@@ -201,9 +197,9 @@ public class Form extends Content implements Const {
 	 * @throws ComplexObjectException
 	 **/
 	@Deprecated
-	public XMLResponse save(String key, HashMap<String, String[]> fields, int parentDocID, int parentDocType,
-			int pageSize, String currentLang) throws DocumentAccessException, DocumentException, RuleException,
-					QueryFormulaParserException, ClassNotFoundException, ComplexObjectException {
+	public XMLResponse save(String key, HashMap<String, String[]> fields, int parentDocID, int parentDocType, int pageSize, String currentLang)
+	        throws DocumentAccessException, DocumentException, RuleException, QueryFormulaParserException, ClassNotFoundException,
+	        ComplexObjectException {
 		IDatabase db = env.getDataBase();
 		XMLResponse result = new XMLResponse(ResponseType.SAVE_FORM);
 		String redirectView = "";
@@ -214,8 +210,7 @@ public class Form extends Content implements Const {
 			int docID = Integer.parseInt(key);
 			switch (rule.docType) {
 			case DOCTYPE_MAIN:
-				doc = db.getMainDocumentByID(docID, userSession.currentUser.getAllUserGroups(),
-						userSession.currentUser.getUserID());
+				doc = db.getMainDocumentByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 				if (parentDocID != 0 && parentDocType != DOCTYPE_UNKNOWN) {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
 						if (doc.isNewDoc()) {
@@ -224,8 +219,7 @@ public class Form extends Content implements Const {
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -234,16 +228,14 @@ public class Form extends Content implements Const {
 				if (parentDocID == 0 || parentDocType == DOCTYPE_UNKNOWN) {
 					result.resultFlag = false;
 
-					doc = db.getTasks().getTaskByID(docID, userSession.currentUser.getAllUserGroups(),
-							userSession.currentUser.getUserID());
+					doc = db.getTasks().getTaskByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 					doc.parentDocID = parentDocID;
 					doc.parentDocType = parentDocType;
 					((Task) doc).setResolType(TaskType.TASK);
 					// return result;
 				} else {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
-						doc = db.getTasks().getTaskByID(docID, userSession.currentUser.getAllUserGroups(),
-								userSession.currentUser.getUserID());
+						doc = db.getTasks().getTaskByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 						if (doc.isNewDoc()) {
 							doc.parentDocID = parentDocID;
 							doc.parentDocType = parentDocType;
@@ -255,8 +247,7 @@ public class Form extends Content implements Const {
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -269,26 +260,24 @@ public class Form extends Content implements Const {
 				} else {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
 						doc = db.getExecutions().getExecutionByID(docID, userSession.currentUser.getAllUserGroups(),
-								userSession.currentUser.getUserID());
+						        userSession.currentUser.getUserID());
 						if (doc.isNewDoc()) {
 							doc.parentDocID = parentDocID;
 							doc.parentDocType = parentDocType;
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
 				break;
 			case DOCTYPE_PROJECT:
-				doc = db.getProjects().getProjectByID(docID, userSession.currentUser.getAllUserGroups(),
-						userSession.currentUser.getUserID());
+				doc = db.getProjects().getProjectByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 				break;
 			case DOCTYPE_GLOSSARY:
-				doc = db.getGlossaries().getGlossaryDocumentByID(docID, true,
-						userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
+				doc = db.getGlossaries().getGlossaryDocumentByID(docID, true, userSession.currentUser.getAllUserGroups(),
+				        userSession.currentUser.getUserID());
 				if (parentDocID != 0 && parentDocType != DOCTYPE_UNKNOWN) {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
 						if (doc.isNewDoc()) {
@@ -297,8 +286,7 @@ public class Form extends Content implements Const {
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -313,12 +301,10 @@ public class Form extends Content implements Const {
 				doc = db.getStructure().getEmployer(docID, userSession.currentUser);
 				break;
 			case DOCTYPE_GROUP:
-				doc = db.getStructure().getGroup(docID, userSession.currentUser.getAllUserGroups(),
-						userSession.currentUser.getUserID());
+				doc = db.getStructure().getGroup(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 				break;
 			case DOCTYPE_TOPIC:
-				doc = db.getForum().getTopicByID(docID, userSession.currentUser.getAllUserGroups(),
-						userSession.currentUser.getUserID());
+				doc = db.getForum().getTopicByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 				if (parentDocID != 0 && parentDocType != DOCTYPE_UNKNOWN) {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
 						if (doc.isNewDoc()) {
@@ -327,15 +313,13 @@ public class Form extends Content implements Const {
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
 				break;
 			case DOCTYPE_POST:
-				doc = db.getForum().getPostByID(docID, userSession.currentUser.getAllUserGroups(),
-						userSession.currentUser.getUserID());
+				doc = db.getForum().getPostByID(docID, userSession.currentUser.getAllUserGroups(), userSession.currentUser.getUserID());
 				if (parentDocID != 0 && parentDocType != DOCTYPE_UNKNOWN) {
 					if (db.hasDocumentByComplexID(parentDocID, parentDocType)) {
 						if (doc.isNewDoc()) {
@@ -344,8 +328,7 @@ public class Form extends Content implements Const {
 						}
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -361,8 +344,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -377,14 +359,12 @@ public class Form extends Content implements Const {
 				} else {
 					((Task) doc).setResolType(TaskType.CONSIGN);
 				}
-				if (db.hasDocumentByComplexID(parentDocID, parentDocType)
-						|| ((Task) doc).getResolType() == TaskType.TASK) {
+				if (db.hasDocumentByComplexID(parentDocID, parentDocType) || ((Task) doc).getResolType() == TaskType.TASK) {
 					doc.parentDocID = parentDocID;
 					doc.parentDocType = parentDocType;
 				} else {
 					result.resultFlag = false;
-					result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-							+ parentDocType);
+					result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 					return result;
 				}
 				break;
@@ -400,8 +380,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -417,8 +396,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -440,8 +418,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -459,8 +436,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -477,8 +453,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -492,8 +467,7 @@ public class Form extends Content implements Const {
 						doc.parentDocType = parentDocType;
 					} else {
 						result.resultFlag = false;
-						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype="
-								+ parentDocType);
+						result.addMessage("Unable to get parent document parentid=" + parentDocID + ", parentdoctype=" + parentDocType);
 						return result;
 					}
 				}
@@ -608,9 +582,8 @@ public class Form extends Content implements Const {
 		return result;
 	}
 
-	private StringBuffer getDocumentAsXML(FormDataSourceSupplier fdss, SourceSupplier captionTextSupplier)
-			throws DocumentException, DocumentAccessException, RuleException, QueryFormulaParserException,
-			QueryException, ComplexObjectException {
+	private StringBuffer getDocumentAsXML(FormDataSourceSupplier fdss, SourceSupplier captionTextSupplier) throws DocumentException,
+	        DocumentAccessException, RuleException, QueryFormulaParserException, QueryException, ComplexObjectException {
 		String fieldList = "";
 		StringBuffer xmlText = new StringBuffer(1000);
 		xmlText.append("<fields>");
@@ -637,8 +610,7 @@ public class Form extends Content implements Const {
 						}
 						fieldList += "<entry " + attrVal + ">" + XMLUtil.getAsTagValue(val[0]) + "</entry>";
 					}
-					xmlText.append(
-							"<" + sf.name + " islist=\"true\"" + caption + ">" + fieldList + "</" + sf.name + ">");
+					xmlText.append("<" + sf.name + " islist=\"true\"" + caption + ">" + fieldList + "</" + sf.name + ">");
 				} else {
 					if (vals.size() == 1) {
 						String val[] = vals.get(0);
@@ -656,52 +628,37 @@ public class Form extends Content implements Const {
 		return xmlText.append("</fields>");
 	}
 
-	protected String[] getEditModeAttr(String lang) throws RuleException, DocumentException, DocumentAccessException,
-			QueryFormulaParserException, QueryException, LocalizatorException {
+	protected String[] getEditModeAttr(String lang) throws RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException,
+	        QueryException, LocalizatorException {
 		String[] result = new String[2];
-		if (env.globalSetting.edsSettings.isOn == RunMode.ON) {
-			result[0] = " editmode=\"edit\" canbesign=\"1\" sign=\"0\"";
-		} else {
-			result[0] = " editmode=\"edit\" canbesign=\"0\" sign=\"-1\"";
-		}
+		/*
+		 * if (env.globalSetting.edsSettings.isOn == RunMode.ON) { result[0] =
+		 * " editmode=\"edit\" canbesign=\"1\" sign=\"0\""; } else { result[0] =
+		 * " editmode=\"edit\" canbesign=\"0\" sign=\"-1\""; }
+		 */
 		result[1] = getSpravFieldSet(userSession.currentUser, lang);
 		return result;
 	}
 
-	protected String[] getEditModeAttr(BaseDocument doc, String lang) throws RuleException, DocumentException,
-			DocumentAccessException, QueryFormulaParserException, QueryException, LocalizatorException {
+	protected String[] getEditModeAttr(BaseDocument doc, String lang) throws RuleException, DocumentException, DocumentAccessException,
+	        QueryFormulaParserException, QueryException, LocalizatorException {
 		String[] result = new String[2];
-		if (env.globalSetting.edsSettings.isOn == RunMode.ON) {
-			switch (doc.editMode) {
-			case EDITMODE_READONLY:
-				result[0] = " editmode=\"readonly\" canbesign=\"1\" ";
-				result[1] = "";
-				return result;
-			case EDITMODE_EDIT:
-				result[0] = " editmode=\"edit\" canbesign=\"1\" ";
-				result[1] = getSpravFieldSet(userSession.currentUser, lang);
-				return result;
-			default:
-				result[0] = " editmode=\"noaccess\" ";
-				result[1] = "";
-				return result;
-			}
-		} else {
-			switch (doc.editMode) {
-			case EDITMODE_READONLY:
-				result[0] = " editmode=\"readonly\" canbesign=\"0\" ";
-				result[1] = "";
-				return result;
-			case EDITMODE_EDIT:
-				result[0] = " editmode=\"edit\" canbesign=\"0\" ";
-				result[1] = getSpravFieldSet(userSession.currentUser, lang);
-				return result;
-			default:
-				result[0] = " editmode=\"noaccess\" ";
-				result[1] = "";
-				return result;
-			}
+
+		switch (doc.editMode) {
+		case EDITMODE_READONLY:
+			result[0] = " editmode=\"readonly\" canbesign=\"0\" ";
+			result[1] = "";
+			return result;
+		case EDITMODE_EDIT:
+			result[0] = " editmode=\"edit\" canbesign=\"0\" ";
+			result[1] = getSpravFieldSet(userSession.currentUser, lang);
+			return result;
+		default:
+			result[0] = " editmode=\"noaccess\" ";
+			result[1] = "";
+			return result;
 		}
+
 	}
 
 	public class ShowValue {

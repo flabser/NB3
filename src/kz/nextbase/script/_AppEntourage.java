@@ -44,10 +44,6 @@ public class _AppEntourage {
 		return env.appType;
 	}
 
-	public String edsIsOn() {
-		return env.globalSetting.edsSettings.isOn.toString();
-	}
-
 	public _ViewEntryCollection getAvailableLangs() throws _Exception {
 		ViewEntryCollection vec = new ViewEntryCollection(ses, 100);
 
@@ -95,7 +91,7 @@ public class _AppEntourage {
 						if (uap.appName.equals(appEnv.appType)) {
 
 							String p[] = { appEnv.appType, appEnv.globalSetting.defaultRedirectURL, appEnv.globalSetting.logo,
-									appEnv.globalSetting.orgName, appEnv.globalSetting.description };
+							        appEnv.globalSetting.orgName, appEnv.globalSetting.description };
 							try {
 								IViewEntry entry = new ViewEntry(p);
 								vec.add(entry);

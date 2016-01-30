@@ -35,7 +35,6 @@ import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.runtimeobj.document.structure.UserRoleCollection;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.flabs.webrule.eds.EDSSetting;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.scheduler.ScheduleSettings;
 import kz.flabs.webrule.synchronizer.SynchroGlobalSetting;
@@ -91,7 +90,6 @@ public class GlobalSetting {
 	public Skin defaultSkin;
 	@Deprecated
 	public SynchroGlobalSetting syncroGlobalSettings;
-	public EDSSetting edsSettings;
 	public int markAsReadMsDelay;
 	public ArrayList<AppDaemonRule> schedSettings = new ArrayList<AppDaemonRule>();
 	@Deprecated
@@ -121,7 +119,9 @@ public class GlobalSetting {
 
 	public GlobalSetting(String path, AppEnv env) {
 		globalFilePath = path;
+
 		rulePath = "rule" + File.separator + env.appType;
+
 		try {
 			Document doc = null;
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -175,7 +175,7 @@ public class GlobalSetting {
 					Node pw = doc.getElementsByTagName("connectionid").item(0);
 
 					if (!dbUserName.trim().equals("") || !dbPassword.trim().equals("")
-							|| database.getLastChild().getNodeName().contains("connectionid")) {
+					        || database.getLastChild().getNodeName().contains("connectionid")) {
 
 						if (dbUserName.trim().equals("") && dbPassword.trim().equals("")) {
 							String temp = pw.getTextContent();
@@ -196,7 +196,7 @@ public class GlobalSetting {
 						}
 
 						if (!dbUserName.trim().equals("") && !dbPassword.trim().equals("")
-								&& database.getLastChild().getNodeName().contains("connectionid")) {
+						        && database.getLastChild().getNodeName().contains("connectionid")) {
 							database.removeChild(pw);
 						}
 						deserializeKey();
@@ -297,7 +297,7 @@ public class GlobalSetting {
 						roleCollection.put(role);
 					} else {
 						AppEnv.logger
-						.warningLogEntry("A role name \"supervisor\" is reserved name of system roles. The role has not added to application");
+						        .warningLogEntry("A role name \"supervisor\" is reserved name of system roles. The role has not added to application");
 					}
 				}
 			}
@@ -350,11 +350,6 @@ public class GlobalSetting {
 			} else {
 				recalcualtorSchedSettings = new ScheduleSettings(360);
 				AppEnv.logger.warningLogEntry("Recalcualtor schedule has not set, it will use default parameters");
-			}
-
-			Node edsNode = XMLUtil.getNode(doc, "/rule/eds", false);
-			if (edsNode != null) {
-				edsSettings = new EDSSetting(edsNode);
 			}
 
 			Node syncNode = XMLUtil.getNode(doc, "/rule/ddb", false);

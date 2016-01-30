@@ -1,21 +1,7 @@
 package kz.flabs.users;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,11 +23,9 @@ import kz.flabs.runtimeobj.document.structure.Employer;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.ISaveField;
-import kz.iola.jce.provider.IolaProvider;
 import kz.pchelka.env.Environment;
 
 import org.apache.catalina.realm.RealmBase;
-import org.apache.commons.codec.binary.Base64;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.packet.Presence;
 
@@ -414,42 +398,7 @@ public class User extends BaseDocument implements Const {
 				HashMap<String, BlobFile> uploadedFiles = new RuntimeObjUtil().getUploadedFiles(fields);
 				if (uploadedFiles.size() > 0) {
 					for (Map.Entry<String, BlobFile> file_entry : uploadedFiles.entrySet()) {
-						try {
-							FileInputStream ksfis = new FileInputStream(new File(file_entry.getValue().path));
-							final InputStream ksbufin = new BufferedInputStream(ksfis);
-							Security.addProvider(new IolaProvider());
-							final KeyStore ks = KeyStore.getInstance("PKCS12", IolaProvider.PROVIDER_NAME);
-							// final KeyStore ks =
-							// KeyStore.getInstance("PKCS12");
-							ks.load(ksbufin, p_eds.toCharArray());
-							KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(p_eds.toCharArray());
-							Enumeration<String> aliases = ks.aliases();
-							String alias = "";
-							while (aliases.hasMoreElements()) {
-								alias = aliases.nextElement();
-							}
-							if (!"".equalsIgnoreCase(alias)) {
-								// KeyStore.PrivateKeyEntry entry =
-								// (KeyStore.PrivateKeyEntry)ks.getEntry(alias,
-								// protParam);
-								// Certificate cert = entry.getCertificate();
-								Certificate cert = ks.getCertificate(alias);
-								publicKey = Base64.encodeBase64String(cert.getEncoded());
-								setPublicKey(publicKey);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (NoSuchAlgorithmException e) {
-							e.printStackTrace();
-						} catch (KeyStoreException e) {
-							e.printStackTrace();
-						} catch (CertificateEncodingException e) {
-							e.printStackTrace();
-						} catch (CertificateException e) {
-							e.printStackTrace();
-						} catch (NoSuchProviderException e) {
-							e.printStackTrace();
-						}
+
 					}
 				}
 			}

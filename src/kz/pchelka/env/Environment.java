@@ -126,7 +126,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
 	private static Integer rtfLimitSize = 3892;
 
-	public static String backupDir;
 	private static ArrayList<UserSession> sess = new ArrayList<UserSession>();
 	public static boolean isDevMode;
 	public static Vocabulary vocabulary;
@@ -259,7 +258,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			try {
 				if (adminConsoleEnable) {
 					remoteConsole = XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/@mode").equalsIgnoreCase("on") ? true
-							: false;
+					        : false;
 					if (remoteConsole) {
 						remoteConsoleServer = XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/server");
 						remoteConsolePort = Integer.parseInt(XMLUtil.getTextContent(xmlDocument, "/nextbase/adminapp/remoteconsole/port"));
@@ -349,13 +348,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			}
 
 			trash = jrDir.getAbsolutePath();
-
-			File backup = new File("backup");
-			if (!backup.exists()) {
-				backup.mkdir();
-			}
-
-			backupDir = backup.getAbsolutePath();
 
 			Localizator l = new Localizator();
 			vocabulary = l.populate();
@@ -565,7 +557,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	@Override
 	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	DocumentException, DocumentAccessException, QueryException {
+	        DocumentException, DocumentAccessException, QueryException {
 		Object obj = cache.get(page.getID());
 		String cacheParam[] = formData.get("cache");
 		if (cacheParam == null) {
