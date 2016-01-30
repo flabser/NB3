@@ -1,0 +1,10 @@
+package kz.flabs.scriptprocessor;
+
+import groovy.lang.GroovyObject;
+
+public interface IScriptProcessor {	
+	String[] processString(String script);	
+	String process(String script);
+	String[] processString(Class<GroovyObject> compiledClass);
+	
+}
