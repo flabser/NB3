@@ -84,12 +84,22 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		this.vocabulary = vocabulary;
 	}
 
-	protected void setContent(_IXMLContent document) {
-		xml.add(document);
-	}
-
 	protected void setContent(Collection<_IXMLContent> documents) {
 		xml.addAll(documents);
+	}
+
+	/*
+	 * protected void setContent(List list) { for (Object element : list) {
+	 * _IXMLContent c = new _IXMLContent() {
+	 * 
+	 * @Override public String toXML() throws _Exception { return "<entry>" +
+	 * element.toString() + "</entry>"; } }; xml.add(c); }
+	 * 
+	 * }
+	 */
+
+	protected void setContent(_IXMLContent document) {
+		xml.add(document);
 	}
 
 	protected void setContent(_IPOJOObject pojo) {

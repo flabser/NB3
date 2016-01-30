@@ -31,6 +31,7 @@ import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
+import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.parser.QueryFormulaParserException;
@@ -48,8 +49,6 @@ import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import kz.pchelka.server.Server;
 
-import org.jivesoftware.smack.ChatManager;
-import org.jivesoftware.smack.XMPPConnection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -86,18 +85,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static String trustStorePwd;
 	public static boolean isClientSSLAuthEnable;
 
-	public static Boolean remoteConsole = false;
-	public static String remoteConsoleServer = "";
-	public static int remoteConsolePort = 0;
-
-	public static boolean XMPPServerEnable;
-	public static String XMPPServer;
-	public static int XMPPServerPort;
-
-	public static String XMPPLogin;
-	public static String XMPPPwd;
-	public static XMPPConnection connection;
-	public static ChatManager chatmanager;
+	public static List<LanguageType> langs = new ArrayList<LanguageType>();
 
 	public static String smtpPort;
 	public static boolean smtpAuth;
@@ -116,7 +104,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
 	private static HashMap<String, AppEnv> allApplications = new HashMap<String, AppEnv>();
 	private static HashMap<String, IDatabase> dataBases = new HashMap<String, IDatabase>();
-	private static boolean xmppEnable;
 
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
 	private static int countOfApp;
@@ -133,19 +120,14 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		loadProperties();
 		initProcess();
 		try {
-			systemBase = new kz.flabs.dataengine.h2.SystemDatabase();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Environment.systemBase = new kz.flabs.dataengine.h2.SystemDatabase();
 		} catch (DatabasePoolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Server.logger.errorLogEntry(e);
+			Server.logger.fatalLogEntry("Server has not connected to system database");
+			Server.shutdown();
+		} catch (Exception e) {
+			Server.logger.errorLogEntry(e);
+			Server.shutdown();
 		}
 	}
 
@@ -212,6 +194,12 @@ public class Environment implements Const, ICache, IProcessInitiator {
 						webAppToStart.put(appName, site);
 					}
 				}
+			}
+
+			// TODO Need to add exception handler
+			NodeList l = XMLUtil.getNodeList(xmlDocument, "/nextbase/langs/entry");
+			for (int i = 0; i < l.getLength(); i++) {
+				langs.add(LanguageType.valueOf(XMLUtil.getTextContent(l.item(i), ".", false)));
 			}
 
 			countOfApp = webAppToStart.size();
@@ -292,8 +280,8 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 			trash = jrDir.getAbsolutePath();
 
-			Localizator l = new Localizator();
-			vocabulary = l.populate();
+			Localizator lz = new Localizator();
+			vocabulary = lz.populate();
 			if (vocabulary == null) {
 				vocabulary = new Vocabulary("system");
 			}

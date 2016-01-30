@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import java.util.Timer;
 
 import kz.flabs.dataengine.IDatabase;
-import kz.pchelka.console.rmi.server.RMIServer;
 import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.Log4jLogger;
@@ -27,7 +26,6 @@ public class Server {
 	public static Date startTime = new Date();
 	public static IDatabase dataBase;
 	public static IWebServer webServerInst;
-	public static RMIServer rmiServer;
 
 	public static void start() throws MalformedURLException, LifecycleException, URISyntaxException {
 		logger = new Log4jLogger("Server");
@@ -45,9 +43,7 @@ public class Server {
 
 		if (Environment.adminConsoleEnable) {
 			Host host = webServerInst.addApplication("Administrator", "/Administrator", "Administrator");
-			if (Environment.remoteConsole) {
-				rmiServer = RMIServer.getInstance();
-			}
+
 			HashSet<Host> hosts = new HashSet<Host>();
 			hosts.add(host);
 		}

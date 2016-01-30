@@ -20,14 +20,12 @@ import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.coordination._Block;
 import kz.nextbase.script.coordination._BlockCollection;
 import kz.nextbase.script.coordination._Coordinator;
-import kz.nextbase.script.mail._InstMessengerAgent;
 import kz.nextbase.script.mail._MailAgent;
 import kz.nextbase.script.struct._Employer;
 import kz.nextbase.script.struct._EmployerCollection;
 import kz.nextbase.script.struct._Structure;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IProcessInitiator;
-
 
 public class _Session extends _ScriptingObject {
 
@@ -45,7 +43,9 @@ public class _Session extends _ScriptingObject {
 		this.user = user;
 		setInitiator(init);
 		dataBase = env.getDataBase();
-		if (dataBase != null) this.db = new _Database(dataBase, user.getUserID(), this);
+		if (dataBase != null) {
+			this.db = new _Database(dataBase, user.getUserID(), this);
+		}
 		this.user = user;
 	}
 
@@ -150,10 +150,6 @@ public class _Session extends _ScriptingObject {
 		return new _MailAgent(this);
 	}
 
-	public _InstMessengerAgent getInstMessengerAgent() {
-		return new _InstMessengerAgent();
-	}
-
 	public _Page getPage(String id, _WebFormData webFormData) throws _Exception {
 		PageRule rule;
 		try {
@@ -161,11 +157,9 @@ public class _Session extends _ScriptingObject {
 			Page page = new Page(env, user.getSession(), rule);
 			return new _Page(page, webFormData);
 		} catch (RuleException e) {
-			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage("
-					+ id + ")");
+			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage(" + id + ")");
 		} catch (QueryFormulaParserException e) {
-			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage("
-					+ id + ")");
+			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage(" + id + ")");
 		}
 	}
 
@@ -186,6 +180,7 @@ public class _Session extends _ScriptingObject {
 		return user;
 	}
 
+	@Override
 	public String toString() {
 		return "userid=" + user.getUserID() + ", database=" + dataBase.toString();
 	}
@@ -199,12 +194,12 @@ public class _Session extends _ScriptingObject {
 	}
 
 	@Deprecated
-	public Set <DocID> getExpandedDocuments() {
+	public Set<DocID> getExpandedDocuments() {
 		return user.getSession().expandedThread;
 	}
 
-	public Set <String> getExpandedThread() {
-		return new HashSet <String>();
+	public Set<String> getExpandedThread() {
+		return new HashSet<String>();
 	}
 
 	public IProcessInitiator getInitiator() {

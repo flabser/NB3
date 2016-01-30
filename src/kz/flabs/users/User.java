@@ -23,11 +23,8 @@ import kz.flabs.runtimeobj.document.structure.Employer;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.ISaveField;
-import kz.pchelka.env.Environment;
 
 import org.apache.catalina.realm.RealmBase;
-import org.jivesoftware.smack.Roster;
-import org.jivesoftware.smack.packet.Presence;
 
 public class User extends BaseDocument implements Const {
 	public int docID;
@@ -320,18 +317,11 @@ public class User extends BaseDocument implements Const {
 		}
 	}
 
+	@Deprecated
 	public boolean isInstMsgOnLine() {
-		try {
-			if (Environment.XMPPServerEnable) {
-				Roster roster = Environment.connection.getRoster();
-				Presence p = roster.getPresence(instMsgAddress);
-				return p.isAvailable();
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			return false;
-		}
+
+		return false;
+
 	}
 
 	public int getInstMsgState() {
