@@ -168,11 +168,11 @@ public class WebRuleProvider implements Const {
 		AppEnv.logger.normalLogEntry("Reload \"" + env.appType + "\" application rules ...");
 
 		pageRuleMap.clear();
-		handlerRuleMap.clear();
+		// handlerRuleMap.clear();
 
-		loadHandlers();
+		// loadHandlers();
 
-		AppEnv.logger.normalLogEntry("Application rules have been reloaded");
+		AppEnv.logger.normalLogEntry("Application rules have been reset");
 		return true;
 	}
 

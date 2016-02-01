@@ -489,15 +489,16 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	@Override
 	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
 	        DocumentException, DocumentAccessException, QueryException {
-		Object obj = cache.get(page.getID());
+		String cacheKey = page.getCacheID();
+		Object obj = cache.get(cacheKey);
 		String cacheParam[] = formData.get("cache");
 		if (cacheParam == null) {
 			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(page.getID(), buffer);
+			cache.put(cacheKey, buffer);
 			return buffer;
 		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
 			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(page.getID(), buffer);
+			cache.put(cacheKey, buffer);
 			return buffer;
 		} else {
 			return (StringBuffer) obj;
@@ -540,6 +541,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static String getCacheInfo() {
 		String ci = "";
 		for (String c : cache.keySet()) {
+			// ci = ci + "," + c + "\n" + cache.get(c);
 			ci = ci + "," + c;
 		}
 		if (ci.equals("")) {

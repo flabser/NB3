@@ -18,9 +18,9 @@ public class Vocabulary {
 		this.words = new HashMap<String, Sentence>();
 	}
 
-	public Vocabulary(Document doc, String appName, HashMap<String, Sentence> words) {
+	public Vocabulary(Document doc, String appName, HashMap<String, Sentence> w) {
 		this.appName = appName;
-		this.words = words;
+		this.words = (HashMap<String, Sentence>) w.clone();
 		org.w3c.dom.Element root = doc.getDocumentElement();
 		LanguageType primaryLang = LanguageType.valueOf(XMLUtil.getTextContent(doc, "/vocabulary/@primary", true, "UNKNOWN", false).toUpperCase());
 

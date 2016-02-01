@@ -145,7 +145,8 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
 	        DocumentException, DocumentAccessException, QueryException {
 		boolean reload = false;
-		Object obj = cache.get(page.getID());
+		String cacheKey = page.getCacheID();
+		Object obj = cache.get(cacheKey);
 		String p[] = formData.get("cache");
 		if (p != null) {
 			String cacheParam = formData.get("cache")[0];
@@ -155,7 +156,7 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 		}
 		if (obj == null || reload) {
 			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(page.getID(), buffer);
+			cache.put(cacheKey, buffer);
 			return buffer;
 		} else {
 			return (StringBuffer) obj;

@@ -3,7 +3,6 @@ package kz.flabs.runtimeobj.page;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
@@ -152,12 +151,12 @@ public class Page implements IProcessInitiator, Const {
 
 	}
 
-	public String getID() {
+	public String getCacheID() {
 		String searchKey = "";
 		if (fields != null && fields.containsKey("keyword")) {
 			searchKey = fields.get("keyword")[0] != null ? fields.get("keyword")[0] : "";
 		}
-		return "PAGE_" + rule.id + "_" + userSession.lang + searchKey;
+		return "PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang + searchKey;
 
 	}
 
@@ -177,9 +176,6 @@ public class Page implements IProcessInitiator, Const {
 					output.append("<" + elementRule.name + ">");
 				}
 				switch (elementRule.type) {
-				case STATIC_TAG:
-					output.append(elementRule.value);
-					break;
 				case SCRIPT:
 					XMLResponse xmlResp = null;
 					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
@@ -214,68 +210,6 @@ public class Page implements IProcessInitiator, Const {
 						output.append(xmlResp.toXML());
 					}
 
-					break;
-				case QUERY:
-					StringBuffer xmlContent = new StringBuffer(5000);
-					int pageNum = 0;
-					try {
-						pageNum = Integer.parseInt(formData.get("page")[0]);
-					} catch (Exception nfe) {
-						pageNum = 1;
-					}
-					int pageSize = userSession.pageSize;
-					if (formData.containsKey("pagesize")) {
-						try {
-							pageSize = Integer.valueOf(formData.get("pagesize")[0]);
-						} catch (Exception nfe) {
-							pageSize = userSession.pageSize;
-						}
-					}
-					int parentDocProp[] = getParentDocProp(formData);
-					if (formData.containsKey("command")) {
-						String commandURL = formData.get("command")[0];
-						if (commandURL != null && !commandURL.equals("null")) {
-							StringTokenizer t = new StringTokenizer(commandURL, ":");
-							ArrayList<String> commands = new ArrayList<String>();
-							while (t.hasMoreTokens()) {
-								commands.add(t.nextToken());
-							}
-
-							for (String command : commands) {
-								try {
-									StringTokenizer commandDetails = new StringTokenizer(command, "`");
-									String commandType = commandDetails.nextToken();
-
-									if (commandType.equals("expand")) {
-										String docIDOrCat = commandDetails.nextToken();
-										try {
-											String docType = commandDetails.nextToken();
-											DocID commandDocID = new DocID(docIDOrCat, docType);
-											userSession.addExpandedThread(commandDocID);
-										} catch (Exception e) {
-											docIDOrCat = new String(docIDOrCat.getBytes("ISO-8859-1"), "UTF-8");
-											userSession.addExpandedCategory(docIDOrCat);
-										}
-									} else if (commandType.equals("collaps")) {
-										String docIDOrCat = commandDetails.nextToken();
-										try {
-											String docType = commandDetails.nextToken();
-											DocID commandDocID = new DocID(docIDOrCat, docType);
-											userSession.resetExpandedThread(commandDocID);
-										} catch (Exception e) {
-											docIDOrCat = new String(docIDOrCat.getBytes("ISO-8859-1"), "UTF-8");
-											userSession.resetExpandedCategory(docIDOrCat);
-										}
-
-									}
-								} catch (Exception e) {
-									AppEnv.logger.errorLogEntry(e);
-								}
-							}
-						}
-					}
-
-					output.append(xmlContent);
 					break;
 				case INCLUDED_PAGE:
 					PageRule rule = (PageRule) env.ruleProvider.getRule(PAGE_RULE, elementRule.value);

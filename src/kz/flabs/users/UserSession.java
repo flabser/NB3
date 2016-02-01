@@ -486,14 +486,14 @@ public class UserSession implements Const, ICache {
 	@Override
 	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
 	        DocumentException, DocumentAccessException, QueryException {
-		String cid = page.getID() + "_";
-		Object obj = getObject(cid);
+		String cacheKey = page.getCacheID();
+		Object obj = getObject(cacheKey);
 		String c[] = formData.get("cache");
 		if (c != null) {
 			String cache = c[0];
 			if (obj == null || cache.equalsIgnoreCase("reload")) {
 				StringBuffer buffer = page.getContent(formData, "GET");
-				setObject(cid, buffer);
+				setObject(cacheKey, buffer);
 				return buffer;
 			} else {
 				return (StringBuffer) obj;
@@ -501,7 +501,7 @@ public class UserSession implements Const, ICache {
 		} else {
 			if (obj == null) {
 				StringBuffer buffer = page.getContent(formData, "GET");
-				setObject(cid, buffer);
+				setObject(cacheKey, buffer);
 				return buffer;
 			} else {
 				return (StringBuffer) obj;

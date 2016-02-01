@@ -12,8 +12,8 @@ public class IncludedPage extends Page implements Const {
 	}
 
 	@Override
-	public String getID() {
-		return "INCLUDED_PAGE_" + rule.id + "_" + userSession.lang;
+	public String getCacheID() {
+		return "INCLUDED_PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang;
 
 	}
 
