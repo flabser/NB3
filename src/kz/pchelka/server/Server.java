@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.Timer;
 
 import kz.flabs.dataengine.IDatabase;
@@ -87,9 +86,7 @@ public class Server {
 
 	public static void shutdown() {
 		logger.normalLogEntry("Server is stopping ... ");
-		for (Entry<String, IDatabase> db : Environment.getDatabases().entrySet()) {
-			db.getValue().shutdown();
-		}
+
 		Environment.shutdown();
 		webServerInst.stopContainer();
 		System.exit(0);

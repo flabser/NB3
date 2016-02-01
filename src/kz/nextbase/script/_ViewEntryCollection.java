@@ -1,5 +1,10 @@
 package kz.nextbase.script;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
@@ -11,33 +16,18 @@ import kz.nextbase.script.actions._Action;
 import kz.nextbase.script.actions._ActionType;
 import kz.pchelka.scheduler.IProcessInitiator;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-
 public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 
 	private ViewEntryCollection parentObj;
-	private LinkedHashSet <_ViewEntry> _entries = new LinkedHashSet <_ViewEntry>();
+	private LinkedHashSet<_ViewEntry> _entries = new LinkedHashSet<_ViewEntry>();
 	private _Session session;
-	private static final String viewTextFileds[] = {
-			"viewtext",
-			"viewtext1",
-			"viewtext2",
-			"viewtext3",
-			"viewtext4",
-			"viewtext5",
-			"viewtext6",
-			"viewtext7",
-			"viewnumber",
-			"viewdate" };
+	private static final String viewTextFileds[] = { "viewtext", "viewtext1", "viewtext2", "viewtext3", "viewtext4", "viewtext5", "viewtext6",
+	        "viewtext7", "viewnumber", "viewdate" };
 
 	public _ViewEntryCollection(User user, ViewEntryCollection parentObj) {
 		session = new _Session(user.getAppEnv(), user, this);
 		this.parentObj = parentObj;
-		HashSet <IViewEntry> entries = parentObj.getEntries();
+		HashSet<IViewEntry> entries = parentObj.getEntries();
 		for (IViewEntry entry : entries) {
 			_ViewEntry _entry = new _ViewEntry((ViewEntry) entry, session);
 			_entries.add(_entry);
@@ -47,7 +37,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	public _ViewEntryCollection(_Session ses, ViewEntryCollection parentObj) {
 		session = ses;
 		this.parentObj = parentObj;
-		HashSet <IViewEntry> entries = parentObj.getEntries();
+		HashSet<IViewEntry> entries = parentObj.getEntries();
 		for (IViewEntry entry : entries) {
 			_ViewEntry _entry = new _ViewEntry((ViewEntry) entry, session);
 			_entries.add(_entry);
@@ -58,6 +48,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 		return session;
 	}
 
+	@Override
 	public String toXML() {
 
 		RunTimeParameters pars = parentObj.getRunTimePameters();
@@ -83,8 +74,8 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 			}
 		}
 
-		String result = "<query maxpage=\"" + parentObj.getMaxPage() + "\" count=\"" + parentObj.getCount()
-				+ "\" currentpage=\"" + parentObj.getCurrentPage() + "\">";
+		String result = "<query maxpage=\"" + parentObj.getMaxPage() + "\" count=\"" + parentObj.getCount() + "\" currentpage=\""
+		        + parentObj.getCurrentPage() + "\">";
 		result += "<columns>" + vtResult + "</columns>";
 		for (_ViewEntry val : _entries) {
 			result += val.toXML();
@@ -92,7 +83,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 		return result + "</query>";
 	}
 
-	public Set <_ViewEntry> getEntries() {
+	public Set<_ViewEntry> getEntries() {
 		return _entries;
 	}
 
@@ -100,12 +91,11 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 		return parentObj.getCount();
 	}
 
-    public int getUnreadCount() {
-        return parentObj.getUnreadCount();
-    }
+	public int getUnreadCount() {
+		return parentObj.getUnreadCount();
+	}
 
-
-    public BigDecimal getViewNumberSum() {
+	public BigDecimal getViewNumberSum() {
 		return parentObj.getViewNumberSum();
 	}
 

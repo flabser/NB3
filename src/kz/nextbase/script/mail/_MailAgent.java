@@ -7,7 +7,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
 import kz.nextbase.script._Session;
-import kz.nextbase.script.struct._Employer;
 import kz.pchelka.env.Environment;
 import kz.pchelka.reminder.Memo;
 
@@ -24,10 +23,12 @@ public class _MailAgent {
 
 		for (String recipient : recipients) {
 			if (recipient.startsWith("[") && recipient.endsWith("]")) {
-				ArrayList<_Employer> ussersByRoles = session.getStructure().getAppUsersByRoles(recipient);
-				for (_Employer ussersByRole : ussersByRoles) {
-					result.add(ussersByRole.getEmail());
-				}
+				/*
+				 * ArrayList<_Employer> ussersByRoles =
+				 * session.getStructure().getAppUsersByRoles(recipient); for
+				 * (_Employer ussersByRole : ussersByRoles) {
+				 * result.add(ussersByRole.getEmail()); }
+				 */
 			} else {
 				result.add(recipient);
 			}

@@ -1,15 +1,14 @@
 package kz.flabs.runtimeobj;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Set;
+
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.pchelka.server.Server;
-
-import javax.xml.bind.annotation.XmlTransient;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
 
 public class Filter extends BaseDocument {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +21,7 @@ public class Filter extends BaseDocument {
 	public Filter(AppEnv env) {
 		this.env = env;
 	}
-	
+
 	public HashMap<String, String> getConditions() {
 		return conditions;
 	}
@@ -78,7 +77,7 @@ public class Filter extends BaseDocument {
 		this.userid = userid;
 	}
 
-	public int getEnable(){
+	public int getEnable() {
 		return enable;
 	}
 
@@ -90,41 +89,47 @@ public class Filter extends BaseDocument {
 		}
 	}
 
-	public int save(Set<String> complexUserID, String absoluteUserID) throws DocumentAccessException, DocumentException{
+	public int save(Set<String> complexUserID, String absoluteUserID) throws DocumentAccessException, DocumentException {
 		int docID = 0;
-		if(isNewDoc()){
+		if (isNewDoc()) {
 			setRegDate(new Date());
 			setLastUpdate(getRegDate());
-			docID = db.getFilters().insertFilter(this, complexUserID, absoluteUserID);
+
 			setDocID(docID);
 			setNewDoc(false);
-		}else{
+		} else {
 			setLastUpdate(new Date());
-			docID = db.getFilters().updateFilter(this, complexUserID, absoluteUserID);
+
 		}
 
 		return docID;
 
 	}
-	
+
+	@Override
 	public String getURL() {
 		return "/" + env.appType + "/Provider?type=outline&id=outline&subtype=filter&subid=" + this.filterID;
 	}
-	
-	public int hashCode() {		
+
+	@Override
+	public int hashCode() {
 		int hashCode = this.name.hashCode() + this.userid.hashCode();
 		return hashCode;
 	}
-	
+
+	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
+		if (this == obj) {
 			return true;
-		if((obj == null) || (obj.getClass() != this.getClass()))
+		}
+		if ((obj == null) || (obj.getClass() != this.getClass())) {
 			return false;
-		Filter filter = (Filter)obj;
+		}
+		Filter filter = (Filter) obj;
 		return this.name.equalsIgnoreCase(filter.name) && this.userid.equalsIgnoreCase(filter.userid);
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}

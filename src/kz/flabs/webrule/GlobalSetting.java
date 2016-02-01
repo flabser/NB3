@@ -32,7 +32,6 @@ import javax.xml.transform.stream.StreamResult;
 import kz.flabs.appdaemon.AppDaemonRule;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabaseType;
-import kz.flabs.runtimeobj.document.structure.UserRoleCollection;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
@@ -104,7 +103,7 @@ public class GlobalSetting {
 	@Deprecated
 	public boolean sendToSignAfterNo = Boolean.TRUE;
 	public DataEngineImpl dbImpl;
-	public UserRoleCollection roleCollection = new UserRoleCollection();
+
 	public HashMap<String, ExternalModule> extModuleMap = new HashMap<String, ExternalModule>();
 
 	@Deprecated
@@ -294,7 +293,7 @@ public class GlobalSetting {
 
 				if (role.isValid && role.isOn == RunMode.ON) {
 					if (!role.name.equalsIgnoreCase("supervisor")) {
-						roleCollection.put(role);
+
 					} else {
 						AppEnv.logger
 						        .warningLogEntry("A role name \"supervisor\" is reserved name of system roles. The role has not added to application");

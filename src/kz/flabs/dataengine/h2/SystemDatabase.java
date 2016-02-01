@@ -15,24 +15,25 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
-import kz.flabs.dataengine.IStructure;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.dataengine.h2.holiday.Holiday;
 import kz.flabs.dataengine.h2.holiday.HolidayCollection;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.runtimeobj.document.structure.Employer;
-import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
-import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.TempUser;
 import kz.flabs.users.User;
 import kz.flabs.webrule.constants.RunMode;
+import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
+import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.apache.catalina.realm.RealmBase;
 
-public class SystemDatabase implements ISystemDatabase, Const {
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
+
+public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const {
 	public static boolean isValid;
 	public static String jdbcDriver = "org.h2.Driver";
 
@@ -82,7 +83,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			conn.setAutoCommit(false);
 			Statement s = conn.createStatement();
 			String sql = "DELETE FROM ENABLEDAPPS WHERE DOCID = (SELECT DOCID FROM USERS WHERE USERID = '" + user.getUserID() + "') AND APP = '"
-					+ env.appType + "'";
+			        + env.appType + "'";
 			s.execute(sql);
 			conn.commit();
 		} catch (SQLException e) {
@@ -344,11 +345,12 @@ public class SystemDatabase implements ISystemDatabase, Const {
 	private User initUser(Connection conn, ResultSet rs, AppEnv env, String login) throws SQLException {
 		boolean isNext = true;
 		User user = new User(login, env);
-		IStructure struct = env.getDataBase().getStructure();
-		Employer emp = struct.getAppUser(login);
+		_Session ses = new _Session(env, user, this);
+		EmployeeDAO dao = new EmployeeDAO(ses);
+		Employee emp = dao.findByLogin(login);
 		if (emp != null) {
-			user.setAppUser(emp);
-			emp.setUser(user);
+			user.setUserName(emp.getName());
+			// emp.setUser(user);
 		}
 		user.fill(rs);
 		while (isNext || rs.next()) {
@@ -456,8 +458,8 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
-				IViewEntry entry = new ViewEntry(rs, dbFields);
-				col.add(entry);
+				// IViewEntry entry = new ViewEntry(rs, dbFields);
+				// col.add(entry);
 			}
 
 			rs.close();
@@ -764,10 +766,9 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			if (rs.next()) {
 				key = rs.getInt(1) + 1;
 			}
-			String insertUser = "insert into USERS(DOCID, USERID, EMAIL, INSTMSGADDR, ISADMIN, LOGINHASH, PUBLICKEY, PWDHASH )" + "values(" + key
-					+ ", " + "'" + user.getUserID() + "', " + "'" + user.getEmail() + "','" + user.getInstMsgAddress() + "'" + ","
-			        + user.getIsAdmin() + "," + (user.getUserID() + user.getPassword()).hashCode() + ", '" + user.getPublicKey() + "','"
-			        + user.getPasswordHash() + "')";
+			String insertUser = "insert into USERS(DOCID, USERID, EMAIL, ISADMIN, LOGINHASH, PUBLICKEY, PWDHASH )" + "values(" + key + ", " + "'"
+			        + user.getUserID() + "', " + "'" + user.getEmail() + "'," + user.getIsAdmin() + ","
+			        + (user.getUserID() + user.getPassword()).hashCode() + ", '" + user.getPublicKey() + "','" + user.getPasswordHash() + "')";
 
 			PreparedStatement pst = conn.prepareStatement(insertUser/*
 																	 * ,
@@ -796,7 +797,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 				if (app.loginMode == UserApplicationProfile.LOGIN_AND_QUESTION) {
 					for (UserApplicationProfile.QuestionAnswer qa : app.getQuestionAnswer()) {
 						insertURL = "insert into QA(DOCID, APP, QUESTION, ANSWER)values(" + key + ",'" + app.appName + "','" + qa.controlQuestion
-								+ "','" + qa.answer + "')";
+						        + "','" + qa.answer + "')";
 						pst = conn.prepareStatement(insertURL);
 						pst.executeUpdate();
 					}
@@ -827,10 +828,9 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			} else {
 				pwd = user.getPassword();
 			}
-			String userUpdateSQL = "update USERS set USERID='" + user.getUserID() + "'," + " EMAIL='" + user.getEmail() + "', INSTMSGADDR='"
-					+ user.getInstMsgAddress() + "'," + "PWD='" + pwd + "', " + "ISADMIN = " + user.getIsAdmin() + "," + "LOGINHASH = "
-					+ (user.getUserID() + user.getPassword()).hashCode() + ", " + "PUBLICKEY = '" + user.getPublicKey() + "', PWDHASH='" + pwdHsh
-					+ "'" + " where DOCID=" + user.docID;
+			String userUpdateSQL = "update USERS set USERID='" + user.getUserID() + "'," + " EMAIL='" + user.getEmail() + "'," + "PWD='" + pwd
+			        + "', " + "ISADMIN = " + user.getIsAdmin() + "," + "LOGINHASH = " + (user.getUserID() + user.getPassword()).hashCode() + ", "
+			        + "PUBLICKEY = '" + user.getPublicKey() + "', PWDHASH='" + pwdHsh + "'" + " where DOCID=" + user.docID;
 			PreparedStatement pst = conn.prepareStatement(userUpdateSQL);
 			pst.executeUpdate();
 			conn.commit();
@@ -844,7 +844,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 
 			for (UserApplicationProfile app : user.enabledApps.values()) {
 				String insertURL = "insert into ENABLEDAPPS(DOCID, APP, LOGINMODE)values (" + user.docID + ", '" + app.appName + "'," + app.loginMode
-						+ ")";
+				        + ")";
 				PreparedStatement pst0 = conn.prepareStatement(insertURL);
 				pst0.executeUpdate();
 
@@ -1019,7 +1019,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 
 			while (rs.next()) {
 				h = new Holiday(rs.getInt("ID"), rs.getString("COUNTRY"), rs.getString("TITLE"), rs.getInt("REPEAT"), rs.getDate("STARTDATE"),
-						rs.getInt("CONTINUING"), rs.getDate("ENDDATE"), rs.getInt("IFFALLSON"), rs.getString("COMMENT"));
+				        rs.getInt("CONTINUING"), rs.getDate("ENDDATE"), rs.getInt("IFFALLSON"), rs.getString("COMMENT"));
 				holidays.add(h);
 			}
 
@@ -1040,11 +1040,11 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			conn.setAutoCommit(false);
 
 			String insertHoliday = "update HOLIDAYS set " + "COUNTRY = " + (h.getCountry() != null ? "'" + h.getCountry() + "'" : "null") + ", "
-					+ "TITLE = " + (h.getTitle() != null ? "'" + h.getTitle() + "'" : "null") + ", " + "REPEAT = " + h.getRepeat() + ", "
-					+ "STARTDATE = " + (h.getStartDate() != null ? "'" + h.getStartDate() + "'" : "null") + ", " + "CONTINUING = "
+			        + "TITLE = " + (h.getTitle() != null ? "'" + h.getTitle() + "'" : "null") + ", " + "REPEAT = " + h.getRepeat() + ", "
+			        + "STARTDATE = " + (h.getStartDate() != null ? "'" + h.getStartDate() + "'" : "null") + ", " + "CONTINUING = "
 			        + h.getContinuing() + ", " + "ENDDATE = " + (h.getEndDate() != null ? "'" + h.getEndDate() + "'" : "null") + ", "
 			        + "IFFALLSON = " + h.getIfFallSon() + ", " + "COMMENT = " + (h.getComment() != null ? "'" + h.getComment() + "'" : "null") + " "
-					+ "where ID = " + h.getId();
+			        + "where ID = " + h.getId();
 
 			PreparedStatement pst = conn.prepareStatement(insertHoliday);
 			pst.executeUpdate();
@@ -1124,7 +1124,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 
 			while (rs.next()) {
 				h = new Holiday(rs.getInt("ID"), rs.getString("COUNTRY"), rs.getString("TITLE"), rs.getInt("REPEAT"), rs.getDate("STARTDATE"),
-						rs.getInt("CONTINUING"), rs.getDate("ENDDATE"), rs.getInt("IFFALLSON"), rs.getString("COMMENT"));
+				        rs.getInt("CONTINUING"), rs.getDate("ENDDATE"), rs.getInt("IFFALLSON"), rs.getString("COMMENT"));
 				holidays.add(h);
 			}
 
@@ -1137,5 +1137,10 @@ public class SystemDatabase implements ISystemDatabase, Const {
 		HolidayCollection hCollection = new HolidayCollection(year);
 		hCollection.setHolidays(holidays);
 		return hCollection;
+	}
+
+	@Override
+	public String getOwnerID() {
+		return "System";
 	}
 }

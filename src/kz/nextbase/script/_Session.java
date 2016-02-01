@@ -17,35 +17,25 @@ import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.page.PageRule;
 import kz.nextbase.script.actions._ActionBar;
-import kz.nextbase.script.coordination._Block;
-import kz.nextbase.script.coordination._BlockCollection;
-import kz.nextbase.script.coordination._Coordinator;
 import kz.nextbase.script.mail._MailAgent;
-import kz.nextbase.script.struct._Employer;
-import kz.nextbase.script.struct._EmployerCollection;
-import kz.nextbase.script.struct._Structure;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class _Session extends _ScriptingObject {
 
-	private _Database db;
 	private IDatabase dataBase;
 	private User user;
 	private SimpleDateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	private AppEnv env;
 	private String formSesID;
 	private IProcessInitiator initiator;
-	private _Document documentInConext;
 
 	public _Session(AppEnv env, User user, IProcessInitiator init) {
 		this.env = env;
 		this.user = user;
 		setInitiator(init);
 		dataBase = env.getDataBase();
-		if (dataBase != null) {
-			this.db = new _Database(dataBase, user.getUserID(), this);
-		}
+
 		this.user = user;
 	}
 
@@ -71,14 +61,6 @@ public class _Session extends _ScriptingObject {
 		return user.getUserID();
 	}
 
-	public String getAppURL() {
-		return user.getSession().host + "/" + user.env.appType;
-	}
-
-	public _Employer getCurrentAppUser() {
-		return new _Employer(user.getAppUser(), this);
-	}
-
 	public String getCurrentHost() {
 		return user.getSession().host;
 	}
@@ -93,22 +75,6 @@ public class _Session extends _ScriptingObject {
 
 	public _ActionBar createActionBar() {
 		return new _ActionBar(this);
-	}
-
-	public _EmployerCollection createEmployerCollection(String[] e) {
-		return new _EmployerCollection(this.dataBase, this, e);
-	}
-
-	public _BlockCollection createBlockCollection() {
-		return new _BlockCollection(this);
-	}
-
-	public _Block createBlock(String data) throws _Exception {
-		return new _Block(data, this);
-	}
-
-	public _Coordinator createCoordinator() {
-		return new _Coordinator(this.dataBase);
 	}
 
 	public _ViewEntryCollectionParam createViewEntryCollectionParam() {
@@ -134,12 +100,8 @@ public class _Session extends _ScriptingObject {
 		return Integer.toString(date.get(Calendar.YEAR));
 	}
 
-	public _Database getCurrentDatabase() {
-		return db;
-	}
-
-	public _Structure getStructure() {
-		return new _Structure(dataBase, user);
+	public IDatabase getCurrentDatabase() {
+		return dataBase;
 	}
 
 	public _UserActivity getUserActivity() {
@@ -210,16 +172,9 @@ public class _Session extends _ScriptingObject {
 		this.initiator = initiator;
 	}
 
-	public _Document getDocumentInConext() {
-		return documentInConext;
-	}
-
-	public void setDocumentInConext(_Document documentInConext) {
-		this.documentInConext = documentInConext;
-	}
-
-	public void setFlash(_Document doc) {
-		user.getSession().setFlashViewEntry(new DocID(doc.getDocID(), doc.getDocType()));
+	public _Employer getCurrentAppUser() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

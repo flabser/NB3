@@ -20,7 +20,6 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.ISystemDatabase;
-import kz.flabs.dataengine.IUsersActivity;
 import kz.flabs.dataengine.h2.LoginModeType;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.PortalException;
@@ -149,8 +148,6 @@ public class Login extends HttpServlet implements Const {
 						userSession = new UserSession(user, request, response, saveToken, jses);
 
 						AppEnv.logger.normalLogEntry(userID + " has connected");
-						IUsersActivity ua = env.getDataBase().getUserActivity();
-						ua.postLogin(userSession.browserType, user);
 
 						String redirect = "";
 						if (userSession.browserType == BrowserType.APPLICATION) {

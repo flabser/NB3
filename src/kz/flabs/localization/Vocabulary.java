@@ -2,7 +2,6 @@ package kz.flabs.localization;
 
 import java.util.HashMap;
 
-import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.util.XMLUtil;
 import kz.pchelka.log.Log4jLogger;
 
@@ -86,9 +85,7 @@ public class Vocabulary {
 
 	public StringBuffer toXML(String lang) {
 		StringBuffer output = new StringBuffer(1000);
-		for (Sentence s : words.values()) {
-			output.append(new ViewEntry(s.words.get(lang).word, s.code).toXML());
-		}
+
 		return output;
 	}
 

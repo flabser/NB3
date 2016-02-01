@@ -1,12 +1,11 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
-import java.util.ArrayList;
+import groovy.lang.GroovyObject;
+
 import java.util.Map;
 
-import groovy.lang.GroovyObject;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.scriptprocessor.form.querysave.IQuerySaveTransaction;
 import kz.flabs.users.User;
 import kz.flabs.util.XMLResponse;
 import kz.nextbase.script._Session;
@@ -15,7 +14,6 @@ import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.server.Server;
 
 public class DoProcessor {
-	public ArrayList<IQuerySaveTransaction> transactionToPost = new ArrayList<IQuerySaveTransaction>();
 
 	private String lang;
 	private GroovyObject groovyObject = null;
@@ -25,7 +23,6 @@ public class DoProcessor {
 
 	public DoProcessor(AppEnv env, User u, String currentLang, Map<String, String[]> formData, IProcessInitiator init) {
 		ses = new _Session(env, u, init);
-		ses.getCurrentDatabase().setTransConveyor(transactionToPost);
 		vocabulary = env.vocabulary;
 		lang = currentLang;
 		webFormData = new _WebFormData(formData);

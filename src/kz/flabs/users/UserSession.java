@@ -33,14 +33,10 @@ import kz.flabs.runtimeobj.Filter;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.document.Document;
-import kz.flabs.runtimeobj.document.structure.Employer;
-import kz.flabs.runtimeobj.document.structure.UserGroup;
 import kz.flabs.runtimeobj.page.Page;
-import kz.flabs.scriptprocessor.page.async.AbstractAsyncScript;
 import kz.flabs.servlets.BrowserType;
 import kz.flabs.servlets.Cookies;
 import kz.flabs.servlets.ServletUtil;
-import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
 import kz.pchelka.env.Environment;
@@ -64,7 +60,6 @@ public class UserSession implements Const, ICache {
 	private DocID toFlash;
 	private Cookies appCookies;
 	private HttpSession jses;
-	private HashMap<String, AbstractAsyncScript> dynamicClass = new HashMap<String, AbstractAsyncScript>();
 
 	private HashMap<String, RunTimeParameters> currConditions = new HashMap<String, RunTimeParameters>();
 
@@ -172,14 +167,6 @@ public class UserSession implements Const, ICache {
 		ipAddr = ServletUtil.getClientIpAddr(request);
 	}
 
-	public void addDynmaicClass(String id, AbstractAsyncScript cl) {
-		dynamicClass.put(id, cl);
-	}
-
-	public AbstractAsyncScript getDynmaicClass(String id) {
-		return dynamicClass.get(id);
-	}
-
 	public void setObject(String name, StringBuffer obj) {
 		HashMap<String, StringBuffer> cache = null;
 		if (jses != null) {
@@ -285,30 +272,28 @@ public class UserSession implements Const, ICache {
 	}
 
 	public Document getAsDocument(IDatabase db) {
-		Employer doc = null;
-		ISystemDatabase sysDb = DatabaseFactory.getSysDatabase();
-		sysDb.reloadUserData(currentUser, currentUser.getUserID());
-		if (currentUser.getAppUser() != null) {
-			Employer emp = currentUser.getAppUser();
-			doc = emp;
-		} else {
-			doc = new Employer(db.getStructure());
-		}
-		doc.addField("userid", currentUser.getUserID(), FieldType.TEXT);
-		doc.addField("email", currentUser.getEmail(), FieldType.TEXT);
-		doc.addField("instmsgaddress", currentUser.getInstMsgAddress(), FieldType.TEXT);
-		doc.addField("instmsgstatus", Boolean.toString(currentUser.isInstMsgOnLine()), FieldType.TEXT);
-		doc.addField("lang", lang, FieldType.TEXT);
-		doc.setSkin(skin);
-		doc.setCountDocInView(pageSize);
-		UserGroup replaceGroup = db.getStructure().getGroup("[" + doc.getUserID() + "]", Const.sysGroupAsSet, Const.sysUser);
-		if (replaceGroup != null) {
-			doc.addListField("replacer", new ArrayList<String>(replaceGroup.getMembers()));
-		}
-		doc.isValid = true;
-		doc.editMode = EDITMODE_EDIT;
-		doc.setNewDoc(false);
-		return doc;
+		return null;
+
+		/*
+		 * ISystemDatabase sysDb = DatabaseFactory.getSysDatabase();
+		 * sysDb.reloadUserData(currentUser, currentUser.getUserID()); if
+		 * (currentUser.getAppUser() != null) { Employer emp =
+		 * currentUser.getAppUser(); doc = emp; } else { doc = new
+		 * Employer(db.getStructure()); } doc.addField("userid",
+		 * currentUser.getUserID(), FieldType.TEXT); doc.addField("email",
+		 * currentUser.getEmail(), FieldType.TEXT);
+		 * doc.addField("instmsgaddress", currentUser.getInstMsgAddress(),
+		 * FieldType.TEXT); doc.addField("instmsgstatus",
+		 * Boolean.toString(currentUser.isInstMsgOnLine()), FieldType.TEXT);
+		 * doc.addField("lang", lang, FieldType.TEXT); doc.setSkin(skin);
+		 * doc.setCountDocInView(pageSize); UserGroup replaceGroup =
+		 * db.getStructure().getGroup("[" + doc.getUserID() + "]",
+		 * Const.sysGroupAsSet, Const.sysUser); if (replaceGroup != null) {
+		 * doc.addListField("replacer", new
+		 * ArrayList<String>(replaceGroup.getMembers())); } doc.isValid = true;
+		 * doc.editMode = EDITMODE_EDIT; doc.setNewDoc(false);
+		 */
+
 	}
 
 	private static BrowserType getBrowserType(HttpServletRequest request) {

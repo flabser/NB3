@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.ISystemDatabase;
-import kz.flabs.dataengine.IUsersActivity;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.servlets.Cookies;
 import kz.flabs.users.User;
@@ -72,8 +71,6 @@ public class AccessGuard implements Filter {
 					UserSession userSession = new UserSession(user, http, httpResponse, saveToken, jses);
 
 					AppEnv.logger.normalLogEntry(userID + " has connected");
-					IUsersActivity ua = env.getDataBase().getUserActivity();
-					ua.postLogin(userSession.browserType, user);
 
 					UserApplicationProfile userAppProfile = user.enabledApps.get(env.appType);
 					if (userAppProfile != null || env.appType.equalsIgnoreCase("Workspace")) {

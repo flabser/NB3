@@ -1,33 +1,24 @@
 package kz.flabs.dataengine.postgresql.filters;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
+import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IFilters;
-import kz.flabs.dataengine.IQueryFormula;
-import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.Filter;
-import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.util.Util;
-import kz.flabs.webrule.constants.TagPublicationFormatType;
 
-public class Filters implements IFilters{
+public class Filters implements IFilters {
 	private IDatabase db;
 	private IDBConnectionPool dbPool;
 
 	public Filters(IDatabase db) {
 		this.db = db;
-		this.dbPool = db.getConnectionPool();
+		// this.dbPool = db.getConnectionPool();
 	}
 
 	public String getSQLQueryFromFilter(Filter filter, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize, boolean count) {
@@ -38,15 +29,16 @@ public class Filters implements IFilters{
 		String formSQL = "";
 		if (doctype.equalsIgnoreCase("")) {
 			tableName = "all";
-		}else if (doctype.equalsIgnoreCase("in") || doctype.equalsIgnoreCase("ish") || doctype.equalsIgnoreCase("l") || doctype.equalsIgnoreCase("sz")) {
+		} else if (doctype.equalsIgnoreCase("in") || doctype.equalsIgnoreCase("ish") || doctype.equalsIgnoreCase("l")
+		        || doctype.equalsIgnoreCase("sz")) {
 			tableName = "maindocs";
 			formSQL = tableName + ".form = '" + doctype + "'";
-		}else if (doctype.equalsIgnoreCase("task")) {
+		} else if (doctype.equalsIgnoreCase("task")) {
 			tableName = "tasks";
-		}else if (doctype.equalsIgnoreCase("outprj")) { 
+		} else if (doctype.equalsIgnoreCase("outprj")) {
 			tableName = "projects";
 			formSQL = tableName + ".form = 'outdocprj'";
-		}else if (doctype.equalsIgnoreCase("workprj")) {
+		} else if (doctype.equalsIgnoreCase("workprj")) {
 			tableName = "projects";
 			formSQL = tableName + ".form = 'workdocprj'";
 		}
@@ -66,7 +58,7 @@ public class Filters implements IFilters{
 		String subQuery = "select docid from custom_fields as cf  ";
 		if (!conditions.get("project").equalsIgnoreCase("")) {
 			if (tableName.equalsIgnoreCase("maindocs")) {
-				projectSQL = subQuery + " where (cf.name = 'project' and cf.valueasglossary = " + conditions.get("project")+ ") ";
+				projectSQL = subQuery + " where (cf.name = 'project' and cf.valueasglossary = " + conditions.get("project") + ") ";
 			} else if (tableName.equalsIgnoreCase("tasks") || tableName.equalsIgnoreCase("projects")) {
 				projectSQL = tableName + ".project = " + conditions.get("project");
 			}
@@ -74,7 +66,7 @@ public class Filters implements IFilters{
 		String authorSQL = "";
 		if (!conditions.get("author").equalsIgnoreCase("")) {
 			if (tableName.equalsIgnoreCase("maindocs")) {
-				authorSQL = subQuery + " where (cf.name = 'author' and cf.value = '" + conditions.get("author")+ "') ";
+				authorSQL = subQuery + " where (cf.name = 'author' and cf.value = '" + conditions.get("author") + "') ";
 			} else if (tableName.equalsIgnoreCase("tasks") || tableName.equalsIgnoreCase("projects")) {
 				authorSQL = tableName + ".author = '" + conditions.get("author") + "'";
 			}
@@ -82,26 +74,27 @@ public class Filters implements IFilters{
 		String categorySQL = "";
 		if (!conditions.get("category").equalsIgnoreCase("")) {
 			if (tableName.equalsIgnoreCase("maindocs")) {
-				categorySQL = subQuery + " where (cf.name = 'category' and cf.valueasglossary = " + conditions.get("category")+ ") ";
+				categorySQL = subQuery + " where (cf.name = 'category' and cf.valueasglossary = " + conditions.get("category") + ") ";
 			} else if (tableName.equalsIgnoreCase("tasks") || tableName.equalsIgnoreCase("projects")) {
 				categorySQL = tableName + ".category = " + conditions.get("category");
 			}
 		}
 		String dateSQL = "";
-		
-		
+
 		if (!conditions.get("datefrom").equalsIgnoreCase("") && !conditions.get("dateto").equalsIgnoreCase("")) {
 			try {
 				Date dateFrom = Util.simpleDateFormat.parse(conditions.get("datefrom"));
 				Date dateTo = Util.simpleDateFormat.parse(conditions.get("dateto"));
-				dateSQL = tableName + ".regdate between '" + Util.derbyDateTimeFormat.format(dateFrom) + "' and '" + Util.derbyDateTimeFormat.format(dateTo) + "'";
+				dateSQL = tableName + ".regdate between '" + Util.derbyDateTimeFormat.format(dateFrom) + "' and '"
+				        + Util.derbyDateTimeFormat.format(dateTo) + "'";
 			} catch (ParseException e) {
 				DatabaseUtil.errorPrint(db.getDbID(), e);
-			}			
+			}
 		}
 		boolean needAnd = false;
 		boolean needIntersect = false;
-		String readerSQL =  " select docid from " + "readers_"  + tableName + " where " + "readers_"  + tableName + ".username = '" + absoluteUserID + "'";
+		String readerSQL = " select docid from " + "readers_" + tableName + " where " + "readers_" + tableName + ".username = '" + absoluteUserID
+		        + "'";
 		if (!tableName.equalsIgnoreCase("maindocs")) {
 			readerSQL = tableName + ".docid in (" + readerSQL + ")";
 		}
@@ -110,7 +103,7 @@ public class Filters implements IFilters{
 		} else {
 			sql.append("select * from " + tableName);
 		}
-		if (tableName.equalsIgnoreCase("maindocs")) {			
+		if (tableName.equalsIgnoreCase("maindocs")) {
 			sql.append(" where " + tableName + ".docid in (");
 			if (!projectSQL.equalsIgnoreCase("")) {
 				if (needIntersect) {
@@ -214,202 +207,5 @@ public class Filters implements IFilters{
 		}
 		return sql.toString();
 	}
-
-
-
-	@Override
-	public StringBuffer getDocumentsByFilter(Filter filter, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize, Set<DocID> toExpandResponses, Set<String> toExpandCategory, TagPublicationFormatType publishAs, int page) {
-		StringBuffer xmlContent = new StringBuffer(1000);
-		try {
-			String sql = getSQLQueryFromFilter(filter, complexUserID, absoluteUserID, offset, pageSize, false);
-			xmlContent = db.getDocsByCondition(sql, complexUserID, absoluteUserID, "", toExpandResponses, toExpandCategory, publishAs, page);
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
-		return xmlContent;
-	}
-
-	@Override
-	public int getDocumentsCountByFilter(Filter filter, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize) {
-		int count = 0;
-		String sql = getSQLQueryFromFilter(filter, complexUserID, absoluteUserID, offset, pageSize, true);
-		count = db.getDocsCountByCondition(sql, complexUserID, absoluteUserID);
-		return count;
-	}
-
-	@Override
-	public int insertFilter(Filter filter, Set<String> complexUserID,
-			String absoluteUserID) {
-		return 0;
-	}
-
-	@Override
-	public int updateFilter(Filter filter, Set<String> complexUserID,
-			String absoluteUserID) {
-		return 0;
-	}
-
-/*	@Override
-	public int addToFavorites(int docID, int docType, String userName) {
-		Connection conn = dbPool.getConnection();
-		int key;
-		try {
-			String sql = "UPDATE " + DatabaseUtil.getReadersTableName(docType) + " SET FAVORITES = 1 WHERE DOCID = ? AND USERNAME = ?";
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setInt(1, docID);
-			pst.setString(2, userName);
-			key = pst.executeUpdate();
-			conn.commit();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(e);
-			return -1;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-		return key;
-	}
-
-	@Override
-	public int removeFromFavorites(int docID, int docType, String userName) {
-		Connection conn = dbPool.getConnection();
-		int key;
-		try {
-			PreparedStatement pst = conn.prepareStatement("UPDATE " + DatabaseUtil.getReadersTableName(docType) + " SET FAVORITES = 0 WHERE DOCID = ? AND USERNAME = ?");
-			pst.setInt(1, docID);
-			pst.setString(2, userName);
-			key = pst.executeUpdate();
-			conn.commit();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(e);
-			return -1;
-		}
-		return key;
-	}*/
-
-	@Override
-	public StringBuffer getFiltersByUser(Set<String> complexUserID, String absoluteUserID) {
-		StringBuffer xmlContent = new StringBuffer(10000);
-		Connection conn = dbPool.getConnection();
-		try {
-			String sql = "SELECT * FROM FILTER WHERE USERID = ?";
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setString(1, absoluteUserID);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				//xmlContent.append("<entry count=\"0\" url=\"Provider?type=outline&amp;id=outline&amp;subtype=view&amp;subid=filter&amp;page=0\" id=\"" + rs.getInt("ID") + "\" caption=\"" + rs.getString("NAME") + "\" hint=\"" + rs.getString("NAME") + "\"/>");
-				xmlContent.append("<entry count=\"0\" url=\"Provider?type=outline&amp;id=outline&amp;subtype=filter&amp;subid=" + rs.getInt("ID") + "&amp;page=0\" id=\"favdocs\" caption=\"" + rs.getString("NAME") + "\" hint=\"" + rs.getString("NAME") + "\"/>");
-			}
-			conn.commit();
-			rs.close();
-			pst.close();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-		return xmlContent;
-	}
-
-	@Override
-	public Filter getFilterByID(int id, Set<String> complexUserID, String absoluteUserID) {
-		Connection conn = dbPool.getConnection();
-		Filter filter = new Filter(db.getParent());
-		try {
-			PreparedStatement pst = conn.prepareStatement("SELECT * FROM FILTER WHERE ID = ? AND USERID = ?");
-			pst.setInt(1, id);
-			pst.setString(2, absoluteUserID);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				filter = db.getStructure().fillFilterDoc(conn, rs);
-			}
-			conn.commit();
-			rs.close();
-			pst.close();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-		return filter;
-
-	}
-	
-/*	@Override
-	public StringBuffer getFavorites(IQueryFormula nf, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize, String fieldsCond, Set<DocID> toExpandResponses, Set<String> toExpandCategory, TagPublicationFormatType publishAs) {
-		StringBuffer xmlContent = new StringBuffer(10000);
-		Connection conn = dbPool.getConnection();
-		try {
-			Statement s = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);			
-			String sql = "select has_attachment, form, docid, doctype, viewtext, viewtext1, viewtext2, viewtext3, viewnumber, viewdate from maindocs where docid in (select docid from readers_maindocs where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select has_attachment, form, docid, doctype, viewtext, viewtext1, viewtext2, viewtext3, viewnumber, viewdate  from tasks where docid in (select docid from readers_tasks where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select has_attachment, form, docid, doctype, viewtext, viewtext1, viewtext2, viewtext3, viewnumber, viewdate  from executions where docid in (select docid from readers_executions where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select has_attachment, form, docid, doctype, viewtext, viewtext1, viewtext2, viewtext3, viewnumber, viewdate  from projects where docid in (select docid from readers_projects where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" order by " + nf.getSortBlock().fieldName + "  " + nf.getSortBlock().order + " LIMIT " + pageSize + " OFFSET " + offset;
-			ResultSet rs = s.executeQuery(sql);			
-			while (rs.next()) {
-				xmlContent.append(db.getDocumentEntry(conn, complexUserID, absoluteUserID, rs, fieldsCond, toExpandResponses));
-			}		
-			s.close();
-			rs.close();
-			conn.commit();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(e);
-		} catch (DocumentException e) {
-			DatabaseUtil.errorPrint(e);
-		} finally {		
-			dbPool.returnConnection(conn);
-		}
-		return xmlContent;
-	}*/
-
-/*	@Override 
-	public int isFavourites(Connection conn, int docID, int docType, String userName) {
-		int isFavour = 0;
-		try {
-			String sql = "SELECT favorites from " + DatabaseUtil.getReadersTableName(docType) + " where docid = ? and username = ?";
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setInt(1, docID);
-			pst.setString(2, userName);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				isFavour = rs.getInt("FAVORITES");
-			}
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(e);
-		}
-		return isFavour;
-	}
-
-	@Override
-	public int getFavoritesCount(Set<String> complexUserID, String absoluteUserID) {
-		int count = 0;
-		Connection conn = dbPool.getConnection();
-		try {
-			Statement s = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);			
-			String sql = " select count(*) from (select docid from maindocs where docid in (select docid from readers_maindocs where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select docid  from tasks where docid in (select docid from readers_tasks where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select docid  from executions where docid in (select docid from readers_executions where username = '" + absoluteUserID + "' and favorites = 1) " +
-					" union " +
-					" select docid  from projects where docid in (select docid from readers_projects where username = '" + absoluteUserID + "' and favorites = 1)) cnt ";			
-			ResultSet rs = s.executeQuery(sql);
-			if (rs.next()) {
-				count = rs.getInt(1);
-			}
-			s.close();
-			rs.close();
-			conn.commit();
-		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(e);
-		} finally {		
-			dbPool.returnConnection(conn);
-
-		}
-		return count;
-	}*/
 
 }

@@ -5,13 +5,13 @@ import java.util.Collection;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
-import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
+import kz.flabs.users.User;
 import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
-import kz.nextbase.script.struct._Employer;
+//import kz.nextbase.script.struct._Employer;
 import kz.pchelka.env.Environment;
 import kz.pchelka.server.Server;
 
@@ -76,17 +76,19 @@ public class _AppEntourage {
 
 	public _ViewEntryCollection getAvailableApps() throws _Exception {
 		ViewEntryCollection vec = new ViewEntryCollection(ses, 100);
-		_Employer emp = ses.getCurrentAppUser();
+		// _Employer emp = ses.getCurrentAppUser();
+		User user = ses.getUser();
 
 		for (AppEnv appEnv : Environment.getApplications()) {
 			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {
-				if (emp.isAuthorized()) {
+				if (user.authorized) {
 					Collection<UserApplicationProfile> enabledApps;
-					try {
-						enabledApps = emp.getEnabledApps();
-					} catch (DocumentException e1) {
-						throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, "internal error: function: _Document.getAvailableApps()");
-					}
+					// try {
+					enabledApps = user.enabledApps.values();
+					// } catch (DocumentException e1) {
+					// throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR,
+					// "internal error: function: _Document.getAvailableApps()");
+					// }
 					for (UserApplicationProfile uap : enabledApps) {
 						if (uap.appName.equals(appEnv.appType)) {
 

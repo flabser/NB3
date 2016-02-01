@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewText;
 
-
 public class _ViewEntry {
 
 	private ViewEntry entry;
@@ -18,7 +17,7 @@ public class _ViewEntry {
 	}
 
 	public String getViewText() {
-		ArrayList <ViewText> vt = entry.getViewTexts();
+		ArrayList<ViewText> vt = entry.getViewTexts();
 		try {
 			return vt.get(0).getValueAsText();
 		} catch (Exception e) {
@@ -42,12 +41,13 @@ public class _ViewEntry {
 		return entry.ddbID;
 	}
 
-	public _Document getDocument() throws _Exception {
-		return session.getCurrentDatabase().getDocumentByID(entry.ddbID);
-	}
+	/*
+	 * public _Document getDocument() throws _Exception { return
+	 * session.getCurrentDatabase().getDocumentByID(entry.ddbID); }
+	 */
 
 	public String toXML() {
-		return entry.toXML(session.getCurrentAppUser().employer).toString();
+		return entry.toXML(session.getUser()).toString();
 	}
 
 	public _Tag toTag() {
@@ -62,18 +62,25 @@ public class _ViewEntry {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return entry.toString();
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof _ViewEntry)) return false;
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof _ViewEntry)) {
+			return false;
+		}
 
 		_ViewEntry viewEntry = (_ViewEntry) o;
 
-		if (!entry.equals(viewEntry.entry)) return false;
+		if (!entry.equals(viewEntry.entry)) {
+			return false;
+		}
 
 		return true;
 	}

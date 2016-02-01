@@ -6,15 +6,11 @@ import java.util.Date;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.users.UserSession;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._JSONHandler;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._URL;
-import kz.nextbase.script.concurrency._AJAXHandler;
-import kz.nextbase.script.constants._JSONTemplate;
 import kz.pchelka.env.Environment;
 
 public class ScriptEvent {
@@ -59,19 +55,21 @@ public class ScriptEvent {
 		toPublishElement.add(value);
 	}
 
-	public void publishElement(String spot, String launcher, _AJAXHandler value, boolean async, _JSONTemplate template) {
-		_JSONHandler jsHandler = new _JSONHandler(spot, launcher, value, template);
-		UserSession userSession = ses.getUser().getSession();
-		userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
-		toPublishElement.add(jsHandler);
-	}
-
-	public void publishElement(String id, String spot, String launcher, _AJAXHandler value, boolean async, _JSONTemplate template) {
-		_JSONHandler jsHandler = new _JSONHandler(id, spot, launcher, value, "", template);
-		UserSession userSession = ses.getUser().getSession();
-		userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
-		toPublishElement.add(jsHandler);
-	}
+	/*
+	 * public void publishElement(String spot, String launcher, _AJAXHandler
+	 * value, boolean async, _JSONTemplate template) { _JSONHandler jsHandler =
+	 * new _JSONHandler(spot, launcher, value, template); UserSession
+	 * userSession = ses.getUser().getSession();
+	 * userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
+	 * toPublishElement.add(jsHandler); }
+	 * 
+	 * public void publishElement(String id, String spot, String launcher,
+	 * _AJAXHandler value, boolean async, _JSONTemplate template) { _JSONHandler
+	 * jsHandler = new _JSONHandler(id, spot, launcher, value, "", template);
+	 * UserSession userSession = ses.getUser().getSession();
+	 * userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
+	 * toPublishElement.add(jsHandler); }
+	 */
 
 	public String getGroovyError(StackTraceElement stack[]) {
 		for (int i = 0; i < stack.length; i++) {

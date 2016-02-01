@@ -2,7 +2,6 @@ package kz.nextbase.script.actions;
 
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.nextbase.script._Document;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Session;
 
@@ -54,7 +53,7 @@ public class _Action {
 
 	public String toXML() {
 		return "<action  mode=\"" + isOn + "\"" + XMLUtil.getAsAttribute("url", url) + " id=\"" + customID + "\" caption=\"" + caption + "\" hint=\""
-				+ hint + "\">" + type + getJson(type) + "</action>";
+		        + hint + "\">" + type + getJson(type) + "</action>";
 	}
 
 	void setSession(_Session ses) {
@@ -70,13 +69,7 @@ public class _Action {
 				return "<js><![CDATA[window.location.href = \"" + session.getLastURL() + "\"]]></js>";
 			}
 		case GET_DOCUMENT_ACCESSLIST:
-			_Document doc = session.getDocumentInConext();
-			if (doc != null) {
-				return "<js><![CDATA[window.location.href = \"Provider?type=service&operation=get_accesslist&id=get_accesslist&docid=" + doc.getID()
-						+ "\"]]></js>";
-			} else {
-				return "<js><![CDATA[window.location.href = \"Provider?type=service&operation=get_accesslist&id=get_accesslist&docid==\"]]></js>";
-			}
+
 		default:
 			return "";
 		}

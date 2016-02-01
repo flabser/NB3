@@ -16,7 +16,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.jpa.ViewPage;
 import kz.flabs.exception.ComplexObjectException;
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.runtimeobj.document.DocID;
@@ -33,7 +32,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 
 	public FTIndexEngine(IDatabase db) {
 		this.db = db;
-		this.dbPool = db.getConnectionPool();
+		// this.dbPool = db.getConnectionPool();
 	}
 
 	public String normalizeKeywordToTSQuery(String keyword) {
@@ -109,7 +108,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 
 			while (rs.next()) {
 				ViewEntry entry = new ViewEntry(db, rs, new HashSet<DocID>(), user);
-				coll.add(entry);
+				// coll.add(entry);
 			}
 
 			sql = "SELECT count(DISTINCT total) from (SELECT distinct docid FROM maindocs, plainto_tsquery('"
@@ -222,27 +221,6 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 				key = rs.getInt("docid");
 				table = rs.getString("tablename");
 
-				try {
-					if (table.equalsIgnoreCase("custom_fields")) {
-						sql = "SELECT DOCID FROM CUSTOM_FIELDS WHERE ID = " + key;
-						PreparedStatement pst1 = conn.prepareStatement(sql);
-						ResultSet rs1 = pst1.executeQuery();
-						if (rs1.next()) {
-							doc = db.getMainDocumentByID(rs1.getInt("DOCID"), complexUserID, absoluteUserID);
-						}
-						pst1.close();
-					} else if (table.equalsIgnoreCase("maindocs")) {
-						doc = db.getMainDocumentByID(key, complexUserID, absoluteUserID);
-					} else if (table.equalsIgnoreCase("tasks")) {
-						doc = db.getTasks().getTaskByID(key, complexUserID, absoluteUserID);
-					} else if (table.equalsIgnoreCase("executions")) {
-						doc = db.getExecutions().getExecutionByID(key, complexUserID, absoluteUserID);
-					} else if (table.equalsIgnoreCase("projects")) {
-						doc = db.getProjects().getProjectByID(key, complexUserID, absoluteUserID);
-					}
-				} catch (DocumentAccessException e) {
-					// xmlContent.append("<entry viewtext=\"access restricted\"></entry>");
-				}
 				if (doc != null && set.add(doc.docType + " " + doc.getDocID())) {
 					xmlContent.append(doc.toXMLEntry(""));
 				}
@@ -366,7 +344,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 			pageSQL += " LIMIT " + pageSize;
 		}
 		if (pageNum > 0) {
-			pageSQL += " OFFSET " + this.db.calcStartEntry(pageNum, pageSize);
+
 		}
 
 		return pageSQL;

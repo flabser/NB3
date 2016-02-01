@@ -35,16 +35,11 @@ public class RuntimeObjUtil implements Const {
 	public BaseDocument getGrandParentDocument(IDatabase db, BaseDocument doc) throws DocumentException, DocumentAccessException,
 	        ComplexObjectException {
 		if (!doc.isNewDoc()) {
-			BaseDocument parentDoc = null;
-			parentDoc = db.getDocumentByComplexID(doc.parentDocType, doc.parentDocID);
-			if (parentDoc != null && parentDoc.parentDocID != 0 && parentDoc.parentDocType != Const.DOCTYPE_UNKNOWN) {
-				parentDoc = getGrandParentDocument(db, parentDoc);
-			}
 
-			return parentDoc;
 		} else {
 			throw new DocumentException(DocumentExceptionType.CANNOT_GET_PARENT_DOCUMENT_FROM_NEWDOC);
 		}
+		return doc;
 	}
 
 	public static Calendar getCtrlDate(Calendar fromTime, int priority, int complication) {

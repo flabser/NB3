@@ -40,7 +40,6 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.flabs.webrule.module.ExternalModuleType;
 import kz.pchelka.daemon.system.LogsZipRule;
 import kz.pchelka.daemon.system.TempFileCleanerRule;
 import kz.pchelka.log.ILogger;
@@ -376,7 +375,8 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		if (applications.size() >= countOfApp) {
 			if (delayedStart.size() > 0) {
 				for (IDatabase db : delayedStart) {
-					logger.normalLogEntry("Connecting to external module " + db.initExternalPool(ExternalModuleType.STRUCTURE));
+					// logger.normalLogEntry("Connecting to external module " +
+					// db.initExternalPool(ExternalModuleType.STRUCTURE));
 					if (!schedulerStarted) {
 						Thread schedulerThread = new Thread(scheduler);
 						schedulerThread.start();

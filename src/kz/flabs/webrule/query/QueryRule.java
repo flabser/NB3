@@ -20,10 +20,6 @@ import kz.flabs.parser.GroupByBlock;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.parser.SortByBlock;
 import kz.flabs.runtimeobj.document.DocID;
-import kz.flabs.runtimeobj.queries.FieldValueMacroType;
-import kz.flabs.runtimeobj.queries.Query;
-import kz.flabs.runtimeobj.queries.QueryFactory;
-import kz.flabs.runtimeobj.queries.QueryMacroType;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
@@ -63,7 +59,6 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 	private IQueryFormula queryFormula;
 	private QueryType queryType = QueryType.UNKNOWN;
 	private RuleValue query;
-	private QueryMacroType macro;
 
 	public QueryRule(AppEnv env, File ruleFile) throws QueryFormulaParserException, RuleException {
 		super(env, ruleFile);
@@ -83,7 +78,7 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 
 		if (query.getSourceType() == ValueSourceType.MACRO) {
 			if (query.getValue().equalsIgnoreCase("RESPONSES")) {
-				macro = QueryMacroType.RESPONSES;
+
 			}
 		}
 		setDocType(XMLUtil.getTextContent(doc, "/rule/doctype", true, "UNKNOWN", false));
@@ -92,13 +87,9 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 
 		String sql = XMLUtil.getTextContent(doc, "/rule/sql");
 		if (!sql.equals("")) {
-			queryFormulaBlocks = new FormulaBlocks(sql, XMLUtil.getTextContent(doc, "/rule/sqlcount"), queryType);
-			queryFormula = env.getDataBase().getQueryFormula(id, queryFormulaBlocks);
+
 		} else {
-			queryFormulaBlocks = new FormulaBlocks(query.getValue(), queryType);
-			if (!queryFormulaBlocks.paramatrizedQuery) {
-				queryFormula = env.getDataBase().getQueryFormula(id, queryFormulaBlocks);
-			}
+
 		}
 
 		groupBy = XMLUtil.getTextContent(doc, "rule/groupby");
@@ -288,26 +279,7 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 			value.append("<querymacros><query>");
 			switch (queryType) {
 			case DOCUMENT:
-				value.append("<entry viewtext=\"" + QueryMacroType.RESPONSES + "\"></entry>");
-				break;
-			case TASK:
-				value.append("<entry viewtext=\"" + QueryMacroType.TASKSFORME + "\"></entry>");
-				value.append("<entry viewtext=\"" + QueryMacroType.MYTASKS + "\"></entry>");
-				value.append("<entry viewtext=\"" + QueryMacroType.COMPLETETASKS + "\"></entry>");
-				break;
-			case EXECUTION:
-				break;
-			case PROJECT:
-				value.append("<entry viewtext=\"" + QueryMacroType.WAITFORCOORD + "\"></entry>");
-				value.append("<entry viewtext=\"" + QueryMacroType.WAITFORSIGN + "\"></entry>");
-				break;
-			case GLOSSARY:
-				break;
-			case STRUCTURE:
-				value.append("<entry viewtext=\"" + QueryMacroType.RESPONSES + "\"></entry>");
-				value.append("<entry viewtext=\"" + QueryMacroType.STRUCTURE + "\"></entry>");
-				value.append("<entry viewtext=\"" + QueryMacroType.EXPANDED_STRUCTURE + "\"></entry>");
-				break;
+
 			case ROLE:
 			}
 			value.append("</query></querymacros>");
@@ -320,7 +292,7 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 			value.append("</query></publicationformats>");
 		}
 		value.append("<fieldsources><query>");
-		value.append("<entry viewtext=\"" + FieldValueMacroType.RESULTSET + "\"></entry>");
+
 		value.append("</query></fieldsources>");
 		value.append("</glossaries>");
 		return value.toString();
@@ -360,11 +332,6 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 			// env.ruleProvider.loadRules();
 			QueryRule ruleObj = new QueryRule(env, ruleFile);
 			ISystemDatabase sysDb = DatabaseFactory.getSysDatabase();
-			Query query = QueryFactory.getQuery(env, ruleObj, sysDb.getUser(Const.sysUser));
-			int result = query.fetch(1, 1000, 0, 0, toExpandResponses, null, null, null);
-			if (result > -1) {
-				xmlContent.append(query.toXML());
-			}
 
 			System.out.println(xmlContent);
 
@@ -421,11 +388,6 @@ public class QueryRule extends Rule implements IQueryRule, Const {
 	@Override
 	public RunMode getCacheMode() {
 		return cacheMode;
-	}
-
-	@Override
-	public QueryMacroType getMacro() {
-		return macro;
 	}
 
 }

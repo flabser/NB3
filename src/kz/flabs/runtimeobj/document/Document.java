@@ -9,12 +9,11 @@ import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.LicenseException;
 import kz.flabs.users.User;
 
-import java.util.Date;
 public class Document extends BaseDocument implements Const {
 
 	private static final long serialVersionUID = 1L;
 
-	public Document(IDatabase db, String currentUser){
+	public Document(IDatabase db, String currentUser) {
 		docType = Const.DOCTYPE_MAIN;
 		this.env = db.getParent();
 		this.db = db;
@@ -24,8 +23,7 @@ public class Document extends BaseDocument implements Const {
 		setAuthor(currentUser);
 	}
 
-
-	public Document(AppEnv env, User currentUser){
+	public Document(AppEnv env, User currentUser) {
 		docType = Const.DOCTYPE_MAIN;
 		this.env = env;
 		db = env.getDataBase();
@@ -35,26 +33,13 @@ public class Document extends BaseDocument implements Const {
 		setAuthor(currentUser.getUserID());
 	}
 
-    public int save(User user) throws DocumentAccessException, DocumentException, LicenseException, ComplexObjectException{
-        computeViewText();
-        normalizeViewTexts();
-        int docID = 0;
-        if(isNewDoc()){
-            setRegDate(new Date());
-            setLastUpdate(getRegDate());
-            this.setDdbID("");
-            docID = db.insertMainDocument(this, user);
-            setDocID(docID);
-            setNewDoc(false);
-        }else{
-            setLastUpdate(new Date());
-            if (getViewDate() == null){
-                setViewDate(getRegDate());
-            }
-            docID = db.updateMainDocument(this, user);
-        }
-        return docID;
+	@Override
+	public int save(User user) throws DocumentAccessException, DocumentException, LicenseException, ComplexObjectException {
 
-    }
+		int docID = 0;
+
+		return docID;
+
+	}
 
 }

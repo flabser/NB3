@@ -13,8 +13,6 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.scriptprocessor.form.postsave.PostSaveProcessor;
-import kz.flabs.scriptprocessor.form.querysave.QuerySaveProcessor;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
 import kz.flabs.webrule.RuleUser;
@@ -212,18 +210,7 @@ public class FormRule extends Rule implements Const {
 				advancedQSEnable = true;
 			} else {
 				String qs = XMLUtil.getTextContent(doc, "/rule/querysave");
-				if (!qs.equals("")) {
-					querySaveEnable = true;
-					querySaveScript = qs;
-					ClassLoader parent = getClass().getClassLoader();
-					GroovyClassLoader loader = new GroovyClassLoader(parent);
-					try {
-						querySaveClass = loader.parseClass(QuerySaveProcessor.normalizeScript(querySaveScript));
-					} catch (MultipleCompilationErrorsException e) {
-						AppEnv.logger.errorLogEntry("QuerySaveScript compilation error at form rule compiling=" + id + ":" + e.getMessage());
-						querySaveEnable = false;
-					}
-				}
+
 			}
 
 			Node psNode = XMLUtil.getNode(doc, "/rule/events/postsave", false);
@@ -238,7 +225,7 @@ public class FormRule extends Rule implements Const {
 					ClassLoader parent = getClass().getClassLoader();
 					GroovyClassLoader loader = new GroovyClassLoader(parent);
 					try {
-						postSaveClass = loader.parseClass(PostSaveProcessor.normalizeScript(postSaveScript));
+
 					} catch (MultipleCompilationErrorsException e) {
 						AppEnv.logger.errorLogEntry("PostSaveScript compilation error at form rule compiling=" + id + ":" + e.getMessage());
 						postSaveEnable = false;
@@ -315,14 +302,7 @@ public class FormRule extends Rule implements Const {
 				return new ElementScript(qsSourceType, XMLUtil.getTextContent(node, ".", true));
 			} else {
 				if (!value.equals("")) {
-					Class<GroovyObject> go = null;
-					GroovyClassLoader loader = new GroovyClassLoader(parent);
-					if (normailzator.equalsIgnoreCase("querysave")) {
-						go = loader.parseClass(QuerySaveProcessor.normalizeScript(value));
-					} else if (normailzator.equalsIgnoreCase("postsave")) {
-						go = loader.parseClass(PostSaveProcessor.normalizeScript(value));
-					}
-					return new ElementScript(ValueSourceType.SCRIPT, go.getName());
+
 				}
 			}
 

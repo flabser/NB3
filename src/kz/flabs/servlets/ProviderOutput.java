@@ -36,7 +36,7 @@ public class ProviderOutput {
 	private HttpServletResponse response;
 
 	public ProviderOutput(String type, String id, StringBuffer output, HttpServletRequest request, HttpServletResponse response,
-			UserSession userSession, HttpSession jses, String title, boolean addHistory) throws UserException {
+	        UserSession userSession, HttpSession jses, String title, boolean addHistory) throws UserException {
 		this.type = type;
 		this.id = id;
 		this.output = output;
@@ -55,7 +55,7 @@ public class ProviderOutput {
 		if (userSession.history != null) {
 			for (UserSession.HistoryEntry entry : userSession.history.getEntries()) {
 				historyXML += "<entry type=\"" + entry.type + "\" title=\"" + entry.title + "\">" + XMLUtil.getAsTagValue(entry.URLforXML)
-						+ "</entry>";
+				        + "</entry>";
 			}
 		}
 
@@ -135,7 +135,7 @@ public class ProviderOutput {
 
 	public String getStandartOutput() {
 		String localUserName = "";
-		localUserName = userSession.currentUser.getFullName();
+		localUserName = userSession.currentUser.getUserName();
 
 		String queryString = request.getQueryString();
 		if (queryString != null) {
@@ -144,15 +144,13 @@ public class ProviderOutput {
 			queryString = "";
 		}
 
-		return xmlTextUTF8Header + "<request " + queryString + " type=\"" + type + "\" title=\"" + title + "\" lang=\"" + userSession.lang
-				+ "\" id=\"" + id + "\" " + "useragent=\"" + browser + "\"  skin=\"" + userSession.skin + "\" userid=\""
-				+ userSession.currentUser.getUserID() + "\" username=\"" + localUserName + "\">" + "<history>" + historyXML + "</history>" + output
-				+ "</request>";
+		return xmlTextUTF8Header + "<request " + queryString + " lang=\"" + userSession.lang + "\" id=\"" + id + "\" " + "useragent=\"" + browser
+		        + "\"  userid=\"" + userSession.currentUser.getUserID() + "\" username=\"" + localUserName + "\">" + output + "</request>";
 	}
 
 	public String getStandartUTF8Output() {
 		String localUserName = "";
-		localUserName = userSession.currentUser.getFullName();
+		localUserName = userSession.currentUser.getUserName();
 
 		String queryString = request.getQueryString();
 		if (queryString != null) {
@@ -161,9 +159,8 @@ public class ProviderOutput {
 			queryString = "";
 		}
 
-		String outputContent = xmlTextUTF8Header + "<request " + queryString + " type=\"" + type + "\" title=\"" + title + "\" lang=\""
-				+ userSession.lang + "\" id=\"" + id + "\" " + "useragent=\"" + browser + "\"  skin=\"" + userSession.skin + "\" userid=\"" + "\" "
-				+ "username=\"" + localUserName + "\"><history>" + historyXML + "</history>" + output + "</request>";
+		String outputContent = xmlTextUTF8Header + "<request " + queryString + " lang=\"" + userSession.lang + "\" id=\"" + id + "\" "
+		        + "useragent=\"" + browser + "\" userid=\"" + "\" " + "username=\"" + localUserName + "\">" + output + "</request>";
 
 		return outputContent;
 	}

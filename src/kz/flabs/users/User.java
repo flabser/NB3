@@ -19,7 +19,6 @@ import kz.flabs.exception.WebFormValueExceptionType;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.BlobFile;
-import kz.flabs.runtimeobj.document.structure.Employer;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.ISaveField;
@@ -37,15 +36,15 @@ public class User extends BaseDocument implements Const {
 	private static final long serialVersionUID = 1L;
 	private transient ISystemDatabase sysDatabase;
 	private String userID;
-	private Employer appUser;
+
 	private String password;
 	private String passwordHash = "";
 	private String email = "";
-	private String instMsgAddress = "";
 	private boolean isSupervisor;
 	private int hash;
 	transient private UserSession session;
 	private String publicKey = "";
+	private String userName;
 
 	public User() {
 		this.sysDatabase = DatabaseFactory.getSysDatabase();
@@ -85,12 +84,11 @@ public class User extends BaseDocument implements Const {
 		sysDatabase = DatabaseFactory.getSysDatabase();
 		sysDatabase.reloadUserData(this, u);
 		if (db != null) {
-			struct = db.getStructure();
-			appUser = struct.getAppUser(userID);
-			if (appUser == null) {
-				appUser = new Employer(struct);
-			}
-			appUser.setUser(this);
+			/*
+			 * struct = db.getStructure(); appUser = struct.getAppUser(userID);
+			 * if (appUser == null) { appUser = new Employer(struct); }
+			 * appUser.setUser(this);
+			 */
 		}
 		try {
 			session = new UserSession(this);
@@ -104,11 +102,10 @@ public class User extends BaseDocument implements Const {
 		sysDatabase = DatabaseFactory.getSysDatabase();
 		sysDatabase.reloadUserData(this, u);
 		if (struct != null) {
-			appUser = struct.getAppUser(userID);
-			if (appUser == null) {
-				appUser = new Employer(struct);
-			}
-			appUser.setUser(this);
+			/*
+			 * appUser = struct.getAppUser(userID); if (appUser == null) {
+			 * appUser = new Employer(struct); } appUser.setUser(this);
+			 */
 		}
 	}
 
@@ -122,12 +119,11 @@ public class User extends BaseDocument implements Const {
 		}
 		IDatabase db = env.getDataBase();
 		if (db != null) {
-			struct = env.getDataBase().getStructure();
-			appUser = struct.getAppUser(userID);
-			if (appUser == null) {
-				appUser = new Employer(struct);
-			}
-			appUser.setUser(this);
+			/*
+			 * struct = env.getDataBase().getStructure(); appUser =
+			 * struct.getAppUser(userID); if (appUser == null) { appUser = new
+			 * Employer(struct); } appUser.setUser(this);
+			 */
 		}
 	}
 
@@ -158,27 +154,16 @@ public class User extends BaseDocument implements Const {
 			userGroups.addAll(observerGroupAsList);
 		}
 		try {
-			userGroups.addAll(appUser.getAllUserGroups());
+			// userGroups.addAll(appUser.getAllUserGroups());
 		} catch (Exception e) {
 			userGroups.add(userID);
 		}
 		return userGroups;
 	}
 
+	@Deprecated
 	public String getFullName() {
-		try {
-			return appUser.getFullName();
-		} catch (Exception e) {
-			return userID;
-		}
-	}
-
-	public Employer getAppUser() {
-		return appUser;
-	}
-
-	public void setAppUser(Employer appUser) {
-		this.appUser = appUser;
+		return userName;
 	}
 
 	public boolean addEnabledApp(String app, UserApplicationProfile ap) {
@@ -191,7 +176,6 @@ public class User extends BaseDocument implements Const {
 			docID = rs.getInt("DOCID");
 			userID = rs.getString("USERID");
 			setEmail(rs.getString("EMAIL"));
-			setInstMsgAddress(rs.getString("INSTMSGADDR"));
 			password = rs.getString("PWD");
 			passwordHash = rs.getString("PWDHASH");
 			publicKey = rs.getString("PUBLICKEY");
@@ -268,22 +252,6 @@ public class User extends BaseDocument implements Const {
 		}
 	}
 
-	public void setInstMsgAddress(String instMsgAddress) throws WebFormValueException {
-		try {
-			this.instMsgAddress = instMsgAddress;
-		} catch (Exception e) {
-			throw new WebFormValueException(WebFormValueExceptionType.FORMDATA_INCORRECT, "instmsgaddress");
-		}
-	}
-
-	public String getInstMsgAddress() {
-		if (instMsgAddress != null) {
-			return instMsgAddress;
-		} else {
-			return "";
-		}
-	}
-
 	public boolean isSupervisor() {
 		return isSupervisor;
 	}
@@ -344,7 +312,6 @@ public class User extends BaseDocument implements Const {
 	public void fillFieldsToSave(HashMap<String, ISaveField> saveFieldsMap, HashMap<String, String[]> fields) throws WebFormValueException {
 		setUserID(getWebFormValue("userid", fields, userID)[0]);
 		setEmail(getWebFormValue("email", fields, email)[0]);
-		setInstMsgAddress(getWebFormValue("instmsgaddress", fields, instMsgAddress)[0]);
 		setPassword(getWebFormValue("pwd", fields, password)[0]);
 		setPasswordHash(getWebFormValue("pwd", fields, password)[0]);
 		setAdmin(getWebFormValue("isadmin", fields, "0"));
@@ -378,7 +345,6 @@ public class User extends BaseDocument implements Const {
 	public void fillFieldsToSaveLight(HashMap<String, String[]> fields) throws WebFormValueException {
 		setUserID(getWebFormValue("userid", fields, userID)[0]);
 		setEmail(getWebFormValue("email", fields, email)[0]);
-		setInstMsgAddress(getWebFormValue("instmsgaddress", fields, instMsgAddress)[0]);
 		setPassword(getWebFormValue("pwd", fields, password)[0]);
 		setPasswordHash(getWebFormValue("pwd", fields, password)[0]);
 		String p_eds = getWebFormValue("p_eds", fields, "")[0];
@@ -394,7 +360,7 @@ public class User extends BaseDocument implements Const {
 			}
 
 		}
-		this.appUser.setReplacers(fields);
+		// this.appUser.setReplacers(fields);
 	}
 
 	public int save(Set<String> complexUserID, String absoluteUserID) {
@@ -415,7 +381,7 @@ public class User extends BaseDocument implements Const {
 	}
 
 	public String usersByKeytoXML() {
-		return "<userid>" + userID + "</userid>" + "<key>" + docID + "</key>" + "<email>" + email + "</email><imid>" + instMsgAddress + "</imid>";
+		return "<userid>" + userID + "</userid>" + "<key>" + docID + "</key>" + "<email>" + email + "</email>";
 	}
 
 	public String getAppURLAsXml() {
@@ -437,5 +403,15 @@ public class User extends BaseDocument implements Const {
 	@Deprecated
 	public UserSession getSession() {
 		return session;
+	}
+
+	public void setUserName(String name) {
+		userName = name;
+
+	}
+
+	public String getUserName() {
+		return userName;
+
 	}
 }

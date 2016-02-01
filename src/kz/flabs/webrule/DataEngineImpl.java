@@ -12,8 +12,7 @@ public class DataEngineImpl {
 			deployer = kz.flabs.dataengine.postgresql.DatabaseDeployer.class;
 			database = kz.flabs.dataengine.postgresql.Database.class;
 		} else if (databaseType == DatabaseType.MSSQL) {
-			deployer = kz.flabs.dataengine.mssql.DatabaseDeployer.class;
-			database = kz.flabs.dataengine.mssql.Database.class;
+
 		} else if (databaseType == DatabaseType.ORACLE) {
 			deployer = kz.flabs.dataengine.oracle.DatabaseDeployer.class;
 			database = kz.flabs.dataengine.oracle.Database.class;

@@ -100,27 +100,31 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	}
 
 	public ArrayList<Role> getRolesList() {
-		ArrayList<Role> rolesList = (ArrayList<Role>) globalSetting.roleCollection.getRolesList().clone();
+		// ArrayList<Role> rolesList = (ArrayList<Role>)
+		// globalSetting.roleCollection.getRolesList().clone();
 		for (AppEnv extApp : Environment.getApplications()) {
 			for (ExternalModule module : extApp.globalSetting.extModuleMap.values()) {
 				if (module.getType() == ExternalModuleType.STRUCTURE && module.getName().equalsIgnoreCase(appType)) {
-					rolesList.addAll(extApp.getRolesList());
+					// rolesList.addAll(extApp.getRolesList());
 				}
 			}
 		}
-		return rolesList;
+		// return rolesList;
+		return null;
 	}
 
 	public HashMap<String, Role> getRolesMap() {
-		HashMap<String, Role> rolesMap = (HashMap<String, Role>) globalSetting.roleCollection.getRolesMap().clone();
+		// HashMap<String, Role> rolesMap = (HashMap<String, Role>)
+		// globalSetting.roleCollection.getRolesMap().clone();
 		for (AppEnv extApp : Environment.getApplications()) {
 			for (ExternalModule module : extApp.globalSetting.extModuleMap.values()) {
 				if (module.getType() == ExternalModuleType.STRUCTURE && module.getName().equalsIgnoreCase(appType)) {
-					rolesMap.putAll(extApp.getRolesMap());
+					// rolesMap.putAll(extApp.getRolesMap());
 				}
 			}
 		}
-		return rolesMap;
+		// return rolesMap;
+		return null;
 	}
 
 	public IDatabase getDataBase() {

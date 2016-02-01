@@ -14,9 +14,6 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.document.DocID;
-import kz.flabs.runtimeobj.queries.Query;
-import kz.flabs.runtimeobj.queries.QueryFactory;
-import kz.flabs.scriptprocessor.form.querysave.IQuerySaveTransaction;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.servlets.pojo.Outcome;
 import kz.flabs.sourcesupplier.SourceSupplier;
@@ -204,10 +201,6 @@ public class Page implements IProcessInitiator, Const {
 
 					}
 
-					for (IQuerySaveTransaction toPostObects : sProcessor.transactionToPost) {
-						toPostObects.post();
-					}
-
 					if (xmlResp.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
 						fileGenerated = true;
 						generatedFilePath = xmlResp.getMessage("filepath").text;
@@ -281,15 +274,7 @@ public class Page implements IProcessInitiator, Const {
 							}
 						}
 					}
-					Query query = QueryFactory.getQuery(env, elementRule, userSession.currentUser);
-					// Query query = new Query(env, (IQueryRule)elementRule,
-					// userSession.currentUser);
-					query.setQiuckFilter(fields, env);
-					int result = query.fetch(pageNum, pageSize, parentDocProp[0], parentDocProp[1], userSession.expandedThread,
-					        userSession.expandedCategory, userSession.getFlashDoc(), fields);
-					if (result > -1) {
-						xmlContent.append(query.toXML());
-					}
+
 					output.append(xmlContent);
 					break;
 				case INCLUDED_PAGE:

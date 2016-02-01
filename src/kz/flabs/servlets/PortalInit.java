@@ -51,8 +51,7 @@ public class PortalInit extends HttpServlet {
 				try {
 					@SuppressWarnings("rawtypes")
 					Class[] intArgsClass = new Class[] { AppEnv.class };
-					Constructor<?> deployerConstr = env.globalSetting.dbImpl.getDeployerClass()
-							.getConstructor(intArgsClass);
+					Constructor<?> deployerConstr = env.globalSetting.dbImpl.getDeployerClass().getConstructor(intArgsClass);
 					dd = (IDatabaseDeployer) deployerConstr.newInstance(new Object[] { env });
 
 					Constructor<?> dbConstr = env.globalSetting.dbImpl.getDatabaseClass().getConstructor(intArgsClass);
@@ -65,7 +64,7 @@ public class PortalInit extends HttpServlet {
 					AppEnv.logger.verboseLogEntry("Application will use \"" + db + "\" database");
 					env.setDataBase(db);
 
-					Environment.addDatabases(env.getDataBase());
+					// Environment.addDatabases(env.getDataBase());
 					env.ruleProvider.loadRules();
 					dd.patch();
 					isValid = true;
@@ -73,7 +72,7 @@ public class PortalInit extends HttpServlet {
 				} catch (Exception e) {
 					if (e instanceof DatabasePoolException) {
 						Server.logger.fatalLogEntry("Application \"" + env.appType + "\" has not connected to database "
-								+ env.globalSetting.databaseType + "(" + env.globalSetting.dbURL + ")");
+						        + env.globalSetting.databaseType + "(" + env.globalSetting.dbURL + ")");
 						Environment.reduceApplication();
 					} else {
 						Server.logger.errorLogEntry(e);
@@ -82,7 +81,7 @@ public class PortalInit extends HttpServlet {
 				}
 
 			} else {
-				env.setDataBase(new kz.flabs.dataengine.nodatabase.Database(env));
+
 				isValid = true;
 			}
 
