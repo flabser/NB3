@@ -3,55 +3,66 @@ package kz.flabs.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import kz.flabs.exception.PortalException;
-import kz.flabs.servlets.SignalType;
+import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.Outcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._IXMLContent;
 
-public class XMLResponse {
+public class PageResponse {
+	@Deprecated
 	public ResponseType type;
+	@Deprecated
 	public boolean resultFlag;
+	@Deprecated
 	public int status;
-	public Outcome json;
-
+	public Outcome outcome;
+	public PublishAsType publishAs = PublishAsType.HTML;
+	public String name;
 	protected static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-
+	private List<PageResponse> includedPage = new ArrayList<PageResponse>();
 	@Deprecated
 	private String responseStatus = "undefined";
 	private String formSesID = "";
-	private String redirectURL = "";
 	private ArrayList<Script> scripts = new ArrayList<>();
 	private ArrayList<Message> messages = new ArrayList<Message>();
 	private HashMap<String, Message> messagesHash = new HashMap<String, Message>();
-	private ArrayList<Signal> signals = new ArrayList<Signal>();
 	private int messageCount = 1;
 	private ArrayList<_IXMLContent> xml = new ArrayList<_IXMLContent>();
 	private String elapsed_time = "";
 
-	public XMLResponse(ResponseType type) {
+	public PageResponse(ResponseType type) {
 		this.type = type;
 	}
 
-	public XMLResponse(ResponseType type, boolean b) {
+	public PageResponse(ResponseType type, boolean b) {
 		this.type = type;
 		setResponseStatus(b);
 	}
 
-	public XMLResponse(Exception e) {
+	public PageResponse(Exception e) {
 		resultFlag = false;
 		responseStatus = "error";
 		addMessage(e.getMessage());
 		addMessage(PortalException.errorMessage(e));
 	}
 
-	public void setResponseType(ResponseType type) {
-		this.type = type;
+	public String getName() {
+		return name;
 	}
 
-	public void setRedirect(String redirectURL) {
-		this.redirectURL = redirectURL.replace("&", "&amp;");
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void addPageResponse(PageResponse o) {
+		includedPage.add(o);
+	}
+
+	public void setResponseType(ResponseType type) {
+		this.type = type;
 	}
 
 	@Deprecated
@@ -129,14 +140,6 @@ public class XMLResponse {
 		return messagesHash.get(key);
 	}
 
-	public void addSignal(SignalType signal) {
-		signals.add(new Signal(signal));
-	}
-
-	public void addReloadSignal() {
-		signals.add(new Signal(SignalType.RELOAD_PAGE));
-	}
-
 	public void addXMLDocumentElements(Collection<_IXMLContent> documents) {
 		xml.addAll(documents);
 	}
@@ -148,9 +151,7 @@ public class XMLResponse {
 	public String toXML() {
 		StringBuffer result = new StringBuffer(100);
 		result.append("<response type=\"" + type + "\" status=\"" + responseStatus + "\" " + elapsed_time + ">");
-		for (Signal sig : signals) {
-			result.append(sig.toXML());
-		}
+
 		for (Message msg : messages) {
 			result.append(msg.toXML());
 		}
@@ -173,7 +174,6 @@ public class XMLResponse {
 			}
 		}
 
-		result.append("<redirect>" + redirectURL + "</redirect>");
 		result.append("</response>");
 		return result.toString();
 	}
@@ -193,20 +193,6 @@ public class XMLResponse {
 
 		String toXML() {
 			return "<message id=\"" + id + "\" " + formSesID + ">" + XMLUtil.getAsTagValue(text) + "</message>";
-		}
-
-	}
-
-	@Deprecated
-	class Signal {
-		SignalType signal;
-
-		Signal(SignalType signal) {
-			this.signal = signal;
-		}
-
-		String toXML() {
-			return "<signal>" + signal.toString() + "</signal>";
 		}
 
 	}

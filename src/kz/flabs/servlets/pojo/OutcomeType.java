@@ -1,5 +1,5 @@
 package kz.flabs.servlets.pojo;
 
 public enum OutcomeType {
-	OK, ERROR, WARNING
+	OK, VALIDATION_ERROR, SERVER_ERROR, WARNING
 }

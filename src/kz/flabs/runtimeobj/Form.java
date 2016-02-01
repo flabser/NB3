@@ -17,8 +17,8 @@ import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.UserSession;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
-import kz.flabs.util.XMLResponse;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.FormRule;
 import kz.nextbase.script._Exception;
@@ -107,11 +107,11 @@ public class Form extends Content implements Const {
 	 * @throws ComplexObjectException
 	 **/
 	@Deprecated
-	public XMLResponse save(String key, HashMap<String, String[]> fields, int parentDocID, int parentDocType, int pageSize, String currentLang)
+	public PageResponse save(String key, HashMap<String, String[]> fields, int parentDocID, int parentDocType, int pageSize, String currentLang)
 	        throws DocumentAccessException, DocumentException, RuleException, QueryFormulaParserException, ClassNotFoundException,
 	        ComplexObjectException {
 		IDatabase db = env.getDataBase();
-		XMLResponse result = new XMLResponse(ResponseType.SAVE_FORM);
+		PageResponse result = new PageResponse(ResponseType.SAVE_FORM);
 		String redirectView = "";
 		BaseDocument doc = null;
 
@@ -195,14 +195,14 @@ public class Form extends Content implements Const {
 				if (pagePosition > -1) {
 					redirectView = redirectView.substring(0, pagePosition);
 				}
-				result.setRedirect("Provider?type=view&id=" + redirectView + "&page=" + pageNum);
+
 				if (!redirectView.equals("")) {
 					userSession.setCurrentPage(redirectView, pageNum);
 				}
 			} catch (Exception nfe) {
 				if (redirectView != null && !redirectView.equals("")) {
 					String redurectURL = "Provider?type=view&amp;id=" + redirectView + "&amp;page=0";
-					result.setRedirect(redurectURL);
+
 					userSession.setCurrentPage(redirectView, 0);
 
 				}

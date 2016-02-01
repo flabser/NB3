@@ -27,9 +27,9 @@ import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
 import kz.flabs.users.User;
 import kz.flabs.users.UserSession;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLResponse;
 import kz.pchelka.env.Environment;
 
 import org.apache.catalina.realm.RealmBase;
@@ -152,7 +152,7 @@ public class Login extends HttpServlet implements Const {
 						String redirect = "";
 						if (userSession.browserType == BrowserType.APPLICATION) {
 							jses.setAttribute("usersession", userSession);
-							XMLResponse resp = new XMLResponse(ResponseType.AUTHENTICATION, true);
+							PageResponse resp = new PageResponse(ResponseType.AUTHENTICATION, true);
 							response.setContentType("text/xml;charset=utf-8");
 							PrintWriter out = response.getWriter();
 							out.println(resp.toCompleteXML());
@@ -179,7 +179,7 @@ public class Login extends HttpServlet implements Const {
 										redirect = getRedirect(jses, appCookies);
 										response.sendRedirect(redirect);
 									} else {
-										XMLResponse xmlResult = new XMLResponse(ResponseType.AUTHENTICATION);
+										PageResponse xmlResult = new PageResponse(ResponseType.AUTHENTICATION);
 										if (userAppProfile.loginMod == LoginModeType.LOGIN_AND_QUESTION) {
 											if (user.authorizedByHash) {
 												xmlResult.setMessage("authorized by hash", "warn");
@@ -192,7 +192,6 @@ public class Login extends HttpServlet implements Const {
 												jses.setAttribute("up", userAppProfile);
 												jses.setAttribute("qa", qa);
 												xmlResult.setResponseType(ResponseType.SUPPLY_LOGIN_QUESTION);
-												xmlResult.setResponseStatus(true);
 												xmlResult.setMessage(qid, "qid");
 												xmlResult.addMessage(qa.controlQuestion, "qq");
 												xmlResult.addMessage(Integer.toString(getQuestionAttempCount(jses)), "attempt_count");
@@ -200,8 +199,7 @@ public class Login extends HttpServlet implements Const {
 										} else if (userAppProfile.loginMod == LoginModeType.JUST_LOGIN) {
 											jses.setAttribute("usersession", userSession);
 											redirect = getRedirect(jses, appCookies);
-											xmlResult.setResponseStatus(true);
-											xmlResult.setRedirect(redirect);
+
 										}
 										StringBuffer output = new StringBuffer(100);
 										output.append(xmlResult.toXML());
@@ -222,7 +220,7 @@ public class Login extends HttpServlet implements Const {
 					} else {
 						userSession = new UserSession(user, request);
 						if (userSession.browserType == BrowserType.APPLICATION) {
-							XMLResponse resp = new XMLResponse(ResponseType.AUTHENTICATION, false);
+							PageResponse resp = new PageResponse(ResponseType.AUTHENTICATION, false);
 							// response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 							response.setContentType("text/xml;charset=UTF-8");
 							PrintWriter out = response.getWriter();
@@ -236,7 +234,7 @@ public class Login extends HttpServlet implements Const {
 					}
 				} else {
 					jses = request.getSession(false);
-					XMLResponse xmlResp = new XMLResponse(ResponseType.AUTHENTICATION);
+					PageResponse xmlResp = new PageResponse(ResponseType.AUTHENTICATION);
 					if (jses != null && unauthorizedUserSessions.containsKey(qID)) {
 						UserApplicationProfile.QuestionAnswer qa = (UserApplicationProfile.QuestionAnswer) jses.getAttribute("qa");
 						userSession = unauthorizedUserSessions.get(qID);

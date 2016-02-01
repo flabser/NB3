@@ -4,7 +4,7 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.servlets.sitefiles.RequestWrapper;
 import kz.flabs.servlets.sitefiles.UploadedFile;
 import kz.flabs.util.ResponseType;
-import kz.flabs.util.XMLResponse;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.XMLUtil;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -94,7 +94,7 @@ public class Uploader extends HttpServlet implements Const, Servlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestWrapper wrappedReq = null;
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        XMLResponse resp = new XMLResponse(ResponseType.UPLOAD_FILE);
+        PageResponse resp = new PageResponse(ResponseType.UPLOAD_FILE);
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {

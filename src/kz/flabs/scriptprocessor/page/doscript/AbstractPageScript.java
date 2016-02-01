@@ -8,9 +8,9 @@ import kz.flabs.scriptprocessor.Msg;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptProcessorUtil;
 import kz.flabs.servlets.SignalType;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLResponse;
 import kz.nextbase.script._IXMLContent;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._Tag;
@@ -24,7 +24,7 @@ public abstract class AbstractPageScript extends ScriptEvent implements IPageScr
 
 	private String lang;
 	private _WebFormData formData;
-	private XMLResponse xmlResp = new XMLResponse(ResponseType.RESULT_OF_PAGE_SCRIPT);
+	private PageResponse xmlResp = new PageResponse(ResponseType.RESULT_OF_PAGE_SCRIPT);
 	private SignalType signal;
 	private ArrayList<_IXMLContent> xml = new ArrayList<_IXMLContent>();
 
@@ -82,7 +82,7 @@ public abstract class AbstractPageScript extends ScriptEvent implements IPageScr
 	}
 
 	@Override
-	public XMLResponse process() {
+	public PageResponse process() {
 
 		long start_time = System.currentTimeMillis();
 		try {
@@ -92,13 +92,10 @@ public abstract class AbstractPageScript extends ScriptEvent implements IPageScr
 			for (Msg message : messages) {
 				xmlResp.addMessage(message.text, message.id);
 			}
-			if (signal != null) {
-				xmlResp.addSignal(signal);
-			}
+
 			if (xml != null) {
 				xmlResp.addXMLDocumentElements(xml);
 			}
-			xmlResp.setRedirect(redirectURL);
 
 		} catch (Exception e) {
 			xmlResp.setResponseStatus(false);
@@ -112,7 +109,7 @@ public abstract class AbstractPageScript extends ScriptEvent implements IPageScr
 	}
 
 	@Override
-	public XMLResponse process(String method) {
+	public PageResponse process(String method) {
 		return process();
 
 	}

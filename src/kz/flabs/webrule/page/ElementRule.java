@@ -52,9 +52,6 @@ public class ElementRule implements Const {
 
 			type = ElementType.valueOf(XMLUtil.getTextContent(node, "@type", true, "UNKNOWN", false));
 			switch (type) {
-			case STATIC_TAG:
-				value = XMLUtil.getTextContent(node, "value", false);
-				break;
 			case SCRIPT:
 				Node qoNode = XMLUtil.getNode(node, "events/doscript", false);
 				doClassName = getClassName(qoNode, "doscript");

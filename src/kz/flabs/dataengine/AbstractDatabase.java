@@ -25,7 +25,7 @@ import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.User;
-import kz.flabs.util.XMLResponse;
+import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Role;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.module.ExternalModuleType;
@@ -287,7 +287,7 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	}
 
-	public XMLResponse deleteDocuments(List<DocID> docID, boolean completely, User user) {
+	public PageResponse deleteDocuments(List<DocID> docID, boolean completely, User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -302,7 +302,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return false;
 	}
 
-	public XMLResponse unDeleteDocuments(List<DocID> docID, User user) {
+	public PageResponse unDeleteDocuments(List<DocID> docID, User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

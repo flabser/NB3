@@ -7,7 +7,7 @@ import java.util.Date;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.Util;
 
-
+@Deprecated
 public class _Tag {
 
 	private Tag runtimeTag;
@@ -32,7 +32,7 @@ public class _Tag {
 		runtimeTag = new Tag(tagName, tagValue);
 	}
 
-	public _Tag(String tagName, Collection <_Tag> tags) {
+	public _Tag(String tagName, Collection<_Tag> tags) {
 		runtimeTag = new Tag(tagName, "");
 		for (_Tag t : tags) {
 			addTag(t);
@@ -76,7 +76,7 @@ public class _Tag {
 		return new _Tag(tag);
 	}
 
-	public void addTag(String tagName, Collection <_Tag> tagsList) {
+	public void addTag(String tagName, Collection<_Tag> tagsList) {
 		for (_Tag t : tagsList) {
 			runtimeTag.tags.add(t.runtimeTag);
 		}

@@ -14,13 +14,12 @@ import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
-import kz.flabs.servlets.pojo.Outcome;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.User;
 import kz.flabs.users.UserSession;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLResponse;
 import kz.flabs.webrule.Caption;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.form.GlossaryRule;
@@ -35,12 +34,12 @@ import org.apache.http.HttpStatus;
 public class Page implements IProcessInitiator, Const {
 	public boolean fileGenerated;
 	public boolean toJSON;
-	public Outcome outcome;
 	public String generatedFilePath;
 	public String generatedFileOriginalName;
 	public int status = HttpStatus.SC_OK;
 	protected AppEnv env;
 	protected PageRule rule;
+	public PageResponse response;
 
 	protected Map<String, String[]> fields = new HashMap<>();
 	protected UserSession userSession;
@@ -135,19 +134,40 @@ public class Page implements IProcessInitiator, Const {
 		return output.append("</page>");
 	}
 
-	public void postProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	        DocumentException, DocumentAccessException, QueryException {
+	public PageResponse pageProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
+		PageResponse resultOut = null;
+		long start_time = System.currentTimeMillis();
+		switch (rule.caching) {
+		case NO_CACHING:
+			resultOut = getPageContent(formData, method);
+			break;
+		/*
+		 * case CACHING_IN_USER_SESSION_SCOPE: resultOut =
+		 * userSession.getPage(this, formData); break; case
+		 * CACHING_IN_APPLICATION_SCOPE: resultOut = env.getPage(this,
+		 * formData); break; case CACHING_IN_SERVER_SCOPE: resultOut = new
+		 * Environment().getPage(this, formData); break;
+		 */
+		default:
+			resultOut = getPageContent(formData, method);
+		}
+
+		return resultOut;
+	}
+
+	public PageResponse postProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException,
+	        QueryFormulaParserException, DocumentException, DocumentAccessException, QueryException {
 		for (ElementRule elementRule : rule.elements) {
 			if (elementRule.type == ElementType.SCRIPT && elementRule.doClassName.getType() == ValueSourceType.JAVA_CLASS) {
 				User user = userSession.currentUser;
 				DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
-				XMLResponse xmlResp = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
+				PageResponse xmlResp = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
 				status = xmlResp.status;
 				toJSON = true;
-				outcome = xmlResp.json;
-				break;
+				response = xmlResp;
 			}
 		}
+		return response;
 
 	}
 
@@ -177,18 +197,18 @@ public class Page implements IProcessInitiator, Const {
 				}
 				switch (elementRule.type) {
 				case SCRIPT:
-					XMLResponse xmlResp = null;
+					PageResponse reponse = null;
 					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
-						xmlResp = sProcessor.processScript(elementRule.doClassName.getClassName());
+						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
 						break;
 					case FILE:
-						xmlResp = sProcessor.processScript(elementRule.doClassName.getClassName());
+						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
 						break;
 					case JAVA_CLASS:
-						xmlResp = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
-						status = xmlResp.status;
+						reponse = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
+						status = reponse.status;
 						break;
 					case UNKNOWN:
 						break;
@@ -197,17 +217,17 @@ public class Page implements IProcessInitiator, Const {
 
 					}
 
-					if (xmlResp.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
+					if (reponse.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
 						fileGenerated = true;
-						generatedFilePath = xmlResp.getMessage("filepath").text;
-						generatedFileOriginalName = xmlResp.getMessage("originalname").text;
+						generatedFilePath = reponse.getMessage("filepath").text;
+						generatedFileOriginalName = reponse.getMessage("originalname").text;
 						break loop;
-					} else if (xmlResp.type == ResponseType.JSON) {
+					} else if (reponse.type == ResponseType.JSON) {
 						toJSON = true;
-						outcome = xmlResp.json;
+
 						break loop;
 					} else {
-						output.append(xmlResp.toXML());
+						output.append(reponse.toXML());
 					}
 
 					break;
@@ -227,6 +247,67 @@ public class Page implements IProcessInitiator, Const {
 		}
 		SourceSupplier captionTextSupplier = new SourceSupplier(env, userSession.lang);
 		return output.append(getCaptions(captionTextSupplier, rule.captions));
+
+	}
+
+	public PageResponse getPageContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
+		fields = formData;
+		PageResponse output = null;
+		User user = userSession.currentUser;
+
+		if (rule.elements.size() > 0) {
+			loop: for (ElementRule elementRule : rule.elements) {
+				if (elementRule.hasElementName) {
+					output.setName(elementRule.name);
+				}
+				switch (elementRule.type) {
+				case SCRIPT:
+					PageResponse reponse = null;
+					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
+					switch (elementRule.doClassName.getType()) {
+					case GROOVY_FILE:
+						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
+						break;
+					case FILE:
+						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
+						break;
+					case JAVA_CLASS:
+						reponse = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
+						status = reponse.status;
+						break;
+					case UNKNOWN:
+						break;
+					default:
+						break;
+
+					}
+
+					if (reponse.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
+						fileGenerated = true;
+						generatedFilePath = reponse.getMessage("filepath").text;
+						generatedFileOriginalName = reponse.getMessage("originalname").text;
+						break loop;
+					} else if (reponse.type == ResponseType.JSON) {
+						output = reponse;
+					}
+
+					break;
+				case INCLUDED_PAGE:
+					PageRule rule = (PageRule) env.ruleProvider.getRule(PAGE_RULE, elementRule.value);
+					// System.out.println(rule.getRuleID());
+					IncludedPage page = new IncludedPage(env, userSession, rule);
+					output.addPageResponse(page.pageProcess(fields, method));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		// SourceSupplier captionTextSupplier = new SourceSupplier(env,
+		// userSession.lang);
+		// return output.append(getCaptions(captionTextSupplier,
+		// rule.captions));
+		return output;
 
 	}
 

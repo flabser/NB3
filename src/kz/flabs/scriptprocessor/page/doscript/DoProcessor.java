@@ -7,7 +7,7 @@ import java.util.Map;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.users.User;
-import kz.flabs.util.XMLResponse;
+import kz.flabs.util.PageResponse;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 import kz.pchelka.scheduler.IProcessInitiator;
@@ -29,7 +29,7 @@ public class DoProcessor {
 	}
 
 	// @TODO logger
-	public XMLResponse processScript(String className) throws ClassNotFoundException {
+	public PageResponse processScript(String className) throws ClassNotFoundException {
 		try {
 			Class pageClass = Class.forName(className);
 			groovyObject = (GroovyObject) pageClass.newInstance();
@@ -49,7 +49,27 @@ public class DoProcessor {
 
 	}
 
-	public XMLResponse processJava(String className, String method) throws ClassNotFoundException {
+	public PageResponse processCode(String className, String method) throws ClassNotFoundException {
+		Object object = null;
+		try {
+			Class<?> pageClass = Class.forName(className);
+			object = pageClass.newInstance();
+		} catch (InstantiationException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (IllegalAccessException e) {
+			Server.logger.errorLogEntry(e);
+		}
+
+		IPageScript myObject = (IPageScript) object;
+
+		myObject.setSession(ses);
+		myObject.setFormData(webFormData);
+		myObject.setCurrentLang(vocabulary, lang);
+
+		return myObject.process(method);
+	}
+
+	public PageResponse processJava(String className, String method) throws ClassNotFoundException {
 		Object object = null;
 		try {
 			Class<?> pageClass = Class.forName(className);

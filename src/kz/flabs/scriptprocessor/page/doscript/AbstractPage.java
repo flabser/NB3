@@ -12,11 +12,12 @@ import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.scriptprocessor.Msg;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptProcessorUtil;
-import kz.flabs.servlets.SignalType;
+import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.Outcome;
+import kz.flabs.servlets.pojo.OutcomeType;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLResponse;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
@@ -39,11 +40,12 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	private LanguageType lang;
 	private _WebFormData formData;
-	private XMLResponse xmlResp = new XMLResponse(ResponseType.RESULT_OF_PAGE_SCRIPT);
+	private PageResponse response = new PageResponse(ResponseType.RESULT_OF_PAGE_SCRIPT);
 	@Deprecated
-	private SignalType signal;
 	private ArrayList<_IXMLContent> xml = new ArrayList<_IXMLContent>();
+	private ArrayList<Outcome> outcomes = new ArrayList<Outcome>();
 	private int httpStatus = HttpStatus.SC_OK;
+	private Outcome outcome = new Outcome();
 
 	@Override
 	public void setSession(_Session ses) {
@@ -57,6 +59,23 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	public void addMsg(String m) {
 		messages.add(new Msg(m, m));
+	}
+
+	public void addValidationError(String m) {
+		setBadRequest();
+		outcome.setType(OutcomeType.VALIDATION_ERROR);
+		messages.add(new Msg(m, m));
+	}
+
+	public void setError(String m) {
+		setBadRequest();
+		outcome.setType(OutcomeType.SERVER_ERROR);
+		messages.clear();
+		messages.add(new Msg(m, m));
+	}
+
+	public void setPublishAsType(PublishAsType respType) {
+		response.publishAs = respType;
 	}
 
 	public <T extends Enum<?>> String[] getLocalizedWord(T[] enumObj, String lang) {
@@ -84,22 +103,22 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		this.vocabulary = vocabulary;
 	}
 
+	@Deprecated
 	protected void setContent(Collection<_IXMLContent> documents) {
 		xml.addAll(documents);
 	}
 
-	/*
-	 * protected void setContent(List list) { for (Object element : list) {
-	 * _IXMLContent c = new _IXMLContent() {
-	 * 
-	 * @Override public String toXML() throws _Exception { return "<entry>" +
-	 * element.toString() + "</entry>"; } }; xml.add(c); }
-	 * 
-	 * }
-	 */
+	protected void setPageContent(Collection<Outcome> documents) {
+		outcomes.addAll(documents);
+	}
 
+	@Deprecated
 	protected void setContent(_IXMLContent document) {
 		xml.add(document);
+	}
+
+	protected void setPageContent(Outcome document) {
+		outcomes.add(document);
 	}
 
 	protected void setContent(_IPOJOObject pojo) {
@@ -155,66 +174,62 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	public void showFile(String filePath, String fileName) {
-		xmlResp.type = ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED;
-		xmlResp.addMessage(filePath, "filepath");
-		xmlResp.addMessage(fileName, "originalname");
+		response.type = ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED;
+		response.addMessage(filePath, "filepath");
+		response.addMessage(fileName, "originalname");
 	}
 
 	public void showFile(_ExportManager attachment) {
-		xmlResp.type = ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED;
-		xmlResp.addMessage(attachment.getFilePath(), "filepath");
-		xmlResp.addMessage(attachment.getOriginalFileName(), "originalname");
+		response.type = ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED;
+		response.addMessage(attachment.getFilePath(), "filepath");
+		response.addMessage(attachment.getOriginalFileName(), "originalname");
 	}
 
 	@Override
-	public XMLResponse process(String method) {
+	public PageResponse process(String method) {
 
 		long start_time = System.currentTimeMillis();
 		try {
 			if (method.equalsIgnoreCase("POST")) {
 				doPOST(ses, formData, lang);
-				xmlResp.status = httpStatus;
-				xmlResp.type = ResponseType.JSON;
-				Outcome outcome = new Outcome();
+				response.status = httpStatus;
+				response.type = ResponseType.JSON;
 				for (Msg message : messages) {
 					outcome.addMessage(message.text);
 				}
-				xmlResp.json = outcome;
+				response.outcome = outcome;
 			} else {
 				doGET(ses, formData, lang);
-				xmlResp.status = httpStatus;
-				xmlResp.setPublishResult(toPublishElement);
+				response.status = httpStatus;
+				response.setPublishResult(toPublishElement);
 				if (httpStatus == HttpStatus.SC_BAD_REQUEST) {
-					xmlResp.setResponseStatus(false);
+					response.setResponseStatus(false);
 				} else {
-					xmlResp.setResponseStatus(true);
+					response.setResponseStatus(true);
 				}
 				for (Msg message : messages) {
-					xmlResp.addMessage(message.text, message.id);
+					response.addMessage(message.text, message.id);
 				}
-				if (signal != null) {
-					xmlResp.addSignal(signal);
-				}
+
 				if (xml != null) {
-					xmlResp.addXMLDocumentElements(xml);
+					response.addXMLDocumentElements(xml);
 				}
-				xmlResp.setRedirect(redirectURL);
 			}
 
 		} catch (Exception e) {
-			xmlResp.status = HttpStatus.SC_BAD_REQUEST;
-			xmlResp.setResponseStatus(false);
-			xmlResp.addMessage(e.getMessage());
+			response.status = HttpStatus.SC_BAD_REQUEST;
+			response.setResponseStatus(false);
+			response.addMessage(e.getMessage());
 			println(e);
 			e.printStackTrace();
 		}
 
-		xmlResp.setElapsedTime(Util.getTimeDiffInSec(start_time));
-		return xmlResp;
+		response.setElapsedTime(Util.getTimeDiffInSec(start_time));
+		return response;
 	}
 
 	@Override
-	public XMLResponse process() {
+	public PageResponse process() {
 		return process("GET");
 	}
 

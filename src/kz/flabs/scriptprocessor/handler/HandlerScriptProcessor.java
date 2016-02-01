@@ -14,7 +14,7 @@ import kz.flabs.scriptprocessor.ScriptProcessorType;
 import kz.flabs.users.User;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLResponse;
+import kz.flabs.util.PageResponse;
 import kz.nextbase.script._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 
@@ -71,9 +71,9 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 	}
 
 	@Deprecated
-	public XMLResponse processScript() throws ClassNotFoundException {
+	public PageResponse processScript() throws ClassNotFoundException {
 		GroovyObject groovyObject = null;
-		XMLResponse xmlResp = null;
+		PageResponse xmlResp = null;
 		try {
 			Class querySaveClass = Class.forName(className);
 			groovyObject = (GroovyObject) querySaveClass.newInstance();
@@ -84,7 +84,7 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 			myObject.setCurrentLang(lang, vocabulary);
 			return myObject.process();
 		} catch (Exception e) {
-			xmlResp = new XMLResponse(ResponseType.RESULT_OF_HANDLER_SCRIPT);
+			xmlResp = new PageResponse(ResponseType.RESULT_OF_HANDLER_SCRIPT);
 			xmlResp.setResponseStatus(false);
 			xmlResp.setMessage(e.toString());
 			xmlResp.addMessage(Util.convertDataTimeToString(new Date()));

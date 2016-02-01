@@ -18,7 +18,6 @@ import org.w3c.dom.NodeList;
 public class PageRule extends Rule implements IElement, Const {
 	public boolean isValid;
 	public ArrayList<ElementRule> elements = new ArrayList<ElementRule>();
-
 	public boolean qoEnable;
 	public String qoClassName;
 	public CachingStrategyType caching = CachingStrategyType.NO_CACHING;
@@ -65,7 +64,7 @@ public class PageRule extends Rule implements IElement, Const {
 		String xmlText = "";
 
 		xmlText = "<ison>" + isOn + "</ison>" + "<rununderuser>" + runUnderUser + "</rununderuser>" + "<cache>" + caching + "</cache>" + "<elements>"
-				+ elements + "</elements>" + "<hits>" + hits + "</hits>" + "<app>" + app + "</app>";
+		        + elements + "</elements>" + "<hits>" + hits + "</hits>" + "<app>" + app + "</app>";
 
 		return xmlText;
 	}

@@ -90,7 +90,7 @@ public class WebRuleProvider implements Const {
 		return null;
 	}
 
-	public IRule getRule(int ruleType, String ruleID) throws RuleException, QueryFormulaParserException {
+	public IRule getRule(int ruleType, String ruleID) throws RuleException {
 		File docFile;
 		try {
 			ruleID = ruleID.toLowerCase();
