@@ -37,6 +37,7 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.BrowserType;
 import kz.flabs.servlets.Cookies;
 import kz.flabs.servlets.ServletUtil;
+import kz.flabs.util.PageResponse;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
 import kz.pchelka.env.Environment;
@@ -571,5 +572,45 @@ public class UserSession implements Const, ICache {
 	@Override
 	public String toString() {
 		return jses.getId();
+	}
+
+	@Override
+	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
+		String cacheKey = page.getCacheID();
+		Object obj = getObject(cacheKey);
+		String c[] = formData.get("cache");
+		if (c != null) {
+			String cache = c[0];
+			if (obj == null || cache.equalsIgnoreCase("reload")) {
+				PageResponse buffer = page.getPageContent(formData, "GET");
+				setPageObject(cacheKey, buffer);
+				return buffer;
+			} else {
+				return (PageResponse) obj;
+			}
+		} else {
+			if (obj == null) {
+				PageResponse buffer = page.getPageContent(formData, "GET");
+				setPageObject(cacheKey, buffer);
+				return buffer;
+			} else {
+				return (PageResponse) obj;
+			}
+		}
+	}
+
+	public void setPageObject(String name, PageResponse obj) {
+		HashMap<String, PageResponse> cache = null;
+		if (jses != null) {
+			cache = (HashMap<String, PageResponse>) jses.getAttribute("cache");
+		}
+		if (cache == null) {
+			cache = new HashMap<>();
+		}
+		cache.put(name, obj);
+		if (jses != null) {
+			jses.setAttribute("cache", cache);
+		}
+
 	}
 }

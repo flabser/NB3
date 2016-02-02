@@ -141,13 +141,16 @@ public class Page implements IProcessInitiator, Const {
 		case NO_CACHING:
 			resultOut = getPageContent(formData, method);
 			break;
-		/*
-		 * case CACHING_IN_USER_SESSION_SCOPE: resultOut =
-		 * userSession.getPage(this, formData); break; case
-		 * CACHING_IN_APPLICATION_SCOPE: resultOut = env.getPage(this,
-		 * formData); break; case CACHING_IN_SERVER_SCOPE: resultOut = new
-		 * Environment().getPage(this, formData); break;
-		 */
+		case CACHING_IN_USER_SESSION_SCOPE:
+			resultOut = userSession.getCachedPage(this, formData);
+			break;
+		case CACHING_IN_APPLICATION_SCOPE:
+			resultOut = env.getCachedPage(this, formData);
+			break;
+		case CACHING_IN_SERVER_SCOPE:
+			resultOut = new Environment().getCachedPage(this, formData);
+			break;
+
 		default:
 			resultOut = getPageContent(formData, method);
 		}

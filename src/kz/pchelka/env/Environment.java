@@ -38,6 +38,7 @@ import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.UserSession;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.pchelka.daemon.system.LogsZipRule;
@@ -588,5 +589,24 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			e.printStackTrace();
 
 		}
+	}
+
+	@Override
+	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
+		String cacheKey = page.getCacheID();
+		Object obj = cache.get(cacheKey);
+		String cacheParam[] = formData.get("cache");
+		if (cacheParam == null) {
+			PageResponse buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer);
+			return buffer;
+		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
+			PageResponse buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer);
+			return buffer;
+		} else {
+			return (PageResponse) obj;
+		}
+
 	}
 }

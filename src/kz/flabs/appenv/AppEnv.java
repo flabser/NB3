@@ -17,6 +17,7 @@ import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.Application;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
+import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.Role;
 import kz.flabs.webrule.WebRuleProvider;
@@ -48,7 +49,7 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	public static ILogger logger = Server.logger;
 
 	private IDatabase dataBase;
-	private HashMap<String, StringBuffer> cache = new HashMap<String, StringBuffer>();
+	private HashMap<String, Object> cache = new HashMap<String, Object>();
 
 	@Deprecated
 	public AppEnv(String at) {
@@ -197,6 +198,24 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 			ci = "cache is empty";
 		}
 		return ci;
+	}
+
+	@Override
+	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
+		String cacheKey = page.getCacheID();
+		Object obj = cache.get(cacheKey);
+		String cacheParam[] = formData.get("cache");
+		if (cacheParam == null) {
+			PageResponse buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer);
+			return buffer;
+		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
+			PageResponse buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer);
+			return buffer;
+		} else {
+			return (PageResponse) obj;
+		}
 	}
 
 }

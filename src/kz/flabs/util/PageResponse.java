@@ -32,6 +32,7 @@ public class PageResponse {
 	private int messageCount = 1;
 	private ArrayList<_IXMLContent> xml = new ArrayList<_IXMLContent>();
 	private String elapsed_time = "";
+	public boolean disableClientCache;
 
 	public PageResponse(ResponseType type) {
 		this.type = type;

@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -31,18 +29,12 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.exception.ServerException;
 import kz.flabs.exception.ServerExceptionType;
 import kz.flabs.exception.TransformatorException;
-import kz.flabs.exception.ViewException;
 import kz.flabs.exception.XSLTFileNotFoundException;
-import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
-import kz.flabs.runtimeobj.Content;
 import kz.flabs.runtimeobj.FTSearchRequest;
-import kz.flabs.runtimeobj.View;
-import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.servlets.sitefiles.AttachmentHandlerException;
-import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
 import kz.flabs.users.User;
@@ -51,10 +43,7 @@ import kz.flabs.users.UserSession;
 import kz.flabs.util.Util;
 import kz.flabs.webrule.IRule;
 import kz.flabs.webrule.Skin;
-import kz.flabs.webrule.StaticContentRule;
-import kz.flabs.webrule.outline.OutlineRule;
 import kz.flabs.webrule.page.PageRule;
-import kz.flabs.webrule.view.ViewRule;
 import kz.pchelka.env.Environment;
 import kz.pchelka.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -129,15 +118,7 @@ public class Provider extends HttpServlet implements Const {
 
 					}
 
-					if (type.equals("static")) {
-						result = content(request, response, rule, userSession, id);
-					} else if (type.equalsIgnoreCase("outline")) {
-						result = outline(request, rule, userSession, id);
-					} else if (type.equalsIgnoreCase("view")) {
-						result = view(request, response, rule, userSession, id);
-					} else if (type.equalsIgnoreCase("filter")) {
-						result = view(request, response, rule, userSession, id);
-					} else if (type.equalsIgnoreCase("page")) {
+					if (type.equalsIgnoreCase("page")) {
 						result = page(response, request, rule, userSession);
 						if (result.publishAs == PublishAsType.OUTPUTSTREAM) {
 							attachHandler = new AttachmentHandler(request, response, true);
@@ -279,8 +260,6 @@ public class Provider extends HttpServlet implements Const {
 			new PortalException(dae, env, response, ProviderExceptionType.DOCUMENTEXCEPTION, PublishAsType.HTML, userSession.skin);
 		} catch (RuleException rnf) {
 			new PortalException(rnf, env, response, ProviderExceptionType.RULENOTFOUND);
-		} catch (ViewException sdre) {
-			new PortalException(sdre, env, response, PublishAsType.HTML, userSession.skin);
 		} catch (XSLTFileNotFoundException xfnf) {
 			new PortalException(xfnf, env, response, ProviderExceptionType.XSLTNOTFOUND, PublishAsType.HTML, userSession.skin);
 		} catch (FTIndexEngineException e) {
@@ -310,143 +289,6 @@ public class Provider extends HttpServlet implements Const {
 
 		// System.out.println("done...");
 
-	}
-
-	@Deprecated
-	private ProviderResult content(HttpServletRequest request, HttpServletResponse response, IRule rule, UserSession userSession, String id)
-	        throws RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException, QueryException, LocalizatorException {
-		StaticContentRule staticContentRule = (StaticContentRule) rule;
-		ProviderResult result = new ProviderResult(staticContentRule.publishAs, staticContentRule.getXSLT());
-
-		if (id.equalsIgnoreCase("start")) {
-			if (Environment.workspaceAuth) {
-				result.forwardTo = Environment.getWorkspaceURL();
-				result.publishAs = PublishAsType.FORWARD;
-				return result;
-			} else {
-				String al = request.getParameter("autologin");
-				if (al != null && al.equals("1")) {
-					result.forwardTo = "/Login";
-					result.publishAs = PublishAsType.FORWARD;
-					return result;
-				}
-			}
-		}
-
-		result.publishAs = PublishAsType.HTML;
-		Content content = new Content(env, staticContentRule);
-		result.output.append(content.getAsXML(userSession.currentUser, userSession.lang));
-		SourceSupplier titleSupplier = new SourceSupplier(userSession.currentUser, env, userSession.lang);
-		result.title = titleSupplier.getValueAsString(rule.getTitle().source, rule.getTitle().value)[0];
-		result.addHistory = rule.addToHistory();
-		return result;
-	}
-
-	@Deprecated
-	private ProviderResult outline(HttpServletRequest request, IRule rule, UserSession userSession, String id) throws UnsupportedEncodingException,
-	        RuleException, QueryFormulaParserException, DocumentException {
-		OutlineRule outlineRule = (OutlineRule) rule;
-		ProviderResult result = new ProviderResult(outlineRule.publishAs, outlineRule.getXSLT());
-
-		int page = userSession.getCurrentPage(id);
-		String command = request.getParameter("command");
-		if (command == null) {
-			command = "";
-		}
-
-		String subId = request.getParameter("subid");
-		String subType = request.getParameter("subtype");
-
-		if (subType.equals("search")) {
-
-		} else if (subType.equals("edit")) {
-			// outline = new DocumentOutline(env, id, key, page, userSession,
-			// type).getOutlineAsXML((String) jses.getAttribute("lang"));
-
-		}
-
-		result.addHistory = rule.addToHistory();
-		return result;
-	}
-
-	@Deprecated
-	private ProviderResult view(HttpServletRequest request, HttpServletResponse response, IRule rule, UserSession userSession, String id)
-	        throws ViewException, DocumentException, DocumentAccessException, RuleException, QueryFormulaParserException, QueryException,
-	        LocalizatorException, ComplexObjectException {
-		ViewRule viewRule = (ViewRule) rule;
-		ProviderResult result = new ProviderResult(viewRule.publishAs, viewRule.getXSLT());
-		View view = new View(env, viewRule, userSession, userSession.lang);
-		result.publishAs = PublishAsType.HTML;
-		int page = 0;
-		result.disableClientCache = true;
-
-		try {
-			page = Integer.parseInt(request.getParameter("page"));
-		} catch (NumberFormatException nfe) {
-			page = 1;
-		}
-		int parentDocProp[] = getParentDocProp(request);
-		String commandURL = request.getParameter("command");
-
-		if (commandURL != null && !commandURL.equals("null")) {
-			StringTokenizer t = new StringTokenizer(commandURL, ":");
-			ArrayList<String> commands = new ArrayList<String>();
-			while (t.hasMoreTokens()) {
-				commands.add(t.nextToken());
-			}
-
-			for (String command : commands) {
-				try {
-					StringTokenizer commandDetails = new StringTokenizer(command, "`");
-					String commandType = commandDetails.nextToken();
-
-					if (commandType.equals("expand")) {
-						String docIDOrCat = commandDetails.nextToken();
-						try {
-							String docType = commandDetails.nextToken();
-							DocID commandDocID = new DocID(docIDOrCat, docType);
-							userSession.addExpandedThread(commandDocID);
-						} catch (Exception e) {
-							docIDOrCat = new String(docIDOrCat.getBytes("ISO-8859-1"), "UTF-8");
-							userSession.addExpandedCategory(docIDOrCat);
-						}
-					} else if (commandType.equals("collaps")) {
-						String docIDOrCat = commandDetails.nextToken();
-						try {
-							String docType = commandDetails.nextToken();
-							DocID commandDocID = new DocID(docIDOrCat, docType);
-							userSession.resetExpandedThread(commandDocID);
-						} catch (Exception e) {
-							docIDOrCat = new String(docIDOrCat.getBytes("ISO-8859-1"), "UTF-8");
-							userSession.resetExpandedCategory(docIDOrCat);
-						}
-
-					}
-				} catch (Exception e) {
-					new PortalException("Command has not recognized, incorrect syntax of the command=" + command, env, response,
-					        ProviderExceptionType.PROVIDERERROR, PublishAsType.HTML, userSession.skin);
-					// return;
-				}
-			}
-		}
-		HashMap<String, String[]> fields = new HashMap<String, String[]>();
-		Map<String, String[]> parMap = request.getParameterMap();
-		fields.putAll(parMap);
-		int pageSize = userSession.pageSize;
-		if (parMap.containsKey("pagesize")) {
-			try {
-				pageSize = Integer.valueOf(parMap.get("pagesize")[0]);
-			} catch (NumberFormatException nfe) {
-				pageSize = userSession.pageSize;
-			}
-		}
-		result.output.append(view.getContent(fields, page, pageSize, parentDocProp[0], parentDocProp[1], userSession.expandedThread,
-		        userSession.expandedCategory, userSession.getFlashDoc()));
-		userSession.setCurrentPage(id, page);
-		SourceSupplier titleSupplier = new SourceSupplier(userSession.currentUser, env, userSession.lang);
-		result.title = titleSupplier.getValueAsString(viewRule.getTitle().source, viewRule.getTitle().value)[0];
-		result.addHistory = rule.addToHistory();
-		return result;
 	}
 
 	private ProviderResult page(HttpServletResponse response, HttpServletRequest request, IRule rule, UserSession userSession)
