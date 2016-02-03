@@ -18,7 +18,7 @@ import org.apache.catalina.LifecycleException;
 
 public class Server {
 	public static kz.pchelka.log.ILogger logger;
-	public static final String serverVersion = "3.0.1";
+	public static final String serverVersion = "3.0.2";
 	public static final int necessaryDbVersion = 104;
 	public static String compilationTime = "";
 	public static final String serverTitle = "NextBase " + serverVersion;

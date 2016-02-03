@@ -276,4 +276,23 @@ public class WebRuleProvider implements Const {
 			scheduledRules.add(rule);
 		}
 	}
+
+	public PageRule getRule(String id) throws RuleException {
+		File docFile;
+
+		String ruleID = id.toLowerCase();
+		PageRule rule = null;
+
+		if (pageRuleMap.containsKey(ruleID)) {
+			rule = pageRuleMap.get(ruleID);
+		} else {
+			docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
+			rule = new PageRule(env, docFile);
+			pageRuleMap.put(ruleID.toLowerCase(), rule);
+		}
+
+		rule.plusHit();
+		return rule;
+
+	}
 }

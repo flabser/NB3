@@ -64,7 +64,6 @@ public abstract class Rule implements IElement, IRule {
 	protected org.w3c.dom.Document doc;
 	protected RuleType type = RuleType.UNKNOWN;
 
-	private Title title;
 	private boolean allowAnonymousAccess;
 	private HashMap<String, GlossaryRule> glossary = new HashMap<String, GlossaryRule>();
 
@@ -107,8 +106,8 @@ public abstract class Rule implements IElement, IRule {
 			description = XMLUtil.getTextContent(doc, "/rule/description");
 
 			setRunUnderUser(XMLUtil.getTextContent(doc, "/rule/rununderuser", false, Macro.CURRENT_USER.toString(), false),
-					XMLUtil.getTextContent(doc, "/rule/rununderuser/@source", true, "MACRO", false),
-					XMLUtil.getTextContent(doc, "/rule/rununderuser/@type", true, "TEXT", false));
+			        XMLUtil.getTextContent(doc, "/rule/rununderuser/@source", true, "MACRO", false),
+			        XMLUtil.getTextContent(doc, "/rule/rununderuser/@type", true, "TEXT", false));
 
 			NodeList captionList = XMLUtil.getNodeList(doc, "/rule/caption");
 			for (int i = 0; i < captionList.getLength(); i++) {
@@ -116,13 +115,6 @@ public abstract class Rule implements IElement, IRule {
 				if (c.isOn == RunMode.ON) {
 					captions.add(c);
 				}
-			}
-
-			NodeList titleList = XMLUtil.getNodeList(doc, "/rule/title");
-			if (titleList.getLength() > 0) {
-				title = new Title(titleList.item(0));
-			} else {
-				title = new Title(description);
 			}
 
 		} catch (SAXParseException spe) {
@@ -219,13 +211,8 @@ public abstract class Rule implements IElement, IRule {
 	@Override
 	public String getRuleAsXML(String app) {
 		String xmlText = "<rule id=\"" + id + "\" isvalid=\"" + isValid + "\" app=\"" + app + "\" ison=\"" + isOn + "\">" + "<description>"
-				+ description + "</description>";
+		        + description + "</description>";
 		return xmlText + "</fields></rule>";
-	}
-
-	@Override
-	public Title getTitle() {
-		return title;
 	}
 
 	@Override

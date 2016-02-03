@@ -1,6 +1,7 @@
 package kz.flabs.appenv;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +18,13 @@ import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.Application;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
-import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.Role;
 import kz.flabs.webrule.WebRuleProvider;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
+import kz.lof.webserver.servlet.PageOutcome;
 import kz.pchelka.env.AuthTypes;
 import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
@@ -31,6 +32,7 @@ import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import kz.pchelka.server.Server;
+import net.sf.saxon.s9api.SaxonApiException;
 
 public class AppEnv implements Const, ICache, IProcessInitiator {
 	public boolean isValid;
@@ -201,20 +203,21 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
+	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
+	        SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
 		String cacheParam[] = formData.get("cache");
 		if (cacheParam == null) {
-			PageResponse buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer);
+			PageOutcome buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
-			PageResponse buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer);
+			PageOutcome buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else {
-			return (PageResponse) obj;
+			return (PageOutcome) obj;
 		}
 	}
 

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.servlet.ServletContext;
@@ -24,16 +22,10 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.dataengine.h2.LoginModeType;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
-import kz.flabs.exception.RuleException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.Filter;
-import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.document.Document;
-import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.BrowserType;
 import kz.flabs.servlets.Cookies;
 import kz.flabs.servlets.ServletUtil;
@@ -42,9 +34,7 @@ import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
 import kz.pchelka.env.Environment;
 
-public class UserSession implements Const, ICache {
-	public Set<DocID> expandedThread = new TreeSet<DocID>();
-	public Set<String> expandedCategory = new TreeSet<String>();
+public class UserSession implements Const {
 	public User currentUser;
 	public HistoryEntryCollection history;
 	public QuickFilterCollection quickFilters = new QuickFilterCollection();
@@ -249,22 +239,6 @@ public class UserSession implements Const, ICache {
 		} finally {
 			toFlash = null;
 		}
-	}
-
-	public boolean addExpandedThread(DocID e) {
-		return expandedThread.add(e);
-	}
-
-	public void resetExpandedThread(DocID e) {
-		expandedThread.remove(e);
-	}
-
-	public boolean addExpandedCategory(String e) {
-		return expandedCategory.add(e);
-	}
-
-	public void resetExpandedCategory(String e) {
-		expandedCategory.remove(e);
 	}
 
 	public void addHistoryEntry(String type, String url, String title) throws UserException {
@@ -484,45 +458,6 @@ public class UserSession implements Const, ICache {
 		history = new HistoryEntryCollection();
 	}
 
-	@Override
-	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	        DocumentException, DocumentAccessException, QueryException {
-		String cacheKey = page.getCacheID();
-		Object obj = getObject(cacheKey);
-		String c[] = formData.get("cache");
-		if (c != null) {
-			String cache = c[0];
-			if (obj == null || cache.equalsIgnoreCase("reload")) {
-				StringBuffer buffer = page.getContent(formData, "GET");
-				setObject(cacheKey, buffer);
-				return buffer;
-			} else {
-				return (StringBuffer) obj;
-			}
-		} else {
-			if (obj == null) {
-				StringBuffer buffer = page.getContent(formData, "GET");
-				setObject(cacheKey, buffer);
-				return buffer;
-			} else {
-				return (StringBuffer) obj;
-			}
-		}
-
-	}
-
-	@Override
-	public void flush() {
-		try {
-			HashMap<String, StringBuffer> cache = (HashMap<String, StringBuffer>) jses.getAttribute("cache");
-			if (cache != null) {
-				cache.clear();
-			}
-		} catch (IllegalStateException e) {
-
-		}
-	}
-
 	public String getCacheInfo() {
 		String res = "";
 		try {
@@ -572,31 +507,6 @@ public class UserSession implements Const, ICache {
 	@Override
 	public String toString() {
 		return jses.getId();
-	}
-
-	@Override
-	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
-		String cacheKey = page.getCacheID();
-		Object obj = getObject(cacheKey);
-		String c[] = formData.get("cache");
-		if (c != null) {
-			String cache = c[0];
-			if (obj == null || cache.equalsIgnoreCase("reload")) {
-				PageResponse buffer = page.getPageContent(formData, "GET");
-				setPageObject(cacheKey, buffer);
-				return buffer;
-			} else {
-				return (PageResponse) obj;
-			}
-		} else {
-			if (obj == null) {
-				PageResponse buffer = page.getPageContent(formData, "GET");
-				setPageObject(cacheKey, buffer);
-				return buffer;
-			} else {
-				return (PageResponse) obj;
-			}
-		}
 	}
 
 	public void setPageObject(String name, PageResponse obj) {

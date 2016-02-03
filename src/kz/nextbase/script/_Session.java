@@ -1,27 +1,35 @@
 package kz.nextbase.script;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
+import kz.flabs.exception.DocumentAccessException;
+import kz.flabs.exception.DocumentException;
+import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
+import kz.flabs.localization.LanguageType;
 import kz.flabs.parser.QueryFormulaParserException;
-import kz.flabs.runtimeobj.document.DocID;
+import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.page.PageRule;
+import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
-import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IProcessInitiator;
+import net.sf.saxon.s9api.SaxonApiException;
 
-public class _Session extends _ScriptingObject {
+public class _Session extends _ScriptingObject implements ICache {
 
 	private IDatabase dataBase;
 	private User user;
@@ -29,6 +37,7 @@ public class _Session extends _ScriptingObject {
 	private AppEnv env;
 	private String formSesID;
 	private IProcessInitiator initiator;
+	private LanguageType lang;
 
 	public _Session(AppEnv env, User user, IProcessInitiator init) {
 		this.env = env;
@@ -47,13 +56,9 @@ public class _Session extends _ScriptingObject {
 		return env.globalSetting;
 	}
 
-	public String getCurrentDateAsString() {
-		return dateformat.format(new Date());
-	}
+	public LanguageType getLang() {
+		return lang;
 
-	@Deprecated
-	public ILogger getLogger() {
-		return env.logger;
 	}
 
 	@Deprecated
@@ -155,11 +160,6 @@ public class _Session extends _ScriptingObject {
 		this.formSesID = formSesID;
 	}
 
-	@Deprecated
-	public Set<DocID> getExpandedDocuments() {
-		return user.getSession().expandedThread;
-	}
-
 	public Set<String> getExpandedThread() {
 		return new HashSet<String>();
 	}
@@ -173,6 +173,36 @@ public class _Session extends _ScriptingObject {
 	}
 
 	public _Employer getCurrentAppUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PageOutcome getCachedPage(Page page, HashMap<String, String[]> formData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
+	        DocumentException, DocumentAccessException, QueryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
+	        SaxonApiException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void flush() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String getCacheInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}

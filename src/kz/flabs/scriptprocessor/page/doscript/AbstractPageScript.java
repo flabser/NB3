@@ -11,6 +11,7 @@ import kz.flabs.servlets.SignalType;
 import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
+import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._IXMLContent;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._Tag;
@@ -112,6 +113,12 @@ public abstract class AbstractPageScript extends ScriptEvent implements IPageScr
 	public PageResponse process(String method) {
 		return process();
 
+	}
+
+	@Override
+	public PageOutcome processCode(String method) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public abstract void doProcess(_Session session, _WebFormData formData, String lang);

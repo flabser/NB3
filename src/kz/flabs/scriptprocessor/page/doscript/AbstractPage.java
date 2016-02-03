@@ -18,6 +18,7 @@ import kz.flabs.servlets.pojo.OutcomeType;
 import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
+import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
@@ -231,6 +232,12 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	@Override
 	public PageResponse process() {
 		return process("GET");
+	}
+
+	@Override
+	public PageOutcome processCode(String method) {
+		return null;
+
 	}
 
 	public abstract void doGET(_Session session, _WebFormData formData, LanguageType lang) throws _Exception;

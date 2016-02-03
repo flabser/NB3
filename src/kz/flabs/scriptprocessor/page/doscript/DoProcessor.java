@@ -8,6 +8,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
+import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 import kz.pchelka.scheduler.IProcessInitiator;
@@ -87,6 +88,26 @@ public class DoProcessor {
 		myObject.setCurrentLang(vocabulary, lang);
 
 		return myObject.process(method);
+	}
+
+	public PageOutcome processScenario(String className, String method) throws ClassNotFoundException {
+		Object object = null;
+		try {
+			Class<?> pageClass = Class.forName(className);
+			object = pageClass.newInstance();
+		} catch (InstantiationException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (IllegalAccessException e) {
+			Server.logger.errorLogEntry(e);
+		}
+
+		IPageScript myObject = (IPageScript) object;
+
+		myObject.setSession(ses);
+		myObject.setFormData(webFormData);
+		myObject.setCurrentLang(vocabulary, lang);
+
+		return myObject.processCode(method);
 	}
 
 }

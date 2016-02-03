@@ -26,6 +26,8 @@ import kz.flabs.webrule.form.GlossaryRule;
 import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.ElementType;
 import kz.flabs.webrule.page.PageRule;
+import kz.lof.webserver.servlet.PageOutcome;
+import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
 
@@ -54,7 +56,14 @@ public class Page implements IProcessInitiator, Const {
 	 * this.env = env; this.rule = rule; }
 	 */
 
+	@Deprecated
 	public Page(AppEnv env, UserSession userSession, PageRule rule) {
+		this.userSession = userSession;
+		this.env = env;
+		this.rule = rule;
+	}
+
+	public Page(AppEnv env2, _Session ses, PageRule pageRule) {
 		this.userSession = userSession;
 		this.env = env;
 		this.rule = rule;
@@ -101,6 +110,7 @@ public class Page implements IProcessInitiator, Const {
 		return "<content>" + rule.getAsXML() + glossarySet + captions + "</content>";
 	}
 
+	@Deprecated
 	public StringBuffer process(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException,
 	        QueryFormulaParserException, DocumentException, DocumentAccessException, QueryException {
 		StringBuffer resultOut = null;
@@ -110,7 +120,8 @@ public class Page implements IProcessInitiator, Const {
 			resultOut = getContent(formData, method);
 			break;
 		case CACHING_IN_USER_SESSION_SCOPE:
-			resultOut = userSession.getPage(this, formData);
+			// resultOut = userSession.getPage(this, formData);
+			resultOut = getContent(formData, method);
 			break;
 		case CACHING_IN_APPLICATION_SCOPE:
 			resultOut = env.getPage(this, formData);
@@ -134,21 +145,21 @@ public class Page implements IProcessInitiator, Const {
 		return output.append("</page>");
 	}
 
-	public PageResponse pageProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
-		PageResponse resultOut = null;
+	public PageOutcome pageProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
+		PageOutcome resultOut = null;
 		long start_time = System.currentTimeMillis();
 		switch (rule.caching) {
 		case NO_CACHING:
 			resultOut = getPageContent(formData, method);
 			break;
 		case CACHING_IN_USER_SESSION_SCOPE:
-			resultOut = userSession.getCachedPage(this, formData);
+			// resultOut = userSession.getCachedPage(this, formData);
 			break;
 		case CACHING_IN_APPLICATION_SCOPE:
-			resultOut = env.getCachedPage(this, formData);
+			// resultOut = env.getCachedPage(this, formData);
 			break;
 		case CACHING_IN_SERVER_SCOPE:
-			resultOut = new Environment().getCachedPage(this, formData);
+			// resultOut = new Environment().getCachedPage(this, formData);
 			break;
 
 		default:
@@ -253,9 +264,9 @@ public class Page implements IProcessInitiator, Const {
 
 	}
 
-	public PageResponse getPageContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
+	public PageOutcome getPageContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
 		fields = formData;
-		PageResponse output = null;
+		PageOutcome output = null;
 		User user = userSession.currentUser;
 
 		if (rule.elements.size() > 0) {
@@ -265,18 +276,14 @@ public class Page implements IProcessInitiator, Const {
 				}
 				switch (elementRule.type) {
 				case SCRIPT:
-					PageResponse reponse = null;
+					PageOutcome reponse = null;
 					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
-						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
-						break;
-					case FILE:
-						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
+						reponse = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case JAVA_CLASS:
-						reponse = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
-						status = reponse.status;
+						reponse = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case UNKNOWN:
 						break;
@@ -284,22 +291,13 @@ public class Page implements IProcessInitiator, Const {
 						break;
 
 					}
-
-					if (reponse.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
-						fileGenerated = true;
-						generatedFilePath = reponse.getMessage("filepath").text;
-						generatedFileOriginalName = reponse.getMessage("originalname").text;
-						break loop;
-					} else if (reponse.type == ResponseType.JSON) {
-						output = reponse;
-					}
-
+					output = reponse;
 					break;
 				case INCLUDED_PAGE:
 					PageRule rule = (PageRule) env.ruleProvider.getRule(PAGE_RULE, elementRule.value);
 					// System.out.println(rule.getRuleID());
 					IncludedPage page = new IncludedPage(env, userSession, rule);
-					output.addPageResponse(page.pageProcess(fields, method));
+					output.addPageOutcome(page.pageProcess(fields, method));
 					break;
 				default:
 					break;

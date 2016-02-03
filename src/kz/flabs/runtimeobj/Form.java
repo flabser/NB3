@@ -14,7 +14,6 @@ import kz.flabs.exception.WebFormValueException;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.document.BaseDocument;
-import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.PageResponse;
@@ -207,8 +206,7 @@ public class Form extends Content implements Const {
 
 				}
 			}
-			userSession.addExpandedThread(new DocID(parentDocID, parentDocType));
-			userSession.setFlashViewEntry(new DocID(docID, doc.docType));
+
 		}
 
 		return result;

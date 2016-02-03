@@ -38,9 +38,10 @@ import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.UserSession;
-import kz.flabs.util.PageResponse;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.webserver.servlet.PageOutcome;
+import kz.nextbase.script._Session;
 import kz.pchelka.daemon.system.LogsZipRule;
 import kz.pchelka.daemon.system.TempFileCleanerRule;
 import kz.pchelka.log.ILogger;
@@ -48,6 +49,7 @@ import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import kz.pchelka.server.Server;
+import net.sf.saxon.s9api.SaxonApiException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -110,7 +112,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
 	private static Integer rtfLimitSize = 3892;
 
-	private static ArrayList<UserSession> sess = new ArrayList<UserSession>();
+	private static ArrayList<_Session> sess = new ArrayList<_Session>();
 	public static boolean isDevMode;
 	public static Vocabulary vocabulary;
 	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
@@ -513,19 +515,19 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	public static void flushSessionsCach() {
-		for (UserSession ses : sess) {
+		for (_Session ses : sess) {
 			ses.flush();
 		}
 	}
 
 	public static List<String> getSessionCachesInfo() {
 		List<String> cachesList = new ArrayList<String>();
-		for (UserSession ses : sess) {
+		for (_Session ses : sess) {
 			String ci = ses.getCacheInfo();
 			if (ci.equals("")) {
 				ci = "cache is empty";
 			}
-			cachesList.add(ses.currentUser.getUserID() + ":" + ci);
+			cachesList.add(ses.getCurrentUserID() + ":" + ci);
 		}
 		return cachesList;
 	}
@@ -562,7 +564,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static void addSession(UserSession userSession) {
 		if (userSession != null) {
-			sess.add(userSession);
+			// sess.add(userSession);
 		}
 
 	}
@@ -592,20 +594,21 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public PageResponse getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException {
+	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
+	        SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
 		String cacheParam[] = formData.get("cache");
 		if (cacheParam == null) {
-			PageResponse buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer);
+			PageOutcome buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
-			PageResponse buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer);
+			PageOutcome buffer = page.getPageContent(formData, "GET");
+			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else {
-			return (PageResponse) obj;
+			return (PageOutcome) obj;
 		}
 
 	}
