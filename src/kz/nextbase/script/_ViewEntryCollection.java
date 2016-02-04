@@ -125,4 +125,10 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	public String getOwnerID() {
 		return this.getClass().getSimpleName();
 	}
+
+	@Override
+	public String toJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

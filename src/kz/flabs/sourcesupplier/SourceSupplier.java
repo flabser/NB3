@@ -17,6 +17,7 @@ import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
+import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.localization.SentenceCaption;
@@ -429,7 +430,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 
 	public String getAvailableApps(User user) {
 		String result = "";
-		SourceSupplier ss = new SourceSupplier(env, user.getSession().lang);
+		SourceSupplier ss = new SourceSupplier(env, LanguageType.RUS.name());
 		// user.getSession().lang
 		for (AppEnv appEnv : Environment.getApplications()) {
 			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {

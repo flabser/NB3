@@ -52,4 +52,10 @@ public class Outcome implements _IXMLContent {
 		return document.toXML();
 	}
 
+	@Override
+	public String toJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

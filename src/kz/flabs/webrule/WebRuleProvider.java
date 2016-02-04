@@ -279,20 +279,23 @@ public class WebRuleProvider implements Const {
 
 	public PageRule getRule(String id) throws RuleException {
 		File docFile;
+		if (id != null) {
+			String ruleID = id.toLowerCase();
+			PageRule rule = null;
 
-		String ruleID = id.toLowerCase();
-		PageRule rule = null;
+			if (pageRuleMap.containsKey(ruleID)) {
+				rule = pageRuleMap.get(ruleID);
+			} else {
+				docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
+				rule = new PageRule(env, docFile);
+				pageRuleMap.put(ruleID.toLowerCase(), rule);
+			}
 
-		if (pageRuleMap.containsKey(ruleID)) {
-			rule = pageRuleMap.get(ruleID);
+			rule.plusHit();
+			return rule;
 		} else {
-			docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
-			rule = new PageRule(env, docFile);
-			pageRuleMap.put(ruleID.toLowerCase(), rule);
+			return null;
 		}
-
-		rule.plusHit();
-		return rule;
 
 	}
 }

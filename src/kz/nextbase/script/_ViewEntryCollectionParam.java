@@ -2,7 +2,6 @@ package kz.nextbase.script;
 
 import java.text.SimpleDateFormat;
 
-
 public class _ViewEntryCollectionParam {
 
 	// private User user;
@@ -15,18 +14,16 @@ public class _ViewEntryCollectionParam {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy kk:mm:ss");
 
 	public _ViewEntryCollectionParam(_Session ses) {
-		this.pageSize = ses.getUser().getSession().pageSize;
+		this.pageSize = ses.pageSize;
 		// this.user = ses.getUser();
 	}
 
-	/*public _ViewEntryCollectionParam setUser(final User user) {
-		this.user = user;
-		return this;
-	}
-
-	public User getUser() {
-		return user;
-	}*/
+	/*
+	 * public _ViewEntryCollectionParam setUser(final User user) { this.user =
+	 * user; return this; }
+	 * 
+	 * public User getUser() { return user; }
+	 */
 
 	public String getQuery() {
 		return query;
@@ -43,8 +40,7 @@ public class _ViewEntryCollectionParam {
 
 	public _ViewEntryCollectionParam setPageNum(int pageNum) {
 		if (pageNum < 0) {
-			throw new IllegalArgumentException("incorrect page number: pageNum = " + pageNum
-					+ ", pageNum may be >= 0, ([pageNum=0] = last page)");
+			throw new IllegalArgumentException("incorrect page number: pageNum = " + pageNum + ", pageNum may be >= 0, ([pageNum=0] = last page)");
 		}
 
 		this.pageNum = pageNum;
@@ -57,8 +53,7 @@ public class _ViewEntryCollectionParam {
 
 	public _ViewEntryCollectionParam setPageSize(int pageSize) {
 		if (pageSize < 0) {
-			throw new IllegalArgumentException("incorrect page size: pageSize = " + pageSize
-					+ ", pageSize may be >= 0, ([pageSize=0] = no limit)");
+			throw new IllegalArgumentException("incorrect page size: pageSize = " + pageSize + ", pageSize may be >= 0, ([pageSize=0] = no limit)");
 		}
 
 		this.pageSize = pageSize;
@@ -103,8 +98,7 @@ public class _ViewEntryCollectionParam {
 
 	@Override
 	public String toString() {
-		return "queryCondition: " + query + ",\npageNum: " + pageNum + ",\npageSize: " + pageSize
-				+ ",\ncheckResponse: " + withResponse + ",\nuseFilter: " + withFilter + ",\nexpandAllResponses: "
-				+ expandAllResponses + ",\nSimpleDateFormat: " + dateFormat.toPattern();
+		return "queryCondition: " + query + ",\npageNum: " + pageNum + ",\npageSize: " + pageSize + ",\ncheckResponse: " + withResponse
+		        + ",\nuseFilter: " + withFilter + ",\nexpandAllResponses: " + expandAllResponses + ",\nSimpleDateFormat: " + dateFormat.toPattern();
 	}
 }

@@ -1,26 +1,42 @@
 package kz.flabs.workspace;
 
 import kz.flabs.users.User;
+import kz.nextbase.script._Session;
 
-
-public class LoggedUser{
+public class LoggedUser {
 	private String login;
 	private String pwd;
 	private User user;
-	
-	LoggedUser(User user){
+
+	@Deprecated
+	LoggedUser(User user) {
 		login = user.getUserID();
-		if (user.getPasswordHash() != null){
-			if(!user.getPasswordHash().trim().equals("")){
-			
-			pwd = user.getPasswordHash();
-			}else{
+		if (user.getPasswordHash() != null) {
+			if (!user.getPasswordHash().trim().equals("")) {
+
+				pwd = user.getPasswordHash();
+			} else {
 				pwd = user.getPassword();
 			}
-		}else{
+		} else {
 			pwd = user.getPassword();
 		}
 		this.user = user;
+	}
+
+	public LoggedUser(_Session ses) {
+		user = ses.getUser();
+		login = user.getUserID();
+		if (user.getPasswordHash() != null) {
+			if (!user.getPasswordHash().trim().equals("")) {
+
+				pwd = user.getPasswordHash();
+			} else {
+				pwd = user.getPassword();
+			}
+		} else {
+			pwd = user.getPassword();
+		}
 	}
 
 	public String getLogin() {
@@ -28,14 +44,12 @@ public class LoggedUser{
 	}
 
 	public String getPwd() {
-		
+
 		return pwd;
 	}
-	
-	public User getUser(){
+
+	public User getUser() {
 		return user;
 	}
 
-	
-	
 }

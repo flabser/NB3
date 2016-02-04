@@ -29,11 +29,11 @@ public class User extends BaseDocument implements Const {
 	public int docID;
 	public boolean isValid = false;
 	public HashMap<String, UserApplicationProfile> enabledApps = new HashMap<String, UserApplicationProfile>();
-	public boolean isAnonymous;
 	public boolean authorized;
 	public boolean authorizedByHash;
 
 	private static final long serialVersionUID = 1L;
+	public final static String ANONYMOUS_USER = "anonymous";
 	private transient ISystemDatabase sysDatabase;
 	private String userID;
 
@@ -42,42 +42,28 @@ public class User extends BaseDocument implements Const {
 	private String email = "";
 	private boolean isSupervisor;
 	private int hash;
-	transient private UserSession session;
 	private String publicKey = "";
 	private String userName;
 
 	public User() {
 		this.sysDatabase = DatabaseFactory.getSysDatabase();
-		userID = "anonymous";
-		isAnonymous = true;
+		userID = ANONYMOUS_USER;
 	}
 
 	public User(AppEnv env) {
 		this.env = env;
 		this.sysDatabase = DatabaseFactory.getSysDatabase();
-
-		userID = "anonymous";
-		isAnonymous = true;
+		userID = ANONYMOUS_USER;
 	}
 
 	public User(String u) {
 		this.sysDatabase = DatabaseFactory.getSysDatabase();
 		setUserID(u);
-		try {
-			session = new UserSession(this);
-		} catch (UserException e) {
-			AppEnv.logger.errorLogEntry(e);
-		}
 	}
 
 	public User(String u, AppEnv env) {
 		this(u, env.getDataBase());
 		this.env = env;
-		try {
-			session = new UserSession(this);
-		} catch (UserException e) {
-			AppEnv.logger.errorLogEntry(e);
-		}
 	}
 
 	public User(String u, IDatabase db) {
@@ -90,11 +76,7 @@ public class User extends BaseDocument implements Const {
 			 * appUser.setUser(this);
 			 */
 		}
-		try {
-			session = new UserSession(this);
-		} catch (UserException e) {
-			AppEnv.logger.errorLogEntry(e);
-		}
+
 	}
 
 	public User(String u, IStructure struct) {
@@ -159,11 +141,6 @@ public class User extends BaseDocument implements Const {
 			userGroups.add(userID);
 		}
 		return userGroups;
-	}
-
-	@Deprecated
-	public String getFullName() {
-		return userName;
 	}
 
 	public boolean addEnabledApp(String app, UserApplicationProfile ap) {
@@ -285,21 +262,6 @@ public class User extends BaseDocument implements Const {
 		}
 	}
 
-	@Deprecated
-	public boolean isInstMsgOnLine() {
-
-		return false;
-
-	}
-
-	public int getInstMsgState() {
-		if (isInstMsgOnLine()) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
@@ -396,22 +358,15 @@ public class User extends BaseDocument implements Const {
 		return xmlContent.toString();
 	}
 
-	public void setSession(UserSession session) {
-		this.session = session;
-	}
-
-	@Deprecated
-	public UserSession getSession() {
-		return session;
-	}
-
 	public void setUserName(String name) {
 		userName = name;
-
 	}
 
 	public String getUserName() {
 		return userName;
+	}
 
+	public String getLogin() {
+		return userID;
 	}
 }

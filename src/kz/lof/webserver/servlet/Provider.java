@@ -3,7 +3,7 @@ package kz.lof.webserver.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -18,10 +18,13 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.webrule.page.PageRule;
+import kz.lof.env.EnvConst;
+import kz.lof.exception.ApplicationException;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.EnvConst;
 import kz.pchelka.env.Environment;
 import kz.pchelka.server.Server;
+
+import org.apache.http.HttpStatus;
 
 public class Provider extends HttpServlet {
 
@@ -59,9 +62,6 @@ public class Provider extends HttpServlet {
 			request.setCharacterEncoding(EnvConst.SUPPOSED_CODE_PAGE);
 			String onlyXML = request.getParameter("onlyxml");
 			String id = request.getParameter("id");
-			if (id == null) {
-				id = EnvConst.DEFAULT_PAGE;
-			}
 
 			if (env != null) {
 				PageRule rule = env.ruleProvider.getRule(id);
@@ -69,41 +69,45 @@ public class Provider extends HttpServlet {
 					jses = request.getSession(false);
 					ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 
-					if (onlyXML != null) {
-						result.publishAs = PublishAsType.XML;
-					}
-
-					HashMap<String, String[]> formData = new HashMap<String, String[]>();
 					Page page = new Page(env, ses, rule);
-					if (request.getMethod().equalsIgnoreCase("GET")) {
-						switch (rule.caching) {
-						case NO_CACHING:
-							result = page.getPageContent(formData, "GET");
-							break;
-						case CACHING_IN_USER_SESSION_SCOPE:
-							result = ses.getCachedPage(page, formData);
-							break;
-						case CACHING_IN_APPLICATION_SCOPE:
-							result = env.getCachedPage(page, formData);
-							break;
-						case CACHING_IN_SERVER_SCOPE:
-							result = new Environment().getCachedPage(page, formData);
-							break;
-
-						default:
-							result = page.getPageContent(formData, "GET");
-						}
+					Map<String, String[]> formData = request.getParameterMap();
+					if (onlyXML != null) {
+						result = page.getPageContent(formData, request.getMethod());
+						result.publishAs = PublishAsType.XML;
 					} else {
-						result = page.getPageContent(formData, "POST");
+						if (request.getMethod().equalsIgnoreCase("GET")) {
+							switch (rule.caching) {
+							case NO_CACHING:
+								result = page.getPageContent(formData, "GET");
+								break;
+							case CACHING_IN_USER_SESSION_SCOPE:
+								result = ses.getCachedPage(page, formData);
+								break;
+							case CACHING_IN_APPLICATION_SCOPE:
+								result = env.getCachedPage(page, formData);
+								break;
+							case CACHING_IN_SERVER_SCOPE:
+								result = new Environment().getCachedPage(page, formData);
+								break;
+
+							default:
+								result = page.getPageContent(formData, "GET");
+							}
+						} else {
+							result = page.getPageContent(formData, "POST");
+							result.publishAs = PublishAsType.JSON;
+						}
 					}
+
+					response.setStatus(result.getHttpStatus());
 
 					if (result.publishAs == PublishAsType.HTML) {
 						if (result.disableClientCache) {
 							disableCash(response);
 						}
 
-						String outputContent = result.toCompleteXML(ses);
-						File xslFile = new File(rule.xsltFile);
+						String outputContent = result.toCompleteXML();
+						File xslFile = new File(env.globalSetting.defaultSkin.path + File.separator + rule.xsltFile);
 						if (xslFile.exists()) {
 							response.setContentType("text/html");
 							new SaxonTransformator().toTrans(response, xslFile, outputContent);
@@ -113,24 +117,32 @@ public class Provider extends HttpServlet {
 							out.println(outputContent);
 							out.close();
 						}
+					} else if (result.publishAs == PublishAsType.JSON) {
+						response.setContentType("application/json;charset=utf-8");
+						PrintWriter out = response.getWriter();
+						String json = result.getJSON();
+						System.out.println(json);
+						out.println(json);
+						out.close();
 					} else if (result.publishAs == PublishAsType.XML) {
 						if (result.disableClientCache) {
 							disableCash(response);
 						}
 						response.setContentType("text/xml;charset=utf-8");
 						PrintWriter out = response.getWriter();
-						out.println(result.toCompleteXML(ses));
+						out.println(result.toCompleteXML());
 						out.close();
 					}
 				} else {
-					return;
+					throw new ApplicationException(context.getServletContextName(), id + " rule has not found");
 				}
 
 			} else {
-
+				throw new ApplicationException(context.getServletContextName(), "application context has not found");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			/*
 			 * ApplicationException ae = new
 			 * ApplicationException(env.templateType, e.toString(), e);

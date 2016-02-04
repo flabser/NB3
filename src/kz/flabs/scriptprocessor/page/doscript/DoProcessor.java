@@ -5,89 +5,43 @@ import groovy.lang.GroovyObject;
 import java.util.Map;
 
 import kz.flabs.appenv.AppEnv;
+import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.users.User;
-import kz.flabs.util.PageResponse;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
-import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.server.Server;
 
 public class DoProcessor {
 
-	private String lang;
+	private LanguageType lang;
 	private GroovyObject groovyObject = null;
 	private _Session ses;
 	private Vocabulary vocabulary;
 	private _WebFormData webFormData;
 
-	public DoProcessor(AppEnv env, User u, String currentLang, Map<String, String[]> formData, IProcessInitiator init) {
-		ses = new _Session(env, u, init);
+	@Deprecated
+	public DoProcessor(AppEnv env, User u, LanguageType currentLang, Map<String, String[]> formData) {
+		ses = new _Session(env, u);
 		vocabulary = env.vocabulary;
 		lang = currentLang;
 		webFormData = new _WebFormData(formData);
 	}
 
-	// @TODO logger
-	public PageResponse processScript(String className) throws ClassNotFoundException {
-		try {
-			Class pageClass = Class.forName(className);
-			groovyObject = (GroovyObject) pageClass.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		IPageScript myObject = (IPageScript) groovyObject;
-
-		myObject.setSession(ses);
-		myObject.setFormData(webFormData);
-		myObject.setCurrentLang(vocabulary, lang);
-
-		return myObject.process();
-
+	@Deprecated
+	public DoProcessor(AppEnv env, User user, String lang, Map<String, String[]> formData) {
+		ses = new _Session(env, user);
+		vocabulary = env.vocabulary;
+		lang = lang;
+		webFormData = new _WebFormData(formData);
 	}
 
-	public PageResponse processCode(String className, String method) throws ClassNotFoundException {
-		Object object = null;
-		try {
-			Class<?> pageClass = Class.forName(className);
-			object = pageClass.newInstance();
-		} catch (InstantiationException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (IllegalAccessException e) {
-			Server.logger.errorLogEntry(e);
-		}
-
-		IPageScript myObject = (IPageScript) object;
-
-		myObject.setSession(ses);
-		myObject.setFormData(webFormData);
-		myObject.setCurrentLang(vocabulary, lang);
-
-		return myObject.process(method);
-	}
-
-	public PageResponse processJava(String className, String method) throws ClassNotFoundException {
-		Object object = null;
-		try {
-			Class<?> pageClass = Class.forName(className);
-			object = pageClass.newInstance();
-		} catch (InstantiationException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (IllegalAccessException e) {
-			Server.logger.errorLogEntry(e);
-		}
-
-		IPageScript myObject = (IPageScript) object;
-
-		myObject.setSession(ses);
-		myObject.setFormData(webFormData);
-		myObject.setCurrentLang(vocabulary, lang);
-
-		return myObject.process(method);
+	public DoProcessor(AppEnv env, _Session ses, Map<String, String[]> formData) {
+		this.ses = ses;
+		vocabulary = env.vocabulary;
+		lang = ses.getLang();
+		webFormData = new _WebFormData(formData);
 	}
 
 	public PageOutcome processScenario(String className, String method) throws ClassNotFoundException {

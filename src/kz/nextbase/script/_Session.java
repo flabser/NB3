@@ -1,10 +1,7 @@
 package kz.nextbase.script;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,7 +19,7 @@ import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
-import kz.flabs.webrule.page.PageRule;
+import kz.lof.user.AuthModeType;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
@@ -33,19 +30,26 @@ public class _Session extends _ScriptingObject implements ICache {
 
 	private IDatabase dataBase;
 	private User user;
-	private SimpleDateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	private AppEnv env;
 	private String formSesID;
 	private IProcessInitiator initiator;
 	private LanguageType lang;
+	public int pageSize = 30;
+	private AuthModeType authMode;
+	private ArrayList<_Session> descendants = new ArrayList<_Session>();
 
+	@Deprecated
 	public _Session(AppEnv env, User user, IProcessInitiator init) {
 		this.env = env;
 		this.user = user;
 		setInitiator(init);
 		dataBase = env.getDataBase();
+	}
 
+	public _Session(AppEnv env, User user) {
+		this.env = env;
 		this.user = user;
+		dataBase = env.getDataBase();
 	}
 
 	public _AppEntourage getAppEntourage() {
@@ -56,26 +60,14 @@ public class _Session extends _ScriptingObject implements ICache {
 		return env.globalSetting;
 	}
 
+	public void setLang(LanguageType lang) {
+		this.lang = lang;
+
+	}
+
 	public LanguageType getLang() {
 		return lang;
 
-	}
-
-	@Deprecated
-	public String getCurrentUser() {
-		return user.getUserID();
-	}
-
-	public String getCurrentHost() {
-		return user.getSession().host;
-	}
-
-	public String getCurrentUserID() {
-		return user.getUserID();
-	}
-
-	public String getCurrentDateAsString(int plusDays) {
-		return dateformat.format(getDatePlusDays(plusDays));
 	}
 
 	public _ActionBar createActionBar() {
@@ -84,25 +76,6 @@ public class _Session extends _ScriptingObject implements ICache {
 
 	public _ViewEntryCollectionParam createViewEntryCollectionParam() {
 		return new _ViewEntryCollectionParam(this);
-	}
-
-	public Date getDatePlusDays(int plusDays) {
-		Calendar date = new GregorianCalendar();
-		date.setTime(new Date());
-		date.add(Calendar.DAY_OF_YEAR, plusDays);
-		return date.getTime();
-	}
-
-	public String getCurrentMonth() {
-		Calendar date = new GregorianCalendar();
-		date.setTime(new Date());
-		return Integer.toString(date.get(Calendar.MONTH) + 1);
-	}
-
-	public String getCurrentYear() {
-		Calendar date = new GregorianCalendar();
-		date.setTime(new Date());
-		return Integer.toString(date.get(Calendar.YEAR));
 	}
 
 	public IDatabase getCurrentDatabase() {
@@ -115,32 +88,6 @@ public class _Session extends _ScriptingObject implements ICache {
 
 	public _MailAgent getMailAgent() {
 		return new _MailAgent(this);
-	}
-
-	public _Page getPage(String id, _WebFormData webFormData) throws _Exception {
-		PageRule rule;
-		try {
-			rule = (PageRule) env.ruleProvider.getRule("page", id);
-			Page page = new Page(env, user.getSession(), rule);
-			return new _Page(page, webFormData);
-		} catch (RuleException e) {
-			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage(" + id + ")");
-		} catch (QueryFormulaParserException e) {
-			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Session.getPage(" + id + ")");
-		}
-	}
-
-	public String getLastURL() {
-		return user.getSession().history.getLastEntry().URL;
-	}
-
-	@Deprecated
-	public String getLastPageURL() throws _Exception {
-		return user.getSession().history.getLastPageEntry().URL;
-	}
-
-	public _URL getURLOfLastPage() throws _Exception {
-		return new _URL(user.getSession().history.getLastPageEntry().URL);
 	}
 
 	public User getUser() {
@@ -205,6 +152,23 @@ public class _Session extends _ScriptingObject implements ICache {
 	public String getCacheInfo() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private void setPageSize(int ps) {
+		pageSize = ps;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public _Session clone(AppEnv env) {
+		_Session newSes = new _Session(env, user);
+		newSes.authMode = AuthModeType.LOGIN_THROUGH_TOKEN;
+		newSes.setLang(lang);
+		newSes.setPageSize(pageSize);
+		descendants.add(newSes);
+		return newSes;
 	}
 
 }

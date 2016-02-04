@@ -15,7 +15,7 @@ public class _POJOTreeWrapper implements _IXMLContent {
 	public String toXML() throws _Exception {
 		String result = "";
 		result += "<entry isread=\"1\" hasattach=\"0\" hasresponse=\"0\" id=\"" + object.getId() + "\" "
-				+ "url=\"Provider?id=furniture_form&amp;docid=" + object.getId() + "\"><viewcontent>";
+		        + "url=\"Provider?id=furniture_form&amp;docid=" + object.getId() + "\"><viewcontent>";
 		result += object.getFullXMLChunk(null) + "</viewcontent></entry>";
 		result += "<responses>";
 		for (_IPOJOObject val : list) {
@@ -23,5 +23,11 @@ public class _POJOTreeWrapper implements _IXMLContent {
 		}
 		result += "</responses>";
 		return result;
+	}
+
+	@Override
+	public String toJSON() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

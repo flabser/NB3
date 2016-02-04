@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 
-public class _POJOListWrapper<T extends _IPOJOObject> implements _IXMLContent {
+public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 	private int maxPage;
 	private long count;
 	private int currentPage;
@@ -35,25 +35,6 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IXMLContent {
 		l.add((T) new SimplePOJO(msg));
 		this.list = l;
 		this.lang = lang;
-	}
-
-	@Override
-	public String toXML() throws _Exception {
-		String entityType = "undefined";
-		try {
-			final Class<T> listClass = (Class<T>) list.get(0).getClass();
-			entityType = listClass.getSimpleName().toLowerCase();
-		} catch (ArrayIndexOutOfBoundsException e) {
-
-		}
-
-		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
-		        + "\">";
-		for (T val : list) {
-			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
-			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
-		}
-		return result + "</query>";
 	}
 
 	class SimplePOJO implements _IPOJOObject {
@@ -88,6 +69,49 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IXMLContent {
 			return getFullXMLChunk(null);
 		}
 
+	}
+
+	@Override
+	public UUID getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public _URL getURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getFullXMLChunk(LanguageType lang) {
+		String entityType = "undefined";
+		try {
+			final Class<T> listClass = (Class<T>) list.get(0).getClass();
+			entityType = listClass.getSimpleName().toLowerCase();
+		} catch (ArrayIndexOutOfBoundsException e) {
+
+		}
+
+		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
+		        + "\">";
+		for (T val : list) {
+			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
+			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
+		}
+		return result + "</query>";
+	}
+
+	@Override
+	public String getShortXMLChunk(LanguageType lang) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isEditable() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

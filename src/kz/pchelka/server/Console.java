@@ -11,7 +11,7 @@ import kz.flabs.dataengine.jpa.deploying.InitializerHelper;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.util.Util;
-import kz.pchelka.env.EnvConst;
+import kz.lof.env.EnvConst;
 import kz.pchelka.env.Environment;
 
 public class Console implements Runnable {

@@ -1,23 +1,31 @@
 package kz.flabs.scriptprocessor;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
+import kz.flabs.dataengine.jpa.DAO;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
-import kz.nextbase.script._Exception;
-import kz.nextbase.script._Helper;
+import kz.flabs.runtimeobj.RuntimeObjUtil;
+import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
+import kz.nextbase.script._POJOListWrapper;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._URL;
+import kz.nextbase.script._WebFormData;
+import kz.nextbase.script.actions._Action;
+import kz.nextbase.script.actions._ActionBar;
+import kz.nextbase.script.actions._ActionType;
 import kz.pchelka.env.Environment;
+import kz.pchelka.server.Server;
 
 public class ScriptEvent {
 	protected Vocabulary vocabulary;
 	protected String redirectURL = "";
 	protected ArrayList<_IXMLContent> toPublishElement = new ArrayList<_IXMLContent>();
 	protected _Session ses;
+	protected LanguageType lang;
 
 	public String getTmpDirPath() {
 		return Environment.tmpDir;
@@ -31,28 +39,38 @@ public class ScriptEvent {
 		}
 	}
 
-	public void publishElement(String entryName, String value) {
-		toPublishElement.add(new ScriptShowField(entryName, value));
+	protected _ActionBar getSimpleActionBar(_Session session, String type, LanguageType lang) {
+		_ActionBar actionBar = new _ActionBar(session);
+		_Action newDocAction = new _Action(getLocalizedWord("new_", lang), getLocalizedWord("add_new_", lang), "new_" + type);
+		newDocAction.setURL("Provider?id=" + type + "&key=");
+		actionBar.addAction(newDocAction);
+		actionBar.addAction(new _Action(getLocalizedWord("del_document", lang), getLocalizedWord("del_document", lang), _ActionType.DELETE_DOCUMENT));
+		return actionBar;
 	}
 
-	public void publishElement(String entryName, Object value) throws _Exception {
-		if (value == null) {
-			toPublishElement.add(new ScriptShowField(entryName, ""));
-		} else if (value instanceof String) {
-			toPublishElement.add(new ScriptShowField(entryName, (String) value));
-		} else if (value instanceof _IXMLContent) {
-			toPublishElement.add(new ScriptShowField(entryName, (_IXMLContent) value));
-		} else if (value instanceof Date) {
-			toPublishElement.add(new ScriptShowField(entryName, _Helper.getDateAsString((Date) value)));
-		} else if (value instanceof Enum) {
-			toPublishElement.add(new ScriptShowField(entryName, ((Enum) value).name()));
-		} else if (value instanceof BigDecimal) {
-			toPublishElement.add(new ScriptShowField(entryName, value.toString()));
+	protected _POJOListWrapper getViewPage(DAO<? extends _IPOJOObject, UUID> dao, _WebFormData formData) {
+		int pageNum = 1;
+		int pageSize = dao.getSession().pageSize;
+		if (formData.containsField("page")) {
+			pageNum = formData.getNumberValueSilently("page", pageNum);
 		}
+		long count = dao.getCount();
+		int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+		if (pageNum == 0) {
+			pageNum = maxPage;
+		}
+		int startRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+		List<? extends _IPOJOObject> list = dao.findAll(startRec, pageSize);
+		return new _POJOListWrapper(list, maxPage, count, pageNum, lang);
+
 	}
 
-	public void publishElement(_IXMLContent value) {
-		toPublishElement.add(value);
+	public void println(Object text) {
+		System.out.println(text.toString());
+	}
+
+	public void log(String text) {
+		Server.logger.normalLogEntry(text);
 	}
 
 	/*

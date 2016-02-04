@@ -2,7 +2,6 @@ package kz.nextbase.script.actions;
 
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.nextbase.script._Exception;
 import kz.nextbase.script._Session;
 
 public class _Action {
@@ -63,11 +62,13 @@ public class _Action {
 	private String getJson(_ActionType type) {
 		switch (type) {
 		case CLOSE:
-			try {
-				return "<js><![CDATA[window.location.href = \"" + session.getLastPageURL() + "\"]]></js>";
-			} catch (_Exception e) {
-				return "<js><![CDATA[window.location.href = \"" + session.getLastURL() + "\"]]></js>";
-			}
+			// try {
+			// return "<js><![CDATA[window.location.href = \"" +
+			// session.getLastPageURL() + "\"]]></js>";
+			// } catch (_Exception e) {
+			// return "<js><![CDATA[window.location.href = \"" +
+			// session.getLastURL() + "\"]]></js>";
+			// }
 		case GET_DOCUMENT_ACCESSLIST:
 
 		default:

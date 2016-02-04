@@ -15,8 +15,8 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.jpa.IDAO;
 import kz.flabs.dataengine.jpa.ISimpleAppEntity;
 import kz.flabs.users.User;
+import kz.lof.env.EnvConst;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.EnvConst;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
 

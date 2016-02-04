@@ -54,6 +54,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return false;
 	}
 
+	@Override
 	public abstract IStructure getStructure();
 
 	public String initExternalPool(ExternalModuleType extModule) {
@@ -72,6 +73,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
 	public IFTIndexEngine getFTSearchEngine() {
 		// TODO Auto-generated method stub
 		return null;
@@ -96,11 +98,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	}
 
 	public IMyDocsProcessor getMyDocsProcessor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IHelp getHelp() {
 		// TODO Auto-generated method stub
 		return null;
 	}

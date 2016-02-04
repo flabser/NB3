@@ -10,6 +10,7 @@ import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
+import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.document.DocID;
@@ -46,6 +47,8 @@ public class Page implements IProcessInitiator, Const {
 	protected Map<String, String[]> fields = new HashMap<>();
 	protected UserSession userSession;
 
+	private _Session ses;
+
 	// private HttpServletRequest request;
 	// private HttpServletResponse response;
 
@@ -63,10 +66,10 @@ public class Page implements IProcessInitiator, Const {
 		this.rule = rule;
 	}
 
-	public Page(AppEnv env2, _Session ses, PageRule pageRule) {
-		this.userSession = userSession;
+	public Page(AppEnv env, _Session ses, PageRule pageRule) {
+		this.ses = ses;
 		this.env = env;
-		this.rule = rule;
+		this.rule = pageRule;
 	}
 
 	public String getSpravFieldSet(User user, String lang) throws RuleException, DocumentException, DocumentAccessException,
@@ -174,11 +177,13 @@ public class Page implements IProcessInitiator, Const {
 		for (ElementRule elementRule : rule.elements) {
 			if (elementRule.type == ElementType.SCRIPT && elementRule.doClassName.getType() == ValueSourceType.JAVA_CLASS) {
 				User user = userSession.currentUser;
-				DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
-				PageResponse xmlResp = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
-				status = xmlResp.status;
-				toJSON = true;
-				response = xmlResp;
+				DoProcessor sProcessor = new DoProcessor(env, user, ses.getLang(), fields);
+				// PageResponse xmlResp =
+				// sProcessor.processJava(elementRule.doClassName.getClassName(),
+				// method);
+				// status = xmlResp.status;
+				// toJSON = true;
+				// response = xmlResp;
 			}
 		}
 		return response;
@@ -200,10 +205,7 @@ public class Page implements IProcessInitiator, Const {
 
 		StringBuffer output = new StringBuffer(1000);
 		User user = userSession.currentUser;
-		if (rule.runUnderUser.getSourceType() == ValueSourceType.STATIC) {
-			user = new User(rule.runUnderUser.value, env);
-			user.setSession(userSession);
-		}
+
 		if (rule.elements.size() > 0) {
 			loop: for (ElementRule elementRule : rule.elements) {
 				if (elementRule.hasElementName) {
@@ -212,16 +214,20 @@ public class Page implements IProcessInitiator, Const {
 				switch (elementRule.type) {
 				case SCRIPT:
 					PageResponse reponse = null;
-					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
+					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
-						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
+						// reponse =
+						// sProcessor.processScript(elementRule.doClassName.getClassName());
 						break;
 					case FILE:
-						reponse = sProcessor.processScript(elementRule.doClassName.getClassName());
+						// reponse =
+						// sProcessor.processScript(elementRule.doClassName.getClassName());
 						break;
 					case JAVA_CLASS:
-						reponse = sProcessor.processJava(elementRule.doClassName.getClassName(), method);
+						// reponse =
+						// sProcessor.processJava(elementRule.doClassName.getClassName(),
+						// method);
 						status = reponse.status;
 						break;
 					case UNKNOWN:
@@ -266,24 +272,21 @@ public class Page implements IProcessInitiator, Const {
 
 	public PageOutcome getPageContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
 		fields = formData;
-		PageOutcome output = null;
-		User user = userSession.currentUser;
+		PageOutcome output = new PageOutcome();
+		User user = ses.getUser();
 
 		if (rule.elements.size() > 0) {
 			loop: for (ElementRule elementRule : rule.elements) {
-				if (elementRule.hasElementName) {
-					output.setName(elementRule.name);
-				}
+
 				switch (elementRule.type) {
 				case SCRIPT:
-					PageOutcome reponse = null;
-					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields, this);
+					DoProcessor sProcessor = new DoProcessor(env, ses, fields);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
-						reponse = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
+						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case JAVA_CLASS:
-						reponse = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
+						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case UNKNOWN:
 						break;
@@ -291,45 +294,39 @@ public class Page implements IProcessInitiator, Const {
 						break;
 
 					}
-					output = reponse;
+					output.setScriptResult(true);
 					break;
 				case INCLUDED_PAGE:
-					PageRule rule = (PageRule) env.ruleProvider.getRule(PAGE_RULE, elementRule.value);
+					PageRule rule = env.ruleProvider.getRule(elementRule.value);
 					// System.out.println(rule.getRuleID());
-					IncludedPage page = new IncludedPage(env, userSession, rule);
-					output.addPageOutcome(page.pageProcess(fields, method));
-					break;
-				default:
+					IncludedPage page = new IncludedPage(env, ses, rule);
+					output.addPageOutcome(page.getPageContent(fields, method));
 					break;
 				}
+				if (elementRule.hasElementName) {
+					output.setName(elementRule.name);
+				}
 			}
+
 		}
-		// SourceSupplier captionTextSupplier = new SourceSupplier(env,
-		// userSession.lang);
-		// return output.append(getCaptions(captionTextSupplier,
-		// rule.captions));
+
+		output.setPageId(rule.id);
+		output.setCaptions(getCaptions(rule.captions, ses.getLang()));
 		return output;
 
-	}
-
-	protected int[] getParentDocProp(Map<String, String[]> formData) {
-		int[] prop = new int[2];
-		try {
-			prop[0] = Integer.parseInt(formData.get("parentdocid")[0]);
-		} catch (Exception nfe) {
-			prop[0] = 0;
-		}
-		try {
-			prop[1] = Integer.parseInt(formData.get("parentdoctype")[0]);
-		} catch (Exception nfe) {
-			prop[1] = DOCTYPE_UNKNOWN;
-		}
-		return prop;
 	}
 
 	@Override
 	public String getOwnerID() {
 		return rule.getRuleID();
+	}
+
+	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageType lang) {
+		HashMap<String, String> translated = new HashMap<String, String>();
+		for (Caption cap : captions) {
+			translated.put(cap.captionID, env.vocabulary.getWord(cap.captionID, lang));
+		}
+		return translated;
 	}
 
 }

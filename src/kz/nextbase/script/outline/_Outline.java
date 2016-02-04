@@ -1,11 +1,14 @@
 package kz.nextbase.script.outline;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
+import kz.flabs.localization.LanguageType;
 import kz.flabs.webrule.constants.RunMode;
-import kz.nextbase.script._IXMLContent;
+import kz.nextbase.script._IPOJOObject;
+import kz.nextbase.script._URL;
 
-public class _Outline implements _IXMLContent {
+public class _Outline implements _IPOJOObject {
 	public RunMode isOn = RunMode.ON;
 	public String caption = "";
 	public String hint = "";
@@ -35,19 +38,39 @@ public class _Outline implements _IXMLContent {
 	}
 
 	@Override
-	public String toXML() {
+	public UUID getId() {
+		return null;
+	}
+
+	@Override
+	public _URL getURL() {
+		return null;
+	}
+
+	@Override
+	public String getFullXMLChunk(LanguageType lang) {
 		String a = "";
 
 		for (_Outline o : outlines) {
-			a += o.toXML();
+			a += o.getFullXMLChunk(lang);
 		}
 
 		for (_OutlineEntry e : entries) {
 			a += e.toXML();
 		}
 
-		return "<outline mode=\"" + isOn + "\" id=\"" + customID + "\" caption=\"" + caption + "\" hint=\"" + hint
-				+ "\">" + a + "</outline>";
+		return "<outline mode=\"" + isOn + "\" id=\"" + customID + "\" caption=\"" + caption + "\" hint=\"" + hint + "\">" + a + "</outline>";
+
+	}
+
+	@Override
+	public String getShortXMLChunk(LanguageType lang) {
+		return getFullXMLChunk(lang);
+	}
+
+	@Override
+	public boolean isEditable() {
+		return false;
 	}
 
 }

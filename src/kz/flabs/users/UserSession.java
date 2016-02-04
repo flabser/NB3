@@ -57,7 +57,7 @@ public class UserSession implements Const {
 	@Deprecated
 	public UserSession(User user) throws UserException {
 		currentUser = user;
-		currentUser.setSession(this);
+		// currentUser.setSession(this);
 		if (!currentUser.getUserID().equalsIgnoreCase(Const.sysUser)) {
 			initHistory();
 		}
@@ -66,7 +66,7 @@ public class UserSession implements Const {
 
 	public UserSession(User user, HttpServletRequest request) throws UserException {
 		currentUser = user;
-		currentUser.setSession(this);
+		// currentUser.setSession(this);
 		appCookies = new Cookies(request);
 		lang = appCookies.currentLang;
 		skin = appCookies.currentSkin;
@@ -82,7 +82,7 @@ public class UserSession implements Const {
 	public UserSession(User user, HttpServletRequest request, HttpServletResponse response, boolean saveToken, HttpSession jses) throws UserException {
 		this.jses = jses;
 		currentUser = user;
-		currentUser.setSession(this);
+		// currentUser.setSession(this);
 		appCookies = new Cookies(request);
 		lang = appCookies.currentLang;
 		skin = appCookies.currentSkin;
@@ -152,7 +152,7 @@ public class UserSession implements Const {
 				initHistory();
 			}
 		}
-		currentUser.setSession(this);
+		// currentUser.setSession(this);
 		browserType = getBrowserType(request);
 		host = getHost(request);
 		ipAddr = ServletUtil.getClientIpAddr(request);

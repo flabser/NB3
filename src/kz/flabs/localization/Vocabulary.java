@@ -53,13 +53,17 @@ public class Vocabulary {
 	}
 
 	public String getWord(String keyWord, LanguageType lang) {
-		Sentence sent = words.get(keyWord);
-		if (sent == null) {
-			logger.warningLogEntry("Translation of word \"" + keyWord + "\" to " + lang + ", has not found in vocabulary (" + appName + ")");
+		try {
+			Sentence sent = words.get(keyWord);
+			if (sent == null) {
+				logger.warningLogEntry("Translation of word \"" + keyWord + "\" to " + lang + ", has not found in vocabulary (" + appName + ")");
+				return keyWord;
+			} else {
+				SentenceCaption caption = sent.words.get(lang.name());
+				return caption.word;
+			}
+		} catch (Exception e) {
 			return keyWord;
-		} else {
-			SentenceCaption caption = sent.words.get(lang);
-			return caption.word;
 		}
 	}
 

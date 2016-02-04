@@ -40,6 +40,7 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.env.EnvConst;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.pchelka.daemon.system.LogsZipRule;
@@ -115,6 +116,8 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static ArrayList<_Session> sess = new ArrayList<_Session>();
 	public static boolean isDevMode;
 	public static Vocabulary vocabulary;
+	public static String workspaceName = "Workspace";
+	public static String primaryAppDir = "";
 	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
 
 	public static void init() {
@@ -527,7 +530,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			if (ci.equals("")) {
 				ci = "cache is empty";
 			}
-			cachesList.add(ses.getCurrentUserID() + ":" + ci);
+			cachesList.add(ses.getUser().getUserID() + ":" + ci);
 		}
 		return cachesList;
 	}

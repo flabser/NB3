@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Timer;
 
 import kz.flabs.dataengine.IDatabase;
 import kz.pchelka.env.Environment;
@@ -58,9 +57,6 @@ public class Server {
 		String info = webServerInst.initConnectors();
 		kz.pchelka.server.Server.logger.verboseLogEntry("Web server started (" + info + ")");
 		webServerInst.startContainer();
-		MemoryInspector inspector = new MemoryInspector(logger);
-		Timer mtimer = new java.util.Timer();
-		mtimer.schedule(inspector, 1000 * 60, 1000 * 60 * 5);
 
 		Thread thread = new Thread(new Console());
 		thread.setPriority(Thread.MIN_PRIORITY);

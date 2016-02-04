@@ -1,14 +1,17 @@
 package kz.nextbase.script.actions;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
+import kz.flabs.localization.LanguageType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
-import kz.nextbase.script._IXMLContent;
+import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._Session;
+import kz.nextbase.script._URL;
 
-public class _ActionBar implements _IXMLContent {
+public class _ActionBar implements _IPOJOObject {
 	public RunMode isOn = RunMode.ON;
 	public String caption = "";
 	public String hint = "";
@@ -31,7 +34,17 @@ public class _ActionBar implements _IXMLContent {
 	}
 
 	@Override
-	public String toXML() {
+	public UUID getId() {
+		return null;
+	}
+
+	@Override
+	public _URL getURL() {
+		return null;
+	}
+
+	@Override
+	public String getFullXMLChunk(LanguageType lang) {
 		String a = "";
 		for (_Action act : actions) {
 			a += act.toXML();
@@ -40,8 +53,13 @@ public class _ActionBar implements _IXMLContent {
 	}
 
 	@Override
-	public String toString() {
-		return toXML();
+	public String getShortXMLChunk(LanguageType lang) {
+		return getFullXMLChunk(lang);
+	}
+
+	@Override
+	public boolean isEditable() {
+		return false;
 	}
 
 }

@@ -20,11 +20,13 @@ import kz.nextbase.script._Session;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public User user;
-	private EntityManagerFactory emf;
 	protected final Class<T> entityClass;
+	private EntityManagerFactory emf;
+	private _Session ses;
 
 	public DAO(Class<T> entityClass, _Session session) {
 		this.entityClass = entityClass;
+		ses = session;
 		emf = session.getCurrentDatabase().getEntityManagerFactory();
 		user = session.getUser();
 	}
@@ -245,4 +247,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 		return queryName;
 	}
 
+	public _Session getSession() {
+		return ses;
+	}
 }

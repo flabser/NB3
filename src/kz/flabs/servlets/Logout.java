@@ -14,8 +14,8 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.h2.LoginModeType;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.PortalException;
-import kz.flabs.users.UserSession;
-import kz.flabs.users.UserSession.HistoryEntry;
+import kz.lof.env.EnvConst;
+import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
 
 public class Logout extends HttpServlet implements Const {
@@ -25,7 +25,7 @@ public class Logout extends HttpServlet implements Const {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		ServletContext context = config.getServletContext();
-		env = (AppEnv) context.getAttribute("portalenv");
+		env = (AppEnv) context.getAttribute(EnvConst.APP_ATTR);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Logout extends HttpServlet implements Const {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-		UserSession userSession = null;
+		_Session ses = null;
 
 		String mode = request.getParameter("mode");
 		if (mode == null) {
@@ -45,9 +45,9 @@ public class Logout extends HttpServlet implements Const {
 		try {
 			HttpSession jses = request.getSession(false);
 			if (jses != null) {
-				userSession = (UserSession) jses.getAttribute("usersession");
+				ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 				// User user = (User)jses.getAttribute("user");
-				if (userSession != null) {
+				if (ses != null) {
 
 				}
 
@@ -69,17 +69,19 @@ public class Logout extends HttpServlet implements Const {
 							response.addCookie(loginCook);
 						}
 
-						if (userSession != null) {
+						if (ses != null) {
 
-							UserApplicationProfile userAppProfile = userSession.currentUser.enabledApps.get(env.appType);
+							UserApplicationProfile userAppProfile = ses.getUser().enabledApps.get(env.appType);
 							if (userAppProfile != null && userAppProfile.loginMod == LoginModeType.LOGIN_AND_REDIRECT) {
 
 							}
-
-							HistoryEntry entry = userSession.history.getLastEntry();
-							Cookie ruCookie = new Cookie("ru", entry.URL);
-							ruCookie.setMaxAge(99999);
-							response.addCookie(ruCookie);
+							/*
+							 * HistoryEntry entry =
+							 * userSession.history.getLastEntry(); Cookie
+							 * ruCookie = new Cookie("ru", entry.URL);
+							 * ruCookie.setMaxAge(99999);
+							 * response.addCookie(ruCookie);
+							 */
 						}
 
 					}

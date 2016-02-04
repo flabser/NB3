@@ -3,12 +3,14 @@ package kz.nextbase.script;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
+import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.Util;
 
 @Deprecated
-public class _Tag {
+public class _Tag implements _IPOJOObject {
 
 	private Tag runtimeTag;
 
@@ -118,6 +120,31 @@ public class _Tag {
 
 	public void setAttr(String attrName, int attrValue) {
 		runtimeTag.attrs.put(attrName, Integer.toString(attrValue));
+	}
+
+	@Override
+	public UUID getId() {
+		return null;
+	}
+
+	@Override
+	public _URL getURL() {
+		return null;
+	}
+
+	@Override
+	public String getFullXMLChunk(LanguageType lang) {
+		return runtimeTag.toXML();
+	}
+
+	@Override
+	public String getShortXMLChunk(LanguageType lang) {
+		return getFullXMLChunk(lang);
+	}
+
+	@Override
+	public boolean isEditable() {
+		return false;
 	}
 
 }
