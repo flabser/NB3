@@ -7,8 +7,8 @@ import java.util.HashMap;
 import kz.flabs.dataengine.h2.holiday.Holiday;
 import kz.flabs.dataengine.h2.holiday.HolidayCollection;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
-import kz.flabs.users.TempUser;
 import kz.flabs.users.User;
+import kz.lof.dataengine.system.IEmployeeDAO;
 
 public interface ISystemDatabase {
 	User checkUser(String userID, String pwd, User user);
@@ -45,12 +45,6 @@ public interface ISystemDatabase {
 
 	void removeAppEntry(User user);
 
-	int calcStartEntry(int pageNum, int pageSize);
-
-	int insert(TempUser tempUser);
-
-	int update(TempUser tempUser);
-
 	@Deprecated
 	Calendar[] getHolidays(int year);
 
@@ -59,8 +53,6 @@ public interface ISystemDatabase {
 
 	HolidayCollection getHolidayCol(int year, int offset, int pageSize);
 
-	int update(Holiday h);
-
-	int insert(Holiday h);
+	void setEmployeeDAO(IEmployeeDAO dao);
 
 }

@@ -233,7 +233,7 @@ public class AdminProvider extends HttpServlet implements Const {
 			result.xslt = "views" + File.separator + "users_list.xsl";
 			UserServices us = new UserServices();
 			String keyWord = request.getParameter("keyword");
-			content = us.getUserListWrapper(keyWord, page, pageSize);
+			// content = us.getUserListWrapper(keyWord, page, pageSize);
 			count = us.getCount();
 		} else if (element.equalsIgnoreCase("scheduler")) {
 			result.xslt = "views" + File.separator + "scheduler_list.xsl";

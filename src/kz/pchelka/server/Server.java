@@ -31,8 +31,6 @@ public class Server {
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
 		logger.verboseLogEntry("Build " + compilationTime);
 		logger.normalLogEntry("Copyright(c) Lab of the Future 2014. All Right Reserved");
-		logger.normalLogEntry("Operating system: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + "("
-		        + System.getProperty("os.arch") + "), jvm: " + System.getProperty("java.version"));
 
 		Environment.init();
 

@@ -47,10 +47,6 @@ public class WebRuleProvider implements Const {
 		loadGlobal(globalFileName);
 	}
 
-	public void loadRules() {
-		// loadHandlers();
-	}
-
 	public IRule getRule(String ruleType, String ruleID) throws RuleException, QueryFormulaParserException {
 		File docFile;
 		try {

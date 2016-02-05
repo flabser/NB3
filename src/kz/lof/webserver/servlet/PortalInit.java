@@ -13,7 +13,10 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.runtimeobj.Application;
+import kz.flabs.users.User;
+import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
+import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.server.Server;
@@ -62,6 +65,17 @@ public class PortalInit extends HttpServlet {
 					}
 					AppEnv.logger.verboseLogEntry("Application will use \"" + db + "\" database");
 					env.setDataBase(db);
+
+					if (env.appType.equalsIgnoreCase("Staff")) {
+						Class<?> clazz = Class.forName("staff.dao.EmployeeDAO");
+						Class[] args = new Class[] { _Session.class };
+						Constructor<?> contructor = clazz.getConstructor(args);
+						_Session ses = new _Session(env, new User(env));
+						IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
+						Environment.systemBase.setEmployeeDAO(aDao);
+						AppEnv.logger.verboseLogEntry("Module \"" + env.appType + "\" has been connected to system");
+					}
+
 					isValid = true;
 
 				} catch (Exception e) {

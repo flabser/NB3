@@ -21,17 +21,15 @@ import kz.flabs.dataengine.h2.holiday.HolidayCollection;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
-import kz.flabs.users.TempUser;
 import kz.flabs.users.User;
 import kz.flabs.webrule.constants.RunMode;
-import kz.nextbase.script._Session;
+import kz.lof.dataengine.system.IEmployee;
+import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
+import kz.pchelka.server.Server;
 
 import org.apache.catalina.realm.RealmBase;
-
-import staff.dao.EmployeeDAO;
-import staff.model.Employee;
 
 public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const {
 	public static boolean isValid;
@@ -40,6 +38,8 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	private IDBConnectionPool dbPool;
 	private static String connectionURL = "jdbc:h2:system_data" + File.separator + "system_data;MVCC=TRUE;AUTO_SERVER="
 	        + (Environment.debugMode == RunMode.ON ? "TRUE" : "FALSE");
+
+	private IEmployeeDAO eDao;
 
 	public SystemDatabase() throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		this(connectionURL);
@@ -69,10 +69,9 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	}
 
 	@Override
-	public int calcStartEntry(int pageNum, int pageSize) {
-		int pageNumMinusOne = pageNum;
-		pageNumMinusOne--;
-		return pageNumMinusOne * pageSize;
+	public void setEmployeeDAO(IEmployeeDAO dao) {
+		eDao = dao;
+
 	}
 
 	@Override
@@ -320,53 +319,33 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		user.setPassword("");
 	}
 
-	// //Checks for the specified column name
-	// private boolean hasColumn(String nameTable, String nameColumn) throws
-	// SQLException{
-	// Connection conn = dbPool.getConnection();
-	// conn.setAutoCommit(false);
-	// Statement s = conn.createStatement();
-	// String sql = "select * from USERS where rownum<2";
-	// ResultSet rs = s.executeQuery(sql);
-	//
-	// ResultSetMetaData rsMetaData = rs.getMetaData();
-	// int numberOfColumns = rsMetaData.getColumnCount();
-	//
-	// for (int i = 1; i < numberOfColumns + 1; i++) {
-	// String columnName = rsMetaData.getColumnName(i);
-	//
-	// if (nameColumn.equals(columnName)) {
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-
 	private User initUser(Connection conn, ResultSet rs, AppEnv env, String login) throws SQLException {
 		boolean isNext = true;
 		User user = new User(login, env);
-		_Session ses = new _Session(env, user, this);
-		EmployeeDAO dao = new EmployeeDAO(ses);
-		Employee emp = dao.findByLogin(login);
-		if (emp != null) {
-			user.setUserName(emp.getName());
-			// emp.setUser(user);
-		}
-		user.fill(rs);
-		while (isNext || rs.next()) {
-			UserApplicationProfile ap = new UserApplicationProfile(rs.getString("APP"), rs.getInt("LOGINMODE"));
-			if (ap.loginMod != LoginModeType.LOGIN_AND_REDIRECT) {
-				String qaSQL = "select * from QA where QA.DOCID=" + user.docID + " AND QA.APP='" + ap.appName + "'";
-				Statement s1 = conn.createStatement();
-				ResultSet rs1 = s1.executeQuery(qaSQL);
-				while (rs1.next()) {
-					ap.getQuestionAnswer().add(ap.new QuestionAnswer(rs1.getString("QUESTION"), rs1.getString("ANSWER")));
-				}
-				user.enabledApps.put(ap.appName, ap);
+		if (eDao != null) {
+			IEmployee emp = eDao.getEmployee(login);
+			if (emp != null) {
+				user.setUserName(emp.getName());
 			}
-			isNext = false;
+			user.fill(rs);
+			while (isNext || rs.next()) {
+				UserApplicationProfile ap = new UserApplicationProfile(rs.getString("APP"), rs.getInt("LOGINMODE"));
+				if (ap.loginMod != LoginModeType.LOGIN_AND_REDIRECT) {
+					String qaSQL = "select * from QA where QA.DOCID=" + user.docID + " AND QA.APP='" + ap.appName + "'";
+					Statement s1 = conn.createStatement();
+					ResultSet rs1 = s1.executeQuery(qaSQL);
+					while (rs1.next()) {
+						ap.getQuestionAnswer().add(ap.new QuestionAnswer(rs1.getString("QUESTION"), rs1.getString("ANSWER")));
+					}
+					user.enabledApps.put(ap.appName, ap);
+				}
+				isNext = false;
+			}
+			return user;
+		} else {
+			Server.logger.errorLogEntry("Any Staff module has not been initialized");
+			return new User();
 		}
-		return user;
 	}
 
 	@Override
@@ -936,40 +915,6 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		return users;
 	}
 
-	// TempUser
-	public TempUser getTempUser(String userid) {
-
-		return new TempUser();
-	}
-
-	@Override
-	public int insert(TempUser user) {
-		Connection conn = dbPool.getConnection();
-
-		try {
-			conn.setAutoCommit(false);
-
-			String insertTempUser = "insert into TEMP_USERS (USERID) values('" + user.getCurrentUserID() + "')";
-
-			PreparedStatement pst = conn.prepareStatement(insertTempUser);
-			pst.executeUpdate();
-
-			conn.commit();
-			pst.close();
-			return 1;
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return -1;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-	}
-
-	@Override
-	public int update(TempUser user) {
-		return -1;
-	}
-
 	private boolean checkHash(String hashAsString, int hash) {
 		try {
 			int userHash = Integer.parseInt(hashAsString);
@@ -1032,63 +977,6 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		return holidays;
 	}
 
-	@Override
-	public int update(Holiday h) {
-		Connection conn = dbPool.getConnection();
-
-		try {
-			conn.setAutoCommit(false);
-
-			String insertHoliday = "update HOLIDAYS set " + "COUNTRY = " + (h.getCountry() != null ? "'" + h.getCountry() + "'" : "null") + ", "
-			        + "TITLE = " + (h.getTitle() != null ? "'" + h.getTitle() + "'" : "null") + ", " + "REPEAT = " + h.getRepeat() + ", "
-			        + "STARTDATE = " + (h.getStartDate() != null ? "'" + h.getStartDate() + "'" : "null") + ", " + "CONTINUING = "
-			        + h.getContinuing() + ", " + "ENDDATE = " + (h.getEndDate() != null ? "'" + h.getEndDate() + "'" : "null") + ", "
-			        + "IFFALLSON = " + h.getIfFallSon() + ", " + "COMMENT = " + (h.getComment() != null ? "'" + h.getComment() + "'" : "null") + " "
-			        + "where ID = " + h.getId();
-
-			PreparedStatement pst = conn.prepareStatement(insertHoliday);
-			pst.executeUpdate();
-
-			conn.commit();
-			pst.close();
-			return 1;
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return -1;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-	}
-
-	@Override
-	public int insert(Holiday h) {
-		Connection conn = dbPool.getConnection();
-
-		try {
-			conn.setAutoCommit(false);
-
-			String insertHoliday = "insert into HOLIDAYS ("
-			        + "ID, COUNTRY, TITLE, REPEAT, STARTDATE, CONTINUING, ENDDATE, IFFALLSON, COMMENT) values(" + h.getId() + ", "
-			        + (h.getCountry() != null ? "'" + h.getCountry() + "'" : "null") + ", "
-			        + (h.getTitle() != null ? "'" + h.getTitle() + "'" : "null") + ", " + h.getRepeat() + ", "
-			        + (h.getStartDate() != null ? "'" + h.getStartDate() + "'" : "null") + ", " + h.getContinuing() + ", "
-			        + (h.getEndDate() != null ? "'" + h.getEndDate() + "'" : "null") + ", " + h.getIfFallSon() + ", "
-			        + (h.getComment() != null ? "'" + h.getComment() + "'" : "null") + ")";
-
-			PreparedStatement pst = conn.prepareStatement(insertHoliday);
-			pst.executeUpdate();
-
-			conn.commit();
-			pst.close();
-			return 1;
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return -1;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-	}
-
 	private boolean dropUserTable(String tableName) {
 		Connection conn = dbPool.getConnection();
 		boolean dropUserTab = false;
@@ -1143,4 +1031,5 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	public String getOwnerID() {
 		return "System";
 	}
+
 }

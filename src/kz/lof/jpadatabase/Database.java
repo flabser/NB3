@@ -61,7 +61,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 	@Override
 	public String toString() {
-		return "version: with JPA, URL:" + connectionURL;
+		return "version JPA";
 	}
 
 	@Override

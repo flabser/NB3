@@ -1,8 +1,6 @@
 package kz.flabs.servlets.admin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
@@ -79,24 +77,6 @@ public class UserServices {
 	boolean deleteUser(String id) {
 		int docID = Integer.parseInt(id);
 		return sysDatabase.deleteUser(docID);
-	}
-
-	public String getUserListWrapper(String keyWord, int pageNum, int pageSize) {
-		String condition = "", xmlFragment = "";
-		if (keyWord != null) {
-			condition = "USERID LIKE '" + keyWord + "%'";
-		}
-		count = sysDatabase.getAllUsersCount(condition);
-		ArrayList<User> fl = sysDatabase.getAllUsers(condition, sysDatabase.calcStartEntry(pageNum, pageSize), pageSize);
-
-		Iterator<User> it = fl.iterator();
-		while (it.hasNext()) {
-			User user = it.next();
-			xmlFragment += "<entry docid=\"" + user.docID + "\" ><userid>" + user.getUserID() + "</userid>" + "<isadministrator>"
-			        + user.isSupervisor() + "</isadministrator><email>" + user.getEmail() + "</email><redirecturl></redirecturl>" + "</entry>";
-		}
-
-		return xmlFragment;
 	}
 
 	public int getCount() {

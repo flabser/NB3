@@ -5,7 +5,6 @@ import kz.flabs.dataengine.DatabaseCore;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IStructure;
-import staff.model.Employee;
 
 public class Structure extends DatabaseCore implements IStructure, Const {
 	public int numberOfLicense = 200;
@@ -16,14 +15,6 @@ public class Structure extends DatabaseCore implements IStructure, Const {
 	public Structure(IDatabase db, IDBConnectionPool dbPool) {
 		this.db = db;
 		this.dbPool = dbPool;
-	}
-
-	@Override
-	public Employee getAppUser(String login) {
-		return null;
-		/*
-		 * EmployeeDAO dao = new EmployeeDAO(); return dao.findByLogin(login);
-		 */
 	}
 
 }
