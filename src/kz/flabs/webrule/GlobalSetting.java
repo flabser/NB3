@@ -35,7 +35,6 @@ import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
-import kz.flabs.webrule.scheduler.ScheduleSettings;
 import kz.flabs.webrule.synchronizer.SynchroGlobalSetting;
 
 import org.w3c.dom.Document;
@@ -53,8 +52,6 @@ public class GlobalSetting {
 	// TODO it need to check whether it necessary
 	public String databaseName;
 	public boolean databaseEnable;
-	@Deprecated
-	public boolean databaseResponseUsed = true;
 	public boolean isWorkspace;
 	public String driver;
 	public String dbURL;
@@ -72,13 +69,9 @@ public class GlobalSetting {
 	public String logo;
 	@Deprecated
 	public String appName;
-	@Deprecated
-	public int licCount;
 	public RunMode isOn;
 	public boolean autoDeployEnable;
 	public boolean isValid;
-	@Deprecated
-	public boolean multiLangEnable;
 	public ArrayList<Lang> langsList = new ArrayList<Lang>();
 	public Lang primaryLang;
 	@Deprecated
@@ -91,17 +84,7 @@ public class GlobalSetting {
 	public SynchroGlobalSetting syncroGlobalSettings;
 	public int markAsReadMsDelay;
 	public ArrayList<AppDaemonRule> schedSettings = new ArrayList<AppDaemonRule>();
-	@Deprecated
-	public ScheduleSettings cycleContrSchedSetings;
-	@Deprecated
-	public ScheduleSettings timeWaitingSchedSettings;
-	@Deprecated
-	public ScheduleSettings recalcualtorSchedSettings;
 	public static final String vocabulary = "vocabulary.xml";
-	@Deprecated
-	public boolean stopCoordAfterNo = Boolean.FALSE;
-	@Deprecated
-	public boolean sendToSignAfterNo = Boolean.TRUE;
 	public DataEngineImpl dbImpl;
 
 	public HashMap<String, ExternalModule> extModuleMap = new HashMap<String, ExternalModule>();
@@ -148,13 +131,6 @@ public class GlobalSetting {
 			orgName = XMLUtil.getTextContent(doc, "/rule/orgname");
 			logo = XMLUtil.getTextContent(doc, "/rule/logo");
 			// appName = XMLUtil.getTextContent(doc, "/rule/appname");
-
-			try {
-				String licenseCount = XMLUtil.getTextContent(doc, "/rule/liccount");
-				licCount = Integer.valueOf(licenseCount);
-			} catch (Exception e) {
-				licCount = 0;
-			}
 
 			try {
 				databaseName = XMLUtil.getTextContent(doc, "/rule/database/name");
@@ -213,11 +189,6 @@ public class GlobalSetting {
 					} else {
 						dbImpl = new DataEngineImpl(databaseType);
 					}
-
-					String ru = XMLUtil.getTextContent(doc, "/rule/database/responseused");
-					if (ru.equals("0") || ru.equalsIgnoreCase("false")) {
-						databaseResponseUsed = false;
-					}
 				} else {
 					AppEnv.logger.errorLogEntry("Unable to determine name of database");
 				}
@@ -242,9 +213,6 @@ public class GlobalSetting {
 				defaultRedirectURL = "Error?type=default_url_not_defined";
 			}
 
-			stopCoordAfterNo = XMLUtil.getBooleanContent(doc, "/rule/coordination/parallel/stopcoordafterno");
-			sendToSignAfterNo = XMLUtil.getBooleanContent(doc, "/rule/coordination/parallel/sendtosignafterno");
-
 			NodeList rules = XMLUtil.getNodeList(doc, "/rule/rules/entry");
 			for (int i = 0; i < rules.getLength(); i++) {
 				rulePath = XMLUtil.getTextContent(rules.item(i), "@path", false);
@@ -259,10 +227,6 @@ public class GlobalSetting {
 						primaryLang = lang;
 					}
 				}
-			}
-
-			if (langsList.size() > 1) {
-				multiLangEnable = true;
 			}
 
 			NodeList skins = XMLUtil.getNodeList(doc, "/rule/skins/entry");
