@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.appenv.AppEnv;
@@ -39,7 +38,6 @@ public class AccessGuard implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse resp, FilterChain chain) {
 		try {
 			HttpServletRequest http = (HttpServletRequest) request;
-			HttpServletResponse httpResponse = (HttpServletResponse) resp;
 			context = http.getServletContext();
 			env = (AppEnv) context.getAttribute(EnvConst.APP_ATTR);
 

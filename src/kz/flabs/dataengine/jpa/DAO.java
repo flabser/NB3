@@ -1,6 +1,7 @@
 package kz.flabs.dataengine.jpa;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,6 +38,11 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 
 	public EntityManagerFactory getEntityManagerFactory() {
 		return emf;
+	}
+
+	@Override
+	public T findById(String id) {
+		return findById((K) UUID.fromString(id));
 	}
 
 	@Override

@@ -67,7 +67,7 @@ public class PortalInit extends HttpServlet {
 					env.setDataBase(db);
 
 					if (env.appType.equalsIgnoreCase("Staff")) {
-						Class<?> clazz = Class.forName("staff.dao.EmployeeDAO");
+						Class<?> clazz = Class.forName(EnvConst.STAFF_DAO_CLASS);
 						Class[] args = new Class[] { _Session.class };
 						Constructor<?> contructor = clazz.getConstructor(args);
 						_Session ses = new _Session(env, new User(env));

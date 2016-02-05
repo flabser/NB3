@@ -20,6 +20,7 @@ public class EnvConst {
 	public final static String SHARED_RESOURCES_NAME = "SharedResources";
 	public static final String ERROR_XSLT = "xsl" + File.separator + "errors" + File.separator + "error.xsl";
 
+	public static String STAFF_DAO_CLASS = "staff.dao.EmployeeDAO";
 	public static String RESOURCES_DIR = "resources";
 	public static String NB_JAR_FILE = "nb.jar";
 }

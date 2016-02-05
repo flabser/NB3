@@ -47,7 +47,8 @@ public class _WebFormData {
 			if (value[0].equals("null")) {
 				return "";
 			} else {
-				return value[0].trim();
+				Object r = value[0].trim();
+				return (String) r;
 			}
 		} catch (Exception e) {
 			return "";

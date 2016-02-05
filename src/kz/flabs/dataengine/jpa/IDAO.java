@@ -6,6 +6,8 @@ public interface IDAO<T, K> {
 
 	T findById(K id);
 
+	T findById(String id);
+
 	ViewPage findAllByIds(List<K> ids, int pageNum, int pageSize);
 
 	List<T> findAll();
