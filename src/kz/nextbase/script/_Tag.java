@@ -147,4 +147,9 @@ public class _Tag implements _IPOJOObject {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return runtimeTag.name + "=" + runtimeTag.value;
+	}
+
 }

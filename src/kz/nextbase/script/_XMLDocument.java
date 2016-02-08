@@ -47,19 +47,16 @@ public class _XMLDocument implements _IXMLContent, _IPOJOObject {
 
 	@Override
 	public String getFullXMLChunk(LanguageType lang) {
-		// TODO Auto-generated method stub
-		return null;
+		return document.toXML();
 	}
 
 	@Override
 	public String getShortXMLChunk(LanguageType lang) {
-		// TODO Auto-generated method stub
-		return null;
+		return document.toXML();
 	}
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

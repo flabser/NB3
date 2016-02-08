@@ -25,7 +25,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	        "viewtext7", "viewnumber", "viewdate" };
 
 	public _ViewEntryCollection(User user, ViewEntryCollection parentObj) {
-		session = new _Session(user.getAppEnv(), user, this);
+		session = new _Session(user.getAppEnv(), user);
 		this.parentObj = parentObj;
 		HashSet<IViewEntry> entries = parentObj.getEntries();
 		for (IViewEntry entry : entries) {

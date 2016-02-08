@@ -18,6 +18,8 @@ public interface IAppEntity extends ISimpleAppEntity {
 
 	public String getDefaultFormName();
 
+	public String getDefaultViewName();
+
 	public boolean isEditable();
 
 	public void setEditable(boolean isEditable);

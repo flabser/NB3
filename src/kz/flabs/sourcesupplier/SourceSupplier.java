@@ -61,7 +61,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		vocabulary = env.vocabulary;
 		contextType = SourceSupplierContextType.APP_ENVIRONMENT;
 		user = new User(Const.sysUser);
-		_Session session = new _Session(env, user, this);
+		_Session session = new _Session(env, user);
 		scriptProcessor = new SimpleScriptProcessor(session);
 		this.env = env;
 	}
@@ -78,7 +78,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		vocabulary = env.vocabulary;
 		contextType = SourceSupplierContextType.DOCUMENT;
 		if (doc2 == null) {
-			_Session session = new _Session(env, user, this);
+			_Session session = new _Session(env, user);
 			scriptProcessor = new SimpleScriptProcessor(session);
 		} else {
 
@@ -93,7 +93,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		this.lang = lang;
 		contextType = SourceSupplierContextType.DOCUMENT_WITH_LANG;
 		if (doc == null) {
-			_Session session = new _Session(env, user, this);
+			_Session session = new _Session(env, user);
 			scriptProcessor = new SimpleScriptProcessorWithLang(session, lang);
 		} else {
 
@@ -108,7 +108,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		this.lang = lang;
 		vocabulary = env.vocabulary;
 		contextType = SourceSupplierContextType.SIMPLE_WITH_LANG;
-		_Session session = new _Session(env, user, this);
+		_Session session = new _Session(env, user);
 		scriptProcessor = new SimpleScriptProcessorWithLang(session, lang);
 
 	}

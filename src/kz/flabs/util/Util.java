@@ -33,7 +33,9 @@ public class Util {
 	public static final SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm");
 	public static final SimpleDateFormat derbyDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+	// public static final SimpleDateFormat simpleDateFormat = new
+	// SimpleDateFormat("dd.MM.yyyy");
+	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private static final SimpleDateFormat providerDateTimeFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
 	public static final Pattern pEntity = Pattern.compile("\\G&(#\\d+|\\w+);");// Pattern.compile("\\G&(#\\d+|\\w+);");
 	public static final Pattern pTag = Pattern.compile("<(?:\"[^\"]*\"['\"]*|'[^']*'['\"]*|[^'\">])+>");
@@ -384,11 +386,11 @@ public class Util {
 
 	public static void main(String[] args) {
 		System.out
-		.println(removeHTMLTags(
-				"<p1><p></p1>I-4979: Берг П. П. -> (Берг П. П.)<p><p> <p>Допереводить непереведенные слова(в файле dict.xml, слова которые с приставкой kaz, файл во вложении)<br></p>")
-				.length());
+		        .println(removeHTMLTags(
+		                "<p1><p></p1>I-4979: Берг П. П. -> (Берг П. П.)<p><p> <p>Допереводить непереведенные слова(в файле dict.xml, слова которые с приставкой kaz, файл во вложении)<br></p>")
+		                .length());
 		System.out
-		.println(removeHTMLTags("I-4979: Берг П. П. -> (Берг П. П.) <p>Допереводить непереведенные слова(в файле dict.xml, слова которые с приставкой kaz, файл во вложении)<br></p>"));
+		        .println(removeHTMLTags("I-4979: Берг П. П. -> (Берг П. П.) <p>Допереводить непереведенные слова(в файле dict.xml, слова которые с приставкой kaz, файл во вложении)<br></p>"));
 	}
 
 	public static String removeHTMLTags(String text) {

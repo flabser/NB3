@@ -2,7 +2,6 @@ package kz.flabs.runtimeobj.page;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
@@ -13,23 +12,18 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
-import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.User;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.PageResponse;
-import kz.flabs.util.ResponseType;
-import kz.flabs.util.Util;
 import kz.flabs.webrule.Caption;
-import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.form.GlossaryRule;
 import kz.flabs.webrule.page.ElementRule;
-import kz.flabs.webrule.page.ElementType;
 import kz.flabs.webrule.page.PageRule;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.Environment;
+import kz.nextbase.script._WebFormData;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.apache.http.HttpStatus;
@@ -44,7 +38,7 @@ public class Page implements IProcessInitiator, Const {
 	protected PageRule rule;
 	public PageResponse response;
 
-	protected Map<String, String[]> fields = new HashMap<>();
+	protected _WebFormData fields;
 	protected UserSession userSession;
 
 	private _Session ses;
@@ -82,14 +76,6 @@ public class Page implements IProcessInitiator, Const {
 		return glossariesAsText.append("</glossaries>").toString();
 	}
 
-	public Map<String, String[]> getFields() {
-		return fields;
-	}
-
-	public void setFields(Map<String, String[]> fields) {
-		this.fields = fields;
-	}
-
 	public String getCaptions(SourceSupplier captionTextSupplier, ArrayList<Caption> captions) throws DocumentException {
 		StringBuffer captionsText = new StringBuffer(100);
 		for (Caption cap : captions) {
@@ -113,42 +99,7 @@ public class Page implements IProcessInitiator, Const {
 		return "<content>" + rule.getAsXML() + glossarySet + captions + "</content>";
 	}
 
-	@Deprecated
-	public StringBuffer process(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException,
-	        QueryFormulaParserException, DocumentException, DocumentAccessException, QueryException {
-		StringBuffer resultOut = null;
-		long start_time = System.currentTimeMillis();
-		switch (rule.caching) {
-		case NO_CACHING:
-			resultOut = getContent(formData, method);
-			break;
-		case CACHING_IN_USER_SESSION_SCOPE:
-			// resultOut = userSession.getPage(this, formData);
-			resultOut = getContent(formData, method);
-			break;
-		case CACHING_IN_APPLICATION_SCOPE:
-			resultOut = env.getPage(this, formData);
-			break;
-		case CACHING_IN_SERVER_SCOPE:
-			resultOut = new Environment().getPage(this, formData);
-			break;
-		default:
-			resultOut = getContent(formData, method);
-		}
-		DocID toFlash = userSession.getFlashDoc();
-		String flashAttr = "";
-		if (toFlash != null) {
-			flashAttr = "flashdocid=\"" + toFlash.id + "\" flashdoctype=\"" + toFlash.type + "\"";
-		}
-		StringBuffer output = new StringBuffer(5000);
-
-		output.append("<page id=\"" + rule.id + "\" cache=\"" + rule.caching + "\" elapsed_time = \"" + Util.getTimeDiffInSec(start_time) + "\" "
-		        + flashAttr + ">");
-		output.append(resultOut);
-		return output.append("</page>");
-	}
-
-	public PageOutcome pageProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
+	public PageOutcome pageProcess(_WebFormData formData, String method) throws ClassNotFoundException, RuleException {
 		PageOutcome resultOut = null;
 		long start_time = System.currentTimeMillis();
 		switch (rule.caching) {
@@ -172,111 +123,17 @@ public class Page implements IProcessInitiator, Const {
 		return resultOut;
 	}
 
-	public PageResponse postProcess(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException,
-	        QueryFormulaParserException, DocumentException, DocumentAccessException, QueryException {
-		for (ElementRule elementRule : rule.elements) {
-			if (elementRule.type == ElementType.SCRIPT && elementRule.doClassName.getType() == ValueSourceType.JAVA_CLASS) {
-				User user = userSession.currentUser;
-				DoProcessor sProcessor = new DoProcessor(env, user, ses.getLang(), fields);
-				// PageResponse xmlResp =
-				// sProcessor.processJava(elementRule.doClassName.getClassName(),
-				// method);
-				// status = xmlResp.status;
-				// toJSON = true;
-				// response = xmlResp;
-			}
-		}
-		return response;
-
-	}
-
 	public String getCacheID() {
-		String searchKey = "";
-		if (fields != null && fields.containsKey("keyword")) {
-			searchKey = fields.get("keyword")[0] != null ? fields.get("keyword")[0] : "";
-		}
-		return "PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang + searchKey;
+		return "PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang;
 
 	}
 
-	public StringBuffer getContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException,
-	        QueryFormulaParserException, DocumentException, DocumentAccessException, QueryException {
-		fields = formData;
-
-		StringBuffer output = new StringBuffer(1000);
-		User user = userSession.currentUser;
-
-		if (rule.elements.size() > 0) {
-			loop: for (ElementRule elementRule : rule.elements) {
-				if (elementRule.hasElementName) {
-					output.append("<" + elementRule.name + ">");
-				}
-				switch (elementRule.type) {
-				case SCRIPT:
-					PageResponse reponse = null;
-					DoProcessor sProcessor = new DoProcessor(env, user, userSession.lang, fields);
-					switch (elementRule.doClassName.getType()) {
-					case GROOVY_FILE:
-						// reponse =
-						// sProcessor.processScript(elementRule.doClassName.getClassName());
-						break;
-					case FILE:
-						// reponse =
-						// sProcessor.processScript(elementRule.doClassName.getClassName());
-						break;
-					case JAVA_CLASS:
-						// reponse =
-						// sProcessor.processJava(elementRule.doClassName.getClassName(),
-						// method);
-						status = reponse.status;
-						break;
-					case UNKNOWN:
-						break;
-					default:
-						break;
-
-					}
-
-					if (reponse.type == ResponseType.SHOW_FILE_AFTER_HANDLER_FINISHED) {
-						fileGenerated = true;
-						generatedFilePath = reponse.getMessage("filepath").text;
-						generatedFileOriginalName = reponse.getMessage("originalname").text;
-						break loop;
-					} else if (reponse.type == ResponseType.JSON) {
-						toJSON = true;
-
-						break loop;
-					} else {
-						output.append(reponse.toXML());
-					}
-
-					break;
-				case INCLUDED_PAGE:
-					PageRule rule = (PageRule) env.ruleProvider.getRule(PAGE_RULE, elementRule.value);
-					// System.out.println(rule.getRuleID());
-					IncludedPage page = new IncludedPage(env, userSession, rule);
-					output.append(page.process(fields, method));
-					break;
-				default:
-					break;
-				}
-				if (elementRule.hasElementName) {
-					output.append("</" + elementRule.name + ">");
-				}
-			}
-		}
-		SourceSupplier captionTextSupplier = new SourceSupplier(env, userSession.lang);
-		return output.append(getCaptions(captionTextSupplier, rule.captions));
-
-	}
-
-	public PageOutcome getPageContent(Map<String, String[]> formData, String method) throws ClassNotFoundException, RuleException {
-		fields = formData;
+	public PageOutcome getPageContent(_WebFormData webFormData, String method) throws ClassNotFoundException, RuleException {
+		fields = webFormData;
 		PageOutcome output = new PageOutcome();
-		User user = ses.getUser();
 
 		if (rule.elements.size() > 0) {
-			loop: for (ElementRule elementRule : rule.elements) {
+			for (ElementRule elementRule : rule.elements) {
 
 				switch (elementRule.type) {
 				case SCRIPT:
@@ -301,6 +158,8 @@ public class Page implements IProcessInitiator, Const {
 					// System.out.println(rule.getRuleID());
 					IncludedPage page = new IncludedPage(env, ses, rule);
 					output.addPageOutcome(page.getPageContent(fields, method));
+					break;
+				default:
 					break;
 				}
 				if (elementRule.hasElementName) {

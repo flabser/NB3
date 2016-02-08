@@ -12,16 +12,16 @@ import kz.pchelka.scheduler.AbstractDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public abstract class _DoScheduledHandler extends AbstractDaemon {
-	
+
 	@Override
-	public int process(IProcessInitiator processOwner) throws DocumentAccessException, RuleException,	QueryFormulaParserException, QueryException{
+	public int process(IProcessInitiator processOwner) throws DocumentAccessException, RuleException, QueryFormulaParserException, QueryException {
 		AppEnv env = (AppEnv) processOwner;
 		User user = new User(Const.supervisorGroup[0], env);
-		_Session session = new _Session(env, user,this);
+		_Session session = new _Session(env, user);
 		String lang = "RUS";
-		return doHandler(session);		
+		return doHandler(session);
 	}
-	
+
 	public abstract int doHandler(_Session session);
-	
+
 }

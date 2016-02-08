@@ -62,13 +62,7 @@ public class _Action {
 	private String getJson(_ActionType type) {
 		switch (type) {
 		case CLOSE:
-			// try {
-			// return "<js><![CDATA[window.location.href = \"" +
-			// session.getLastPageURL() + "\"]]></js>";
-			// } catch (_Exception e) {
-			// return "<js><![CDATA[window.location.href = \"" +
-			// session.getLastURL() + "\"]]></js>";
-			// }
+			return "<js><![CDATA[window.history.back()]]></js>";
 		case GET_DOCUMENT_ACCESSLIST:
 
 		default:

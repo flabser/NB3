@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.servlets.PublishAsType;
@@ -12,6 +13,7 @@ import kz.flabs.servlets.pojo.OutcomeType;
 import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._POJOObjectWrapper;
 import kz.nextbase.script._Session;
+import kz.pchelka.env.Environment;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;
@@ -30,12 +32,15 @@ public class PageOutcome {
 	private _Session ses;
 	private LanguageType lang;
 	private OutcomeType type;
-	private HashMap<String, String> captions;
+	private Map<String, String> captions = new HashMap<String, String>();
 	private boolean isScriptResult;
 	private String pageId;
+	private String redirectURL;
+	private String flash;
 
 	public void setSession(_Session ses) {
 		this.ses = ses;
+		lang = ses.getLang();
 	}
 
 	public String getName() {
@@ -80,7 +85,17 @@ public class PageOutcome {
 
 	public void setType(OutcomeType type) {
 		this.type = type;
-
+		String keyWord = "";
+		if (type == OutcomeType.OK) {
+			keyWord = "action_completed_successfully";
+		} else if (type == OutcomeType.DOCUMENT_SAVED) {
+			keyWord = "document_was_saved_succesfully";
+		} else if (type == OutcomeType.SERVER_ERROR) {
+			keyWord = "internal_server_error";
+		} else if (type == OutcomeType.VALIDATION_ERROR) {
+			keyWord = "validation_error";
+		}
+		captions.put("type", Environment.vocabulary.getWord(keyWord, lang));
 	}
 
 	public void setScriptResult(boolean isScriptResult) {
@@ -97,6 +112,14 @@ public class PageOutcome {
 			return toCompleteXML();
 		}
 
+	}
+
+	public String getFlash() {
+		return flash;
+	}
+
+	public void setFlash(String flash) {
+		this.flash = flash;
 	}
 
 	public String toXML() {
@@ -153,6 +176,8 @@ public class PageOutcome {
 		clazz.setMessages(messages);
 		clazz.setCaptions(captions);
 		clazz.setType(type);
+		clazz.setRedirectURL(redirectURL);
+		clazz.setFlash(flash);
 		Gson gson = new Gson();
 		return gson.toJson(clazz);
 	}
@@ -172,17 +197,27 @@ public class PageOutcome {
 	}
 
 	public void setCaptions(HashMap<String, String> captions) {
-		this.captions = captions;
+		this.captions.putAll(captions);
 	}
 
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
 	}
 
+	public String getRedirectURL() {
+		return redirectURL;
+	}
+
+	public void setRedirectURL(String redirectURL) {
+		this.redirectURL = redirectURL;
+	}
+
 	class JSONClass {
 		private ArrayList<String> messages;
-		private HashMap<String, String> captions;
+		private Map<String, String> captions;
 		private OutcomeType type;
+		private String redirectURL;
+		private String flash;
 
 		public ArrayList<String> getMessages() {
 			return messages;
@@ -192,11 +227,11 @@ public class PageOutcome {
 			this.messages = messages;
 		}
 
-		public HashMap<String, String> getCaptions() {
+		public Map<String, String> getCaptions() {
 			return captions;
 		}
 
-		public void setCaptions(HashMap<String, String> captions) {
+		public void setCaptions(Map<String, String> captions) {
 			this.captions = captions;
 		}
 
@@ -206,6 +241,22 @@ public class PageOutcome {
 
 		public void setType(OutcomeType type) {
 			this.type = type;
+		}
+
+		public String getRedirectURL() {
+			return redirectURL;
+		}
+
+		public void setRedirectURL(String redirectURL) {
+			this.redirectURL = redirectURL;
+		}
+
+		public String getFlash() {
+			return flash;
+		}
+
+		public void setFlash(String flash) {
+			this.flash = flash;
 		}
 
 	}

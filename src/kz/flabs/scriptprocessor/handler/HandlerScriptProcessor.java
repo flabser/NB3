@@ -12,9 +12,9 @@ import kz.flabs.scriptprocessor.IScriptSource;
 import kz.flabs.scriptprocessor.ScriptProcessor;
 import kz.flabs.scriptprocessor.ScriptProcessorType;
 import kz.flabs.users.User;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.PageResponse;
 import kz.nextbase.script._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 
@@ -29,7 +29,7 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 
 	public HandlerScriptProcessor(AppEnv env, User user, String lang) {
 		super();
-		session = new _Session(env, user, this);
+		session = new _Session(env, user);
 
 		vocabulary = env.vocabulary;
 		this.lang = lang;
@@ -38,21 +38,13 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 	@Deprecated
 	public HandlerScriptProcessor(AppEnv env, User user, Map<String, String[]> formData, String lang) {
 		super();
-		session = new _Session(env, user, this);
+		session = new _Session(env, user);
 
 		if (formData != null) {
 			this.formData.putAll(formData);
 		}
 		vocabulary = env.vocabulary;
 		this.lang = lang;
-	}
-
-	@Deprecated
-	public HandlerScriptProcessor(Map<String, String[]> formData, AppEnv env, User user) {
-		super();
-		session = new _Session(env, user, this);
-
-		this.formData.putAll(formData);
 	}
 
 	@Deprecated

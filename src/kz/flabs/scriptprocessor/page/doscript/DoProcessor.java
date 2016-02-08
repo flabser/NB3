@@ -1,13 +1,9 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
 import groovy.lang.GroovyObject;
-
-import java.util.Map;
-
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.users.User;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
@@ -21,27 +17,11 @@ public class DoProcessor {
 	private Vocabulary vocabulary;
 	private _WebFormData webFormData;
 
-	@Deprecated
-	public DoProcessor(AppEnv env, User u, LanguageType currentLang, Map<String, String[]> formData) {
-		ses = new _Session(env, u);
-		vocabulary = env.vocabulary;
-		lang = currentLang;
-		webFormData = new _WebFormData(formData);
-	}
-
-	@Deprecated
-	public DoProcessor(AppEnv env, User user, String lang, Map<String, String[]> formData) {
-		ses = new _Session(env, user);
-		vocabulary = env.vocabulary;
-		lang = lang;
-		webFormData = new _WebFormData(formData);
-	}
-
-	public DoProcessor(AppEnv env, _Session ses, Map<String, String[]> formData) {
+	public DoProcessor(AppEnv env, _Session ses, _WebFormData webFormData) {
 		this.ses = ses;
 		vocabulary = env.vocabulary;
 		lang = ses.getLang();
-		webFormData = new _WebFormData(formData);
+		this.webFormData = webFormData;
 	}
 
 	public PageOutcome processScenario(String className, String method) throws ClassNotFoundException {

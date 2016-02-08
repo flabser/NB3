@@ -1,20 +1,18 @@
 package kz.nextbase.script;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
+import javax.servlet.http.HttpSession;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.DocumentAccessException;
-import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
-import kz.flabs.exception.RuleException;
+import kz.flabs.dataengine.jpa.IAppEntity;
 import kz.flabs.localization.LanguageType;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.User;
@@ -24,27 +22,19 @@ import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
 import kz.pchelka.scheduler.IProcessInitiator;
-import net.sf.saxon.s9api.SaxonApiException;
 
 public class _Session extends _ScriptingObject implements ICache {
 
 	private IDatabase dataBase;
 	private User user;
 	private AppEnv env;
-	private String formSesID;
 	private IProcessInitiator initiator;
 	private LanguageType lang;
 	public int pageSize = 30;
 	private AuthModeType authMode;
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
-
-	@Deprecated
-	public _Session(AppEnv env, User user, IProcessInitiator init) {
-		this.env = env;
-		this.user = user;
-		setInitiator(init);
-		dataBase = env.getDataBase();
-	}
+	private HttpSession jses;
+	private HashMap<UUID, FormTransaction> formTrans = new HashMap<UUID, FormTransaction>();
 
 	public _Session(AppEnv env, User user) {
 		this.env = env;
@@ -99,14 +89,6 @@ public class _Session extends _ScriptingObject implements ICache {
 		return "userid=" + user.getUserID() + ", database=" + dataBase.toString();
 	}
 
-	public String getFormSesID() {
-		return formSesID;
-	}
-
-	public void setFormSesID(String formSesID) {
-		this.formSesID = formSesID;
-	}
-
 	public Set<String> getExpandedThread() {
 		return new HashSet<String>();
 	}
@@ -124,21 +106,8 @@ public class _Session extends _ScriptingObject implements ICache {
 		return null;
 	}
 
-	public PageOutcome getCachedPage(Page page, HashMap<String, String[]> formData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
-	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	        DocumentException, DocumentAccessException, QueryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
-	        SaxonApiException {
+	public PageOutcome getCachedPage(Page page, _WebFormData formData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -162,6 +131,10 @@ public class _Session extends _ScriptingObject implements ICache {
 		return pageSize;
 	}
 
+	public void setJses(HttpSession jses) {
+		this.jses = jses;
+	}
+
 	public _Session clone(AppEnv env) {
 		_Session newSes = new _Session(env, user);
 		newSes.authMode = AuthModeType.LOGIN_THROUGH_TOKEN;
@@ -169,6 +142,53 @@ public class _Session extends _ScriptingObject implements ICache {
 		newSes.setPageSize(pageSize);
 		descendants.add(newSes);
 		return newSes;
+	}
+
+	public void addFormTransaction(IAppEntity entity, String referrer) {
+		UUID id = entity.getId();
+		if (id != null) {
+			FormTransaction ft = new FormTransaction();
+			ft.setCreated(new Date());
+			ft.setRefrerrer(referrer);
+			formTrans.put(id, ft);
+		}
+	}
+
+	public String getTransactRedirect(IAppEntity entity) {
+		UUID id = entity.getId();
+		if (id != null) {
+			FormTransaction ft = formTrans.get(id);
+			ft.isExpired = true;
+			return ft.getRefrerrer();
+		} else {
+			return "Provider?id=" + entity.getDefaultViewName() + "&page=0";
+		}
+
+	}
+
+	// TODO Need a ft flusher
+	class FormTransaction {
+		public boolean isExpired;
+
+		private Date created;
+		private String refrerrer;
+
+		public Date getCreated() {
+			return created;
+		}
+
+		public void setCreated(Date created) {
+			this.created = created;
+		}
+
+		public String getRefrerrer() {
+			return refrerrer;
+		}
+
+		public void setRefrerrer(String refrerrer) {
+			this.refrerrer = refrerrer;
+		}
+
 	}
 
 }

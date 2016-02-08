@@ -152,7 +152,7 @@ public class InitializerHelper implements IProcessInitiator {
 			AppEnv env = Environment.getAppEnv(p);
 			if (env != null) {
 				User user = new User(Const.sysUser, env);
-				_Session ses = new _Session(env, user, this);
+				_Session ses = new _Session(env, user);
 				pcInstance = (IInitialData<ISimpleAppEntity, IDAO>) Class.forName(populatingClass.getCanonicalName()).newInstance();
 				List<ISimpleAppEntity> entities = pcInstance.getData(ses, null, null);
 				Class<?> daoClass = pcInstance.getDAO();

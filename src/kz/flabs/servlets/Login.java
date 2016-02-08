@@ -133,6 +133,7 @@ public class Login extends HttpServlet implements Const {
 					String userID = user.getUserID();
 					jses = request.getSession(true);
 					ses = new _Session(env, user);
+					ses.setJses(jses);
 					String token = SessionPool.put(ses);
 					ses.setLang(LanguageType.valueOf(appCookies.currentLang));
 					WorkSpaceSession.addUserSession(ses);

@@ -58,12 +58,13 @@ public class Secure extends ValveBase {
 		SessionCooks appCookies = new SessionCooks(http, response);
 		String token = appCookies.auth;
 		if (token != null) {
-			_Session userSession = SessionPool.getLoggeedUser(token);
-			if (userSession != null) {
+			_Session ses = SessionPool.getLoggeedUser(token);
+			if (ses != null) {
 				HttpSession jses = http.getSession(true);
-				jses.setAttribute(EnvConst.SESSION_ATTR, userSession.clone(env));
-				Server.logger.verboseLogEntry(userSession.getUser().getLogin() + "\" got from session pool "
-				        + jses.getServletContext().getContextPath());
+				_Session clonedSes = ses.clone(env);
+				jses.setAttribute(EnvConst.SESSION_ATTR, clonedSes);
+				clonedSes.setJses(jses);
+				Server.logger.verboseLogEntry(ses.getUser().getLogin() + "\" got from session pool " + jses.getServletContext().getContextPath());
 				invoke(request, response);
 			} else {
 				Server.logger.warningLogEntry("there is no associated user session for the token");

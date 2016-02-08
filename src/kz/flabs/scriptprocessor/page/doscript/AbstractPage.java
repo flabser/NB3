@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import kz.flabs.dataengine.jpa.IAppEntity;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.ScriptEvent;
@@ -15,7 +16,6 @@ import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._POJOObjectWrapper;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 
@@ -68,6 +68,12 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		result.addMessage(m);
 	}
 
+	public void addValidationError(String m, String fieldName) {
+		result.setBadRequest();
+		result.setType(OutcomeType.VALIDATION_ERROR);
+		result.addMessage(m);
+	}
+
 	public void setError(String m) {
 		setBadRequest();
 		result.setType(OutcomeType.SERVER_ERROR);
@@ -113,8 +119,15 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		}
 	}
 
-	private void setContent(_POJOObjectWrapper wrappedObject) {
-		result.addObject(wrappedObject);
+	protected void startSaveFormTransact(IAppEntity entity) {
+		ses.addFormTransaction(entity, formData.getReferrer());
+
+	}
+
+	protected void finishSaveFormTransact(IAppEntity entity) {
+		result.setRedirectURL(ses.getTransactRedirect(entity));
+		result.setFlash(entity.getId().toString());
+		result.setType(OutcomeType.DOCUMENT_SAVED);
 
 	}
 

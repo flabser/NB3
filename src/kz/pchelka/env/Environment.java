@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,14 +26,10 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
-import kz.flabs.exception.DocumentAccessException;
-import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.UserSession;
@@ -43,6 +38,7 @@ import kz.flabs.webrule.constants.RunMode;
 import kz.lof.env.EnvConst;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
+import kz.nextbase.script._WebFormData;
 import kz.pchelka.daemon.system.LogsZipRule;
 import kz.pchelka.daemon.system.TempFileCleanerRule;
 import kz.pchelka.log.ILogger;
@@ -493,26 +489,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	        DocumentException, DocumentAccessException, QueryException {
-		String cacheKey = page.getCacheID();
-		Object obj = cache.get(cacheKey);
-		String cacheParam[] = formData.get("cache");
-		if (cacheParam == null) {
-			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(cacheKey, buffer);
-			return buffer;
-		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
-			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(cacheKey, buffer);
-			return buffer;
-		} else {
-			return (StringBuffer) obj;
-		}
-
-	}
-
-	@Override
 	public void flush() {
 		cache.clear();
 	}
@@ -597,11 +573,10 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
-	        SaxonApiException {
+	public PageOutcome getCachedPage(Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
-		String cacheParam[] = formData.get("cache");
+		String cacheParam[] = formData.getFormData().get("cache");
 		if (cacheParam == null) {
 			PageOutcome buffer = page.getPageContent(formData, "GET");
 			cache.put(cacheKey, buffer.getValue());

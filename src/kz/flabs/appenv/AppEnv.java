@@ -4,17 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.DocumentAccessException;
-import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.Application;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
@@ -25,6 +20,7 @@ import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.webserver.servlet.PageOutcome;
+import kz.nextbase.script._WebFormData;
 import kz.pchelka.env.AuthTypes;
 import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
@@ -145,29 +141,6 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public StringBuffer getPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, QueryFormulaParserException,
-	        DocumentException, DocumentAccessException, QueryException {
-		boolean reload = false;
-		String cacheKey = page.getCacheID();
-		Object obj = cache.get(cacheKey);
-		String p[] = formData.get("cache");
-		if (p != null) {
-			String cacheParam = formData.get("cache")[0];
-			if (cacheParam.equalsIgnoreCase("reload")) {
-				reload = true;
-			}
-		}
-		if (obj == null || reload) {
-			StringBuffer buffer = page.getContent(formData, "GET");
-			cache.put(cacheKey, buffer);
-			return buffer;
-		} else {
-			return (StringBuffer) obj;
-		}
-
-	}
-
-	@Override
 	public void flush() {
 		cache.clear();
 	}
@@ -203,11 +176,10 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	}
 
 	@Override
-	public PageOutcome getCachedPage(Page page, Map<String, String[]> formData) throws ClassNotFoundException, RuleException, IOException,
-	        SaxonApiException {
+	public PageOutcome getCachedPage(Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
-		String cacheParam[] = formData.get("cache");
+		String cacheParam[] = formData.getFormData().get("cache");
 		if (cacheParam == null) {
 			PageOutcome buffer = page.getPageContent(formData, "GET");
 			cache.put(cacheKey, buffer.getValue());

@@ -1,28 +1,15 @@
 package kz.flabs.dataengine.h2;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
 
 import kz.flabs.appenv.AppEnv;
-import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.h2.alter.CheckDataBase;
-import kz.flabs.exception.RuleException;
-import kz.flabs.scriptprocessor.IScriptSource;
-import kz.flabs.scriptprocessor.ScriptProcessor;
-import kz.flabs.users.User;
-import kz.flabs.webrule.WebRuleProvider;
-import kz.flabs.webrule.handler.HandlerRule;
-import kz.flabs.webrule.handler.TriggerType;
-import kz.nextbase.script._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
@@ -287,54 +274,7 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 
 	@Override
 	public boolean patch() {
-		Connection conn = dbPool.getConnection();
-		WebRuleProvider wrp = env.ruleProvider;
-		try {
-			Collection<HandlerRule> handlers = wrp.getHandlerRules(true);
-			Statement stat = conn.createStatement();
-			String query = "";
-			String script = "";
-			for (HandlerRule handler : handlers) {
-				if (handler.trigger == TriggerType.PATCH) {
-					query = "SELECT * FROM PATCHES WHERE HASH = " + handler.hashCode();
-					ResultSet rs = stat.executeQuery(query);
-					if (!rs.next()) {
-						Connection scriptConn = dbPool.getConnection();
-						try {
-							script = handler.getScript();
-							ScriptProcessor sp = new ScriptProcessor();
-							IScriptSource myObject = sp.setScriptLauncher(script, false);
-							_Session session = new _Session(env, new User(Const.sysUser), this);
-							myObject.setSession(session);
-							myObject.setConnection(scriptConn);
-							String resObj = myObject.patchHandlerProcess();
-							executeQuery("insert into patches (PROCESSEDTIME, HASH, DESCRIPTION, NAME) VALUES ('"
-							        + new Timestamp(new Date().getTime()) + "', " + handler.hashCode() + ", " + "'" + handler.description + "', '"
-							        + handler.id + "')");
-							// System.out.println(resObj);
-						} catch (Exception e) {
-							ScriptProcessor.logger.errorLogEntry(script);
-							ScriptProcessor.logger.errorLogEntry(e);
-							executeQuery("insert into patches (PROCESSEDTIME, HASH, DESCRIPTION, NAME) VALUES ('"
-							        + new Timestamp(new Date().getTime()) + "', " + handler.hashCode() + ", " + "'" + handler.description + " " + e
-							        + "', '" + handler.id + "')");
-							return false;
-						} finally {
-							dbPool.returnConnection(scriptConn);
-						}
-					}
-				}
-			}
-			stat.close();
-		} catch (RuleException e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return false;
-		} catch (SQLException e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return false;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
+
 		return false;
 	}
 

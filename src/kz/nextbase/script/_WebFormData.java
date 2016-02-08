@@ -9,25 +9,11 @@ import kz.flabs.util.Util;
 
 public class _WebFormData {
 	private Map<String, String[]> formData;
-	private String sign = "pochemu pustoi? podumai!";
+	private String referrer;
 
-	public _WebFormData(Map<String, String[]> formData) {
+	public _WebFormData(Map<String, String[]> formData, String r) {
 		this.formData = formData;
-	}
-
-	public _WebFormData() {
-
-	}
-
-	@Deprecated
-	public String[] get(String fn) throws _Exception {
-		String value[] = formData.get(fn);
-		if (value != null) {
-			return value;
-		} else {
-			throw new _Exception(_ExceptionType.FORMDATA_INCORRECT, "field=" + fn);
-		}
-
+		setReferer(r);
 	}
 
 	public String[] getListOfValuesSilently(String fn) {
@@ -156,10 +142,6 @@ public class _WebFormData {
 		return prop;
 	}
 
-	public void setSign(String sign) {
-		this.sign = sign;
-	}
-
 	public String getSign() throws _Exception {
 		try {
 			String value[] = formData.get("srctext");
@@ -207,6 +189,14 @@ public class _WebFormData {
 		result += "----------------- end of list-----------------------";
 		return result;
 
+	}
+
+	public String getReferrer() {
+		return referrer;
+	}
+
+	public void setReferer(String referrer) {
+		this.referrer = referrer;
 	}
 
 }

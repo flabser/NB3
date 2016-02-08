@@ -14,10 +14,12 @@ public class _Page implements _IXMLContent {
 	@Override
 	public String toXML() throws _Exception {
 		try {
-			return baseElement.process(webFormData.getFormData(), "GET").toString();
+			// return baseElement.process(webFormData.getFormData(),
+			// "GET").toString();
 		} catch (Exception e) {
 			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, e.getMessage() + " function: _Page.toXML()");
 		}
+		return null;
 	}
 
 	@Override

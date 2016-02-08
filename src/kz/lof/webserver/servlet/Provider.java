@@ -3,7 +3,6 @@ package kz.lof.webserver.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -21,6 +20,7 @@ import kz.flabs.webrule.page.PageRule;
 import kz.lof.env.EnvConst;
 import kz.lof.exception.ApplicationException;
 import kz.nextbase.script._Session;
+import kz.nextbase.script._WebFormData;
 import kz.pchelka.env.Environment;
 import kz.pchelka.server.Server;
 
@@ -70,7 +70,8 @@ public class Provider extends HttpServlet {
 					ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 
 					Page page = new Page(env, ses, rule);
-					Map<String, String[]> formData = request.getParameterMap();
+					String referrer = request.getHeader("referer");
+					_WebFormData formData = new _WebFormData(request.getParameterMap(), referrer);
 					if (onlyXML != null) {
 						result = page.getPageContent(formData, request.getMethod());
 						result.publishAs = PublishAsType.XML;
@@ -121,7 +122,8 @@ public class Provider extends HttpServlet {
 						response.setContentType("application/json;charset=utf-8");
 						PrintWriter out = response.getWriter();
 						String json = result.getJSON();
-						System.out.println(json);
+						System.out.println("json=" + json);
+						json = json.replaceAll("\u003d", "=").replaceAll("\u0026", "&");
 						out.println(json);
 						out.close();
 					} else if (result.publishAs == PublishAsType.XML) {
