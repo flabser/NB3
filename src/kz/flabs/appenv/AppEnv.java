@@ -21,7 +21,7 @@ import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.Scheduler;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;

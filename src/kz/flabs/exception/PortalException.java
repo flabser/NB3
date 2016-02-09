@@ -8,7 +8,7 @@ import java.io.*;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 import kz.flabs.servlets.*;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Skin;

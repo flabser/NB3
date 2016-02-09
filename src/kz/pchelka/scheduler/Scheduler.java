@@ -3,7 +3,7 @@ package kz.pchelka.scheduler;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class Scheduler implements Runnable {
 	public PeriodicalServices periodicalServices;

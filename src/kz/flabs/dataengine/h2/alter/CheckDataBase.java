@@ -10,7 +10,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.h2.DBConnectionPool;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class CheckDataBase {
 

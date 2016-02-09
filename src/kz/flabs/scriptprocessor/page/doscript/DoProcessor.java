@@ -7,7 +7,7 @@ import kz.flabs.localization.Vocabulary;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class DoProcessor {
 

@@ -41,7 +41,7 @@ import kz.nextbase.script._ViewEntryCollection;
 import kz.pchelka.env.Environment;
 import kz.pchelka.log.LogFiles;
 import kz.pchelka.scheduler.BackgroundProcCollection;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class AdminProvider extends HttpServlet implements Const {
 	public static final int pageSize = 30;

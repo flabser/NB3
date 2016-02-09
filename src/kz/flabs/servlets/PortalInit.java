@@ -20,7 +20,7 @@ import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IDaemon;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class PortalInit extends HttpServlet {
 

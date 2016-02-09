@@ -1,4 +1,4 @@
-package kz.pchelka.server;
+package kz.lof.server;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -9,20 +9,19 @@ import kz.flabs.dataengine.IDatabase;
 import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.Log4jLogger;
-import kz.pchelka.webserver.IWebServer;
-import kz.pchelka.webserver.WebServerFactory;
+import kz.pchelka.webserver.WebServer;
 
 import org.apache.catalina.Host;
 import org.apache.catalina.LifecycleException;
 
 public class Server {
 	public static kz.pchelka.log.ILogger logger;
-	public static final String serverVersion = "3.0.3";
+	public static final String serverVersion = "3.0.4";
 	public static String compilationTime = "";
 	public static final String serverTitle = "NextBase " + serverVersion;
 	public static Date startTime = new Date();
 	public static IDatabase dataBase;
-	public static IWebServer webServerInst;
+	public static WebServer webServerInst;
 
 	public static void start() throws MalformedURLException, LifecycleException, URISyntaxException {
 		logger = new Log4jLogger("Server");
@@ -33,7 +32,7 @@ public class Server {
 
 		Environment.init();
 
-		webServerInst = WebServerFactory.getServer(Environment.serverVersion);
+		webServerInst = new WebServer();
 		webServerInst.init(Environment.hostName);
 
 		if (Environment.adminConsoleEnable) {
@@ -43,7 +42,7 @@ public class Server {
 			hosts.add(host);
 		}
 
-		kz.pchelka.server.Server.logger.normalLogEntry("All applications are starting...");
+		Server.logger.normalLogEntry("All applications are starting...");
 
 		for (Site webApp : Environment.webAppToStart.values()) {
 			// hosts.add(webServerInst.addApplication(webApp.name, "/" +
@@ -52,7 +51,7 @@ public class Server {
 		}
 
 		String info = webServerInst.initConnectors();
-		kz.pchelka.server.Server.logger.verboseLogEntry("Web server started (" + info + ")");
+		Server.logger.verboseLogEntry("Web server started (" + info + ")");
 		webServerInst.startContainer();
 
 		Thread thread = new Thread(new Console());

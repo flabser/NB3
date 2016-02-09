@@ -12,8 +12,8 @@ import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
+import kz.lof.server.Server;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;

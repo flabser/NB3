@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import javax.servlet.http.HttpServletResponse;
 
 import kz.flabs.filters.AccessGuard;
+import kz.lof.server.Server;
 import kz.lof.webserver.valve.Logging;
 import kz.lof.webserver.valve.Secure;
 import kz.lof.webserver.valve.Unsecure;
@@ -25,14 +26,13 @@ import org.apache.tomcat.util.descriptor.web.ErrorPage;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 
-public class WebServer implements IWebServer {
+public class WebServer {
 	private static Tomcat tomcat;
 	private static Engine engine;
 	private static final String defaultWelcomeList[] = { "index.html", "index.htm" };
 
-	@Override
 	public void init(String defaultHostName) throws MalformedURLException, LifecycleException {
-		kz.pchelka.server.Server.logger.verboseLogEntry("Init webserver ...");
+		Server.logger.verboseLogEntry("Init webserver ...");
 
 		tomcat = new Tomcat();
 		tomcat.setPort(Environment.httpPort);
@@ -63,7 +63,6 @@ public class WebServer implements IWebServer {
 		return sharedResContext;
 	}
 
-	@Override
 	public Host addApplication(String siteName, String URLPath, String docBase) throws LifecycleException, MalformedURLException {
 		Context context = null;
 
@@ -155,12 +154,11 @@ public class WebServer implements IWebServer {
 		context.addServletMapping("/", "default");
 	}
 
-	@Override
 	public String initConnectors() {
 		String portInfo = "";
 		if (Environment.isSSLEnable) {
 			Connector secureConnector = null;
-			kz.pchelka.server.Server.logger.normalLogEntry("TLS connector has been enabled");
+			Server.logger.normalLogEntry("TLS connector has been enabled");
 			secureConnector = tomcat.getConnector();
 			// secureConnector.setDomain("flabs.kz");
 			secureConnector.setPort(Environment.secureHttpPort);
@@ -187,13 +185,12 @@ public class WebServer implements IWebServer {
 
 	}
 
-	@Override
 	public void startContainer() {
 		try {
 			tomcat.start();
 			// tomcat.getServer().await();
 		} catch (LifecycleException e) {
-			kz.pchelka.server.Server.logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e);
 		}
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -204,14 +201,13 @@ public class WebServer implements IWebServer {
 		});
 	}
 
-	@Override
 	public synchronized void stopContainer() {
 		try {
 			if (tomcat != null) {
 				tomcat.stop();
 			}
 		} catch (LifecycleException exception) {
-			kz.pchelka.server.Server.logger.errorLogEntry("Cannot Stop WebServer" + exception.getMessage());
+			Server.logger.errorLogEntry("Cannot Stop WebServer" + exception.getMessage());
 		}
 
 	}

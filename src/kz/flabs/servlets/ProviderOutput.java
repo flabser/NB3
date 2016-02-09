@@ -16,7 +16,7 @@ import kz.flabs.users.UserException;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Skin;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ProviderOutput {
 	public File xslFile;
