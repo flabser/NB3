@@ -53,11 +53,6 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		toPublishElement.add(value);
 	}
 
-	@Deprecated
-	public void localizedMsgBox(String m) {
-		result.addMessage(m);
-	}
-
 	public void addMsg(String m) {
 		result.addMessage(m);
 	}

@@ -67,6 +67,15 @@ public class _WebFormData {
 		}
 	}
 
+	public float getFloatValueSilently(String fn, int defaultValue) {
+		try {
+			String value[] = formData.get(fn);
+			return Float.parseFloat(value[0].trim());
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
 	public Integer[] getNumberValuesSilently(String fn, int defaultValue) {
 		String value[] = formData.get(fn);
 		Integer[] nValue = new Integer[value.length];

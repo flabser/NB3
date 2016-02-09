@@ -1,11 +1,8 @@
 package kz.flabs.dataengine;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
-import kz.flabs.dataengine.h2.holiday.Holiday;
-import kz.flabs.dataengine.h2.holiday.HolidayCollection;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.system.IEmployeeDAO;
@@ -44,14 +41,6 @@ public interface ISystemDatabase {
 	ArrayList<User> getUsers(String keyWord);
 
 	void removeAppEntry(User user);
-
-	@Deprecated
-	Calendar[] getHolidays(int year);
-
-	@Deprecated
-	ArrayList<Holiday> getHolidays(int offset, int pageSize);
-
-	HolidayCollection getHolidayCol(int year, int offset, int pageSize);
 
 	void setEmployeeDAO(IEmployeeDAO dao);
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -19,7 +18,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
-import kz.flabs.dataengine.h2.holiday.HolidayCollection;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
@@ -242,11 +240,6 @@ public class AdminProvider extends HttpServlet implements Const {
 				count = pc.size();
 				content = pc.getProcessAsXMLPiece();
 			}
-		} else if (element.equalsIgnoreCase("calendar")) {
-			result.xslt = "views" + File.separator + "calendar_list.xsl";
-			HolidayCollection holidays = Environment.systemBase.getHolidayCol(Calendar.getInstance().get(Calendar.YEAR), page, pageSize);
-			count = holidays.holidays.size();
-
 		} else if (element.equalsIgnoreCase("activity")) {
 
 		} else if (element.equalsIgnoreCase("document_activity")) {
