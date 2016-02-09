@@ -16,7 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import kz.flabs.appenv.AppEnv;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class AuthFailedException extends Exception {
 	public AuthFailedExceptionType type;

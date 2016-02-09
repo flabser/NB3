@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import kz.flabs.util.Util;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class BackgroundProcCollection {
 	private static ArrayList<IDaemon> activProcList = new ArrayList<IDaemon>();

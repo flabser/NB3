@@ -21,7 +21,7 @@ import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
 import kz.pchelka.env.Environment;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
 	public boolean isValid;

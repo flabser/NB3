@@ -7,7 +7,7 @@ import kz.flabs.webrule.scheduler.DaysOfWeek;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.AbstractDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class TempFileCleaner extends AbstractDaemon {
 	private int ac;

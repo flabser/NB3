@@ -3,7 +3,7 @@ package kz.flabs.servlets.admin;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class AdminOutline {
 	private String XMLText = "";

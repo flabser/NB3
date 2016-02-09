@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kz.flabs.exception.TransformatorException;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
 
 public class Error extends HttpServlet{

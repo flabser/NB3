@@ -41,7 +41,7 @@ import kz.flabs.webrule.constants.ValueSourceType;
 import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 @Deprecated
 public class SourceSupplier implements IProcessInitiator, Const {

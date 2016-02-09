@@ -8,7 +8,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.runtimeobj.Filter;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class FilterParser {
 

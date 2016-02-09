@@ -6,7 +6,7 @@ import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ScriptProcessor implements IScriptProcessor, IProcessInitiator {
 	public static ILogger logger = Server.logger;

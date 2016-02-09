@@ -1,7 +1,7 @@
 package kz.flabs.webrule;
 
 import kz.flabs.dataengine.DatabaseType;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class DataEngineImpl {
 	Class<?> database;

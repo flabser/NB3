@@ -1,4 +1,4 @@
-package kz.pchelka.server;
+package kz.lof.server;
 
 import java.awt.event.*;
 import java.util.*;

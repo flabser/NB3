@@ -8,7 +8,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.document.BaseDocument;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class Filter extends BaseDocument {
 	private static final long serialVersionUID = 1L;

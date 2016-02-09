@@ -13,7 +13,7 @@ import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
 //import kz.nextbase.script.struct._Employer;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class _AppEntourage {
 	private AppEnv env;

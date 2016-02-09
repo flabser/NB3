@@ -11,7 +11,7 @@ import kz.flabs.util.Util;
 import kz.flabs.webrule.scheduler.DaysOfWeek;
 import kz.flabs.webrule.scheduler.ScheduleType;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class PeriodicalServices extends TimerTask {
 	private ArrayList<IDaemon> activProceses;

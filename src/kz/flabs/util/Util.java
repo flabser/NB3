@@ -26,7 +26,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.jpa.AppEntity;
 import kz.flabs.exception.ConversionError;
 import kz.flabs.exception.DataConversionException;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class Util {
 	public static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy kk:mm:ss");

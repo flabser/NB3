@@ -36,6 +36,7 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.env.EnvConst;
+import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
@@ -45,7 +46,6 @@ import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
-import kz.pchelka.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.w3c.dom.Document;
@@ -56,8 +56,6 @@ import org.xml.sax.SAXException;
 public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static boolean verboseLogging;
-	public static int serverVersion;
-	public static Boolean webServicesEnable = false;
 	public static String serverName;
 	public static String hostName;
 	public static int httpPort = 38779;
@@ -144,10 +142,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 			logger.normalLogEntry("Initialize runtime environment");
 			initMimeTypes();
-
-			serverVersion = XMLUtil.getNumberContent(xmlDocument, "/nextbase/webserver/version", 7);
-
-			webServicesEnable = XMLUtil.getTextContent(xmlDocument, "/nextbase/webserver/webservices/@mode").equalsIgnoreCase("on");
 
 			hostName = XMLUtil.getTextContent(xmlDocument, "/nextbase/hostname");
 			if (hostName.isEmpty()) {

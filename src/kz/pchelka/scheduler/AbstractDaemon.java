@@ -16,7 +16,7 @@ import kz.flabs.webrule.handler.TriggerType;
 import kz.flabs.webrule.scheduler.DaysOfWeek;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
 import kz.flabs.webrule.scheduler.ScheduleType;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public abstract class AbstractDaemon implements IDaemon, Runnable, IProcessInitiator, IAdministartorForm {
 	public ArrayList<DaysOfWeek> daysOfWeek = new ArrayList<DaysOfWeek>();

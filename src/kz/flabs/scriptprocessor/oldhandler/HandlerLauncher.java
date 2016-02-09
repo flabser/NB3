@@ -1,7 +1,7 @@
 package kz.flabs.scriptprocessor.oldhandler;
 
 import kz.flabs.scriptprocessor.handler.HandlerScriptProcessor;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 @Deprecated
 public class HandlerLauncher extends Thread {

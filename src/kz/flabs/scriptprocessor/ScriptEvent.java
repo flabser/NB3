@@ -18,7 +18,7 @@ import kz.nextbase.script.actions._Action;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.actions._ActionType;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ScriptEvent {
 	protected Vocabulary vocabulary;

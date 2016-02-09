@@ -19,7 +19,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;

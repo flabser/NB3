@@ -6,7 +6,7 @@ import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
 import kz.pchelka.scheduler.AbstractDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ScheduledHandlerLauncher extends AbstractDaemon{
 	

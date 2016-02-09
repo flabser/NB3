@@ -24,7 +24,7 @@ import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 import org.apache.catalina.realm.RealmBase;
 

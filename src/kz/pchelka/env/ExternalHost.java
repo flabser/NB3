@@ -4,7 +4,7 @@ import org.w3c.dom.Node;
 
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ExternalHost {
 	public String host;

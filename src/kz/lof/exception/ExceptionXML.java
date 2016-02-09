@@ -1,7 +1,7 @@
 package kz.lof.exception;
 
 import kz.lof.env.EnvConst;
-import kz.pchelka.server.Server;
+import kz.lof.server.Server;
 
 public class ExceptionXML {
 	private String errorMessage = "";
