@@ -1,41 +1,33 @@
 package kz.flabs.appenv;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.RuleException;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.Application;
-import kz.flabs.runtimeobj.caching.ICache;
-import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.Role;
 import kz.flabs.webrule.WebRuleProvider;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
-import kz.lof.webserver.servlet.PageOutcome;
-import kz.nextbase.script._WebFormData;
+import kz.lof.caching.PageCacheAdapter;
 import kz.pchelka.env.AuthTypes;
 import kz.pchelka.env.Environment;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import kz.pchelka.server.Server;
-import net.sf.saxon.s9api.SaxonApiException;
 
-public class AppEnv implements Const, ICache, IProcessInitiator {
+public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
 	public String appType = "undefined";
 	public WebRuleProvider ruleProvider;
 	public HashMap<String, File> xsltFileMap = new HashMap<String, File>();
-	// public String rulePath;
 	public String adminXSLTPath;
 	public GlobalSetting globalSetting;
 	public boolean isSystem;
@@ -47,7 +39,6 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 	public static ILogger logger = Server.logger;
 
 	private IDatabase dataBase;
-	private HashMap<String, Object> cache = new HashMap<String, Object>();
 
 	@Deprecated
 	public AppEnv(String at) {
@@ -140,16 +131,6 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 		loadVocabulary();
 	}
 
-	@Override
-	public void flush() {
-		cache.clear();
-	}
-
-	@Override
-	public String getOwnerID() {
-		return appType;
-	}
-
 	@Deprecated
 	public static String getName() {
 		return "appType";
@@ -161,35 +142,6 @@ public class AppEnv implements Const, ICache, IProcessInitiator {
 		vocabulary = l.populate(appType, vocabuarFilePath);
 		if (vocabulary != null) {
 			Server.logger.normalLogEntry("Dictionary has loaded");
-		}
-	}
-
-	public String getCacheInfo() {
-		String ci = "";
-		for (String c : cache.keySet()) {
-			ci = ci + "," + c;
-		}
-		if (ci.equals("")) {
-			ci = "cache is empty";
-		}
-		return ci;
-	}
-
-	@Override
-	public PageOutcome getCachedPage(Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException {
-		String cacheKey = page.getCacheID();
-		Object obj = cache.get(cacheKey);
-		String cacheParam[] = formData.getFormData().get("cache");
-		if (cacheParam == null) {
-			PageOutcome buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer.getValue());
-			return buffer;
-		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
-			PageOutcome buffer = page.getPageContent(formData, "GET");
-			cache.put(cacheKey, buffer.getValue());
-			return buffer;
-		} else {
-			return (PageOutcome) obj;
 		}
 	}
 

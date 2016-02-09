@@ -13,17 +13,15 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.jpa.IAppEntity;
 import kz.flabs.localization.LanguageType;
-import kz.flabs.runtimeobj.caching.ICache;
-import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
+import kz.lof.caching.PageCacheAdapter;
 import kz.lof.user.AuthModeType;
-import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
 import kz.pchelka.scheduler.IProcessInitiator;
 
-public class _Session extends _ScriptingObject implements ICache {
+public class _Session extends PageCacheAdapter {
 
 	private IDatabase dataBase;
 	private User user;
@@ -102,23 +100,6 @@ public class _Session extends _ScriptingObject implements ICache {
 	}
 
 	public _Employer getCurrentAppUser() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PageOutcome getCachedPage(Page page, _WebFormData formData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void flush() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public String getCacheInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}

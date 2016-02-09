@@ -73,13 +73,11 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 
 	@Override
 	public UUID getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public _URL getURL() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -104,13 +102,11 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 
 	@Override
 	public String getShortXMLChunk(LanguageType lang) {
-		// TODO Auto-generated method stub
-		return null;
+		return getFullXMLChunk(lang);
 	}
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -68,7 +68,6 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 
 	public HandlerRule(AppEnv env, File file) throws IOException, RuleException {
 		super(env, file);
-		init(env);
 		try {
 			trigger = TriggerType.valueOf(XMLUtil.getTextContent(doc, "/rule/trigger", true, "UNKNOWN", false));
 			if (trigger == TriggerType.SCHEDULER) {

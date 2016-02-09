@@ -19,6 +19,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.http.HttpStatus;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 
 public class PageOutcome {
 	public PublishAsType publishAs = PublishAsType.HTML;
@@ -173,11 +174,17 @@ public class PageOutcome {
 
 	public String getJSON() {
 		JSONClass clazz = new JSONClass();
+		clazz.setObjects(objects);
 		clazz.setMessages(messages);
 		clazz.setCaptions(captions);
 		clazz.setType(type);
 		clazz.setRedirectURL(redirectURL);
 		clazz.setFlash(flash);
+		// Gson gson = new
+		// GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		// gson = new GsonBuilder().setExclusionStrategies(new ExclStrat())
+		// .serializeNulls() <-- uncomment to serialize NULL fields as well
+		// .create();
 		Gson gson = new Gson();
 		return gson.toJson(clazz);
 	}
@@ -213,10 +220,17 @@ public class PageOutcome {
 	}
 
 	class JSONClass {
+		@Expose
+		private ArrayList<_IPOJOObject> objects = new ArrayList<_IPOJOObject>();
+		@Expose
 		private ArrayList<String> messages;
+		@Expose
 		private Map<String, String> captions;
+		@Expose
 		private OutcomeType type;
+		@Expose
 		private String redirectURL;
+		@Expose
 		private String flash;
 
 		public ArrayList<String> getMessages() {
@@ -257,6 +271,14 @@ public class PageOutcome {
 
 		public void setFlash(String flash) {
 			this.flash = flash;
+		}
+
+		public ArrayList<_IPOJOObject> getObjects() {
+			return objects;
+		}
+
+		public void setObjects(ArrayList<_IPOJOObject> objects) {
+			this.objects = objects;
 		}
 
 	}

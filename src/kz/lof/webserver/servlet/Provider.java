@@ -90,7 +90,6 @@ public class Provider extends HttpServlet {
 							case CACHING_IN_SERVER_SCOPE:
 								result = new Environment().getCachedPage(page, formData);
 								break;
-
 							default:
 								result = page.getPageContent(formData, "GET");
 							}
