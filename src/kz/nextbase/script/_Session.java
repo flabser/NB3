@@ -155,9 +155,9 @@ public class _Session extends _ScriptingObject implements ICache {
 	}
 
 	public String getTransactRedirect(IAppEntity entity) {
-		UUID id = entity.getId();
-		if (id != null) {
-			FormTransaction ft = formTrans.get(id);
+
+		FormTransaction ft = formTrans.get(entity.getId());
+		if (ft != null) {
 			ft.isExpired = true;
 			return ft.getRefrerrer();
 		} else {

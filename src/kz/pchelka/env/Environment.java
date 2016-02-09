@@ -2,6 +2,7 @@ package kz.pchelka.env;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -32,7 +33,6 @@ import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
-import kz.flabs.users.UserSession;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.env.EnvConst;
@@ -541,13 +541,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		return "";
 	}
 
-	public static void addSession(UserSession userSession) {
-		if (userSession != null) {
-			// sess.add(userSession);
-		}
-
-	}
-
 	private static void loadProperties() {
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -566,6 +559,8 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					}
 				}
 			}
+		} catch (FileNotFoundException e) {
+
 		} catch (Exception e) {
 			e.printStackTrace();
 
