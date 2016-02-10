@@ -181,8 +181,8 @@ public class GlobalSetting {
 					databaseHost = XMLUtil.getTextContent(doc, "/rule/database/host");
 					databaseEnable = true;
 
-					String deployerClass = XMLUtil.getTextContent(doc, "/rule/database/implementation/idatabasedeployer");
-					String databaseClass = XMLUtil.getTextContent(doc, "/rule/database/implementation/idatabase");
+					String deployerClass = "kz.lof.dataengine.jpadatabase.DatabaseDeployer";
+					String databaseClass = "kz.lof.dataengine.jpadatabase.Database";
 
 					if (!deployerClass.equals("") && !databaseClass.equals("")) {
 						dbImpl = new DataEngineImpl(deployerClass, databaseClass);
