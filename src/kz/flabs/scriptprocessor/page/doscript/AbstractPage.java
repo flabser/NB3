@@ -140,8 +140,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 			}
 		} catch (Exception e) {
 			result.setError(e);
-			println(e);
-			e.printStackTrace();
+			error(e);
 		}
 		return result;
 

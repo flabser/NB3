@@ -75,7 +75,8 @@ public class PageOutcome {
 	}
 
 	public void setError(Exception e) {
-		messages.add(e.getMessage());
+		setMessage(e.toString());
+		objects.clear();
 		httpStatus = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
 	}

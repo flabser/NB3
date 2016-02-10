@@ -100,6 +100,13 @@ public class Provider extends HttpServlet {
 					}
 
 					response.setStatus(result.getHttpStatus());
+					if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+						// TODO need to Improvement
+						result.publishAs = PublishAsType.JSON;
+						ApplicationException e = new ApplicationException(context.getServletContextName(), result.getValue());
+						e.setCode(response.getStatus());
+						throw e;
+					}
 
 					if (result.publishAs == PublishAsType.HTML) {
 						if (result.disableClientCache) {
@@ -141,15 +148,12 @@ public class Provider extends HttpServlet {
 			} else {
 				throw new ApplicationException(context.getServletContextName(), "application context has not found");
 			}
+		} catch (ApplicationException ae) {
+			response.getWriter().println(ae.getHTMLMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			/*
-			 * ApplicationException ae = new
-			 * ApplicationException(env.templateType, e.toString(), e);
-			 * response.setStatus(ae.getCode());
-			 * response.getWriter().println(ae.getHTMLMessage());
-			 */
+			ApplicationException ae = new ApplicationException(env.appType, e.toString(), e);
+			response.getWriter().println(ae.getHTMLMessage());
 		}
 	}
 
