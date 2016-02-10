@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa.embedded;
+package kz.lof.dataengine.jpa.embedded;
 
 import java.util.Date;
 

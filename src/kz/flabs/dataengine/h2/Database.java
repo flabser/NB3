@@ -9,7 +9,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseCore;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseType;
-import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IActivity;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
@@ -19,9 +18,9 @@ import kz.flabs.dataengine.IUsersActivity;
 import kz.flabs.webrule.WebRuleProvider;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
+import kz.lof.server.Server;
 import kz.pchelka.env.Environment;
 import kz.pchelka.log.ILogger;
-import kz.lof.server.Server;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
 	public boolean isValid;
@@ -42,9 +41,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	protected static String baseTable = "MAINDOCS";
 
 	protected String externalStructureApp;
-	private static final String maindocFields = "MAINDOCS.DOCID, DDBID, AUTHOR, PARENTDOCID, PARENTDOCTYPE, REGDATE, DOCTYPE, LASTUPDATE, VIEWTEXT, "
-	        + DatabaseUtil.getViewTextList("") + ", VIEWNUMBER, VIEWDATE, VIEWICON, FORM, HAS_ATTACHMENT ";
-	private boolean respUsed;
 
 	public Database(AppEnv env, DatabaseType dbType) throws DatabasePoolException, InstantiationException, IllegalAccessException,
 	        ClassNotFoundException {

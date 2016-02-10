@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa.deploying;
+package kz.lof.dataengine.jpa.deploying;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,9 +12,9 @@ import java.util.zip.ZipInputStream;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.jpa.IDAO;
-import kz.flabs.dataengine.jpa.ISimpleAppEntity;
 import kz.flabs.users.User;
+import kz.lof.dataengine.jpa.IDAO;
+import kz.lof.dataengine.jpa.ISimpleAppEntity;
 import kz.lof.env.EnvConst;
 import kz.nextbase.script._Session;
 import kz.pchelka.env.Environment;

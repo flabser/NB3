@@ -16,12 +16,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.exception.WebFormValueExceptionType;
 import kz.flabs.servlets.PublishAsType;
-import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.ActionType;
-import kz.flabs.webrule.constants.QueryType;
 import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
@@ -57,8 +54,6 @@ public abstract class Rule implements IElement, IRule {
 	public HashMap<ActionType, FormActionRule> showActionsMap = new HashMap<ActionType, FormActionRule>();
 	public ScheduleSettings scheduleSettings;
 	public boolean isSecured;
-	public QueryType docType = QueryType.UNKNOWN;
-	public boolean addToHistory;
 	public AppEnv env;
 	public ArrayList<ElementRule> elements = new ArrayList<ElementRule>();
 	protected org.w3c.dom.Document doc;
@@ -91,23 +86,11 @@ public abstract class Rule implements IElement, IRule {
 				allowAnonymousAccess = true;
 			}
 
-			if (XMLUtil.getTextContent(doc, "/rule/@history").equalsIgnoreCase("on")) {
-				addToHistory = true;
-			}
-
 			if (XMLUtil.getTextContent(doc, "/rule/@security").equalsIgnoreCase("on")) {
 				isSecured = true;
 			}
 
-			xsltFile = XMLUtil.getTextContent(doc, "/rule/xsltfile");
-			if (!xsltFile.equals("")) {
-				publishAs = PublishAsType.HTML;
-			}
 			description = XMLUtil.getTextContent(doc, "/rule/description");
-
-			setRunUnderUser(XMLUtil.getTextContent(doc, "/rule/rununderuser", false, Macro.CURRENT_USER.toString(), false),
-			        XMLUtil.getTextContent(doc, "/rule/rununderuser/@source", true, "MACRO", false),
-			        XMLUtil.getTextContent(doc, "/rule/rununderuser/@type", true, "TEXT", false));
 
 			NodeList captionList = XMLUtil.getNodeList(doc, "/rule/caption");
 			for (int i = 0; i < captionList.getLength(); i++) {
@@ -132,14 +115,6 @@ public abstract class Rule implements IElement, IRule {
 
 	}
 
-	protected String[] getWebFormValue(String fieldName, Map<String, String[]> fields) throws WebFormValueException {
-		try {
-			return fields.get(fieldName);
-		} catch (Exception e) {
-			throw new WebFormValueException(WebFormValueExceptionType.FORMDATA_INCORRECT, fieldName);
-		}
-	}
-
 	protected void setIsOn(String isOnAsText) {
 		if (isOnAsText.equalsIgnoreCase("on")) {
 			isOn = RunMode.ON;
@@ -160,25 +135,12 @@ public abstract class Rule implements IElement, IRule {
 
 	}
 
-	protected void setRunUnderUser(String value, String st, String ft) {
-		runUnderUser = new RuleValue(value, st, ft);
-	}
-
 	protected String getRunUnderUserSource() {
 		String value = "<rununderusersource><query>";
 		value += "<entry viewtext=\"" + ValueSourceType.STATIC + "\"></entry>";
 		value += "<entry viewtext=\"" + ValueSourceType.MACRO + "\"></entry>";
 		value += "</query></rununderusersource>";
-		if (runUnderUser.getSourceType() == ValueSourceType.MACRO) {
-			value += getRunUnderUserAvailableMacro();
-		}
-		return value;
-	}
 
-	private String getRunUnderUserAvailableMacro() {
-		String value = "<rununderusermacro><query>";
-		value += "<entry viewtext=\"" + Macro.CURRENT_USER + "\"></entry>";
-		value += "</query></rununderusermacro>";
 		return value;
 	}
 
@@ -213,11 +175,6 @@ public abstract class Rule implements IElement, IRule {
 		String xmlText = "<rule id=\"" + id + "\" isvalid=\"" + isValid + "\" app=\"" + app + "\" ison=\"" + isOn + "\">" + "<description>"
 		        + description + "</description>";
 		return xmlText + "</fields></rule>";
-	}
-
-	@Override
-	public boolean addToHistory() {
-		return addToHistory;
 	}
 
 	@Override

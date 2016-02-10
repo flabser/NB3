@@ -31,12 +31,6 @@ public class RuleServices {
 		String xmlFragment = "";
 		Collection<PageRule> pageRules = Environment.getApplication(app).ruleProvider.getPageRules(reload);
 
-		for (PageRule rule : pageRules) {
-			xmlFragment += "<entry  id=\"" + rule.id + "\" url=\"Provider?type=edit&amp;element=page_rule&amp;id=" + rule.id + "&amp;app=" + app
-			        + "\" >" + "<ison>" + rule.isOn + "</ison>" + "<rununderuser>" + rule.runUnderUser + "</rununderuser>" + "<cache>" + rule.caching
-			        + "</cache>" + "<elements>" + rule.elements + "</elements>" + "<hits>" + rule.hits + "</hits>" + "<app>" + app + "</app></entry>";
-		}
-
 		return xmlFragment;
 	}
 }

@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa.deploying;
+package kz.lof.dataengine.jpa.deploying;
 
 import java.util.List;
 

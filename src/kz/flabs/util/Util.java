@@ -23,9 +23,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kz.flabs.appenv.AppEnv;
-import kz.flabs.dataengine.jpa.AppEntity;
 import kz.flabs.exception.ConversionError;
 import kz.flabs.exception.DataConversionException;
+import kz.lof.dataengine.jpa.AppEntity;
 import kz.lof.server.Server;
 
 public class Util {

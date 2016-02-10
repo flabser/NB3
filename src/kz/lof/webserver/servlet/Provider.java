@@ -114,7 +114,7 @@ public class Provider extends HttpServlet {
 						}
 
 						String outputContent = result.toCompleteXML();
-						File xslFile = new File(env.globalSetting.defaultSkin.path + File.separator + rule.xsltFile);
+						File xslFile = new File(rule.xsltFile);
 						if (xslFile.exists()) {
 							response.setContentType("text/html");
 							new SaxonTransformator().toTrans(response, xslFile, outputContent);

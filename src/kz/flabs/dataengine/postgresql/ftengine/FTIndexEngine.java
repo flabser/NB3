@@ -14,7 +14,6 @@ import kz.flabs.dataengine.FTIndexEngineExceptionType;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.dataengine.jpa.ViewPage;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
@@ -23,6 +22,7 @@ import kz.flabs.runtimeobj.document.Document;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
+import kz.lof.dataengine.jpa.ViewPage;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._ViewEntryCollection;
 

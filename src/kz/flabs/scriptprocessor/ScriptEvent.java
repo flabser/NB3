@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import kz.flabs.dataengine.jpa.DAO;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
@@ -18,6 +17,7 @@ import kz.nextbase.script.actions._Action;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.actions._ActionType;
 import kz.pchelka.env.Environment;
+import kz.lof.dataengine.jpa.DAO;
 import kz.lof.server.Server;
 
 public class ScriptEvent {

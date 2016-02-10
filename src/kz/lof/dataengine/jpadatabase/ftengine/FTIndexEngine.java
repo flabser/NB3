@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase.ftengine;
+package kz.lof.dataengine.jpadatabase.ftengine;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +13,10 @@ import kz.flabs.dataengine.FTIndexEngineException;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.dataengine.jpa.ViewPage;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.users.User;
+import kz.lof.dataengine.jpa.ViewPage;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._ViewEntryCollection;
 
@@ -36,7 +36,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 		try {
 			conn.setAutoCommit(false);
 
-			String sql = "SELECT id FROM properties where to_tsvector('russian', description) @@ to_tsquery('russian', '" + keyWord + "')";
+			String sql = "SELECT id FROM properties where to_tsvector('russian', object_name) @@ to_tsquery('russian', '" + keyWord + "')";
 
 			List<UUID> ids = new ArrayList<UUID>();
 			PreparedStatement pst = conn.prepareStatement(sql);

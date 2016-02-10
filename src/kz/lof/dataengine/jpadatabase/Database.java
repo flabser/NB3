@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase;
+package kz.lof.dataengine.jpadatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,10 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.dataengine.IDatabase;
+import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
+import kz.lof.dataengine.jpadatabase.ftengine.FTIndexEngine;
 import kz.lof.server.Server;
 import kz.pchelka.env.Environment;
 
@@ -67,6 +69,11 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 	@Override
 	public EntityManagerFactory getEntityManagerFactory() {
 		return factory;
+	}
+
+	@Override
+	public IFTIndexEngine getFTSearchEngine() {
+		return new FTIndexEngine(this);
 	}
 
 }

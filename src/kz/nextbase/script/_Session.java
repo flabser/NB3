@@ -11,11 +11,11 @@ import javax.servlet.http.HttpSession;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.jpa.IAppEntity;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
 import kz.lof.caching.PageCacheAdapter;
+import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.user.AuthModeType;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;

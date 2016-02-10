@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase;
+package kz.lof.dataengine.jpadatabase;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseCore;

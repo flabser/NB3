@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase;
+package kz.lof.dataengine.jpadatabase;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

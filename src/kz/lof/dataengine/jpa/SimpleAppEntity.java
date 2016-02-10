@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa;
+package kz.lof.dataengine.jpa;
 
 import java.util.UUID;
 
@@ -7,11 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import kz.lof.dataengine.jpa.util.UUIDConverter;
+
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import org.eclipse.persistence.annotations.UuidGenerator;
-
-import kz.flabs.dataengine.jpa.util.UUIDConverter;
 
 @MappedSuperclass
 @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)

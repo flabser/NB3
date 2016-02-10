@@ -56,6 +56,7 @@ public class GlobalSetting {
 	public String driver;
 	public String dbURL;
 	public String rulePath;
+	public String xsltAppsPath;
 	@Deprecated
 	public DatabaseType databaseType;
 	@Deprecated
@@ -79,8 +80,6 @@ public class GlobalSetting {
 	@Deprecated
 	public HashMap<String, Skin> skinsMap = new HashMap<String, Skin>();
 	@Deprecated
-	public Skin defaultSkin;
-	@Deprecated
 	public SynchroGlobalSetting syncroGlobalSettings;
 	public int markAsReadMsDelay;
 	public ArrayList<AppDaemonRule> schedSettings = new ArrayList<AppDaemonRule>();
@@ -103,6 +102,7 @@ public class GlobalSetting {
 		globalFilePath = path;
 
 		rulePath = "rule" + File.separator + env.appType;
+		xsltAppsPath = "webapps" + File.separator + env.appType + File.separator + "xsl";
 
 		try {
 			Document doc = null;
@@ -227,28 +227,6 @@ public class GlobalSetting {
 						primaryLang = lang;
 					}
 				}
-			}
-
-			NodeList skins = XMLUtil.getNodeList(doc, "/rule/skins/entry");
-			for (int i = 0; i < skins.getLength(); i++) {
-				Skin skin = new Skin(skins.item(i));
-				if (skin.isOn == RunMode.ON) {
-					skinsList.add(skin);
-					skinsMap.put(skin.id, skin);
-					if (skin.isDefault) {
-						defaultSkin = skin;
-					}
-				}
-			}
-
-			if (skinsList.size() > 0 && defaultSkin == null) {
-				defaultSkin = skinsList.get(0);
-			}
-
-			if (defaultSkin == null) {
-				AppEnv.logger.warningLogEntry("A default skin has not defined. Probably it may cause an error ");
-			} else {
-				AppEnv.logger.normalLogEntry(defaultSkin.id + " is default skin");
 			}
 
 			NodeList roles = XMLUtil.getNodeList(doc, "/rule/roles/entry");

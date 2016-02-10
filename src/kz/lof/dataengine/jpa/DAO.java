@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa;
+package kz.lof.dataengine.jpa;
 
 import java.util.List;
 import java.util.UUID;

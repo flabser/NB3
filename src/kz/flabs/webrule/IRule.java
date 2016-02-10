@@ -7,8 +7,6 @@ import kz.flabs.exception.WebFormValueException;
 public interface IRule {
 	boolean isAnonymousAccessAllowed();
 
-	boolean addToHistory();
-
 	void update(Map<String, String[]> fields) throws WebFormValueException;
 
 	boolean save();

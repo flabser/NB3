@@ -1,4 +1,4 @@
-package kz.flabs.dataengine.jpa;
+package kz.lof.dataengine.jpa;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -16,11 +16,11 @@ import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 import kz.flabs.appenv.AppEnv;
-import kz.flabs.dataengine.jpa.util.UUIDConverter;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
+import kz.lof.dataengine.jpa.util.UUIDConverter;
 import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._URL;
 

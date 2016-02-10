@@ -10,7 +10,7 @@ import kz.nextbase.script._ViewEntryCollection;
 
 public interface IFTIndexEngine {
 
-	kz.flabs.dataengine.jpa.ViewPage search(String keyWord, _Session ses, int pageNum, int pageSize);
+	kz.lof.dataengine.jpa.ViewPage search(String keyWord, _Session ses, int pageNum, int pageSize);
 
 	@Deprecated
 	int ftSearchCount(Set<String> complexUserID, String absoluteUserID, String keyWord) throws DocumentException, ComplexObjectException;

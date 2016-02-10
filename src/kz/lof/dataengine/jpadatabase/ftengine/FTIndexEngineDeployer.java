@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase.ftengine;
+package kz.lof.dataengine.jpadatabase.ftengine;
 
 import java.sql.Connection;
 import java.sql.SQLException;

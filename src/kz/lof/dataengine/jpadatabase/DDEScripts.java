@@ -1,4 +1,4 @@
-package kz.lof.jpadatabase;
+package kz.lof.dataengine.jpadatabase;
 
 public class DDEScripts {
 
