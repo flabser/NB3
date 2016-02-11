@@ -7,6 +7,7 @@ public class ViewPage<T> {
 	private long count;
 	private int maxPage;
 	private int pageNum;
+	private String keyWord;
 
 	public ViewPage(List<T> result, long count2, int maxPage, int pageNum) {
 		this.result = result;
@@ -30,4 +31,9 @@ public class ViewPage<T> {
 	public int getPageNum() {
 		return pageNum;
 	}
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
 }

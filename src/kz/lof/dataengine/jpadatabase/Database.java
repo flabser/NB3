@@ -13,7 +13,7 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
-import kz.lof.dataengine.jpadatabase.ftengine.FTIndexEngine;
+import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.server.Server;
 import kz.pchelka.env.Environment;
 
@@ -22,6 +22,7 @@ import org.eclipse.persistence.jpa.PersistenceProvider;
 
 public class Database extends kz.flabs.dataengine.h2.Database implements IDatabase, Const {
 	protected EntityManagerFactory factory;
+	private FTSearchEngine ftEngine;
 
 	public Database(AppEnv env) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		super(env, DatabaseType.JPA);
@@ -46,6 +47,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 			Server.logger.errorLogEntry("the entity manager of \"" + env.appType + "\" has not been initialized");
 
 		}
+		ftEngine = new FTSearchEngine(this);
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 	@Override
 	public IFTIndexEngine getFTSearchEngine() {
-		return new FTIndexEngine(this);
+		return ftEngine;
 	}
 
 }

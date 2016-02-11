@@ -23,7 +23,7 @@ import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.jpa.ViewPage;
-import kz.lof.dataengine.jpadatabase.ftengine.ToFTIndex;
+import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._ViewEntryCollection;
 
@@ -433,7 +433,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 	}
 
 	@Override
-	public void registerTable(ToFTIndex table) {
+	public void registerTable(FTEntity table) {
 		// TODO Auto-generated method stub
 
 	}

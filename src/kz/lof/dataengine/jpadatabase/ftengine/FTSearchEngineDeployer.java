@@ -7,12 +7,12 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 
-public class FTIndexEngineDeployer {
+public class FTSearchEngineDeployer {
 	private IDBConnectionPool dbPool;
 	private String schema = "PUBLIC";
 	
 	
-	public FTIndexEngineDeployer(IDBConnectionPool dbPool) {		
+	public FTSearchEngineDeployer(IDBConnectionPool dbPool) {		
 		this.dbPool = dbPool;
 	}
 	

@@ -1,6 +1,8 @@
 package kz.lof.webserver.servlet;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -13,10 +15,9 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.Application;
 import kz.flabs.users.User;
-import kz.lof.dataengine.jpadatabase.ftengine.ToFTIndex;
+import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
 import kz.lof.server.Server;
@@ -33,20 +34,8 @@ public class PortalInit extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		ServletContext context = config.getServletContext();
 		String app = context.getServletContextName();
-		AppEnv env = null;
-
-		/*
-		 * if (app.equalsIgnoreCase("Administrator")) { try { env = new
-		 * AppEnv(app); Environment.systemBase = new
-		 * kz.flabs.dataengine.h2.SystemDatabase(); isValid = true; } catch
-		 * (DatabasePoolException e) { Server.logger.errorLogEntry(e);
-		 * Server.logger
-		 * .fatalLogEntry("Server has not connected to system database");
-		 * Server.shutdown(); } catch (Exception e) {
-		 * Server.logger.errorLogEntry(e); Server.shutdown(); } } else {
-		 */
 		String global = Environment.webAppToStart.get(app).global;
-		env = new AppEnv(app, global);
+		AppEnv env = new AppEnv(app, global);
 		if (env.globalSetting.databaseEnable) {
 			IDatabaseDeployer dd = null;
 			try {
@@ -78,7 +67,12 @@ public class PortalInit extends HttpServlet {
 				// TODO it need to improve
 				IFTIndexEngine ftEngine = db.getFTSearchEngine();
 				if (env.appType.equalsIgnoreCase("municipalproperty")) {
-					ftEngine.registerTable(new ToFTIndex("properties", "object_name", LanguageType.RUS));
+					List<String> fields = new ArrayList<String>();
+					fields.add("object_name");
+					fields.add("description");
+					fields.add("notes");
+					fields.add("inv_number");
+					ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
 				}
 
 				isValid = true;
@@ -122,11 +116,10 @@ public class PortalInit extends HttpServlet {
 			env.application = new Application(env);
 		}
 
-		// }
-
 		if (isValid) {
 			context.setAttribute(EnvConst.APP_ATTR, env);
 		}
 
 	}
+
 }

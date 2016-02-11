@@ -12,6 +12,7 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 	private int currentPage;
 	private List<T> list;
 	private LanguageType lang;
+	private String keyWord = "";
 
 	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, LanguageType lang) {
 		this.maxPage = maxPage;
@@ -19,6 +20,15 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 		this.currentPage = currentPage;
 		this.list = list;
 		this.lang = lang;
+	}
+
+	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, LanguageType lang, String keyWord) {
+		this.maxPage = maxPage;
+		this.count = count;
+		this.currentPage = currentPage;
+		this.list = list;
+		this.lang = lang;
+		this.keyWord = " keyword=\"" + keyWord + "\" ";
 	}
 
 	public _POJOListWrapper(List<T> list, LanguageType lang) {
@@ -29,12 +39,13 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 		this.lang = lang;
 	}
 
-	public _POJOListWrapper(String msg) {
+	public _POJOListWrapper(String msg, String keyWord) {
 		this.count = 0;
 		List<T> l = new ArrayList<T>();
 		l.add((T) new SimplePOJO(msg));
 		this.list = l;
 		this.lang = lang;
+		this.keyWord = " keyword=\"" + keyWord + "\" ";
 	}
 
 	class SimplePOJO implements _IPOJOObject {
@@ -92,7 +103,7 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 		}
 
 		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
-		        + "\">";
+		        + "\"" + keyWord + ">";
 		for (T val : list) {
 			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
 			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
