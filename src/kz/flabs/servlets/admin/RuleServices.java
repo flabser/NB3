@@ -6,7 +6,7 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.util.Util;
 import kz.flabs.webrule.handler.HandlerRule;
 import kz.flabs.webrule.page.PageRule;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 public class RuleServices {
 

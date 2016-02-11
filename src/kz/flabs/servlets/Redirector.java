@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 
 public class Redirector extends HttpServlet {

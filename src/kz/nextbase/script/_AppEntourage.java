@@ -12,9 +12,9 @@ import kz.flabs.users.User;
 import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
 //import kz.nextbase.script.struct._Employer;
-import kz.pchelka.env.Environment;
 
 public class _AppEntourage {
 	private AppEnv env;

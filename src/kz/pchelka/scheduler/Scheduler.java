@@ -2,7 +2,7 @@ package kz.pchelka.scheduler;
 
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
 public class Scheduler implements Runnable {

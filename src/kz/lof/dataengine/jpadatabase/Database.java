@@ -14,8 +14,8 @@ import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
-import kz.pchelka.env.Environment;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;

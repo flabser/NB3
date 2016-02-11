@@ -2,7 +2,7 @@ package kz.flabs.workspace;
 
 import java.io.IOException;
 
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

@@ -1,10 +1,10 @@
 package kz.pchelka.env;
 
-import org.w3c.dom.Node;
-
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.server.Server;
+
+import org.w3c.dom.Node;
 
 public class ExternalHost {
 	public String host;
@@ -18,7 +18,7 @@ public class ExternalHost {
 	public RunMode isOn = RunMode.ON;
 	public boolean isValid;
 
-	ExternalHost(Node node) {
+	public ExternalHost(Node node) {
 		try {
 			host = XMLUtil.getTextContent(node, ".", false);
 			id = XMLUtil.getTextContent(node, "@id", false);
@@ -35,7 +35,7 @@ public class ExternalHost {
 		}
 	}
 
-	ExternalHost(String id, String host, String name) {
+	public ExternalHost(String id, String host, String name) {
 		this.id = id;
 		this.host = host;
 		this.name = name;

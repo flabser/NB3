@@ -20,9 +20,9 @@ import kz.flabs.users.User;
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IDaemon;
 
 public class PortalInit extends HttpServlet {

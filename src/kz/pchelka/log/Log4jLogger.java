@@ -5,7 +5,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 public class Log4jLogger implements ILogger {
 	public org.apache.log4j.Logger log4jLogger;

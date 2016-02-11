@@ -15,7 +15,7 @@ import kz.flabs.webrule.RuleValue;
 import kz.flabs.webrule.constants.QueryType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;

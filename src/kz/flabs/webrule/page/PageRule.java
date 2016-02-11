@@ -14,7 +14,7 @@ import kz.flabs.webrule.Rule;
 import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.env.EnvConst;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 import org.w3c.dom.NodeList;
 

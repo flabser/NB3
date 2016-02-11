@@ -20,8 +20,8 @@ import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.FormRule;
+import kz.lof.env.Environment;
 import kz.nextbase.script._Exception;
-import kz.pchelka.env.Environment;
 
 public class Form extends Content implements Const {
 	protected FormRule rule;

@@ -6,8 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
+import kz.lof.env.Environment;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.Environment;
 import kz.pchelka.reminder.Memo;
 
 public class _MailAgent {

@@ -16,8 +16,8 @@ import kz.flabs.users.User;
 import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ISimpleAppEntity;
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 import kz.nextbase.script._Session;
-import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 import com.eztech.util.JavaClassFinder;

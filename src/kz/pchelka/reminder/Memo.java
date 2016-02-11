@@ -19,7 +19,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
 

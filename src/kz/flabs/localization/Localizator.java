@@ -11,7 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

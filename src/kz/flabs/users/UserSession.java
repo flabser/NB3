@@ -32,7 +32,7 @@ import kz.flabs.servlets.ServletUtil;
 import kz.flabs.util.PageResponse;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 
 public class UserSession implements Const {
 	public User currentUser;

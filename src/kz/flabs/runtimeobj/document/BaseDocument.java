@@ -47,9 +47,9 @@ import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.form.ISaveField;
 import kz.flabs.webrule.form.SaveFieldRule;
+import kz.lof.env.Environment;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
-import kz.pchelka.env.Environment;
 
 import org.apache.commons.dbcp.DelegatingConnection;
 import org.apache.commons.lang3.StringUtils;

@@ -2,7 +2,7 @@ package kz.flabs.servlets.admin;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
-import kz.pchelka.env.Environment;
+import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
 public class AdminOutline {

@@ -1,4 +1,4 @@
-package kz.pchelka.env;
+package kz.lof.env;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,19 +35,22 @@ import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.lof.env.EnvConst;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 import kz.pchelka.daemon.system.LogsZipRule;
 import kz.pchelka.daemon.system.TempFileCleanerRule;
+import kz.pchelka.env.AuthTypes;
+import kz.pchelka.env.ExternalHost;
+import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.pchelka.scheduler.Scheduler;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.jdom.input.SAXHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -65,7 +68,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static ISystemDatabase systemBase;
 	public static String defaultSender = "";
 	public static HashMap<String, String> mimeHash = new HashMap<String, String>();
-	public static boolean adminConsoleEnable;
 	public static HashMap<String, Site> webAppToStart = new HashMap<String, Site>();
 	public static String tmpDir;
 	public static String trash;
@@ -105,8 +107,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
 	private static int countOfApp;
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
-	private static Integer rtfLimitSize = 3892;
-
 	private static ArrayList<_Session> sess = new ArrayList<_Session>();
 	public static boolean isDevMode;
 	public static Vocabulary vocabulary;
@@ -252,15 +252,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 				verboseLogging = false;
 			}
 
-			try {
-				Integer limitSize = XMLUtil.getNumberContent(xmlDocument, "/nextbase/rtfcontent/limitsize");
-				if (limitSize > 0) {
-					rtfLimitSize = limitSize;
-				}
-			} catch (NumberFormatException nfe) {
-				logger.normalLogEntry("Default size for rtfcontent field is " + rtfLimitSize + " mb");
-			}
-
 			File tmp = new File("tmp");
 			if (!tmp.exists()) {
 				tmp.mkdir();
@@ -354,10 +345,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static void reduceApplication() {
 		countOfApp--;
-	}
-
-	public static Integer getRtfLimitSize() {
-		return rtfLimitSize;
 	}
 
 	public static void addApplication(AppEnv env) {
