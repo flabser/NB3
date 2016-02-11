@@ -52,6 +52,8 @@ public class PageRule extends Rule implements IElement, Const {
 				} else if (xsltFile.equalsIgnoreCase("default_staff")) {
 					AppEnv staffEnv = Environment.getAppEnv(EnvConst.STAFF_APP_NAME);
 					xsltFile = staffEnv.globalSetting.xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
+				} else {
+					xsltFile = env.globalSetting.xsltAppsPath + File.separator + xsltFile;
 				}
 			}
 

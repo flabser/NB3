@@ -17,6 +17,7 @@ public class EnvConst {
 	public final static String SESSION_ATTR = "usersession";
 	public static final String LANG_COOKIE_NAME = "lang";
 	public static final String AUTH_COOKIE_NAME = "nb3ses";
+	public static final String ADMINISTRATOR_APP_NAME = "Administrator";
 	public final static String SHARED_RESOURCES_APP_NAME = "SharedResources";
 	public static final String ERROR_XSLT = "xsl" + File.separator + "errors" + File.separator + "error.xsl";
 

@@ -22,9 +22,9 @@ import kz.flabs.users.User;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
+import kz.lof.server.Server;
 import kz.pchelka.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.lof.server.Server;
 
 import org.apache.catalina.realm.RealmBase;
 
@@ -49,7 +49,6 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		try {
 			conn.setAutoCommit(false);
 			createUserTable(getUsersDDE(), "USERS");
-			dropUserTable("REDIRECTURL");
 
 			isValid = true;
 			conn.commit();
@@ -698,11 +697,6 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		        + "USERID VARCHAR(32) CONSTRAINT USERS_USERID_UNIQUE UNIQUE, " + "EMAIL VARCHAR(32)," + "INSTMSGADDR VARCHAR(32),"
 		        + "PWD VARCHAR(32), " + "REGDATE timestamp DEFAULT now()," + "ISAPPADMIN int, " + "ISADMIN int, " + "ISOBSERVER int, "
 		        + "LOGINHASH int, " + "PUBLICKEY varchar(6144)," + "PWDHASH VARCHAR(1024))";
-
-		createTable += ";CREATE TABLE TEMP_USERS ( " + " ID bigint auto_increment," + " USERID varchar(10) UNIQUE," + " PWD varchar(32),"
-		        + " REGDATE timestamp DEFAULT now()," + " STARTTIME timestamp," + " LIFETIME integer DEFAULT 0,"
-		        + " CONSTRAINT TEMP_USERS_PRIMARY_KEY PRIMARY KEY (ID)" + " );";
-
 		return createTable;
 	}
 

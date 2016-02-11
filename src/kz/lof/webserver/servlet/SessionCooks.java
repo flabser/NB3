@@ -10,7 +10,7 @@ import kz.lof.env.EnvConst;
 public class SessionCooks {
 
 	public String auth;
-	private String currentLang = "ENG";
+	private String currentLang;
 	private HttpServletResponse response;
 	private static final int MONTH_TIME = 60 * 60 * 24 * 365;
 
@@ -40,7 +40,11 @@ public class SessionCooks {
 	}
 
 	public String getCurrentLang() {
-		return currentLang;
+		if (currentLang == null) {
+			return LanguageType.ENG.name();
+		} else {
+			return currentLang;
+		}
 	}
 
 	@Override

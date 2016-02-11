@@ -11,9 +11,10 @@ import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
 import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
+import kz.lof.env.EnvConst;
+import kz.lof.server.Server;
 //import kz.nextbase.script.struct._Employer;
 import kz.pchelka.env.Environment;
-import kz.lof.server.Server;
 
 public class _AppEntourage {
 	private AppEnv env;
@@ -83,14 +84,9 @@ public class _AppEntourage {
 			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {
 				if (user.authorized) {
 					Collection<UserApplicationProfile> enabledApps;
-					// try {
 					enabledApps = user.enabledApps.values();
-					// } catch (DocumentException e1) {
-					// throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR,
-					// "internal error: function: _Document.getAvailableApps()");
-					// }
 					for (UserApplicationProfile uap : enabledApps) {
-						if (uap.appName.equals(appEnv.appType)) {
+						if (uap.appName.equals(appEnv.appType) && !appEnv.appType.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
 
 							String p[] = { appEnv.appType, appEnv.globalSetting.defaultRedirectURL, appEnv.globalSetting.logo,
 							        appEnv.globalSetting.orgName, appEnv.globalSetting.description };
@@ -104,16 +100,6 @@ public class _AppEntourage {
 						}
 					}
 				}
-			}
-		}
-
-		if (ses.getUser().isSupervisor()) {
-			String p[] = { "Administrator", "index.html", "nextbase_logo.png", "", "Control panel" };
-			try {
-				IViewEntry entry = new ViewEntry(p);
-				vec.add(entry);
-			} catch (SQLException e) {
-				throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, "internal error: function: _Document.getAvailableApps()");
 			}
 		}
 		return vec.getScriptingObj();

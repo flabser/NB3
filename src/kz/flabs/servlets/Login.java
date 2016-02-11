@@ -61,7 +61,7 @@ public class Login extends HttpServlet implements Const {
 			User user = null;
 			ISystemDatabase systemDatabase = DatabaseFactory.getSysDatabase();
 
-			if (env == null || env.isSystem) {
+			if (env == null || env.appType.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
 				HashMap<String, User> admins = systemDatabase.getAllAdministrators();
 				if (admins.size() > 0) {
 					User admin = admins.get(login);

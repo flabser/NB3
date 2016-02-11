@@ -23,6 +23,7 @@ import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.jpa.ViewPage;
+import kz.lof.dataengine.jpadatabase.ftengine.ToFTIndex;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._ViewEntryCollection;
 
@@ -42,7 +43,6 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 		return keyword;
 	}
 
-	@Override
 	public _ViewEntryCollection search(String keyWord, User user, int pageNum, int pageSize, String[] filters, String[] sorting)
 	        throws FTIndexEngineException {
 		HashSet<String> userGroups = user.getAllUserGroups();
@@ -179,8 +179,6 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 
 	}
 
-	@Override
-	@Deprecated
 	public StringBuffer ftSearch(Set<String> complexUserID, String absoluteUserID, String keyWord, int offset, int pageSize)
 	        throws DocumentException, FTIndexEngineException, ComplexObjectException {
 		StringBuffer xmlContent = new StringBuffer(10000);
@@ -237,8 +235,6 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 		return xmlContent;
 	}
 
-	@Override
-	@Deprecated
 	public int ftSearchCount(Set<String> complexUserID, String absoluteUserID, String keyWord) throws DocumentException {
 		int count = 0;
 
@@ -432,12 +428,13 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 	}
 
 	@Override
-	public int updateFTIndex() throws FTIndexEngineException {
-		return 0;
+	public ViewPage search(String keyWord, _Session ses, int pageNum, int pageSize) {
+		return null;
 	}
 
 	@Override
-	public ViewPage search(String keyWord, _Session ses, int pageNum, int pageSize) {
-		return null;
+	public void registerTable(ToFTIndex table) {
+		// TODO Auto-generated method stub
+
 	}
 }

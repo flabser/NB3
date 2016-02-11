@@ -158,8 +158,7 @@ public class PageOutcome {
 			captionsText.append("<" + capKey + " caption=\"" + translatedVal + "\"></" + capKey + ">");
 		}
 
-		result.append("<captions>" + captionsText.toString() + "</captions>");
-		result.append("</page>");
+		result.append("<captions>" + captionsText.toString() + "</captions></page>");
 		return result.toString();
 	}
 

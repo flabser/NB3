@@ -12,8 +12,6 @@ import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.RunTimeParameters.Filter;
 import kz.flabs.users.RunTimeParameters.Sorting;
 import kz.flabs.users.User;
-import kz.nextbase.script.actions._Action;
-import kz.nextbase.script.actions._ActionType;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
@@ -109,11 +107,6 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 
 	public int getMaxPage() {
 		return parentObj.getMaxPage();
-	}
-
-	public _Action getFilterAction(String caption, String hint) {
-		_Action fAction = new _Action(caption, hint, _ActionType.FILTER);
-		return fAction;
 	}
 
 	public void add(_ViewEntry entry) {

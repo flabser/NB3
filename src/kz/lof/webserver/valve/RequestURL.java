@@ -47,7 +47,7 @@ public class RequestURL {
 	}
 
 	public boolean isAuthRequest() {
-		return url.matches("/Workspace/Login");
+		return url.matches("/Workspace/Login") || url.contains("Logout");
 	}
 
 	public boolean isPage() {

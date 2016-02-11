@@ -3,7 +3,6 @@ package kz.lof.server;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
-import java.util.HashSet;
 
 import kz.flabs.dataengine.IDatabase;
 import kz.pchelka.env.Environment;
@@ -11,7 +10,6 @@ import kz.pchelka.env.Site;
 import kz.pchelka.log.Log4jLogger;
 import kz.pchelka.webserver.WebServer;
 
-import org.apache.catalina.Host;
 import org.apache.catalina.LifecycleException;
 
 public class Server {
@@ -35,14 +33,15 @@ public class Server {
 		webServerInst = new WebServer();
 		webServerInst.init(Environment.hostName);
 
-		if (Environment.adminConsoleEnable) {
-			Host host = webServerInst.addApplication("Administrator", "/Administrator", "Administrator");
+		/*
+		 * if (Environment.adminConsoleEnable) { Host host =
+		 * webServerInst.addApplication("Administrator", "/Administrator",
+		 * "Administrator");
+		 * 
+		 * HashSet<Host> hosts = new HashSet<Host>(); hosts.add(host); }
+		 */
 
-			HashSet<Host> hosts = new HashSet<Host>();
-			hosts.add(host);
-		}
-
-		Server.logger.normalLogEntry("All applications are starting...");
+		// Server.logger.normalLogEntry("All applications are starting...");
 
 		for (Site webApp : Environment.webAppToStart.values()) {
 			// hosts.add(webServerInst.addApplication(webApp.name, "/" +

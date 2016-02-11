@@ -1,6 +1,8 @@
 package kz.flabs.servlets.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
@@ -24,6 +26,24 @@ public class UserServices {
 
 	public UserServices() {
 		sysDatabase = DatabaseFactory.getSysDatabase();
+	}
+
+	public String getUserListWrapper(String keyWord, int pageNum, int pageSize) {
+		String condition = "", xmlFragment = "";
+		if (keyWord != null) {
+			condition = "USERID LIKE '" + keyWord + "%'";
+		}
+		count = sysDatabase.getAllUsersCount(condition);
+		ArrayList<User> fl = sysDatabase.getAllUsers(condition, calcStartEntry(pageNum, pageSize), pageSize);
+
+		Iterator<User> it = fl.iterator();
+		while (it.hasNext()) {
+			User user = it.next();
+			xmlFragment += "<entry docid=\"" + user.docID + "\" ><userid>" + user.getUserID() + "</userid>" + "<isadministrator>"
+			        + user.isSupervisor() + "</isadministrator><email>" + user.getEmail() + "</email><redirecturl></redirecturl>" + "</entry>";
+		}
+
+		return xmlFragment;
 	}
 
 	public String getUserAsXML(int docID) throws RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException,
@@ -81,6 +101,12 @@ public class UserServices {
 
 	public int getCount() {
 		return count;
+	}
+
+	private int calcStartEntry(int pageNum, int pageSize) {
+		int pageNumMinusOne = pageNum;
+		pageNumMinusOne--;
+		return pageNumMinusOne * pageSize;
 	}
 
 }

@@ -69,8 +69,7 @@ public class Secure extends ValveBase {
 			} else {
 				Server.logger.warningLogEntry("there is no associated user session for the token");
 				AuthFailedException e = new AuthFailedException(AuthFailedExceptionType.NO_ASSOCIATED_SESSION_FOR_THE_TOKEN, ru.getAppType());
-				response.setStatus(e.getCode());
-				response.getWriter().println(e.getHTMLMessage());
+				response.sendRedirect("Logout");
 			}
 		} else {
 			Server.logger.warningLogEntry("user session was expired");

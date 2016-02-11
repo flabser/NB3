@@ -19,7 +19,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.AprLifecycleListener;
-import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.ErrorPage;
@@ -65,9 +64,9 @@ public class WebServer {
 
 	public Host addApplication(String siteName, String URLPath, String docBase) throws LifecycleException, MalformedURLException {
 		Context context = null;
+		String db = new File("webapps/" + docBase).getAbsolutePath();
 
 		if (docBase.equalsIgnoreCase("Administrator")) {
-			String db = new File("webapps/" + docBase).getAbsolutePath();
 			context = tomcat.addContext(URLPath, db);
 			for (int i = 0; i < defaultWelcomeList.length; i++) {
 				context.addWelcomeFile(defaultWelcomeList[i]);
@@ -75,25 +74,10 @@ public class WebServer {
 			Tomcat.addServlet(context, "Provider", "kz.flabs.servlets.admin.AdminProvider");
 			context.setDisplayName("Administrator");
 		} else {
-			if (siteName == null || siteName.equalsIgnoreCase("")) {
-				String db = new File("webapps/" + docBase).getAbsolutePath();
-				context = tomcat.addContext(URLPath, db);
-				context.setDisplayName(URLPath.substring(1));
-			} else {
-				URLPath = "";
-				StandardHost appHost = new StandardHost();
-				appHost.setName(siteName);
-				String baseDir = new File("webapps/" + docBase).getAbsolutePath();
-				appHost.setAppBase(baseDir);
-
-				context = tomcat.addContext(appHost, URLPath, baseDir);
-				context.setDisplayName(siteName);
-			}
+			context = tomcat.addContext(URLPath, db);
+			context.setDisplayName(URLPath.substring(1));
 			context.addWelcomeFile("Provider");
-			// Tomcat.addServlet(context, "Provider",
-			// "kz.flabs.servlets.Provider");
 			Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
-
 		}
 
 		Tomcat.addServlet(context, "default", "org.apache.catalina.servlets.DefaultServlet");

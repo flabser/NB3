@@ -21,6 +21,10 @@ public class _Action {
 			caption = "close";
 			hint = "just_close";
 			break;
+		case BACK:
+			caption = "back";
+			hint = "just_back";
+			break;
 		case GET_DOCUMENT_ACCESSLIST:
 			caption = "get_document_acl";
 			hint = "who_can_read_and_edit_the_document";
@@ -62,6 +66,8 @@ public class _Action {
 	private String getJson(_ActionType type) {
 		switch (type) {
 		case CLOSE:
+			return "<js><![CDATA[window.history.back()]]></js>";
+		case BACK:
 			return "<js><![CDATA[window.history.back()]]></js>";
 		case GET_DOCUMENT_ACCESSLIST:
 
