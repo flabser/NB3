@@ -11,6 +11,7 @@ import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
+import kz.lof.script.POJOObjectAdapter;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
@@ -29,10 +30,12 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		result.setSession(ses);
 	}
 
+	@Deprecated
 	public void publishElement(String entryName, String value) {
 		result.addContent(new ScriptShowField(entryName, value));
 	}
 
+	@Deprecated
 	public void publishElement(String entryName, Object value) throws _Exception {
 		if (value == null) {
 			result.addContent(new ScriptShowField(entryName, ""));
@@ -49,6 +52,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		}
 	}
 
+	@Deprecated
 	public void publishElement(_IXMLContent value) {
 		toPublishElement.add(value);
 	}
@@ -93,6 +97,12 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		}
 	}
 
+	public void showFile(String filePath, String fileName) {
+		result.publishAs = PublishAsType.OUTPUTSTREAM;
+		// result.addMsg(filePath, "filepath");
+		// result.addMsg(fileName, "originalname");
+	}
+
 	@Override
 	public void setFormData(_WebFormData formData) {
 		this.formData = formData;
@@ -102,6 +112,20 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	public void setCurrentLang(Vocabulary vocabulary, LanguageType lang) {
 		this.lang = lang;
 		this.vocabulary = vocabulary;
+	}
+
+	protected void setContent(String elementName, List<?> langs) {
+		result.addObject(new POJOObjectAdapter() {
+			@Override
+			public String getFullXMLChunk(LanguageType lang) {
+				StringBuffer val = new StringBuffer(500);
+				val.append("<" + elementName + ">");
+				for (Object obj : langs) {
+					val.append("<entry>" + obj.toString() + "</entry>");
+				}
+				return val.append("</" + elementName + ">").toString();
+			}
+		});
 	}
 
 	protected void setContent(_IPOJOObject document) {

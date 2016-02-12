@@ -60,7 +60,6 @@ public class Provider extends HttpServlet {
 
 		try {
 			request.setCharacterEncoding(EnvConst.SUPPOSED_CODE_PAGE);
-			String onlyXML = request.getParameter("onlyxml");
 			String id = request.getParameter("id");
 
 			if (env != null) {
@@ -72,9 +71,13 @@ public class Provider extends HttpServlet {
 					Page page = new Page(env, ses, rule);
 					String referrer = request.getHeader("referer");
 					_WebFormData formData = new _WebFormData(request.getParameterMap(), referrer);
-					if (onlyXML != null) {
+					if (formData.containsField("as")) {
 						result = page.getPageContent(formData, request.getMethod());
-						result.publishAs = PublishAsType.XML;
+						if (formData.getValue("as").equalsIgnoreCase("json")) {
+							result.publishAs = PublishAsType.JSON;
+						} else {
+							result.publishAs = PublishAsType.XML;
+						}
 					} else {
 						if (request.getMethod().equalsIgnoreCase("GET")) {
 							switch (rule.caching) {

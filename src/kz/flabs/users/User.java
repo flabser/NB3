@@ -27,7 +27,6 @@ import org.apache.catalina.realm.RealmBase;
 
 public class User extends BaseDocument implements Const {
 	public int docID;
-	public boolean isValid = false;
 	public HashMap<String, UserApplicationProfile> enabledApps = new HashMap<String, UserApplicationProfile>();
 	public boolean authorized;
 	public boolean authorizedByHash;
