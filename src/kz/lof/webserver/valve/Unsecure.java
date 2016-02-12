@@ -31,7 +31,7 @@ public class Unsecure extends ValveBase {
 
 	@Override
 	public void invoke(Request request, Response response) throws IOException, ServletException {
-		if (ru.getAppType().equals(EnvConst.ADMINISTRATOR_APP_NAME)) {
+		if (ru.getAppType().equals(EnvConst.SHARED_RESOURCES_APP_NAME) || ru.getAppType().equals(EnvConst.ADMINISTRATOR_APP_NAME)) {
 			getNext().getNext().invoke(request, response);
 		} else {
 			env = Environment.getAppEnv(ru.getAppType());
@@ -69,9 +69,6 @@ public class Unsecure extends ValveBase {
 						getNext().getNext().invoke(request, response);
 					}
 				}
-
-			} else if (ru.getAppType().equals(EnvConst.SHARED_RESOURCES_APP_NAME)) {
-				getNext().getNext().invoke(request, response);
 			} else {
 				String msg = "unknown application type \"" + ru.getAppType() + "\"";
 				Server.logger.warningLogEntry(msg);
