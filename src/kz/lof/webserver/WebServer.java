@@ -37,7 +37,7 @@ public class WebServer {
 		tomcat.setBaseDir("webserver");
 		engine = tomcat.getEngine();
 
-		StandardServer server = (StandardServer) tomcat.getServer();
+		StandardServer server = (StandardServer) this.tomcat.getServer();
 		AprLifecycleListener listener = new AprLifecycleListener();
 		server.addLifecycleListener(listener);
 

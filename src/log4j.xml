@@ -31,6 +31,8 @@
 		</layout>
 	</appender>
 
+	
+ 	
 	<appender name="words"
 		class="kz.pchelka.log.DailyRollingFileAppenderChanged">
 		<param name="File" value="logs/vocabulary.log" />
@@ -64,6 +66,11 @@
 		<appender-ref ref="console" />
 	</logger>
 
+ 	<logger name="Logging">
+  		<level value="INFO"/>
+  		<appender-ref ref="requests"/>
+ 	</logger>
+ 	
 	<logger name="Vocabulary">
 		<level value="INFO" />
 		<appender-ref ref="words" />
