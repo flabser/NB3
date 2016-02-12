@@ -99,8 +99,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	public void showFile(String filePath, String fileName) {
 		result.publishAs = PublishAsType.OUTPUTSTREAM;
-		// result.addMsg(filePath, "filepath");
-		// result.addMsg(fileName, "originalname");
+		result.setFile(filePath, fileName);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
+import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.webrule.page.PageRule;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
@@ -143,6 +144,13 @@ public class Provider extends HttpServlet {
 						PrintWriter out = response.getWriter();
 						out.println(result.toCompleteXML());
 						out.close();
+					} else if (result.publishAs == PublishAsType.OUTPUTSTREAM) {
+						String disposition = "attachment";
+						if (formData.containsField("disposition")) {
+							disposition = formData.getValue("disposition");
+						}
+						AttachmentHandler attachHandler = new AttachmentHandler(request, response, true);
+						attachHandler.publish(result.getFilePath(), result.getFileName(), disposition);
 					}
 				} else {
 					throw new ApplicationException(context.getServletContextName(), id + " rule has not found");

@@ -38,6 +38,7 @@ public class PageOutcome {
 	private String pageId;
 	private String redirectURL;
 	private String flash;
+	private String filePath, fileName;
 
 	public void setSession(_Session ses) {
 		this.ses = ses;
@@ -102,6 +103,19 @@ public class PageOutcome {
 
 	public void setScriptResult(boolean isScriptResult) {
 		this.isScriptResult = isScriptResult;
+	}
+
+	public void setFile(String fp, String fn) {
+		filePath = fp;
+		fileName = fn;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 
 	public String getValue() throws IOException, SaxonApiException {
