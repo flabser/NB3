@@ -31,7 +31,16 @@
 		</layout>
 	</appender>
 
-	
+	<appender name="requests"
+		class="kz.pchelka.log.DailyRollingFileAppenderChanged">
+		<param name="File" value="logs/request.log" />	
+		<param name="MaxFileSize" value="5MB" /> 
+		<param name="maxBackupIndex" value="5" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} - %m%n" />
+		</layout>
+	</appender>
  	
 	<appender name="words"
 		class="kz.pchelka.log.DailyRollingFileAppenderChanged">

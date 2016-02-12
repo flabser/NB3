@@ -85,8 +85,8 @@ public class Filters implements IFilters {
 			try {
 				Date dateFrom = Util.simpleDateFormat.parse(conditions.get("datefrom"));
 				Date dateTo = Util.simpleDateFormat.parse(conditions.get("dateto"));
-				dateSQL = tableName + ".regdate between '" + Util.derbyDateTimeFormat.format(dateFrom) + "' and '"
-				        + Util.derbyDateTimeFormat.format(dateTo) + "'";
+				dateSQL = tableName + ".regdate between '" + Util.simpleDateTimeFormat.format(dateFrom) + "' and '"
+				        + Util.simpleDateTimeFormat.format(dateTo) + "'";
 			} catch (ParseException e) {
 				DatabaseUtil.errorPrint(db.getDbID(), e);
 			}

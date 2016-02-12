@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 
 import kz.flabs.servlets.SaxonTransformator;
@@ -14,9 +13,10 @@ import kz.lof.env.Environment;
 import kz.lof.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.apache.http.HttpStatus;
+
 public class ApplicationException extends Exception {
 	private static final long serialVersionUID = 1L;
-	private int code = HttpServletResponse.SC_BAD_REQUEST;
 	private String location;
 	private String type = "APPLICATION";
 	private String servletName = "";
@@ -41,6 +41,10 @@ public class ApplicationException extends Exception {
 	}
 
 	public String getHTMLMessage() {
+		return getHTMLMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+	}
+
+	public String getHTMLMessage(int code) {
 		String xmlText = null;
 
 		ExceptionXML document = new ExceptionXML(getMessage(), code, location, type, servletName, exception);
@@ -58,14 +62,6 @@ public class ApplicationException extends Exception {
 		}
 
 		return xmlText;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public int getCode() {
-		return code;
 	}
 
 	public void setType(String type) {

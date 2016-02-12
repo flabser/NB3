@@ -31,10 +31,9 @@ import kz.lof.server.Server;
 public class Util {
 	public static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy kk:mm:ss");
 	public static final SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm");
-	public static final SimpleDateFormat derbyDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static final SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-	// public static final SimpleDateFormat simpleDateFormat = new
-	// SimpleDateFormat("dd.MM.yyyy");
+
 	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private static final SimpleDateFormat providerDateTimeFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
 	public static final Pattern pEntity = Pattern.compile("\\G&(#\\d+|\\w+);");// Pattern.compile("\\G&(#\\d+|\\w+);");
@@ -121,7 +120,7 @@ public class Util {
 
 	public static String convertDateTimeToDerbyFormat(Date date) throws DataConversionException {
 		try {
-			return derbyDateTimeFormat.format(date);
+			return simpleDateTimeFormat.format(date);
 		} catch (Exception e) {
 			throw new DataConversionException(ConversionError.CONVERSION_DATE_TO_DATABASE_DATE);
 		}

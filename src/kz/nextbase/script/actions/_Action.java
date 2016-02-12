@@ -1,5 +1,6 @@
 package kz.nextbase.script.actions;
 
+import kz.flabs.localization.Vocabulary;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.nextbase.script._Session;
@@ -11,7 +12,6 @@ public class _Action {
 	public _ActionType type;
 	public String customID;
 
-	private _Session session;
 	private String url = "";
 
 	public _Action(_ActionType type) {
@@ -59,8 +59,10 @@ public class _Action {
 		        + hint + "\">" + type + getJson(type) + "</action>";
 	}
 
-	void setSession(_Session ses) {
-		session = ses;
+	void setSession(_Session session) {
+		Vocabulary v = session.getAppEnv().vocabulary;
+		caption = v.getWord(caption, session.getLang());
+		hint = v.getWord(hint, session.getLang());
 	}
 
 	private String getJson(_ActionType type) {

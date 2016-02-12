@@ -379,7 +379,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 			case CONTROLDAYS:
 				for (String IDAsString : tagValue) {
 					try {
-						Date ctrlDate = Util.derbyDateTimeFormat.parse(IDAsString);
+						Date ctrlDate = Util.simpleDateTimeFormat.parse(IDAsString);
 						Date now = new Date();
 						long diff = (ctrlDate.getTime() - now.getTime()) / (86400000);
 						result[0] = Long.toString(diff);

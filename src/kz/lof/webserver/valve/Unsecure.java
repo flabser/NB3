@@ -19,6 +19,7 @@ import kz.nextbase.script._Session;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+import org.apache.http.HttpStatus;
 
 public class Unsecure extends ValveBase {
 	private RequestURL ru;
@@ -59,7 +60,7 @@ public class Unsecure extends ValveBase {
 						} catch (RuleException e) {
 							Server.logger.errorLogEntry(e.getMessage());
 							ApplicationException ae = new ApplicationException(ru.getAppType(), e.getMessage());
-							response.setStatus(ae.getCode());
+							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 							response.getWriter().println(ae.getHTMLMessage());
 						}
 					} else if (ru.isProtected()) {
@@ -73,7 +74,7 @@ public class Unsecure extends ValveBase {
 				String msg = "unknown application type \"" + ru.getAppType() + "\"";
 				Server.logger.warningLogEntry(msg);
 				ApplicationException ae = new ApplicationException(ru.getAppType(), msg);
-				response.setStatus(ae.getCode());
+				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println(ae.getHTMLMessage());
 			}
 

@@ -19,14 +19,11 @@ import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.user.AuthModeType;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 public class _Session extends PageCacheAdapter {
-
 	private IDatabase dataBase;
 	private User user;
 	private AppEnv env;
-	private IProcessInitiator initiator;
 	private LanguageType lang;
 	public int pageSize = 30;
 	private AuthModeType authMode;
@@ -40,6 +37,10 @@ public class _Session extends PageCacheAdapter {
 		dataBase = env.getDataBase();
 	}
 
+	public AppEnv getAppEnv() {
+		return env;
+	}
+
 	public _AppEntourage getAppEntourage() {
 		return new _AppEntourage(this, env);
 	}
@@ -50,12 +51,10 @@ public class _Session extends PageCacheAdapter {
 
 	public void setLang(LanguageType lang) {
 		this.lang = lang;
-
 	}
 
 	public LanguageType getLang() {
 		return lang;
-
 	}
 
 	public _ActionBar createActionBar() {
@@ -89,14 +88,6 @@ public class _Session extends PageCacheAdapter {
 
 	public Set<String> getExpandedThread() {
 		return new HashSet<String>();
-	}
-
-	public IProcessInitiator getInitiator() {
-		return initiator;
-	}
-
-	public void setInitiator(IProcessInitiator initiator) {
-		this.initiator = initiator;
 	}
 
 	public _Employer getCurrentAppUser() {

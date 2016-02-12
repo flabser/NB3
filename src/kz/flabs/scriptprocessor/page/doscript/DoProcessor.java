@@ -4,10 +4,10 @@ import groovy.lang.GroovyObject;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
+import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
-import kz.lof.server.Server;
 
 public class DoProcessor {
 
@@ -17,6 +17,7 @@ public class DoProcessor {
 	private Vocabulary vocabulary;
 	private _WebFormData webFormData;
 
+	// TODO need to refactoring to reduce count of the parameters
 	public DoProcessor(AppEnv env, _Session ses, _WebFormData webFormData) {
 		this.ses = ses;
 		vocabulary = env.vocabulary;
