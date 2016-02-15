@@ -59,6 +59,10 @@ public class _WebFormData {
 	}
 
 	public int getNumberValueSilently(String fn, int defaultValue) {
+		if (!containsField(fn)) {
+			return defaultValue;
+		}
+
 		try {
 			String value[] = formData.get(fn);
 			return Integer.parseInt(value[0].trim());
