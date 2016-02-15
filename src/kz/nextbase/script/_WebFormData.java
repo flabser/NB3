@@ -16,17 +16,6 @@ public class _WebFormData {
 		setReferer(r);
 	}
 
-	public String[] getListOfValuesSilently(String fn) {
-		String value[] = formData.get(fn);
-		if (value != null) {
-			return value;
-		} else {
-			String val[] = { "" };
-			return val;
-		}
-
-	}
-
 	public String getValueSilently(String fn) {
 		try {
 			String value[] = formData.get(fn);
@@ -96,6 +85,27 @@ public class _WebFormData {
 		} catch (Exception e) {
 			return defaultValue;
 		}
+	}
+
+	public String[] getListOfValuesSilently(String fn) {
+		String value[] = formData.get(fn);
+		if (value != null) {
+			return value;
+		} else {
+			String val[] = { "" };
+			return val;
+		}
+
+	}
+
+	public String[] getListOfValuesSilently(String fn, String[] d) {
+		String value[] = formData.get(fn);
+		if (value != null) {
+			return value;
+		} else {
+			return d;
+		}
+
 	}
 
 	public String[] getListOfValues(String fn) throws _Exception {
