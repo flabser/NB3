@@ -9,8 +9,8 @@ public class _Validation {
 
     private List<Error> errors = new ArrayList<>();
 
-    public void addError(String field, String type, String msg) {
-        errors.add(new Error(field, type, msg));
+    public void addError(String field, String error, String msg) {
+        errors.add(new Error(field, error, msg));
     }
 
     public List<Error> getErrors() {
