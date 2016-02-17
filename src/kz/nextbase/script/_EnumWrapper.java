@@ -36,7 +36,7 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	}
 
 	@Override
-	public _URL getURL() {
+	public String getURL() {
 		// TODO Auto-generated method stub
 		return null;
 	}

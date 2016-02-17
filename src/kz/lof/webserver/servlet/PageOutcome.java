@@ -11,19 +11,17 @@ import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.env.Environment;
-import kz.lof.scripting._POJOListWrapper;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._Validation;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PageOutcome {
 	public PublishAsType publishAs = PublishAsType.HTML;
@@ -31,23 +29,18 @@ public class PageOutcome {
 	public boolean disableClientCache;
 	private int httpStatus = HttpStatus.SC_OK;
 	private static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-	@JsonIgnore
 	private List<PageOutcome> includedPage = new ArrayList<PageOutcome>();
-	@JsonIgnore
 	private ArrayList<String> messages = new ArrayList<String>();
-	@JsonIgnore
 	private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
 	private _Session ses;
 	private LanguageType lang;
-	private OutcomeType type;
-	@JsonIgnore
+	private OutcomeType type = OutcomeType.OK;
 	private Map<String, String> captions = new HashMap<String, String>();
 	private boolean isScriptResult;
 	private String pageId;
 	private String redirectURL;
 	private String flash;
 	private String filePath, fileName;
-	@JsonIgnore
 	private _Validation validation;
 
 	public void setSession(_Session ses) {
@@ -212,13 +205,13 @@ public class PageOutcome {
 		clazz.setValidation(validation);
 
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.EAGER_SERIALIZER_FETCH);
 		// mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		SimpleModule customSerializerModule = new SimpleModule();
-		// add serializer for the Compensation class
-		customSerializerModule.addSerializer(_POJOListWrapper.class, new POJOObjectSerializer());
-		// register the serializer module
-		mapper.registerModule(customSerializerModule);
+		// mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+		// SimpleModule customSerializerModule = new SimpleModule();
+		// customSerializerModule.addSerializer(_POJOListWrapper.class, new
+		// POJOObjectSerializer());
+		// mapper.registerModule(customSerializerModule);
 		String jsonInString = null;
 		try {
 			jsonInString = mapper.writeValueAsString(clazz);
@@ -226,13 +219,6 @@ public class PageOutcome {
 			e.printStackTrace();
 		}
 		return jsonInString;
-		// Gson gson = new
-		// GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		// gson = new GsonBuilder().setExclusionStrategies(new ExclStrat())
-		// .serializeNulls() <-- uncomment to serialize NULL fields as well
-		// .create();
-		// Gson gson = new Gson();
-		// return gson.toJson(clazz);
 	}
 
 	public void setContent(IOutcomeObject wrappedObj) {
@@ -270,6 +256,8 @@ public class PageOutcome {
 		this.redirectURL = redirectURL;
 	}
 
+	// TODO Probably it is object is not needed because it can be serialize
+	// straight through PageOutcome instance
 	@JsonRootName("outcome")
 	class JSONClass {
 		private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();

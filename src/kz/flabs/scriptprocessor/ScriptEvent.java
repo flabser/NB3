@@ -7,18 +7,17 @@ import java.util.UUID;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
-import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._Session;
-import kz.nextbase.script._URL;
-import kz.nextbase.script._WebFormData;
-import kz.nextbase.script.actions._Action;
-import kz.nextbase.script.actions._ActionBar;
-import kz.nextbase.script.actions._ActionType;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.env.Environment;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._POJOListWrapper;
 import kz.lof.server.Server;
+import kz.nextbase.script._IXMLContent;
+import kz.nextbase.script._Session;
+import kz.nextbase.script._WebFormData;
+import kz.nextbase.script.actions._Action;
+import kz.nextbase.script.actions._ActionBar;
+import kz.nextbase.script.actions._ActionType;
 
 public class ScriptEvent {
 	protected Vocabulary vocabulary;
@@ -105,10 +104,6 @@ public class ScriptEvent {
 
 	public String getLocalizedWord(String word, LanguageType lang) {
 		return getWord(word, vocabulary, lang.name());
-	}
-
-	public void setRedirectURL(_URL url) {
-		redirectURL = url.toString();
 	}
 
 	public static void log(Object logText) {

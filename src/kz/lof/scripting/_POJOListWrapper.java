@@ -6,13 +6,12 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 import kz.lof.webserver.servlet.IOutcomeObject;
-import kz.nextbase.script._URL;
 
 public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
-	private int maxPage;
+	public int maxPage;
 	private long count;
 	private int currentPage;
-	private List<T> list;
+	public List<T> list;
 	private LanguageType lang;
 	private String keyWord = "";
 
@@ -64,7 +63,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		        + "\"" + keyWord + ">";
 		for (T val : list) {
 			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
-			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
+			result += val.getShortXMLChunk(lang) + "</viewcontent></entry>";
 		}
 		return result + "</query>";
 	}
@@ -72,6 +71,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	@Override
 	public String toJSON() {
 		return null;
+
 	}
 
 	class SimplePOJO implements IPOJOObject {
@@ -87,8 +87,9 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		}
 
 		@Override
-		public _URL getURL() {
-			return new _URL("");
+		public String getURL() {
+			return msg;
+
 		}
 
 		@Override
@@ -103,8 +104,9 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 
 		@Override
 		public String getShortXMLChunk(LanguageType lang) {
-			return getFullXMLChunk(null);
+			return getFullXMLChunk(lang);
 		}
 
 	}
+
 }

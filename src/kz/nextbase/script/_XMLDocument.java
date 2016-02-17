@@ -30,19 +30,16 @@ public class _XMLDocument implements _IXMLContent, IPOJOObject {
 
 	@Override
 	public String toJSON() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public UUID getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public _URL getURL() {
-		// TODO Auto-generated method stub
+	public String getURL() {
 		return null;
 	}
 

@@ -22,12 +22,13 @@ import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.lof.dataengine.jpa.util.UUIDConverter;
 import kz.lof.scripting.IPOJOObject;
-import kz.nextbase.script._URL;
 
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import org.eclipse.persistence.annotations.UuidGenerator;
 import org.eclipse.persistence.internal.indirection.jdk8.IndirectList;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @MappedSuperclass
 @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
@@ -51,6 +52,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	@Column(name = "form", nullable = false, updatable = false, length = 64)
 	protected String form;
 
+	@JsonIgnore
 	@Transient
 	protected boolean isEditable = true;
 
@@ -69,6 +71,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		return id;
 	}
 
+	@JsonIgnore
 	@Override
 	public long getAuthor() {
 		return author;
@@ -83,10 +86,12 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		author = (long) user.docID;
 	}
 
+	@JsonIgnore
 	public void setAuthorName(long author) {
 		this.author = author;
 	}
 
+	@JsonIgnore
 	@Override
 	public Date getRegDate() {
 		return regDate;
@@ -97,6 +102,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		this.regDate = regDate;
 	}
 
+	@JsonIgnore
 	@Override
 	public String toString() {
 		return getId().toString();
@@ -157,26 +163,30 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	 * To more faster processing the method during showing in a view should be
 	 * reloaded in real entity object
 	 */
+	@JsonIgnore
 	@Override
 	public String getShortXMLChunk(LanguageType lang) {
 		return getFullXMLChunk(lang);
 	}
 
 	@Override
-	public _URL getURL() {
-		return new _URL("Provider?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&amp;docid=" + getId());
+	public String getURL() {
+		return "Provider?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&amp;docid=" + getId();
 	}
 
+	@JsonIgnore
 	@Override
 	public String getDefaultFormName() {
 		return this.getClass().getSimpleName().toLowerCase() + "-form";
 	}
 
+	@JsonIgnore
 	@Override
 	public String getDefaultViewName() {
 		return this.getClass().getSimpleName().toLowerCase() + "-view";
 	}
 
+	@JsonIgnore
 	@Override
 	public String getForm() {
 		return form;

@@ -9,7 +9,6 @@ import kz.lof.scripting.IPOJOObject;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
 import kz.nextbase.script._Session;
-import kz.nextbase.script._URL;
 
 public class _ActionBar implements IPOJOObject {
 	public RunMode isOn = RunMode.ON;
@@ -39,7 +38,7 @@ public class _ActionBar implements IPOJOObject {
 	}
 
 	@Override
-	public _URL getURL() {
+	public String getURL() {
 		return null;
 	}
 

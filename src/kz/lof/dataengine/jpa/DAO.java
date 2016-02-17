@@ -17,6 +17,7 @@ import javax.persistence.criteria.Root;
 import kz.flabs.dataengine.Const;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.users.User;
+import kz.lof.server.Server;
 import kz.nextbase.script._Session;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
@@ -42,7 +43,12 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 
 	@Override
 	public T findById(String id) {
-		return findById((K) UUID.fromString(id));
+		try {
+			return findById((K) UUID.fromString(id));
+		} catch (IllegalArgumentException e) {
+			Server.logger.errorLogEntry(e.toString());
+			return null;
+		}
 	}
 
 	@Override

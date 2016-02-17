@@ -129,7 +129,7 @@ public class _Tag implements IPOJOObject {
 	}
 
 	@Override
-	public _URL getURL() {
+	public String getURL() {
 		return null;
 	}
 

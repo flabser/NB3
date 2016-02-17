@@ -3,12 +3,11 @@ package kz.lof.scripting;
 import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
-import kz.nextbase.script._URL;
 
 public interface IPOJOObject {
 	UUID getId();
 
-	_URL getURL();
+	String getURL();
 
 	String getFullXMLChunk(LanguageType lang);
 

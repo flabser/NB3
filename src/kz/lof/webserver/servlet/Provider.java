@@ -125,8 +125,9 @@ public class Provider extends HttpServlet {
 				response.setContentType("application/json;charset=utf-8");
 				PrintWriter out = response.getWriter();
 				String json = result.getJSON();
-				System.out.println("json=" + json);
-				json = json.replaceAll("\u003d", "=").replaceAll("\u0026", "&");
+				// System.out.println("json=" + json);
+				// json = json.replaceAll("\u003d", "=").replaceAll("\u0026",
+				// "&");
 				out.println(json);
 				out.close();
 			} else if (result.publishAs == PublishAsType.XML) {

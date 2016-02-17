@@ -3,7 +3,6 @@ package kz.lof.scripting;
 import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
-import kz.nextbase.script._URL;
 
 public class POJOObjectAdapter implements IPOJOObject {
 
@@ -13,7 +12,7 @@ public class POJOObjectAdapter implements IPOJOObject {
 	}
 
 	@Override
-	public _URL getURL() {
+	public String getURL() {
 		return null;
 	}
 
