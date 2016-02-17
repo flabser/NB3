@@ -1,12 +1,14 @@
-package kz.nextbase.script;
+package kz.lof.scripting;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
+import kz.lof.webserver.servlet.IOutcomeObject;
+import kz.nextbase.script._URL;
 
-public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
+public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	private int maxPage;
 	private long count;
 	private int currentPage;
@@ -48,7 +50,31 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 		this.keyWord = " keyword=\"" + keyWord + "\" ";
 	}
 
-	class SimplePOJO implements _IPOJOObject {
+	@Override
+	public String toXML() {
+		String entityType = "undefined";
+		try {
+			final Class<T> listClass = (Class<T>) list.get(0).getClass();
+			entityType = listClass.getSimpleName().toLowerCase();
+		} catch (ArrayIndexOutOfBoundsException e) {
+
+		}
+
+		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
+		        + "\"" + keyWord + ">";
+		for (T val : list) {
+			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
+			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
+		}
+		return result + "</query>";
+	}
+
+	@Override
+	public String toJSON() {
+		return null;
+	}
+
+	class SimplePOJO implements IPOJOObject {
 		private String msg;
 
 		SimplePOJO(String msg) {
@@ -81,44 +107,4 @@ public class _POJOListWrapper<T extends _IPOJOObject> implements _IPOJOObject {
 		}
 
 	}
-
-	@Override
-	public UUID getId() {
-		return null;
-	}
-
-	@Override
-	public _URL getURL() {
-		return null;
-	}
-
-	@Override
-	public String getFullXMLChunk(LanguageType lang) {
-		String entityType = "undefined";
-		try {
-			final Class<T> listClass = (Class<T>) list.get(0).getClass();
-			entityType = listClass.getSimpleName().toLowerCase();
-		} catch (ArrayIndexOutOfBoundsException e) {
-
-		}
-
-		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
-		        + "\"" + keyWord + ">";
-		for (T val : list) {
-			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
-			result += val.getShortXMLChunk(null) + "</viewcontent></entry>";
-		}
-		return result + "</query>";
-	}
-
-	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return getFullXMLChunk(lang);
-	}
-
-	@Override
-	public boolean isEditable() {
-		return false;
-	}
-
 }

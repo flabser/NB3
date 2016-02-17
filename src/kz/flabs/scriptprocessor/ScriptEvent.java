@@ -7,9 +7,7 @@ import java.util.UUID;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
-import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._POJOListWrapper;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._URL;
 import kz.nextbase.script._WebFormData;
@@ -18,6 +16,8 @@ import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.actions._ActionType;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.env.Environment;
+import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting._POJOListWrapper;
 import kz.lof.server.Server;
 
 public class ScriptEvent {
@@ -48,7 +48,7 @@ public class ScriptEvent {
 		return actionBar;
 	}
 
-	protected _POJOListWrapper getViewPage(DAO<? extends _IPOJOObject, UUID> dao, _WebFormData formData) {
+	protected _POJOListWrapper getViewPage(DAO<? extends IPOJOObject, UUID> dao, _WebFormData formData) {
 		int pageNum = 1;
 		int pageSize = dao.getSession().pageSize;
 		if (formData.containsField("page")) {
@@ -60,7 +60,7 @@ public class ScriptEvent {
 			pageNum = maxPage;
 		}
 		int startRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-		List<? extends _IPOJOObject> list = dao.findAll(startRec, pageSize);
+		List<? extends IPOJOObject> list = dao.findAll(startRec, pageSize);
 		return new _POJOListWrapper(list, maxPage, count, pageNum, lang);
 
 	}

@@ -3,6 +3,7 @@ package kz.nextbase.script;
 import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
+import kz.lof.scripting.IPOJOObject;
 
 /**
  * wrapp a Enum to publish as XML
@@ -10,7 +11,7 @@ import kz.flabs.localization.LanguageType;
  * @author Kayra created 03-01-2016
  */
 
-public class _EnumWrapper<T extends Enum<?>> implements _IPOJOObject {
+public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	private T[] enumObj;
 	private String[] translatedWords;
 

@@ -5,13 +5,13 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.scripting.IPOJOObject;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
-import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._URL;
 
-public class _ActionBar implements _IPOJOObject {
+public class _ActionBar implements IPOJOObject {
 	public RunMode isOn = RunMode.ON;
 	public String caption = "";
 	public String hint = "";

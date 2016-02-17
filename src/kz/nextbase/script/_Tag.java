@@ -8,9 +8,10 @@ import java.util.UUID;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.Util;
+import kz.lof.scripting.IPOJOObject;
 
 @Deprecated
-public class _Tag implements _IPOJOObject {
+public class _Tag implements IPOJOObject {
 
 	private Tag runtimeTag;
 

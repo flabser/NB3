@@ -2,11 +2,13 @@ package kz.nextbase.script;
 
 import java.util.List;
 
-public class _POJOTreeWrapper implements _IXMLContent {
-	private _IPOJOObject object;
-	private List<_IPOJOObject> list;
+import kz.lof.scripting.IPOJOObject;
 
-	public _POJOTreeWrapper(_IPOJOObject parent, List<_IPOJOObject> list) {
+public class _POJOTreeWrapper implements _IXMLContent {
+	private IPOJOObject object;
+	private List<IPOJOObject> list;
+
+	public _POJOTreeWrapper(IPOJOObject parent, List<IPOJOObject> list) {
 		this.object = parent;
 		this.list = list;
 	}
@@ -18,7 +20,7 @@ public class _POJOTreeWrapper implements _IXMLContent {
 		        + "url=\"Provider?id=furniture_form&amp;docid=" + object.getId() + "\"><viewcontent>";
 		result += object.getFullXMLChunk(null) + "</viewcontent></entry>";
 		result += "<responses>";
-		for (_IPOJOObject val : list) {
+		for (IPOJOObject val : list) {
 			result += val.getFullXMLChunk(null);
 		}
 		result += "</responses>";

@@ -21,7 +21,7 @@ import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.lof.dataengine.jpa.util.UUIDConverter;
-import kz.nextbase.script._IPOJOObject;
+import kz.lof.scripting.IPOJOObject;
 import kz.nextbase.script._URL;
 
 import org.eclipse.persistence.annotations.Convert;
@@ -32,7 +32,7 @@ import org.eclipse.persistence.internal.indirection.jdk8.IndirectList;
 @MappedSuperclass
 @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
 @UuidGenerator(name = "uuid-gen")
-public abstract class AppEntity implements IAppEntity, _IPOJOObject {
+public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	@Id
 	@GeneratedValue(generator = "uuid-gen")
 	@Convert("uuidConverter")
@@ -130,13 +130,13 @@ public abstract class AppEntity implements IAppEntity, _IPOJOObject {
 						if (val instanceof Date) {
 							methodValue = Util.simpleDateFormat.format((Date) val);
 						} else if (val instanceof IndirectList) {
-							List<_IPOJOObject> list = (List<_IPOJOObject>) val;
-							for (_IPOJOObject nestedValue : list) {
+							List<IPOJOObject> list = (List<IPOJOObject>) val;
+							for (IPOJOObject nestedValue : list) {
 								// methodValue += nestedValue.toXML();
 								methodValue = nestedValue.getClass().getName();
 							}
-						} else if (val.getClass().isInstance(_IPOJOObject.class)) {
-							methodValue = ((_IPOJOObject) val).getFullXMLChunk(null);
+						} else if (val.getClass().isInstance(IPOJOObject.class)) {
+							methodValue = ((IPOJOObject) val).getFullXMLChunk(null);
 						} else {
 							methodValue = val.toString();
 						}

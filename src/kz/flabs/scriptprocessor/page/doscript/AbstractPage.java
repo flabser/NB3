@@ -11,11 +11,14 @@ import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
-import kz.lof.script.POJOObjectAdapter;
+import kz.lof.scripting.POJOObjectAdapter;
+import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting._POJOListWrapper;
+import kz.lof.scripting._POJOObjectWrapper;
+import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
-import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
 import kz.nextbase.script._Session;
 import kz.nextbase.script._Validation;
@@ -103,7 +106,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	protected void setContent(String elementName, List<?> langs) {
-		result.addObject(new POJOObjectAdapter() {
+		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
 			@Override
 			public String getFullXMLChunk(LanguageType lang) {
 				StringBuffer val = new StringBuffer(500);
@@ -113,7 +116,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 				}
 				return val.append("</" + elementName + ">").toString();
 			}
-		});
+		}, lang));
 	}
 
 	protected void setValidation(_Validation obj) {
@@ -127,14 +130,25 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		setValidation(ve);
 	}
 
-	protected void setContent(_IPOJOObject document) {
-		result.addObject(document);
+	protected void setContent(List<IOutcomeObject> list) {
+		result.addContent(list);
+
 	}
 
-	protected void setContent(List<_IPOJOObject> list) {
-		for (_IPOJOObject element : list) {
-			result.addContent(element);
-		}
+	protected void setContent(IPOJOObject document) {
+		result.addObject(new _POJOObjectWrapper(document, lang));
+	}
+
+	@Deprecated
+	protected void setContent(_POJOObjectWrapper _POJOObjectWrapper) {
+		result.addContent(_POJOObjectWrapper);
+
+	}
+
+	// @Deprecated
+	protected void setContent(_POJOListWrapper _POJOListWrapper) {
+		result.addContent(_POJOListWrapper);
+
 	}
 
 	protected void startSaveFormTransact(IAppEntity entity) {

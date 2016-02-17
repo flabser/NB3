@@ -4,9 +4,10 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.xml.XMLDocument;
+import kz.lof.scripting.IPOJOObject;
 
 @Deprecated
-public class _XMLDocument implements _IXMLContent, _IPOJOObject {
+public class _XMLDocument implements _IXMLContent, IPOJOObject {
 	XMLDocument document;
 
 	public _XMLDocument(_Tag rootTag) {

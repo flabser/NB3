@@ -1,21 +1,16 @@
 package kz.flabs.scriptprocessor;
 
 import groovy.lang.GroovyObject;
-
-import java.util.UUID;
-
-import kz.flabs.localization.LanguageType;
 import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.form.IShowField;
+import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.nextbase.script._Exception;
-import kz.nextbase.script._IPOJOObject;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._URL;
 
-public class ScriptShowField implements IShowField, _IPOJOObject {
+public class ScriptShowField implements IShowField, IOutcomeObject {
 	private String name;
 	private String value = "";
 	private String idValue;
@@ -127,31 +122,13 @@ public class ScriptShowField implements IShowField, _IPOJOObject {
 	}
 
 	@Override
-	public UUID getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public _URL getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getFullXMLChunk(LanguageType lang) {
+	public String toXML() {
 		return XMLPiece;
 	}
 
 	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return XMLPiece;
-	}
-
-	@Override
-	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+	public String toJSON() {
+		return null;
 	}
 
 }
