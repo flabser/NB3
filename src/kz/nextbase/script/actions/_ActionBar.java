@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.webrule.constants.RunMode;
-import kz.lof.scripting.IPOJOObject;
+import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
 import kz.nextbase.script._Session;
 
-public class _ActionBar implements IPOJOObject {
+public class _ActionBar implements IOutcomeObject {
 	public RunMode isOn = RunMode.ON;
 	public String caption = "";
 	public String hint = "";
@@ -32,17 +32,14 @@ public class _ActionBar implements IPOJOObject {
 		return this;
 	}
 
-	@Override
 	public UUID getId() {
 		return null;
 	}
 
-	@Override
 	public String getURL() {
 		return null;
 	}
 
-	@Override
 	public String getFullXMLChunk(LanguageType lang) {
 		String a = "";
 		for (_Action act : actions) {
@@ -51,14 +48,27 @@ public class _ActionBar implements IPOJOObject {
 		return "<actionbar mode=\"" + isOn + "\" caption=\"" + caption + "\" hint=\"" + hint + "\">" + a + "</actionbar>";
 	}
 
-	@Override
 	public String getShortXMLChunk(LanguageType lang) {
 		return getFullXMLChunk(lang);
 	}
 
-	@Override
 	public boolean isEditable() {
 		return false;
+	}
+
+	@Override
+	public String toXML() {
+		String a = "";
+		for (_Action act : actions) {
+			a += act.toXML();
+		}
+		return "<actionbar mode=\"" + isOn + "\" caption=\"" + caption + "\" hint=\"" + hint + "\">" + a + "</actionbar>";
+	}
+
+	@Override
+	public String toJSON() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

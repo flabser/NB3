@@ -1,15 +1,13 @@
 package kz.nextbase.script;
 
-import java.util.UUID;
-
-import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.xml.XMLDocument;
-import kz.lof.scripting.IPOJOObject;
+import kz.lof.webserver.servlet.IOutcomeObject;
 
 @Deprecated
-public class _XMLDocument implements _IXMLContent, IPOJOObject {
+public class _XMLDocument implements _IXMLContent, IOutcomeObject {
 	XMLDocument document;
 
+	@Deprecated
 	public _XMLDocument(_Tag rootTag) {
 		document = new XMLDocument(rootTag.getRuntimeTag());
 	}
@@ -31,31 +29,6 @@ public class _XMLDocument implements _IXMLContent, IPOJOObject {
 	@Override
 	public String toJSON() {
 		return null;
-	}
-
-	@Override
-	public UUID getId() {
-		return null;
-	}
-
-	@Override
-	public String getURL() {
-		return null;
-	}
-
-	@Override
-	public String getFullXMLChunk(LanguageType lang) {
-		return document.toXML();
-	}
-
-	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return document.toXML();
-	}
-
-	@Override
-	public boolean isEditable() {
-		return false;
 	}
 
 }

@@ -11,8 +11,8 @@ import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
-import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
 import kz.lof.scripting._POJOObjectWrapper;
 import kz.lof.webserver.servlet.IOutcomeObject;
@@ -130,23 +130,28 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		setValidation(ve);
 	}
 
-	protected void setContent(List<IOutcomeObject> list) {
+	protected void addContent(IOutcomeObject obj) {
+		result.addContent(obj);
+
+	}
+
+	protected void addContent(List<IOutcomeObject> list) {
 		result.addContent(list);
 
 	}
 
-	protected void setContent(IPOJOObject document) {
+	protected void addContent(IPOJOObject document) {
 		result.addObject(new _POJOObjectWrapper(document, lang));
 	}
 
 	@Deprecated
-	protected void setContent(_POJOObjectWrapper _POJOObjectWrapper) {
+	protected void addContent(_POJOObjectWrapper _POJOObjectWrapper) {
 		result.addContent(_POJOObjectWrapper);
 
 	}
 
 	// @Deprecated
-	protected void setContent(_POJOListWrapper _POJOListWrapper) {
+	protected void addContent(_POJOListWrapper _POJOListWrapper) {
 		result.addContent(_POJOListWrapper);
 
 	}

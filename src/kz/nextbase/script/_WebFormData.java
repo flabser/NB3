@@ -19,7 +19,7 @@ public class _WebFormData {
 	public String getValueSilently(String fn) {
 		try {
 			String value[] = formData.get(fn);
-			if (value[0].equals("null")) {
+			if (value[0].contains("null")) {
 				return "";
 			} else {
 				Object r = value[0].trim();
