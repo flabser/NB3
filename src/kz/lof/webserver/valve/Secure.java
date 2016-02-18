@@ -12,9 +12,9 @@ import kz.flabs.users.AuthFailedExceptionType;
 import kz.flabs.users.User;
 import kz.lof.env.EnvConst;
 import kz.lof.env.SessionPool;
+import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.SessionCooks;
-import kz.nextbase.script._Session;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;

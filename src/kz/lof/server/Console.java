@@ -121,6 +121,14 @@ public class Console implements Runnable {
 				}
 				System.out.println("done");
 			}
+		} else if (command.equalsIgnoreCase("show file to delete") || command.equalsIgnoreCase("sfd")) {
+			if (Environment.fileToDelete.size() == 0) {
+				System.out.println("there are no any files to delete");
+			} else {
+				for (String ci : Environment.fileToDelete) {
+					System.out.println(ci);
+				}
+			}
 		} else if (command.equals("help") || command.equalsIgnoreCase("h")) {
 			System.out.println(Util.readFile(EnvConst.RESOURCES_DIR + File.separator + "console_commands.txt"));
 		} else {

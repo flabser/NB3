@@ -16,7 +16,7 @@ import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.PortalException;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class Logout extends HttpServlet implements Const {
 	private static final long serialVersionUID = 1L;

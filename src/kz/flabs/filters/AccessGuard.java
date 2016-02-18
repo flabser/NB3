@@ -19,8 +19,8 @@ import kz.flabs.users.User;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
 import kz.lof.env.EnvConst;
+import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.SessionCooks;
-import kz.nextbase.script._Session;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;

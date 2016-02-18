@@ -7,7 +7,7 @@ import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.runtimeobj.document.AbstractComplexObject;
 import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.User;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._ViewEntry;
 import kz.nextbase.script._ViewEntryCollection;
 

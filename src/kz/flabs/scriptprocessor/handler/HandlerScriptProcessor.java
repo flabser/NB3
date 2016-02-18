@@ -15,7 +15,7 @@ import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 @Deprecated

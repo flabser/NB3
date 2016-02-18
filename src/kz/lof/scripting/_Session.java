@@ -1,4 +1,4 @@
-package kz.nextbase.script;
+package kz.lof.scripting;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +17,10 @@ import kz.flabs.webrule.GlobalSetting;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.user.AuthModeType;
+import kz.nextbase.script._AppEntourage;
+import kz.nextbase.script._Employer;
+import kz.nextbase.script._UserActivity;
+import kz.nextbase.script._ViewEntryCollectionParam;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
 

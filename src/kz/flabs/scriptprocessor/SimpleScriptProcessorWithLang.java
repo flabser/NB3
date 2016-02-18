@@ -1,6 +1,6 @@
 package kz.flabs.scriptprocessor;
 
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class SimpleScriptProcessorWithLang extends ScriptProcessor{
 	private _Session session;

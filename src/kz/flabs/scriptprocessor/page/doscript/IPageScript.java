@@ -2,8 +2,8 @@ package kz.flabs.scriptprocessor.page.doscript;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
+import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.PageOutcome;
-import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 
 public interface IPageScript {

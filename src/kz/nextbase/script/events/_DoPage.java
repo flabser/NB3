@@ -2,8 +2,8 @@ package kz.nextbase.script.events;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.scriptprocessor.page.doscript.AbstractPage;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._Exception;
-import kz.nextbase.script._Session;
 import kz.nextbase.script._WebFormData;
 
 public abstract class _DoPage extends AbstractPage {

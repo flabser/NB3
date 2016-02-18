@@ -2,6 +2,8 @@ package kz.nextbase.script;
 
 import java.text.SimpleDateFormat;
 
+import kz.lof.scripting._Session;
+
 public class _ViewEntryCollectionParam {
 
 	// private User user;

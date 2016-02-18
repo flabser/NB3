@@ -111,7 +111,7 @@ public class WebServer {
 		// Tomcat.addServlet(context, "Uploader", "kz.flabs.servlets.Uploader");
 		// context.addServletMapping("/Uploader", "Uploader");
 
-		Tomcat.addServlet(context, "UploadFile", "kz.flabs.servlets.UploadFile");
+		Tomcat.addServlet(context, "UploadFile", "kz.lof.webserver.servlet.UploadFile");
 		context.addServletMapping("/UploadFile", "UploadFile");
 
 		Tomcat.addServlet(context, "Error", "kz.flabs.servlets.Error");

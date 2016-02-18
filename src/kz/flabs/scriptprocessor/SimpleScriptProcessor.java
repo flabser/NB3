@@ -1,7 +1,7 @@
 package kz.flabs.scriptprocessor;
 
 import groovy.lang.GroovyObject;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class SimpleScriptProcessor extends ScriptProcessor{
 	private _Session session;

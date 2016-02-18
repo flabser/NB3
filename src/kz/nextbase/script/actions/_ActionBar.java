@@ -5,10 +5,10 @@ import java.util.UUID;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
-import kz.nextbase.script._Session;
 
 public class _ActionBar implements IOutcomeObject {
 	public RunMode isOn = RunMode.ON;

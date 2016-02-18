@@ -15,12 +15,12 @@ import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
 import kz.lof.scripting._POJOObjectWrapper;
+import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._Session;
 import kz.nextbase.script._Validation;
 import kz.nextbase.script._WebFormData;
 
@@ -61,14 +61,10 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		toPublishElement.add(value);
 	}
 
-	public void addMsg(String m) {
-		result.addMessage(m);
-	}
-
 	public void setError(String m) {
 		setBadRequest();
 		result.setType(OutcomeType.SERVER_ERROR);
-		result.setMessage(m);
+		addContent("msg", m);
 	}
 
 	public void setPublishAsType(PublishAsType respType) {
@@ -105,7 +101,18 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		this.vocabulary = vocabulary;
 	}
 
-	protected void setContent(String elementName, List<?> langs) {
+	protected void setValidation(_Validation obj) {
+		result.setType(OutcomeType.VALIDATION_ERROR);
+		result.setValidation(obj);
+	}
+
+	protected void setValidation(String localizedMessage) {
+		_Validation ve = new _Validation();
+		ve.addError("", "", localizedMessage);
+		setValidation(ve);
+	}
+
+	protected void addContent(String elementName, List<?> langs) {
 		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
 			@Override
 			public String getFullXMLChunk(LanguageType lang) {
@@ -119,15 +126,16 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		}, lang));
 	}
 
-	protected void setValidation(_Validation obj) {
-		result.setType(OutcomeType.VALIDATION_ERROR);
-		result.setValidation(obj);
-	}
-
-	protected void setValidation(String localizedMessage) {
-		_Validation ve = new _Validation();
-		ve.addError("", "", localizedMessage);
-		setValidation(ve);
+	protected void addContent(String elementName, String someValue) {
+		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
+			@Override
+			public String getFullXMLChunk(LanguageType lang) {
+				StringBuffer val = new StringBuffer(500);
+				val.append("<" + elementName + ">");
+				val.append(someValue);
+				return val.append("</" + elementName + ">").toString();
+			}
+		}, lang));
 	}
 
 	protected void addContent(IOutcomeObject obj) {
@@ -144,6 +152,10 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		result.addObject(new _POJOObjectWrapper(document, lang));
 	}
 
+	/**
+	 * use kz.flabs.scriptprocessor.page.doscript.AbstractPage.addContent(
+	 * IPOJOObject) instead of the method
+	 **/
 	@Deprecated
 	protected void addContent(_POJOObjectWrapper _POJOObjectWrapper) {
 		result.addContent(_POJOObjectWrapper);
@@ -181,7 +193,9 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 				doGET(ses, formData, lang);
 			}
 		} catch (Exception e) {
-			result.setError(e);
+			addContent("msg", e.toString());
+			result.setType(OutcomeType.SERVER_ERROR);
+			result.setVeryBadRequest();
 			error(e);
 		}
 		return result;

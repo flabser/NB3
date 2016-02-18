@@ -29,7 +29,7 @@ import kz.flabs.workspace.WorkSpaceSession;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.env.SessionPool;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 import org.apache.catalina.realm.RealmBase;
 

@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import kz.flabs.appenv.AppEnv;
+import kz.lof.scripting._Session;
 
 public class _Exception extends Exception {
 	private static final long serialVersionUID = -6047450542781990205L;

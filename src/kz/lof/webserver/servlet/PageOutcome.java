@@ -11,7 +11,7 @@ import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.env.Environment;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._Validation;
 import net.sf.saxon.s9api.SaxonApiException;
 
@@ -30,7 +30,6 @@ public class PageOutcome {
 	private int httpStatus = HttpStatus.SC_OK;
 	private static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	private List<PageOutcome> includedPage = new ArrayList<PageOutcome>();
-	private ArrayList<String> messages = new ArrayList<String>();
 	private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
 	private _Session ses;
 	private LanguageType lang;
@@ -60,15 +59,6 @@ public class PageOutcome {
 		includedPage.add(o);
 	}
 
-	public void setMessage(String message) {
-		messages.clear();
-		messages.add(message);
-	}
-
-	public void addMessage(String message) {
-		messages.add(message);
-	}
-
 	public void setObject(IOutcomeObject obj) {
 		objects.clear();
 		objects.add(obj);
@@ -82,15 +72,12 @@ public class PageOutcome {
 		validation = obj;
 	}
 
-	public void setError(Exception e) {
-		setMessage(e.toString());
-		objects.clear();
-		httpStatus = HttpStatus.SC_INTERNAL_SERVER_ERROR;
-
-	}
-
 	public void setBadRequest() {
 		httpStatus = HttpStatus.SC_BAD_REQUEST;
+	}
+
+	public void setVeryBadRequest() {
+		httpStatus = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 	}
 
 	public void setType(OutcomeType type) {
@@ -154,8 +141,9 @@ public class PageOutcome {
 		if (isScriptResult) {
 			result.append("<response type=\"RESULT_OF_PAGE_SCRIPT\"><content>");
 		}
-		for (String msg : messages) {
-			result.append(msg);
+
+		if (validation != null) {
+			result.append(validation.toXML());
 		}
 
 		for (IOutcomeObject xmlContent : objects) {
@@ -197,7 +185,6 @@ public class PageOutcome {
 		JSONClass clazz = new JSONClass();
 
 		clazz.setObjects(objects);
-		clazz.setMessages(messages);
 		clazz.setCaptions(captions);
 		clazz.setType(type);
 		clazz.setRedirectURL(redirectURL);
@@ -261,20 +248,11 @@ public class PageOutcome {
 	@JsonRootName("outcome")
 	class JSONClass {
 		private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
-		private ArrayList<String> messages;
 		private Map<String, String> captions;
 		private OutcomeType type;
 		private String redirectURL;
 		private String flash;
 		private _Validation validation;
-
-		public ArrayList<String> getMessages() {
-			return messages;
-		}
-
-		public void setMessages(ArrayList<String> messages) {
-			this.messages = messages;
-		}
 
 		public Map<String, String> getCaptions() {
 			return captions;

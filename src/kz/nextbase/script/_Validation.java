@@ -3,13 +3,15 @@ package kz.nextbase.script;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.lof.webserver.servlet.IOutcomeObject;
+
 /**
  * 
  * 
  * @author Medet created 15-02-2016
  */
 
-public class _Validation {
+public class _Validation implements IOutcomeObject {
 
 	private List<Error> errors = new ArrayList<>();
 
@@ -53,5 +55,25 @@ public class _Validation {
 		public String toString() {
 			return field + ", " + error + ", " + message;
 		}
+	}
+
+	@Override
+	public String toXML() {
+		StringBuilder chunk = new StringBuilder(1000);
+		chunk.append("<validation>");
+		for (Error e : errors) {
+			chunk.append("<error>");
+			chunk.append("<field>" + e.field + "</field>");
+			chunk.append("<error>" + e.error + "</error>");
+			chunk.append("<message>" + e.message + "</message>");
+			chunk.append("</error>");
+		}
+		chunk.append("</validation>");
+		return chunk.toString();
+	}
+
+	@Override
+	public String toJSON() {
+		return null;
 	}
 }

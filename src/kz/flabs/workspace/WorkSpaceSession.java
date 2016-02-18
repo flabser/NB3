@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 import org.apache.commons.codec.binary.Base64;
 

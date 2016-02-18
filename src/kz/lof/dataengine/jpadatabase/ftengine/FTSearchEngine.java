@@ -17,7 +17,7 @@ import kz.flabs.localization.LanguageType;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ViewPage;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class FTSearchEngine implements IFTIndexEngine, Const {
 	private IDBConnectionPool dbPool;

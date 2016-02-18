@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewText;
+import kz.lof.scripting._Session;
 
 public class _ViewEntry {
 

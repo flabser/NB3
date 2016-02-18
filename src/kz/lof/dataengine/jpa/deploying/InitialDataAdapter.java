@@ -4,7 +4,7 @@ import java.util.List;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 /**
  * Created by Kayra on 30/12/15.

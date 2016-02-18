@@ -1,8 +1,9 @@
 package kz.nextbase.script.events;
 
 import java.util.Map;
+
 import kz.flabs.scriptprocessor.handler.AbstractHandler;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._WebFormData;
 
 public abstract class _DoHandler extends AbstractHandler {

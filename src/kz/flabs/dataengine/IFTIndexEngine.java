@@ -1,7 +1,7 @@
 package kz.flabs.dataengine;
 
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public interface IFTIndexEngine {
 

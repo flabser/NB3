@@ -38,9 +38,9 @@ import kz.flabs.webrule.Role;
 import kz.flabs.webrule.Skin;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
-import kz.nextbase.script._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 import kz.lof.env.Environment;
+import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 
 @Deprecated

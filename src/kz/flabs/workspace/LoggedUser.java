@@ -1,7 +1,7 @@
 package kz.flabs.workspace;
 
 import kz.flabs.users.User;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class LoggedUser {
 	private String login;

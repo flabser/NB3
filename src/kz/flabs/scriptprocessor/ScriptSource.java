@@ -3,7 +3,7 @@ package kz.flabs.scriptprocessor;
 import java.sql.Connection;
 import java.util.Map;
 
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class ScriptSource implements IScriptSource {
 	private _Session session;

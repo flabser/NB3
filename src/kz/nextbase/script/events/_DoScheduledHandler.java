@@ -7,7 +7,7 @@ import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.users.User;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.pchelka.scheduler.AbstractDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
 

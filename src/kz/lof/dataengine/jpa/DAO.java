@@ -17,8 +17,8 @@ import javax.persistence.criteria.Root;
 import kz.flabs.dataengine.Const;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.users.User;
+import kz.lof.scripting._Session;
 import kz.lof.server.Server;
-import kz.nextbase.script._Session;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public User user;

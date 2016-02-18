@@ -3,7 +3,7 @@ package kz.flabs.scriptprocessor;
 import groovy.lang.GroovyObject;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.users.User;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class SessionScriptProcessor extends ScriptProcessor {
 	private _Session session;

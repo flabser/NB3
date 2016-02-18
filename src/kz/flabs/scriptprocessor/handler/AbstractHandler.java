@@ -12,7 +12,7 @@ import kz.flabs.servlets.SignalType;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
 import kz.flabs.util.PageResponse;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._WebFormData;
 
 public abstract class AbstractHandler extends ScriptEvent implements IHandlerScript {

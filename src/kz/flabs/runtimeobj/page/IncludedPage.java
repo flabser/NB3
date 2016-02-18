@@ -4,7 +4,7 @@ import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.users.UserSession;
 import kz.flabs.webrule.page.PageRule;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 
 public class IncludedPage extends Page implements Const {
 

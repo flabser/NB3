@@ -1,4 +1,4 @@
-package kz.flabs.servlets;
+package kz.lof.webserver.servlet;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import kz.flabs.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 
 import org.apache.commons.fileupload.FileItem;
@@ -49,6 +49,7 @@ public class UploadFile extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession jses = req.getSession(false);
 		_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
+		FileItem fileItem = null;
 
 		String time = req.getParameter("time");
 		File userTmpDir = new File(Environment.tmpDir + File.separator + ses.getUser().getUserID());
@@ -72,7 +73,12 @@ public class UploadFile extends HttpServlet {
 			List<FileItem> items = upload.parseRequest(req);
 			for (FileItem item : items) {
 				if (item.isFormField()) {
-					System.out.println(item.getString());
+					// System.out.println(item.getString() + " " +
+					// item.getFieldName());
+					if (item.getFieldName().endsWith("fsid")) {
+						fileItem = item;
+					}
+
 				} else {
 					String fn = item.getName();
 					File f = new File(userTmpDir.getAbsolutePath() + File.separator + fn);
@@ -91,7 +97,8 @@ public class UploadFile extends HttpServlet {
 		sb.append(fns.stream().collect(Collectors.joining(",")));
 		sb.append("]}");
 
-		//
+		System.out.println("complete");
+		System.out.println(fileItem.getString() + " " + fileItem.getFieldName());
 		resp.setContentType(ContentType.APPLICATION_JSON.toString());
 		PrintWriter out = resp.getWriter();
 		out.println(sb.toString());
@@ -116,7 +123,7 @@ public class UploadFile extends HttpServlet {
 		// sb.append("{progress: {").append(time).append(":").append(progress).append("}}");
 		sb.append("{\"progress\": {\"").append(time).append("\":\"").append(progress).append("\"").append(appendPiece);
 		// sb.append(",filename:\"exel.xls\"}}");
-		System.out.println(sb.toString());
+		// System.out.println(sb.toString());
 		resp.setContentType(ContentType.APPLICATION_JSON.toString());
 		PrintWriter out = resp.getWriter();
 		out.println(sb.toString());

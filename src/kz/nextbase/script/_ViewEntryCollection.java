@@ -12,6 +12,7 @@ import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.RunTimeParameters.Filter;
 import kz.flabs.users.RunTimeParameters.Sorting;
 import kz.flabs.users.User;
+import kz.lof.scripting._Session;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {

@@ -1,9 +1,10 @@
 package kz.flabs.scriptprocessor.handler;
 
 import java.util.Map;
+
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.util.PageResponse;
-import kz.nextbase.script._Session;
+import kz.lof.scripting._Session;
 import kz.nextbase.script._WebFormData;
 
 public interface IHandlerScript {	
