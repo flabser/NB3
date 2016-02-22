@@ -13,7 +13,7 @@ public class BackgroundProcCollection {
 
 	public synchronized void addActivProcess(IDaemon daemon) {
 		if (addProcess(daemon)) {
-			Server.logger.verboseLogEntry("Init scheduler task (process=\"" + daemon.getID() + "\")");
+			Server.logger.debugLogEntry("Init scheduler task (process=\"" + daemon.getID() + "\")");
 			activProcList.add(daemon);
 		}
 	}

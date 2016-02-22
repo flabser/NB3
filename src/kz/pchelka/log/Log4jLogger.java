@@ -1,6 +1,7 @@
 package kz.pchelka.log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -10,13 +11,8 @@ import kz.lof.env.Environment;
 public class Log4jLogger implements ILogger {
 	public org.apache.log4j.Logger log4jLogger;
 
-	private String module = "";
-	private boolean adminConsoleEnabled;
-
 	public Log4jLogger(String module) {
 		log4jLogger = org.apache.log4j.Logger.getLogger(module);
-		this.module = module;
-
 	}
 
 	@Override
@@ -67,19 +63,19 @@ public class Log4jLogger implements ILogger {
 	}
 
 	@Override
-	public void normalLogEntry(String logtext) {
+	public void infoLogEntry(String logtext) {
 		log4jLogger.info(logtext);
 
 	}
 
 	@Override
-	public void normalLogEntry(String agent, String logtext) {
+	public void infoLogEntry(String agent, String logtext) {
 		log4jLogger.info(agent + "-" + logtext);
 
 	}
 
 	@Override
-	public void verboseLogEntry(String logtext) {
+	public void debugLogEntry(String logtext) {
 		if (Environment.verboseLogging) {
 			log4jLogger.debug(logtext);
 
@@ -87,7 +83,7 @@ public class Log4jLogger implements ILogger {
 	}
 
 	@Override
-	public void verboseLogEntry(String agent, String logtext) {
+	public void debugLogEntry(String agent, String logtext) {
 		if (Environment.verboseLogging) {
 			log4jLogger.debug(agent + "-" + logtext);
 
@@ -122,16 +118,25 @@ public class Log4jLogger implements ILogger {
 
 	public String getBuildDateTime() {
 		String value = "";
+		JarFile jarFile = null;
 		try {
 			String pathToJar = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 			if (pathToJar.contains("jar")) {
-				JarFile jarFile = new JarFile(new File(pathToJar));
+				jarFile = new JarFile(new File(pathToJar));
 				Manifest entry = jarFile.getManifest();
 				Attributes attrs = entry.getMainAttributes();
 				value = attrs.getValue("Built-Date");
 			}
 		} catch (Exception e) {
 			errorLogEntry(getClass().getName(), e);
+		} finally {
+			if (jarFile != null) {
+				try {
+					jarFile.close();
+				} catch (IOException e) {
+					errorLogEntry(e);
+				}
+			}
 		}
 		return value;
 	}

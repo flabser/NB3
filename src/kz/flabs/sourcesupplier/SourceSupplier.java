@@ -15,7 +15,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Localizator;
@@ -38,10 +37,10 @@ import kz.flabs.webrule.Role;
 import kz.flabs.webrule.Skin;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
-import kz.pchelka.scheduler.IProcessInitiator;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.pchelka.scheduler.IProcessInitiator;
 
 @Deprecated
 public class SourceSupplier implements IProcessInitiator, Const {
@@ -137,7 +136,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 	}
 
 	public ArrayList<BaseDocument> getDocuments(IRuleValue sourceVal, User user) throws DocumentException, DocumentAccessException, RuleException,
-	        QueryFormulaParserException, QueryException, ComplexObjectException {
+	        QueryFormulaParserException, ComplexObjectException {
 		ArrayList<BaseDocument> col = new ArrayList<BaseDocument>();
 		switch (sourceVal.getSourceType()) {
 		case QUERY:
@@ -245,7 +244,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 	}
 
 	public StringBuffer getDataAsXML(ValueSourceType sourceType, String value, Macro macro, String lang) throws RuleException, DocumentException,
-	        DocumentAccessException, QueryFormulaParserException, QueryException, LocalizatorException {
+	        DocumentAccessException, QueryFormulaParserException, LocalizatorException {
 		StringBuffer xmlContent = new StringBuffer(5000);
 
 		switch (sourceType) {

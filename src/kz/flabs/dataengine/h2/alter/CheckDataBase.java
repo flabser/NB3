@@ -79,7 +79,7 @@ public class CheckDataBase {
 		} catch (SQLException e) {
 			DatabaseUtil.debugErrorPrint(e);
 		}
-		Server.logger.normalLogEntry("Database structure has updated from " + oldVersion + " to version " + version);
+		Server.logger.infoLogEntry("Database structure has updated from " + oldVersion + " to version " + version);
 	}
 
 	public void addColumn(String column, String type, String tableName) {

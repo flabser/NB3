@@ -132,7 +132,7 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 		}
 
 		try {
-			AppEnv.logger.normalLogEntry("FT-index initilaize ... ");
+			AppEnv.logger.infoLogEntry("FT-index initilaize ... ");
 
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);

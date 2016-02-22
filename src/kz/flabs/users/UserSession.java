@@ -131,7 +131,7 @@ public class UserSession implements Const {
 				if (currentUser.authorized) {
 					WorkSpaceSession.addUserSession(currentUser);
 				} else {
-					AppEnv.logger.normalLogEntry("Authorization failed, login or password is incorrect (by workspace authorization)");
+					AppEnv.logger.infoLogEntry("Authorization failed, login or password is incorrect (by workspace authorization)");
 					throw new AuthFailedException(AuthFailedExceptionType.PASSWORD_INCORRECT, lu.getLogin());
 				}
 			} else {
@@ -141,7 +141,7 @@ public class UserSession implements Const {
 		} else {
 			int userHash = Integer.parseInt(appCookies.authHash);
 			if (userHash == 0) {
-				AppEnv.logger.normalLogEntry("Authorization failed, login or password is incorrect/");
+				AppEnv.logger.infoLogEntry("Authorization failed, login or password is incorrect/");
 				throw new AuthFailedException(AuthFailedExceptionType.NO_USER_SESSION, "");
 			} else {
 				currentUser = new User(userHash, env);

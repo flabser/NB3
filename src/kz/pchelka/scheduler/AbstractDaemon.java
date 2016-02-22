@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import kz.flabs.exception.DocumentAccessException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.scriptprocessor.ScriptProcessor;
@@ -31,8 +30,7 @@ public abstract class AbstractDaemon implements IDaemon, Runnable, IProcessIniti
 	private DaemonStatusType status = DaemonStatusType.WAIT_FOR_RUN;
 
 	@Override
-	abstract public int process(IProcessInitiator processOwner)
-			throws DocumentAccessException, RuleException, QueryFormulaParserException, QueryException;
+	abstract public int process(IProcessInitiator processOwner) throws DocumentAccessException, RuleException, QueryFormulaParserException;
 
 	@Override
 	public void init(IScheduledProcessRule rule) {
@@ -52,7 +50,7 @@ public abstract class AbstractDaemon implements IDaemon, Runnable, IProcessIniti
 	}
 
 	public static void log(String logText) {
-		ScriptProcessor.logger.normalLogEntry(logText);
+		ScriptProcessor.logger.infoLogEntry(logText);
 	}
 
 	@Override
@@ -98,16 +96,13 @@ public abstract class AbstractDaemon implements IDaemon, Runnable, IProcessIniti
 			currentTime.setTime(new Date());
 			Calendar ruleTime = new GregorianCalendar();
 			ruleTime.setTime(rule.getStartTime().getTime());
-			finishTime.set(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH),
-					currentTime.get(Calendar.DAY_OF_MONTH) + 1, ruleTime.get(Calendar.HOUR_OF_DAY),
-					ruleTime.get(Calendar.MINUTE));
+			finishTime.set(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1,
+			        ruleTime.get(Calendar.HOUR_OF_DAY), ruleTime.get(Calendar.MINUTE));
 		} else if (rule.getScheduleType() == ScheduleType.PERIODICAL) {
-			finishTime.set(finishTime.get(Calendar.YEAR), finishTime.get(Calendar.MONTH),
-					finishTime.get(Calendar.DAY_OF_MONTH), finishTime.get(Calendar.HOUR_OF_DAY),
-					finishTime.get(Calendar.MINUTE) + rule.getMinuteInterval());
+			finishTime.set(finishTime.get(Calendar.YEAR), finishTime.get(Calendar.MONTH), finishTime.get(Calendar.DAY_OF_MONTH),
+			        finishTime.get(Calendar.HOUR_OF_DAY), finishTime.get(Calendar.MINUTE) + rule.getMinuteInterval());
 		}
-		Server.logger.normalLogEntry(getID() + "\" has been success finished. Next start "
-				+ Util.dateTimeFormat.format(finishTime.getTime()));
+		Server.logger.infoLogEntry(getID() + "\" has been success finished. Next start " + Util.dateTimeFormat.format(finishTime.getTime()));
 		runHistory.add(Util.convertDataTimeToString(finishTime));
 		rule.setNextStartTime(finishTime);
 		successRun++;
@@ -165,10 +160,9 @@ public abstract class AbstractDaemon implements IDaemon, Runnable, IProcessIniti
 		String lst = Util.convertDataTimeToString(getLastSuccessTime());
 		String nt = Util.convertDataTimeToString(getStartTime());
 		DaemonStatusType stat = getStatus();
-		String xmlFragment = "<id>" + getID() + "</id>" + "<type>" + getDeamonType() + "</type>" + "<trigger>"
-				+ getTriggerType() + "</trigger>" + "<lastsuccess>" + lst + "</lastsuccess>" + "<nexttime>" + nt
-				+ "</nexttime>" + "<successrun>" + getSuccessRunCount() + "</successrun>" + "<runhistory>"
-				+ getSuccessRunHistory() + "</runhistory>" + "<status>" + stat + "</status>";
+		String xmlFragment = "<id>" + getID() + "</id>" + "<type>" + getDeamonType() + "</type>" + "<trigger>" + getTriggerType() + "</trigger>"
+		        + "<lastsuccess>" + lst + "</lastsuccess>" + "<nexttime>" + nt + "</nexttime>" + "<successrun>" + getSuccessRunCount()
+		        + "</successrun>" + "<runhistory>" + getSuccessRunHistory() + "</runhistory>" + "<status>" + stat + "</status>";
 
 		return xmlFragment;
 	}

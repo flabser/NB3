@@ -5,20 +5,14 @@ import java.util.HashMap;
 
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.LanguageType;
-import kz.flabs.localization.LocalizatorException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.sourcesupplier.SourceSupplier;
-import kz.flabs.users.User;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Caption;
-import kz.flabs.webrule.form.GlossaryRule;
 import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.PageRule;
 import kz.lof.scripting._Session;
@@ -66,16 +60,6 @@ public class Page implements IProcessInitiator, Const {
 		this.rule = pageRule;
 	}
 
-	public String getSpravFieldSet(User user, String lang) throws RuleException, DocumentException, DocumentAccessException,
-	        QueryFormulaParserException, QueryException, LocalizatorException {
-		StringBuffer glossariesAsText = new StringBuffer("<glossaries>");
-		SourceSupplier ss = new SourceSupplier(user, env, lang);
-		for (GlossaryRule glos : rule.getGlossary()) {
-			glossariesAsText.append("<" + glos.name + ">" + ss.getDataAsXML(glos.valueSource, glos.value, glos.macro, lang) + "</" + glos.name + ">");
-		}
-		return glossariesAsText.append("</glossaries>").toString();
-	}
-
 	public String getCaptions(SourceSupplier captionTextSupplier, ArrayList<Caption> captions) throws DocumentException {
 		StringBuffer captionsText = new StringBuffer(100);
 		for (Caption cap : captions) {
@@ -89,14 +73,6 @@ public class Page implements IProcessInitiator, Const {
 			return "<captions>" + captionsText.toString() + "</captions>";
 		}
 
-	}
-
-	public String getAsXML(User user, String lang) throws RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException,
-	        QueryException, LocalizatorException {
-		SourceSupplier captionTextSupplier = new SourceSupplier(env, lang);
-		String captions = getCaptions(captionTextSupplier, rule.captions);
-		String glossarySet = getSpravFieldSet(user, lang);
-		return "<content>" + rule.getAsXML() + glossarySet + captions + "</content>";
 	}
 
 	public PageOutcome pageProcess(_WebFormData formData, String method) throws ClassNotFoundException, RuleException {

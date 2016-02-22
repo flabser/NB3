@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
@@ -32,14 +31,12 @@ import org.apache.http.entity.ContentType;
 
 public class UploadFile extends HttpServlet {
 	private static final long serialVersionUID = -6070611526857723049L;
-	private AppEnv env;
 	private ServletContext context;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		try {
 			context = config.getServletContext();
-			env = (AppEnv) context.getAttribute("portalenv");
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
 		}
@@ -50,8 +47,9 @@ public class UploadFile extends HttpServlet {
 		HttpSession jses = req.getSession(false);
 		_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 		FileItem fileItem = null;
+		String fn = "";
 
-		String time = req.getParameter("time");
+		String time = req.getParameter(EnvConst.TIME_FIELD_NAME);
 		File userTmpDir = new File(Environment.tmpDir + File.separator + ses.getUser().getUserID());
 		if (!userTmpDir.exists()) {
 			userTmpDir.mkdir();
@@ -75,12 +73,12 @@ public class UploadFile extends HttpServlet {
 				if (item.isFormField()) {
 					// System.out.println(item.getString() + " " +
 					// item.getFieldName());
-					if (item.getFieldName().endsWith("fsid")) {
+					if (item.getFieldName().endsWith(EnvConst.FSID_FIELD_NAME)) {
 						fileItem = item;
 					}
 
 				} else {
-					String fn = item.getName();
+					fn = item.getName();
 					File f = new File(userTmpDir.getAbsolutePath() + File.separator + fn);
 					jses.setAttribute("filename", fn);
 					item.write(f);
@@ -97,8 +95,19 @@ public class UploadFile extends HttpServlet {
 		sb.append(fns.stream().collect(Collectors.joining(",")));
 		sb.append("]}");
 
-		System.out.println("complete");
-		System.out.println(fileItem.getString() + " " + fileItem.getFieldName());
+		// System.out.println(fileItem.getString() + " " +
+		// fileItem.getFieldName());
+		List<String> formFiles = null;
+		Object obj = ses.getAttribute(fileItem.getString());
+		if (obj == null) {
+			formFiles = new ArrayList<String>();
+		} else {
+			formFiles = (List<String>) obj;
+		}
+		if (!formFiles.contains(fn)) {
+			formFiles.add(fn);
+			ses.setAttribute(fileItem.getString(), formFiles);
+		}
 		resp.setContentType(ContentType.APPLICATION_JSON.toString());
 		PrintWriter out = resp.getWriter();
 		out.println(sb.toString());

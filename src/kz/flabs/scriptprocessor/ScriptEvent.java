@@ -23,11 +23,19 @@ public class ScriptEvent {
 	protected Vocabulary vocabulary;
 	protected String redirectURL = "";
 	protected ArrayList<_IXMLContent> toPublishElement = new ArrayList<_IXMLContent>();
-	protected _Session ses;
 	protected LanguageType lang;
+	private _Session ses;
 
 	public String getTmpDirPath() {
 		return Environment.tmpDir;
+	}
+
+	public _Session getSes() {
+		return ses;
+	}
+
+	public void setSes(_Session ses) {
+		this.ses = ses;
 	}
 
 	public String getWord(String word, Vocabulary vocabulary, String lang) {
@@ -69,7 +77,7 @@ public class ScriptEvent {
 	}
 
 	public void log(String text) {
-		Server.logger.normalLogEntry(text);
+		Server.logger.infoLogEntry(text);
 	}
 
 	/*
@@ -107,7 +115,7 @@ public class ScriptEvent {
 	}
 
 	public static void log(Object logText) {
-		ScriptProcessor.logger.normalLogEntry(logText.toString());
+		ScriptProcessor.logger.infoLogEntry(logText.toString());
 	}
 
 	public static void error(Exception e) {

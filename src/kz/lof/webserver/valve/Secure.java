@@ -64,7 +64,7 @@ public class Secure extends ValveBase {
 				_Session clonedSes = ses.clone(env);
 				jses.setAttribute(EnvConst.SESSION_ATTR, clonedSes);
 				clonedSes.setJses(jses);
-				Server.logger.verboseLogEntry(ses.getUser().getLogin() + "\" got from session pool " + jses.getServletContext().getContextPath());
+				Server.logger.debugLogEntry(ses.getUser().getLogin() + "\" got from session pool " + jses.getServletContext().getContextPath());
 				invoke(request, response);
 			} else {
 				Server.logger.warningLogEntry("there is no associated user session for the token");

@@ -138,7 +138,7 @@ public class Login extends HttpServlet implements Const {
 					ses.setLang(LanguageType.valueOf(appCookies.currentLang));
 					WorkSpaceSession.addUserSession(ses);
 
-					AppEnv.logger.normalLogEntry(userID + " has connected");
+					AppEnv.logger.infoLogEntry(userID + " has connected");
 
 					String redirect = "";
 
@@ -175,7 +175,7 @@ public class Login extends HttpServlet implements Const {
 					}
 
 				} else {
-					AppEnv.logger.normalLogEntry("Authorization failed, login or password is incorrect -");
+					AppEnv.logger.infoLogEntry("Authorization failed, login or password is incorrect -");
 					throw new AuthFailedException(AuthFailedExceptionType.PASSWORD_INCORRECT, login);
 				}
 			}

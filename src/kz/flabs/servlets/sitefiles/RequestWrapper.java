@@ -2,7 +2,6 @@ package kz.flabs.servlets.sitefiles;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,16 +12,14 @@ import javax.servlet.http.HttpSession;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.servlets.FileUploadListener;
-import kz.flabs.util.Util;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 
 public class RequestWrapper extends HttpServletRequestWrapper {
-	public ArrayList<UploadedFile> uploadedFiles = new ArrayList<>();
+	// public ArrayList<UploadedFile> uploadedFiles = new ArrayList<>();
 	public String formSesID = "";
 	public boolean extInfo;
 
@@ -74,39 +71,13 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		try {
 			IDatabase db = env.getDataBase();
 
-			if (uploadedFiles == null) {
-				AppEnv.logger.errorLogEntry("uploadedFiles is null");
-			}
 		} catch (Exception e) {
 			AppEnv.logger.errorLogEntry(e);
 		}
-	}
-
-	public UploadedFile[] getFilesArray() {
-		UploadedFile[] files = new UploadedFile[uploadedFiles.size()];
-		for (int i = 0; i < files.length; i++) {
-			files[i] = uploadedFiles.get(i);
-		}
-		return files;
 	}
 
 	public boolean isRichTextUpload() {
 		return richTextUpload;
 	}
 
-	private UploadedFile parseFile(FileItem item, String tmpFolder) throws Exception {
-		String name = item.getName();
-		long filelen = item.getSize();
-
-		if (name != null && (name.length() > 0)) {
-			name = FilenameUtils.getName(name);
-
-			String tmpFileName = Util.getFileName(name, tmpFolder);
-			File tempFile = new File(tmpFileName);
-			item.write(tempFile);
-			return new UploadedFile(tempFile.getName(), filelen, tempFile.getAbsolutePath(), item.getContentType());
-		} else {
-			return null;
-		}
-	}
 }

@@ -117,7 +117,7 @@ public class GlobalSetting {
 				AppEnv.logger.warningLogEntry("a name \"system\" is reserved name of application.");
 			}
 
-			AppEnv.logger.normalLogEntry("Loading: " + this.getClass().getSimpleName() + ", id=" + id);
+			AppEnv.logger.infoLogEntry("Loading: " + this.getClass().getSimpleName() + ", id=" + id);
 			if (XMLUtil.getTextContent(doc, "/rule/@mode").equalsIgnoreCase("on")) {
 				isOn = RunMode.ON;
 				isValid = true;

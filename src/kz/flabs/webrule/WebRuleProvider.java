@@ -144,7 +144,7 @@ public class WebRuleProvider implements Const {
 	}
 
 	public boolean resetRule(int ruleType, String ruleID) {
-		AppEnv.logger.normalLogEntry("Reset rule \"" + ruleID + "\" from rule pool");
+		AppEnv.logger.infoLogEntry("Reset rule \"" + ruleID + "\" from rule pool");
 		switch (ruleType) {
 
 		case HANDLER_RULE:
@@ -161,14 +161,14 @@ public class WebRuleProvider implements Const {
 	}
 
 	public boolean resetRules() {
-		AppEnv.logger.normalLogEntry("Reload \"" + env.appType + "\" application rules ...");
+		AppEnv.logger.infoLogEntry("Reload \"" + env.appType + "\" application rules ...");
 
 		pageRuleMap.clear();
 		// handlerRuleMap.clear();
 
 		// loadHandlers();
 
-		AppEnv.logger.normalLogEntry("Application rules have been reset");
+		AppEnv.logger.infoLogEntry("Application rules have been reset");
 		return true;
 	}
 
@@ -205,7 +205,7 @@ public class WebRuleProvider implements Const {
 					if (attr.equalsIgnoreCase("page")) {
 						PageRule ruleObj = new PageRule(env, file);
 						if (ruleObj.isOn != RunMode.ON) {
-							AppEnv.logger.verboseLogEntry("rule " + ruleObj.id + " turn off ");
+							AppEnv.logger.debugLogEntry("rule " + ruleObj.id + " turn off ");
 						}
 
 						pageRuleMap.put(ruleObj.id.toLowerCase(), ruleObj);
@@ -232,11 +232,11 @@ public class WebRuleProvider implements Const {
 				File file = null;
 				try {
 					file = fl.get(n);
-					AppEnv.logger.normalLogEntry("Loading handler  rules " + file.getAbsolutePath());
+					AppEnv.logger.infoLogEntry("Loading handler  rules " + file.getAbsolutePath());
 					HandlerRule ruleObj = new HandlerRule(env, file);
 
 					if (ruleObj.isOn != RunMode.ON) {
-						AppEnv.logger.verboseLogEntry("rule " + ruleObj.id + " turn off ");
+						AppEnv.logger.debugLogEntry("rule " + ruleObj.id + " turn off ");
 					} else {
 						handlerRuleMap.put(ruleObj.id.toLowerCase(), ruleObj);
 						addScheduledRule(ruleObj);

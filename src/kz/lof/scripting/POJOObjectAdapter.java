@@ -13,7 +13,7 @@ public class POJOObjectAdapter implements IPOJOObject {
 
 	@Override
 	public String getURL() {
-		return null;
+		return "Provider";
 	}
 
 	@Override

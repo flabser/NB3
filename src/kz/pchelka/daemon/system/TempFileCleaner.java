@@ -54,7 +54,7 @@ public class TempFileCleaner extends AbstractDaemon {
 			}
 		}
 		if (ac > 0) {
-			Server.logger.verboseLogEntry(getID() + " " + ac + " temporary files were deleted");
+			Server.logger.debugLogEntry(getID() + " " + ac + " temporary files were deleted");
 		}
 		return 0;
 	}

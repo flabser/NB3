@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import kz.flabs.appdaemon.AppDaemonRule;
 import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
@@ -23,7 +22,6 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
-import kz.pchelka.scheduler.IDaemon;
 
 public class PortalInit extends HttpServlet {
 
@@ -48,10 +46,10 @@ public class PortalInit extends HttpServlet {
 				IDatabase db = (IDatabase) dbConstr.newInstance(new Object[] { env });
 
 				if (env.globalSetting.autoDeployEnable) {
-					Server.logger.normalLogEntry("Checking database structure ...");
+					Server.logger.infoLogEntry("Checking database structure ...");
 					dd.deploy();
 				}
-				AppEnv.logger.verboseLogEntry("Application will use \"" + db + "\" database");
+				AppEnv.logger.debugLogEntry("Application will use \"" + db + "\" database");
 				env.setDataBase(db);
 
 				if (env.appType.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {
@@ -61,7 +59,7 @@ public class PortalInit extends HttpServlet {
 					_Session ses = new _Session(env, new User(env));
 					IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
 					Environment.systemBase.setEmployeeDAO(aDao);
-					AppEnv.logger.verboseLogEntry("Module \"" + env.appType + "\" has been connected to system");
+					AppEnv.logger.debugLogEntry("Module \"" + env.appType + "\" has been connected to system");
 				}
 
 				// TODO it need to improve
@@ -94,25 +92,7 @@ public class PortalInit extends HttpServlet {
 		}
 
 		if (isValid) {
-
 			Environment.addApplication(env);
-
-			if (env.globalSetting.databaseEnable) {
-				for (AppDaemonRule rule : env.globalSetting.schedSettings) {
-					try {
-						Class<?> c = Class.forName(rule.getClassName());
-						IDaemon daemon = (IDaemon) c.newInstance();
-						daemon.init(rule);
-					} catch (InstantiationException e) {
-						Server.logger.errorLogEntry(e);
-					} catch (IllegalAccessException e) {
-						Server.logger.errorLogEntry(e);
-					} catch (ClassNotFoundException e) {
-						Server.logger.errorLogEntry(e);
-					}
-				}
-
-			}
 			env.application = new Application(env);
 		}
 

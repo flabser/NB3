@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,7 +19,6 @@ import kz.lof.caching.PageCacheAdapter;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.user.AuthModeType;
 import kz.nextbase.script._AppEntourage;
-import kz.nextbase.script._Employer;
 import kz.nextbase.script._UserActivity;
 import kz.nextbase.script._ViewEntryCollectionParam;
 import kz.nextbase.script.actions._ActionBar;
@@ -34,6 +34,7 @@ public class _Session extends PageCacheAdapter {
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
 	private HttpSession jses;
 	private HashMap<UUID, FormTransaction> formTrans = new HashMap<UUID, FormTransaction>();
+	Map<String, Object> valuesMap = new HashMap<String, Object>();
 
 	public _Session(AppEnv env, User user) {
 		this.env = env;
@@ -94,11 +95,6 @@ public class _Session extends PageCacheAdapter {
 		return new HashSet<String>();
 	}
 
-	public _Employer getCurrentAppUser() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private void setPageSize(int ps) {
 		pageSize = ps;
 	}
@@ -118,6 +114,19 @@ public class _Session extends PageCacheAdapter {
 		newSes.setPageSize(pageSize);
 		descendants.add(newSes);
 		return newSes;
+	}
+
+	public void setAttribute(String varName, Object fn) {
+		valuesMap.put(varName, fn);
+	}
+
+	public Object getAttribute(String varName) {
+		return valuesMap.get(varName);
+
+	}
+
+	public void removeAttribute(String varName, String fn) {
+		valuesMap.remove(varName);
 	}
 
 	public void addFormTransaction(IAppEntity entity, String referrer) {

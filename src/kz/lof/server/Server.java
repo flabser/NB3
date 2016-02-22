@@ -6,6 +6,7 @@ import java.util.Date;
 
 import kz.flabs.dataengine.IDatabase;
 import kz.lof.env.Environment;
+import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.webserver.WebServer;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.Log4jLogger;
@@ -23,10 +24,10 @@ public class Server {
 
 	public static void start() throws MalformedURLException, LifecycleException, URISyntaxException {
 		logger = new Log4jLogger("Server");
-		logger.normalLogEntry(serverTitle + " start");
+		logger.infoLogEntry(serverTitle + " start");
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
-		logger.verboseLogEntry("Build " + compilationTime);
-		logger.normalLogEntry("Copyright(c) Lab of the Future 2014. All Right Reserved");
+		logger.debugLogEntry("Build " + compilationTime);
+		logger.infoLogEntry("Copyright(c) Lab of the Future 2014. All Right Reserved");
 
 		Environment.init();
 
@@ -50,8 +51,10 @@ public class Server {
 		}
 
 		String info = webServerInst.initConnectors();
-		Server.logger.verboseLogEntry("Web server started (" + info + ")");
+		Server.logger.debugLogEntry("Web server started (" + info + ")");
 		webServerInst.startContainer();
+
+		Environment.periodicalServices = new PeriodicalServices();
 
 		Thread thread = new Thread(new Console());
 		thread.setPriority(Thread.MIN_PRIORITY);
@@ -76,7 +79,7 @@ public class Server {
 	}
 
 	public static void shutdown() {
-		logger.normalLogEntry("Server is stopping ... ");
+		logger.infoLogEntry("Server is stopping ... ");
 
 		Environment.shutdown();
 		webServerInst.stopContainer();

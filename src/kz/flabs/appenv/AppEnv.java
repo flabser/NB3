@@ -17,11 +17,10 @@ import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.env.Environment;
+import kz.lof.server.Server;
 import kz.pchelka.env.AuthTypes;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.scheduler.Scheduler;
-import kz.lof.server.Server;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
@@ -34,7 +33,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isWorkspace;
 	public AuthTypes authType = AuthTypes.WORKSPACE;
 	public Vocabulary vocabulary;
-	public Scheduler scheduler;
+	// public Scheduler scheduler;
 	public Application application;
 	public static ILogger logger = Server.logger;
 
@@ -50,7 +49,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	public AppEnv(String appType, String globalFileName) {
 		this.appType = appType;
 		try {
-			Server.logger.normalLogEntry("# Start application \"" + appType + "\"");
+			Server.logger.infoLogEntry("# Start application \"" + appType + "\"");
 			Site appSite = Environment.webAppToStart.get(appType);
 			if (appSite != null) {
 				authType = appSite.authType;
@@ -63,7 +62,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 			isWorkspace = globalSetting.isWorkspace;
 			if (globalSetting.isOn == RunMode.ON) {
 				if (globalSetting.langsList.size() > 0) {
-					Server.logger.normalLogEntry("Dictionary is loading...");
+					Server.logger.infoLogEntry("Dictionary is loading...");
 					loadVocabulary();
 				}
 				isValid = true;
@@ -127,7 +126,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	}
 
 	public void reloadVocabulary() {
-		Server.logger.normalLogEntry("Dictionary is reloading (" + appType + ")...");
+		Server.logger.infoLogEntry("Dictionary is reloading (" + appType + ")...");
 		loadVocabulary();
 	}
 
@@ -141,7 +140,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		String vocabuarFilePath = globalSetting.rulePath + File.separator + "Resources" + File.separator + "vocabulary.xml";
 		vocabulary = l.populate(appType, vocabuarFilePath);
 		if (vocabulary != null) {
-			Server.logger.normalLogEntry("Dictionary has loaded");
+			Server.logger.infoLogEntry("Dictionary has loaded");
 		}
 	}
 

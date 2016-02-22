@@ -27,7 +27,7 @@ public class OutlineRule extends Rule implements Const {
         super(env, ruleFile);
 
         id = XMLUtil.getTextContent(doc, "/rule/@id");
-        AppEnv.logger.normalLogEntry("Loading: " + this.getClass().getSimpleName() + ", id=" + id);
+        AppEnv.logger.infoLogEntry("Loading: " + this.getClass().getSimpleName() + ", id=" + id);
 
         NodeList fields = XMLUtil.getNodeList(doc, "/rule/outline/default/field");
         for (int i = 0; i < fields.getLength(); i++)

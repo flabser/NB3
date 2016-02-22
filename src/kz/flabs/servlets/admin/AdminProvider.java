@@ -23,10 +23,8 @@ import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.LicenseException;
 import kz.flabs.exception.PortalException;
-import kz.flabs.exception.QueryException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.servlets.ProviderExceptionType;
@@ -39,8 +37,6 @@ import kz.flabs.users.User;
 import kz.flabs.users.UserSession;
 import kz.flabs.util.ResponseType;
 import kz.flabs.webrule.IRule;
-import kz.flabs.webrule.handler.HandlerRule;
-import kz.flabs.webrule.page.PageRule;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
 import kz.nextbase.script._Exception;
@@ -110,7 +106,7 @@ public class AdminProvider extends HttpServlet implements Const {
 				if (type.equalsIgnoreCase("view")) {
 					result = view(request, dbID, app, element, id);
 				} else if (type.equalsIgnoreCase("edit")) {
-					result = edit(request, app, element, id, key);
+					// result = edit(request, app, element, id, key);
 				} else if (type.equalsIgnoreCase("save")) {
 					result = save(request, app, dbID, element, id);
 				} else if (type.equalsIgnoreCase("get_form")) {
@@ -296,66 +292,6 @@ public class AdminProvider extends HttpServlet implements Const {
 		result.output.append("<query count=\"" + count + "\" currentpage=\"" + page + "\" maxpage=\"" + RuntimeObjUtil.countMaxPage(count, pageSize)
 		        + "\">" + content + "</query>");
 		return result;
-	}
-
-	private ProviderResult edit(HttpServletRequest request, String app, String element, String id, String key) throws NumberFormatException,
-	        RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException, QueryException, LocalizatorException,
-	        ComplexObjectException {
-		ProviderResult result = new ProviderResult();
-		result.publishAs = PublishAsType.HTML;
-
-		AppEnv appEnv = null;
-		String dbID = "";
-		if (app != null) {
-			appEnv = Environment.getApplication(app);
-			dbID = Environment.getApplication(app).getDataBase().getDbID();
-
-		} else {
-
-		}
-
-		result.output.append("<document>");
-		if (element.equalsIgnoreCase("cfg")) {
-			result.xslt = "forms" + File.separator + "cfg.xsl";
-
-		} else if (element.equalsIgnoreCase("log")) {
-			LogFiles logs = new LogFiles();
-			// result.attachHandler = new AttachmentHandler(request, response,
-			// true);
-			result.filePath = logs.logDir + File.separator + id;
-			result.originalAttachName = id;
-			result.publishAs = PublishAsType.OUTPUTSTREAM;
-		} else if (element.equalsIgnoreCase("user")) {
-			result.xslt = "forms" + File.separator + "user.xsl";
-			UserServices us = new UserServices();
-			if (key == null || key.equals("")) {
-				result.output.append(us.getBlankUserAsXML());
-			} else {
-				result.output.append(us.getUserAsXML(Integer.parseInt(key)));
-			}
-		} else if (element.equalsIgnoreCase("schedule")) {
-			result.xslt = "forms" + File.separator + "schedule.xsl";
-			BackgroundProcCollection procCollection = Environment.scheduler.getProcesses();
-			IAdministartorForm daemon = (IAdministartorForm) procCollection.getProcess(id);
-			result.output.append(daemon.toXML());
-		} else if (element.equalsIgnoreCase("handler_rule")) {
-			result.xslt = "forms" + File.separator + "handler.xsl";
-			HandlerRule rule = (HandlerRule) Environment.getApplication(app).ruleProvider.getRule(HANDLER_RULE, id);
-			result.output.append(rule.getRuleAsXML(app));
-		} else if (element.equalsIgnoreCase("page_rule")) {
-			result.xslt = "forms" + File.separator + "page.xsl";
-			PageRule rule = (PageRule) appEnv.ruleProvider.getRule(PAGE_RULE, id);
-			result.output.append(rule.getRuleAsXML(app));
-		} else if (element.equalsIgnoreCase("document")) {
-			result.xslt = "forms" + File.separator + "document.xsl";
-
-		} else if (element.equalsIgnoreCase("glossary")) {
-			result.xslt = "forms" + File.separator + "document.xsl";
-
-		}
-		result.output.append("</document>");
-		return result;
-
 	}
 
 	private ProviderResult save(HttpServletRequest request, String app, String dbID, String element, String id) throws WebFormValueException,

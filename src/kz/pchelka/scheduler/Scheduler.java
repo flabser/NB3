@@ -43,7 +43,7 @@ public class Scheduler implements Runnable {
 		Thread.currentThread().setName(" Scheduler main process");
 		try {
 			Thread.sleep(minuteInterval * Environment.delaySchedulerStart);
-			Server.logger.normalLogEntry("Initialize scheduled services");
+			Server.logger.infoLogEntry("Initialize scheduled services");
 			initServerScheduler();
 		} catch (InterruptedException e) {
 			Server.logger.errorLogEntry(e);

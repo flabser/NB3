@@ -29,7 +29,7 @@ public class WebServer {
 	private static final String defaultWelcomeList[] = { "index.html", "index.htm" };
 
 	public void init(String defaultHostName) throws MalformedURLException, LifecycleException {
-		Server.logger.verboseLogEntry("Init webserver ...");
+		Server.logger.debugLogEntry("Init webserver ...");
 
 		tomcat = new Tomcat();
 		tomcat.setPort(Environment.httpPort);
@@ -142,7 +142,7 @@ public class WebServer {
 		String portInfo = "";
 		if (Environment.isSSLEnable) {
 			Connector secureConnector = null;
-			Server.logger.normalLogEntry("TLS connector has been enabled");
+			Server.logger.infoLogEntry("TLS connector has been enabled");
 			secureConnector = tomcat.getConnector();
 			// secureConnector.setDomain("flabs.kz");
 			secureConnector.setPort(Environment.secureHttpPort);

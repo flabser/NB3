@@ -48,7 +48,7 @@ public class FTIndexEngineDeployer {
 			
 			Statement s = conn.createStatement();
 			s.execute(sql);
-			AppEnv.logger.verboseLogEntry("FT index for " + tableName + " has not created");
+			AppEnv.logger.debugLogEntry("FT index for " + tableName + " has not created");
 			s.close();
 			conn.commit();
 		}catch(SQLException e){

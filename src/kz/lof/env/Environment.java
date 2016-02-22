@@ -35,6 +35,7 @@ import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
@@ -112,6 +113,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static Vocabulary vocabulary;
 	public static String workspaceName = "Workspace";
 	public static String primaryAppDir = "";
+	public static PeriodicalServices periodicalServices;
 	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
 
 	public static void init() {
@@ -140,7 +142,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			saxParser.parse(file, cfgXMLhandler);
 			Document xmlDocument = getDocument();
 
-			logger.normalLogEntry("Initialize runtime environment");
+			logger.infoLogEntry("Initialize runtime environment");
 			initMimeTypes();
 
 			hostName = XMLUtil.getTextContent(xmlDocument, "/nextbase/hostname");
@@ -152,9 +154,9 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			String portAsText = XMLUtil.getTextContent(xmlDocument, "/nextbase/port");
 			try {
 				httpPort = Integer.parseInt(portAsText);
-				logger.normalLogEntry("WebServer is going to use port: " + httpPort);
+				logger.infoLogEntry("WebServer is going to use port: " + httpPort);
 			} catch (NumberFormatException nfe) {
-				logger.normalLogEntry("WebServer is going to use standart port");
+				logger.infoLogEntry("WebServer is going to use standart port");
 			}
 
 			try {
@@ -213,11 +215,11 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					// logger.normalLogEntry("SSL is enabled. keyPass: " +
 					// keyPwd +", keyStore:" +
 					// keyStore);
-					logger.normalLogEntry("TLS is enabled");
+					logger.infoLogEntry("TLS is enabled");
 					httpSchema = "https";
 				}
 			} catch (Exception ex) {
-				logger.normalLogEntry("TLS configiration error");
+				logger.infoLogEntry("TLS configiration error");
 				isSSLEnable = false;
 				keyPwd = "";
 				keyStore = "";
@@ -232,12 +234,12 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					smtpUser = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpuser");
 					smtpPassword = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtppassword");
 					smtpPort = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpport");
-					logger.normalLogEntry("MailAgent is going to redirect some messages to host: " + SMTPHost);
+					logger.infoLogEntry("MailAgent is going to redirect some messages to host: " + SMTPHost);
 				} else {
-					logger.normalLogEntry("MailAgent is switch off");
+					logger.infoLogEntry("MailAgent is switch off");
 				}
 			} catch (NumberFormatException nfe) {
-				logger.normalLogEntry("MailAgent is not set");
+				logger.infoLogEntry("MailAgent is not set");
 				SMTPHost = "";
 				defaultSender = "";
 			}

@@ -51,7 +51,7 @@ public class PeriodicalServices extends TimerTask {
 						if (daemon.getRule().getScheduleType() == ScheduleType.PERIODICAL) {
 
 							if (currentTime.compareTo(startTime) >= 0) {
-								logger.verboseLogEntry("Launch(periodical)>" + daemon.getID());
+								logger.debugLogEntry("Launch(periodical)>" + daemon.getID());
 								daemon.setMonitor(shared);
 								Thread t = new Thread(daemon);
 								t.setPriority(Thread.MIN_PRIORITY);
@@ -65,7 +65,7 @@ public class PeriodicalServices extends TimerTask {
 									startTime.get(Calendar.MINUTE) + maxCurrentTimeMin);
 
 							if (currentTime.compareTo(startTime) >= 0 && currentTime.before(maxCurrentTime)) {
-								logger.verboseLogEntry("Launch(in time)>" + daemon.getID());
+								logger.debugLogEntry("Launch(in time)>" + daemon.getID());
 								daemon.setMonitor(shared);
 								Thread t = new Thread(daemon);
 								t.setPriority(Thread.MIN_PRIORITY);
@@ -143,7 +143,7 @@ public class PeriodicalServices extends TimerTask {
 	}
 
 	public void cancelSchedule() {
-		logger.normalLogEntry("cancelling scheduler");
+		logger.infoLogEntry("cancelling scheduler");
 		timer.cancel();
 	}
 

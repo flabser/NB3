@@ -3,6 +3,7 @@ package kz.flabs.scriptprocessor.page.doscript;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
@@ -30,7 +31,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	@Override
 	public void setSession(_Session ses) {
-		this.ses = ses;
+		setSes(ses);
 		result.setSession(ses);
 	}
 
@@ -126,6 +127,20 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		}, lang));
 	}
 
+	protected void addContent(String elementName, Set<?> langs) {
+		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
+			@Override
+			public String getFullXMLChunk(LanguageType lang) {
+				StringBuffer val = new StringBuffer(500);
+				val.append("<" + elementName + ">");
+				for (Object obj : langs) {
+					val.append("<entry>" + obj.toString() + "</entry>");
+				}
+				return val.append("</" + elementName + ">").toString();
+			}
+		}, lang));
+	}
+
 	protected void addContent(String elementName, String someValue) {
 		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
 			@Override
@@ -163,18 +178,18 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	// @Deprecated
-	protected void addContent(_POJOListWrapper _POJOListWrapper) {
-		result.addContent(_POJOListWrapper);
+	protected void addContent(_POJOListWrapper list) {
+		result.addContent(list);
 
 	}
 
 	protected void startSaveFormTransact(IAppEntity entity) {
-		ses.addFormTransaction(entity, formData.getReferrer());
+		getSes().addFormTransaction(entity, formData.getReferrer());
 
 	}
 
 	protected void finishSaveFormTransact(IAppEntity entity) {
-		result.setRedirectURL(ses.getTransactRedirect(entity));
+		result.setRedirectURL(getSes().getTransactRedirect(entity));
 		result.setFlash(entity.getId().toString());
 		result.setType(OutcomeType.DOCUMENT_SAVED);
 
@@ -188,9 +203,9 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	public PageOutcome processCode(String method) {
 		try {
 			if (method.equalsIgnoreCase("POST")) {
-				doPOST(ses, formData, lang);
+				doPOST(getSes(), formData, lang);
 			} else {
-				doGET(ses, formData, lang);
+				doGET(getSes(), formData, lang);
 			}
 		} catch (Exception e) {
 			addContent("msg", e.toString());

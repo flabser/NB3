@@ -69,6 +69,12 @@
 		<appender-ref ref="roller" />
 	</category>
 
+	<logger name="org.quartz">
+		<level value="INFO" />
+		<appender-ref ref="server_main"/>
+  		<appender-ref ref="console" />
+	</logger>
+	
 	<logger name="Server">
 		<level value="DEBUG" />
 		<appender-ref ref="server_main" />
