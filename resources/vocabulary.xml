@@ -55,8 +55,8 @@
 		<entry lang="ENG">has been not filled</entry>
 	</sentence>
 	<sentence mode="on" keyword="should_be_contain_value_more_than_zero">
-		<entry lang="RUS">должно быть содержать значение больше нуля</entry>
-		<entry lang="KAZ">должно быть содержать значение больше нуля</entry>
+		<entry lang="RUS">должно содержать значение больше нуля</entry>
+		<entry lang="KAZ">должно содержать значение больше нуля</entry>
 		<entry lang="ENG">should be contain value more than zero</entry>
 	</sentence>	
 	<sentence mode="on" keyword="change_skin">
