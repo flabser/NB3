@@ -12,6 +12,7 @@ import kz.lof.webserver.servlet.IOutcomeObject;
  */
 
 public class _Validation implements IOutcomeObject {
+	public static final String VALUE_GREATER_THAN_ZERO = "^([0-9]*[1-9][0-9]*(\\.[0-9]+)?|[0]+\\.[0-9]*[1-9][0-9]*)$";
 
 	private List<Error> errors = new ArrayList<>();
 
@@ -19,6 +20,10 @@ public class _Validation implements IOutcomeObject {
 		errors.add(new Error(field, error, msg));
 	}
 
+	public void addError(String field, String regex) {
+		errors.add(new Error(field, regex, ""));
+	}
+	
 	public List<Error> getErrors() {
 		return errors;
 	}
@@ -76,4 +81,5 @@ public class _Validation implements IOutcomeObject {
 	public String toJSON() {
 		return null;
 	}
+
 }

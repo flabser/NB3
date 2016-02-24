@@ -14,7 +14,7 @@ public interface ISystemDatabase {
 
 	User checkUserHash(String userID, String pwd, String hash, User user);
 
-	User getUser(int docID);
+	User getUser(long docID);
 
 	User getUser(String userID);
 

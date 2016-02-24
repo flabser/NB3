@@ -90,8 +90,10 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 
 	private void recognizeName() {
 		try {
-			final Class<T> listClass = (Class<T>) list.get(0).getClass();
-			entityType = listClass.getSimpleName().toLowerCase();
+			if (list.size() > 0) {
+				final Class<T> listClass = (Class<T>) list.get(0).getClass();
+				entityType = listClass.getSimpleName().toLowerCase();
+			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 
 		}

@@ -554,7 +554,7 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	}
 
 	@Override
-	public User getUser(int docID) {
+	public User getUser(long docID) {
 		User user = new User();
 		Connection conn = dbPool.getConnection();
 		try {
