@@ -42,7 +42,6 @@ import kz.lof.server.Server;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ViewEntryCollection;
 import kz.pchelka.log.LogFiles;
-import kz.pchelka.scheduler.BackgroundProcCollection;
 
 public class AdminProvider extends HttpServlet implements Const {
 	public static final int pageSize = 30;
@@ -256,11 +255,12 @@ public class AdminProvider extends HttpServlet implements Const {
 			count = us.getCount();
 		} else if (element.equalsIgnoreCase("scheduler")) {
 			result.xslt = "views" + File.separator + "scheduler_list.xsl";
-			BackgroundProcCollection pc = Environment.scheduler.getProcesses();
-			if (pc != null) {
-				count = pc.size();
-				content = pc.getProcessAsXMLPiece();
-			}
+			// BackgroundProcCollection pc =
+			// Environment.scheduler.getProcesses();
+			/*
+			 * if (pc != null) { count = pc.size(); content =
+			 * pc.getProcessAsXMLPiece(); }
+			 */
 		} else if (element.equalsIgnoreCase("activity")) {
 
 		} else if (element.equalsIgnoreCase("document_activity")) {

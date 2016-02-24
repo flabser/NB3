@@ -48,7 +48,6 @@ import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
 import kz.pchelka.scheduler.IDaemon;
 import kz.pchelka.scheduler.IProcessInitiator;
-import kz.pchelka.scheduler.Scheduler;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.jdom.input.SAXHandler;
@@ -75,7 +74,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static ArrayList<String> fileToDelete = new ArrayList<String>();
 	public static ILogger logger;
 	public static int delaySchedulerStart;
-	public static Scheduler scheduler = new Scheduler();
+	// public static Scheduler scheduler = new Scheduler();
 
 	public static Boolean isSSLEnable = false;
 	public static int secureHttpPort;
@@ -293,7 +292,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					Class c = Class.forName(tfcr.getClassName());
 					IDaemon daemon = (IDaemon) c.newInstance();
 					daemon.init(tfcr);
-					scheduler.addProcess(tfcr, daemon);
+					// scheduler.addProcess(tfcr, daemon);
 				} catch (InstantiationException e) {
 					logger.errorLogEntry(e);
 				} catch (IllegalAccessException e) {
@@ -310,7 +309,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					Class c = Class.forName(lzr.getClassName());
 					IDaemon daemon = (IDaemon) c.newInstance();
 					daemon.init(lzr);
-					scheduler.addProcess(lzr, daemon);
+					// scheduler.addProcess(lzr, daemon);
 				} catch (InstantiationException e) {
 					logger.errorLogEntry(e);
 				} catch (IllegalAccessException e) {
@@ -363,14 +362,14 @@ public class Environment implements Const, ICache, IProcessInitiator {
 					// logger.normalLogEntry("Connecting to external module " +
 					// db.initExternalPool(ExternalModuleType.STRUCTURE));
 					if (!schedulerStarted) {
-						Thread schedulerThread = new Thread(scheduler);
-						schedulerThread.start();
+						// Thread schedulerThread = new Thread(scheduler);
+						// schedulerThread.start();
 						schedulerStarted = true;
 					}
 				}
 			} else {
-				Thread schedulerThread = new Thread(scheduler);
-				schedulerThread.start();
+				// Thread schedulerThread = new Thread(scheduler);
+				// schedulerThread.start();
 				schedulerStarted = true;
 			}
 			delayedStart = new ArrayList<>();
