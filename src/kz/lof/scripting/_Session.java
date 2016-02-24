@@ -34,7 +34,7 @@ public class _Session extends PageCacheAdapter {
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
 	private HttpSession jses;
 	private HashMap<UUID, FormTransaction> formTrans = new HashMap<UUID, FormTransaction>();
-	Map<String, Object> valuesMap = new HashMap<String, Object>();
+	private Map<String, Object> valuesMap = new HashMap<String, Object>();
 
 	public _Session(AppEnv env, User user) {
 		this.env = env;
@@ -112,8 +112,14 @@ public class _Session extends PageCacheAdapter {
 		newSes.authMode = AuthModeType.LOGIN_THROUGH_TOKEN;
 		newSes.setLang(lang);
 		newSes.setPageSize(pageSize);
+		newSes.setValuesMap(valuesMap);
 		descendants.add(newSes);
 		return newSes;
+	}
+
+	private void setValuesMap(Map<String, Object> vm) {
+		this.valuesMap = vm;
+
 	}
 
 	public void setAttribute(String varName, Object fn) {
@@ -125,7 +131,7 @@ public class _Session extends PageCacheAdapter {
 
 	}
 
-	public void removeAttribute(String varName, String fn) {
+	public void removeAttribute(String varName) {
 		valuesMap.remove(varName);
 	}
 

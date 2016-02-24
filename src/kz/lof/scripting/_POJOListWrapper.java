@@ -8,10 +8,11 @@ import kz.flabs.localization.LanguageType;
 import kz.lof.webserver.servlet.IOutcomeObject;
 
 public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
-	public int maxPage;
+	private String entityType = "undefined";
+	private int maxPage;
 	private long count;
 	private int currentPage;
-	public List<T> list;
+	private List<T> list;
 	private LanguageType lang;
 	private String keyWord = "";
 
@@ -21,6 +22,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		this.currentPage = currentPage;
 		this.list = list;
 		this.lang = lang;
+		recognizeName();
 	}
 
 	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, LanguageType lang, String keyWord) {
@@ -30,6 +32,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		this.list = list;
 		this.lang = lang;
 		this.keyWord = " keyword=\"" + keyWord + "\" ";
+		recognizeName();
 	}
 
 	public _POJOListWrapper(List<T> list, LanguageType lang) {
@@ -38,6 +41,16 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		maxPage = 1;
 		currentPage = 1;
 		this.lang = lang;
+		recognizeName();
+	}
+
+	public _POJOListWrapper(List<T> list, LanguageType lang, String en) {
+		this.count = list.size();
+		this.list = list;
+		maxPage = 1;
+		currentPage = 1;
+		this.lang = lang;
+		entityType = en;
 	}
 
 	public _POJOListWrapper(String msg, String keyWord) {
@@ -49,15 +62,16 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		this.keyWord = " keyword=\"" + keyWord + "\" ";
 	}
 
+	public int getMaxPage() {
+		return maxPage;
+	}
+
+	public List<T> getList() {
+		return list;
+	}
+
 	@Override
 	public String toXML() {
-		String entityType = "undefined";
-		try {
-			final Class<T> listClass = (Class<T>) list.get(0).getClass();
-			entityType = listClass.getSimpleName().toLowerCase();
-		} catch (ArrayIndexOutOfBoundsException e) {
-
-		}
 
 		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
 		        + "\"" + keyWord + ">";
@@ -72,6 +86,15 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	public String toJSON() {
 		return null;
 
+	}
+
+	private void recognizeName() {
+		try {
+			final Class<T> listClass = (Class<T>) list.get(0).getClass();
+			entityType = listClass.getSimpleName().toLowerCase();
+		} catch (ArrayIndexOutOfBoundsException e) {
+
+		}
 	}
 
 	class SimplePOJO implements IPOJOObject {

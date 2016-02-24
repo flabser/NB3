@@ -1,9 +1,9 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import kz.flabs.localization.LanguageType;
 import kz.flabs.localization.Vocabulary;
@@ -113,32 +113,33 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		setValidation(ve);
 	}
 
-	protected void addContent(String elementName, List<?> langs) {
-		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
-			@Override
-			public String getFullXMLChunk(LanguageType lang) {
-				StringBuffer val = new StringBuffer(500);
-				val.append("<" + elementName + ">");
-				for (Object obj : langs) {
-					val.append("<entry>" + obj.toString() + "</entry>");
-				}
-				return val.append("</" + elementName + ">").toString();
-			}
-		}, lang));
-	}
+	/*
+	 * @SuppressWarnings({ "unchecked", "rawtypes" }) protected void
+	 * addContent(String elementName, List<?> list) { result.addObject(new
+	 * _POJOListWrapper(list, lang)); }
+	 */
 
-	protected void addContent(String elementName, Set<?> langs) {
-		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
-			@Override
-			public String getFullXMLChunk(LanguageType lang) {
-				StringBuffer val = new StringBuffer(500);
-				val.append("<" + elementName + ">");
-				for (Object obj : langs) {
-					val.append("<entry>" + obj.toString() + "</entry>");
+	/*
+	 * @SuppressWarnings({ "unchecked", "rawtypes" }) protected void
+	 * addContent(String elementName, Set<?> list) { List mainList = new
+	 * ArrayList(); mainList.addAll(list); addContent(elementName, list); }
+	 */
+
+	protected void addContent(String elementName, List<?> list) {
+		List<IPOJOObject> newList = new ArrayList<IPOJOObject>();
+		for (Object element : list) {
+			newList.add(new POJOObjectAdapter() {
+				@Override
+				public String getShortXMLChunk(LanguageType lang) {
+					StringBuffer val = new StringBuffer(500);
+					val.append("<entry>");
+					val.append(element.toString());
+					return val.append("</entry>").toString();
 				}
-				return val.append("</" + elementName + ">").toString();
-			}
-		}, lang));
+			});
+
+		}
+		result.addObject(new _POJOListWrapper<IPOJOObject>(newList, lang, elementName));
 	}
 
 	protected void addContent(String elementName, String someValue) {
