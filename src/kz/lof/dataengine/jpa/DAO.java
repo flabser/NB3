@@ -233,6 +233,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(c.get("readers").in((long) user.docID), condition);
 			}
+			cq.orderBy(cb.asc(c.get("regDate")));
 			cq.where(condition);
 			countCq.where(condition);
 			TypedQuery<T> typedQuery = em.createQuery(cq);
