@@ -91,6 +91,8 @@ public class Provider extends HttpServlet {
                         default:
                             result = page.getPageContent(formData, "GET");
                     }
+                } else if (request.getMethod().equalsIgnoreCase("DELETE")) {
+                    result = page.getPageContent(formData, "DELETE");
                 } else {
                     result = page.getPageContent(formData, "POST");
                 }
