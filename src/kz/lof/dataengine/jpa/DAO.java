@@ -20,6 +20,8 @@ import kz.flabs.users.User;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 
+import org.eclipse.persistence.exceptions.DatabaseException;
+
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public User user;
 	protected final Class<T> entityClass;
@@ -111,7 +113,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	}
 
 	@Override
-	public T add(T entity) {
+	public T add(T entity) throws DatabaseException {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		try {
 			EntityTransaction t = em.getTransaction();

@@ -14,8 +14,10 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.parser.QueryFormulaParserException;
+import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.User;
+import kz.flabs.webrule.constants.ValueSourceType;
 
 public class UserServices {
 	private ISystemDatabase sysDatabase;
@@ -60,7 +62,8 @@ public class UserServices {
 			        + user.getHash() + "</hash>" + "<enabledapps>" + ea + "</enabledapps>";
 
 			SourceSupplier ss = new SourceSupplier(user.getUserID());
-			xmlContent += "<glossaries><apps></apps></glossaries>";
+			xmlContent += "<glossaries><apps>" + ss.getDataAsXML(ValueSourceType.MACRO, "", Macro.ALL_APPLICATIONS, "RUS") + "</apps></glossaries>";
+
 		}
 
 		return xmlContent;
