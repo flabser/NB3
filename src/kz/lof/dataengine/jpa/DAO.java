@@ -26,7 +26,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public User user;
 	protected final Class<T> entityClass;
 	private EntityManagerFactory emf;
-	private _Session ses;
+	protected _Session ses;
 
 	public DAO(Class<T> entityClass, _Session session) {
 		this.entityClass = entityClass;
