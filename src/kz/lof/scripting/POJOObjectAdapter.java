@@ -2,8 +2,6 @@ package kz.lof.scripting;
 
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
-
 public class POJOObjectAdapter implements IPOJOObject {
 
 	@Override
@@ -17,13 +15,13 @@ public class POJOObjectAdapter implements IPOJOObject {
 	}
 
 	@Override
-	public String getFullXMLChunk(LanguageType lang) {
+	public String getFullXMLChunk(_Session ses) {
 		return "<object>null</object>";
 	}
 
 	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return getFullXMLChunk(lang);
+	public String getShortXMLChunk(_Session ses) {
+		return getFullXMLChunk(ses);
 	}
 
 	@Override

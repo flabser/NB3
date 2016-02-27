@@ -68,7 +68,7 @@ public class ScriptEvent {
 		}
 		int startRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 		List<? extends IPOJOObject> list = dao.findAll(startRec, pageSize);
-		return new _POJOListWrapper(list, maxPage, count, pageNum, lang);
+		return new _POJOListWrapper(list, maxPage, count, pageNum, ses);
 
 	}
 

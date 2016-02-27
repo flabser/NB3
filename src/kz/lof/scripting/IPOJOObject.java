@@ -2,16 +2,14 @@ package kz.lof.scripting;
 
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
-
 public interface IPOJOObject {
 	UUID getId();
 
 	String getURL();
 
-	String getFullXMLChunk(LanguageType lang);
+	String getFullXMLChunk(_Session ses);
 
-	String getShortXMLChunk(LanguageType lang);
+	String getShortXMLChunk(_Session ses);
 
 	public boolean isEditable();
 

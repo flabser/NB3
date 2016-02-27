@@ -2,8 +2,8 @@ package kz.nextbase.script;
 
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
 import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting._Session;
 
 /**
  * wrapp a Enum to publish as XML
@@ -42,7 +42,7 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	}
 
 	@Override
-	public String getFullXMLChunk(LanguageType lang) {
+	public String getFullXMLChunk(_Session ses) {
 		final Class<T> enumClass = (Class<T>) enumObj[0].getClass();
 		String entityType = enumClass.getSimpleName().toLowerCase();
 		StringBuffer res = new StringBuffer(1000).append("<constants entity=\"" + entityType + "\">");
@@ -54,7 +54,7 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	}
 
 	@Override
-	public String getShortXMLChunk(LanguageType lang) {
+	public String getShortXMLChunk(_Session ses) {
 		// TODO Auto-generated method stub
 		return null;
 	}

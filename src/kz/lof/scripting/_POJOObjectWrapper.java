@@ -1,21 +1,20 @@
 package kz.lof.scripting;
 
-import kz.flabs.localization.LanguageType;
 import kz.lof.webserver.servlet.IOutcomeObject;
 
 public class _POJOObjectWrapper implements IOutcomeObject {
 	private IPOJOObject object;
-	private LanguageType lang;
+	private _Session ses;
 
-	public _POJOObjectWrapper(IPOJOObject object, LanguageType lang) {
+	public _POJOObjectWrapper(IPOJOObject object, _Session ses) {
 		this.object = object;
-		this.lang = lang;
+		this.ses = ses;
 	}
 
 	@Override
 	public String toXML() {
 		return "<document entity=\"" + object.getClass().getSimpleName().toLowerCase() + "\"  docid=\"" + object.getId() + "\" editable=\""
-		        + object.isEditable() + "\"><fields>" + object.getFullXMLChunk(lang) + "</fields></document>";
+		        + object.isEditable() + "\"><fields>" + object.getFullXMLChunk(ses) + "</fields></document>";
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
 import kz.lof.webserver.servlet.IOutcomeObject;
 
 public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
@@ -13,43 +12,43 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	private long count;
 	private int currentPage;
 	private List<T> list;
-	private LanguageType lang;
 	private String keyWord = "";
+	private _Session ses;
 
-	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, LanguageType lang) {
+	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, _Session ses) {
 		this.maxPage = maxPage;
 		this.count = count;
 		this.currentPage = currentPage;
 		this.list = list;
-		this.lang = lang;
+		this.ses = ses;
 		recognizeName();
 	}
 
-	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, LanguageType lang, String keyWord) {
+	public _POJOListWrapper(List<T> list, int maxPage, long count, int currentPage, _Session ses, String keyWord) {
 		this.maxPage = maxPage;
 		this.count = count;
 		this.currentPage = currentPage;
 		this.list = list;
-		this.lang = lang;
+		this.ses = ses;
 		this.keyWord = " keyword=\"" + keyWord + "\" ";
 		recognizeName();
 	}
 
-	public _POJOListWrapper(List<T> list, LanguageType lang) {
+	public _POJOListWrapper(List<T> list, _Session ses) {
 		this.count = list.size();
 		this.list = list;
 		maxPage = 1;
 		currentPage = 1;
-		this.lang = lang;
+		this.ses = ses;
 		recognizeName();
 	}
 
-	public _POJOListWrapper(List<T> list, LanguageType lang, String en) {
+	public _POJOListWrapper(List<T> list, _Session ses, String en) {
 		this.count = list.size();
 		this.list = list;
 		maxPage = 1;
 		currentPage = 1;
-		this.lang = lang;
+		this.ses = ses;
 		entityType = en;
 	}
 
@@ -58,7 +57,6 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		List<T> l = new ArrayList<T>();
 		l.add((T) new SimplePOJO(msg));
 		this.list = l;
-		this.lang = lang;
 		this.keyWord = " keyword=\"" + keyWord + "\" ";
 	}
 
@@ -77,7 +75,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		        + "\"" + keyWord + ">";
 		for (T val : list) {
 			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
-			result += val.getShortXMLChunk(lang) + "</viewcontent></entry>";
+			result += val.getShortXMLChunk(ses) + "</viewcontent></entry>";
 		}
 		return result + "</query>";
 	}
@@ -123,13 +121,13 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		}
 
 		@Override
-		public String getFullXMLChunk(LanguageType lang) {
+		public String getFullXMLChunk(_Session ses) {
 			return "<message>" + msg + "</message>";
 		}
 
 		@Override
-		public String getShortXMLChunk(LanguageType lang) {
-			return getFullXMLChunk(lang);
+		public String getShortXMLChunk(_Session ses) {
+			return getFullXMLChunk(ses);
 		}
 
 	}

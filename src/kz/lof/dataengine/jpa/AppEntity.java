@@ -16,12 +16,12 @@ import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 import kz.flabs.appenv.AppEnv;
-import kz.flabs.localization.LanguageType;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.lof.dataengine.jpa.util.UUIDConverter;
 import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting._Session;
 
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
@@ -113,7 +113,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	 * object
 	 */
 	@Override
-	public String getFullXMLChunk(LanguageType lang) {
+	public String getFullXMLChunk(_Session ses) {
 		Class<?> noparams[] = {};
 		StringBuilder value = new StringBuilder(1000);
 		try {
@@ -165,8 +165,8 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	 */
 	@JsonIgnore
 	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return getFullXMLChunk(lang);
+	public String getShortXMLChunk(_Session ses) {
+		return getFullXMLChunk(ses);
 	}
 
 	@Override

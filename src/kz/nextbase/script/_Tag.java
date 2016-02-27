@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.Util;
 import kz.lof.scripting.IPOJOObject;
+import kz.lof.scripting._Session;
 
 @Deprecated
 public class _Tag implements IPOJOObject {
@@ -134,13 +134,13 @@ public class _Tag implements IPOJOObject {
 	}
 
 	@Override
-	public String getFullXMLChunk(LanguageType lang) {
+	public String getFullXMLChunk(_Session ses) {
 		return runtimeTag.toXML();
 	}
 
 	@Override
-	public String getShortXMLChunk(LanguageType lang) {
-		return getFullXMLChunk(lang);
+	public String getShortXMLChunk(_Session ses) {
+		return getFullXMLChunk(null);
 	}
 
 	@Override
