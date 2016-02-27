@@ -34,19 +34,7 @@ public class Server {
 		webServerInst = new WebServer();
 		webServerInst.init(Environment.hostName);
 
-		/*
-		 * if (Environment.adminConsoleEnable) { Host host =
-		 * webServerInst.addApplication("Administrator", "/Administrator",
-		 * "Administrator");
-		 * 
-		 * HashSet<Host> hosts = new HashSet<Host>(); hosts.add(host); }
-		 */
-
-		// Server.logger.normalLogEntry("All applications are starting...");
-
 		for (Site webApp : Environment.webAppToStart.values()) {
-			// hosts.add(webServerInst.addApplication(webApp.name, "/" +
-			// webApp.appBase, webApp.appBase));
 			webServerInst.addApplication(webApp.name, "/" + webApp.appBase, webApp.appBase);
 		}
 
