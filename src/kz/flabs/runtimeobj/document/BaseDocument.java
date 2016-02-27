@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
@@ -47,6 +46,7 @@ import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.form.ISaveField;
 import kz.flabs.webrule.form.SaveFieldRule;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;

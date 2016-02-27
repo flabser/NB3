@@ -1,10 +1,10 @@
 package kz.flabs.runtimeobj;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.Document;
 import kz.flabs.webrule.constants.FieldType;
+import kz.lof.appenv.AppEnv;
 
 public class Application {
 	public String orgName;

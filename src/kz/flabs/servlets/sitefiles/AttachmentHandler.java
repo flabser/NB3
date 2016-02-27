@@ -1,6 +1,6 @@
 package kz.flabs.servlets.sitefiles;
 
-import kz.flabs.appenv.AppEnv;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 
 import org.apache.commons.io.FilenameUtils;

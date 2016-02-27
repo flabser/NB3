@@ -1,9 +1,9 @@
 package kz.flabs.runtimeobj.page;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.users.UserSession;
 import kz.flabs.webrule.page.PageRule;
+import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 
 public class IncludedPage extends Page implements Const {

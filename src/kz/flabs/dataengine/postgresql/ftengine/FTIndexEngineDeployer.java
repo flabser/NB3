@@ -3,9 +3,10 @@ package kz.flabs.dataengine.postgresql.ftengine;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
+import kz.lof.appenv.AppEnv;
 
 public class FTIndexEngineDeployer {
 	private IDBConnectionPool dbPool;

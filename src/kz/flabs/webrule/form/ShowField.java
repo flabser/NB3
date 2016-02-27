@@ -2,15 +2,17 @@ package kz.flabs.webrule.form;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
+
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.w3c.dom.Node;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.scriptprocessor.ScriptProcessor;
 import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 
 public class ShowField implements IShowField {
 	public String value = "";	

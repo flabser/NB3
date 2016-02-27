@@ -13,7 +13,7 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ViewPage;
@@ -79,7 +79,7 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 		indexTables.add(table);
 	}
 
-	private String getLangString(LanguageType lang) {
+	private String getLangString(LanguageCode lang) {
 		switch (lang) {
 		case RUS:
 			return "russian";

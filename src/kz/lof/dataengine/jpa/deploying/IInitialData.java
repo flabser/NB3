@@ -2,7 +2,7 @@ package kz.lof.dataengine.jpa.deploying;
 
 import java.util.List;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.lof.scripting._Session;
 
@@ -11,7 +11,7 @@ import kz.lof.scripting._Session;
  */
 
 public interface IInitialData<T, T1> {
-	List<T> getData(_Session ses, LanguageType lang, Vocabulary vocabulary);
+	List<T> getData(_Session ses, LanguageCode lang, Vocabulary vocabulary);
 
 	Class<T1> getDAO();
 

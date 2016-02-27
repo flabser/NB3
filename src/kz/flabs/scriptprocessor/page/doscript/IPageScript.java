@@ -1,6 +1,6 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.PageOutcome;
@@ -13,6 +13,6 @@ public interface IPageScript {
 
 	PageOutcome processCode(String method);
 
-	void setCurrentLang(Vocabulary vocabulary, LanguageType lang);
+	void setCurrentLang(Vocabulary vocabulary, LanguageCode lang);
 
 }

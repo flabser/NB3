@@ -12,12 +12,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.servlets.Cookies;
 import kz.flabs.users.User;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.SessionCooks;
@@ -92,7 +92,7 @@ public class AccessGuard implements Filter {
 	private _Session getAnonymousSes(Request request, Response response, HttpSession jses, AppEnv env, String appID) {
 		SessionCooks cooks = new SessionCooks(request, response);
 		_Session ses = new _Session(env, new User());
-		ses.setLang(LanguageType.valueOf(cooks.getCurrentLang()));
+		ses.setLang(LanguageCode.valueOf(cooks.getCurrentLang()));
 		return ses;
 	}
 

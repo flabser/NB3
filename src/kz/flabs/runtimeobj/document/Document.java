@@ -1,6 +1,5 @@
 package kz.flabs.runtimeobj.document;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
@@ -8,6 +7,7 @@ import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.LicenseException;
 import kz.flabs.users.User;
+import kz.lof.appenv.AppEnv;
 
 public class Document extends BaseDocument implements Const {
 

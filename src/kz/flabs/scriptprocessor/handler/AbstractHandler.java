@@ -8,10 +8,9 @@ import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.Msg;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptProcessorUtil;
-import kz.flabs.servlets.SignalType;
+import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
-import kz.flabs.util.PageResponse;
 import kz.lof.scripting._Session;
 import kz.nextbase.script._WebFormData;
 
@@ -22,7 +21,6 @@ public abstract class AbstractHandler extends ScriptEvent implements IHandlerScr
 	private _Session ses;
 	private Map<String, String[]> formData;
 	private Vocabulary vocabulary;
-	private SignalType signal;
 	private File file;
 	private PageResponse xmlResp = new PageResponse(ResponseType.RESULT_OF_HANDLER_SCRIPT);
 	private _WebFormData webFormData;
@@ -67,10 +65,6 @@ public abstract class AbstractHandler extends ScriptEvent implements IHandlerScr
 	public void localizedMsgBox(String m, String id) {
 		String msg = vocabulary.getWord(m, lang)[0];
 		messages.add(new Msg(id, msg));
-	}
-
-	public void sendSignalToRefresh() {
-		signal = SignalType.RELOAD_PAGE;
 	}
 
 	public void showFile(File file) {

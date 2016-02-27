@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.lof.env.EnvConst;
 
 public class SessionCooks {
@@ -32,7 +32,7 @@ public class SessionCooks {
 		}
 	}
 
-	public void saveLang(LanguageType lang) {
+	public void saveLang(LanguageCode lang) {
 		Cookie c = new Cookie(EnvConst.LANG_COOKIE_NAME, lang.name());
 		c.setMaxAge(MONTH_TIME);
 		// c.setDomain("/");
@@ -41,7 +41,7 @@ public class SessionCooks {
 
 	public String getCurrentLang() {
 		if (currentLang == null) {
-			return LanguageType.ENG.name();
+			return LanguageCode.ENG.name();
 		} else {
 			return currentLang;
 		}

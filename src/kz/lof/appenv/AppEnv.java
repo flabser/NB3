@@ -1,4 +1,4 @@
-package kz.flabs.appenv;
+package kz.lof.appenv;
 
 import java.io.File;
 import java.util.ArrayList;

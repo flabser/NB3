@@ -1,11 +1,12 @@
 package kz.flabs.webrule.form;
 
 import org.w3c.dom.Node;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 
 public class GlossaryRule implements Const{
 	public String name;

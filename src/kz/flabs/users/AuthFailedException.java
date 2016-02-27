@@ -15,7 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import kz.flabs.appenv.AppEnv;
+import kz.lof.appenv.AppEnv;
 import kz.lof.server.Server;
 
 public class AuthFailedException extends Exception {

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
@@ -12,6 +11,7 @@ import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.form.DefaultFieldRule;
+import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

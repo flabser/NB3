@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.lof.dataengine.jpa.DAO;
@@ -23,7 +23,7 @@ public class ScriptEvent {
 	protected Vocabulary vocabulary;
 	protected String redirectURL = "";
 	protected ArrayList<_IXMLContent> toPublishElement = new ArrayList<_IXMLContent>();
-	protected LanguageType lang;
+	protected LanguageCode lang;
 	private _Session ses;
 
 	public String getTmpDirPath() {
@@ -46,7 +46,7 @@ public class ScriptEvent {
 		}
 	}
 
-	protected _ActionBar getSimpleActionBar(_Session session, String type, LanguageType lang) {
+	protected _ActionBar getSimpleActionBar(_Session session, String type, LanguageCode lang) {
 		_ActionBar actionBar = new _ActionBar(session);
 		_Action newDocAction = new _Action(getLocalizedWord("new_", lang), getLocalizedWord("add_new_", lang), "new_" + type);
 		newDocAction.setURL("Provider?id=" + type + "&key=");
@@ -110,7 +110,7 @@ public class ScriptEvent {
 		return getWord(word, vocabulary, lang);
 	}
 
-	public String getLocalizedWord(String word, LanguageType lang) {
+	public String getLocalizedWord(String word, LanguageCode lang) {
 		return getWord(word, vocabulary, lang.name());
 	}
 

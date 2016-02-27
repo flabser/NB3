@@ -2,8 +2,8 @@ package kz.flabs.webrule.page;
 
 import java.util.ArrayList;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.webrule.Caption;
+import kz.lof.appenv.AppEnv;
 
 public interface IElement {
 	String getID();

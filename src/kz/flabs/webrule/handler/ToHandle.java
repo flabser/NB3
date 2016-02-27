@@ -1,11 +1,12 @@
 package kz.flabs.webrule.handler;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.sourcesupplier.DocumentCollectionMacro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.IRuleValue;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
+
 import org.w3c.dom.Node;
 
 public class ToHandle implements IRuleValue {

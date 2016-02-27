@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.FTIndexEngineException;
 import kz.flabs.dataengine.IDatabase;
@@ -13,6 +12,7 @@ import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.util.XMLUtil;
+import kz.lof.appenv.AppEnv;
 
 public class FTSearchRequest implements Const {
 	private static final SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");

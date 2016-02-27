@@ -3,11 +3,10 @@ package kz.flabs.runtimeobj.page;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.users.UserSession;
@@ -15,6 +14,7 @@ import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Caption;
 import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.PageRule;
+import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._WebFormData;
@@ -156,7 +156,7 @@ public class Page implements IProcessInitiator, Const {
 		return rule.getRuleID();
 	}
 
-	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageType lang) {
+	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageCode lang) {
 		HashMap<String, String> translated = new HashMap<String, String>();
 		for (Caption cap : captions) {
 			translated.put(cap.captionID, env.vocabulary.getWord(cap.captionID, lang));

@@ -1,9 +1,9 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
 import groovy.lang.GroovyObject;
-import kz.flabs.appenv.AppEnv;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
+import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
@@ -11,7 +11,7 @@ import kz.nextbase.script._WebFormData;
 
 public class DoProcessor {
 
-	private LanguageType lang;
+	private LanguageCode lang;
 	private GroovyObject groovyObject = null;
 	private _Session ses;
 	private Vocabulary vocabulary;

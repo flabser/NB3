@@ -2,9 +2,9 @@ package kz.flabs.webrule;
 
 import java.io.File;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Node;
 

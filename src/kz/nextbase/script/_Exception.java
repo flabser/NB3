@@ -3,7 +3,7 @@ package kz.nextbase.script;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import kz.flabs.appenv.AppEnv;
+import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 
 public class _Exception extends Exception {

@@ -15,10 +15,10 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.util.UUIDConverter;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._Session;

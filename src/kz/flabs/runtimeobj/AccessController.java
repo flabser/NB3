@@ -1,7 +1,7 @@
 package kz.flabs.runtimeobj;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.users.User;
+import kz.lof.appenv.AppEnv;
 
 public class AccessController {
 	AppEnv env;

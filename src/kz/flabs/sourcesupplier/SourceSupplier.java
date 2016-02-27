@@ -9,14 +9,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.localization.SentenceCaption;
@@ -37,6 +36,7 @@ import kz.flabs.webrule.Role;
 import kz.flabs.webrule.Skin;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
@@ -429,7 +429,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 
 	public String getAvailableApps(User user) {
 		String result = "";
-		SourceSupplier ss = new SourceSupplier(env, LanguageType.RUS.name());
+		SourceSupplier ss = new SourceSupplier(env, LanguageCode.RUS.name());
 		// user.getSession().lang
 		for (AppEnv appEnv : Environment.getApplications()) {
 			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {

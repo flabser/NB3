@@ -30,12 +30,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import kz.flabs.appdaemon.AppDaemonRule;
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.synchronizer.SynchroGlobalSetting;
+import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

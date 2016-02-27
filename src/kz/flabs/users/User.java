@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
@@ -22,6 +21,7 @@ import kz.flabs.runtimeobj.document.BlobFile;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.form.ISaveField;
+import kz.lof.appenv.AppEnv;
 
 import org.apache.catalina.realm.RealmBase;
 

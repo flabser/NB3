@@ -22,7 +22,7 @@ public class Vocabulary {
 		this.appName = appName;
 		this.words = (HashMap<String, Sentence>) w.clone();
 		org.w3c.dom.Element root = doc.getDocumentElement();
-		LanguageType primaryLang = LanguageType.valueOf(XMLUtil.getTextContent(doc, "/vocabulary/@primary", true, "UNKNOWN", false).toUpperCase());
+		LanguageCode primaryLang = LanguageCode.valueOf(XMLUtil.getTextContent(doc, "/vocabulary/@primary", true, "UNKNOWN", false).toUpperCase());
 
 		NodeList nodename = root.getElementsByTagName("sentence");
 		for (int i = 0; i < nodename.getLength(); i++) {
@@ -52,7 +52,7 @@ public class Vocabulary {
 		}
 	}
 
-	public String getWord(String keyWord, LanguageType lang) {
+	public String getWord(String keyWord, LanguageCode lang) {
 		try {
 			Sentence sent = words.get(keyWord);
 			if (sent == null) {

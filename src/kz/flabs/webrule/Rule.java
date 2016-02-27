@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.servlets.PublishAsType;
@@ -27,6 +26,7 @@ import kz.flabs.webrule.form.GlossaryRule;
 import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.IElement;
 import kz.flabs.webrule.scheduler.ScheduleSettings;
+import kz.lof.appenv.AppEnv;
 
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;

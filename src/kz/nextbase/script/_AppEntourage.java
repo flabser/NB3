@@ -3,7 +3,6 @@ package kz.nextbase.script;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
@@ -11,6 +10,7 @@ import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
 import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;

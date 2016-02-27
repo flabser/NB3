@@ -1,8 +1,10 @@
 package kz.flabs.webrule.form;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.scriptprocessor.ScriptProcessor;
+import kz.lof.appenv.AppEnv;
+
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 

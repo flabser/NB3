@@ -3,7 +3,7 @@ package kz.nextbase.script.actions;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.IOutcomeObject;
@@ -40,7 +40,7 @@ public class _ActionBar implements IOutcomeObject {
 		return null;
 	}
 
-	public String getFullXMLChunk(LanguageType lang) {
+	public String getFullXMLChunk(LanguageCode lang) {
 		String a = "";
 		for (_Action act : actions) {
 			a += act.toXML();
@@ -48,7 +48,7 @@ public class _ActionBar implements IOutcomeObject {
 		return "<actionbar mode=\"" + isOn + "\" caption=\"" + caption + "\" hint=\"" + hint + "\">" + a + "</actionbar>";
 	}
 
-	public String getShortXMLChunk(LanguageType lang) {
+	public String getShortXMLChunk(LanguageCode lang) {
 		return getFullXMLChunk(lang);
 	}
 

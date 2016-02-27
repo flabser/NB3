@@ -1,6 +1,6 @@
 package kz.flabs.dataengine;
 
-import kz.flabs.appenv.AppEnv;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 
 public class DatabaseFactory implements Const {

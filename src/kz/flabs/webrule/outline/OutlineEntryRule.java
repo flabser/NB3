@@ -1,16 +1,17 @@
 package kz.flabs.webrule.outline;
 
 import java.util.ArrayList;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.RuleUser;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 
 
 public class OutlineEntryRule {

@@ -1,12 +1,13 @@
 package kz.flabs.webrule.form;
 
 import org.w3c.dom.Node;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 
 public class SaveFieldRule implements ISaveField, Const{
 	public String name;

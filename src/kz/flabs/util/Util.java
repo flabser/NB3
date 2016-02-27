@@ -22,9 +22,9 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.ConversionError;
 import kz.flabs.exception.DataConversionException;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.AppEntity;
 import kz.lof.server.Server;
 

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseType;
@@ -13,6 +12,7 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;

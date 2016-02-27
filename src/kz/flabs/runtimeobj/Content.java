@@ -2,11 +2,11 @@ package kz.flabs.runtimeobj;
 
 import java.util.ArrayList;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.webrule.Caption;
 import kz.flabs.webrule.Rule;
+import kz.lof.appenv.AppEnv;
 
 public class Content {
 	private AppEnv env;

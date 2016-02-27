@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptShowField;
@@ -97,7 +97,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	@Override
-	public void setCurrentLang(Vocabulary vocabulary, LanguageType lang) {
+	public void setCurrentLang(Vocabulary vocabulary, LanguageCode lang) {
 		this.lang = lang;
 		this.vocabulary = vocabulary;
 	}
@@ -220,9 +220,9 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	}
 
-	public abstract void doGET(_Session session, _WebFormData formData, LanguageType lang) throws _Exception;
+	public abstract void doGET(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
 
-	public abstract void doPOST(_Session session, _WebFormData formData, LanguageType lang) throws _Exception;
+	public abstract void doPOST(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
 
-	public abstract void doDELETE(_Session session, _WebFormData formData, LanguageType lang) throws _Exception;
+	public abstract void doDELETE(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
 }

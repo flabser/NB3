@@ -1,6 +1,5 @@
 package kz.flabs.runtimeobj;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
@@ -13,6 +12,7 @@ import kz.flabs.webrule.Rule;
 import kz.flabs.webrule.RuleUser;
 import kz.flabs.webrule.form.FormActionRule;
 import kz.flabs.webrule.form.FormRule;
+import kz.lof.appenv.AppEnv;
 
 public class FormActions {
 	private Rule rule;

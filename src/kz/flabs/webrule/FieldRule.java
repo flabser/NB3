@@ -1,7 +1,7 @@
 package kz.flabs.webrule;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.util.XMLUtil;
+import kz.lof.appenv.AppEnv;
 
 public class FieldRule{
 	public String name;

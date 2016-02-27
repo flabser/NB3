@@ -2,7 +2,7 @@ package kz.flabs.dataengine;
 
 import javax.persistence.EntityManagerFactory;
 
-import kz.flabs.appenv.AppEnv;
+import kz.lof.appenv.AppEnv;
 
 public interface IDatabase {
 

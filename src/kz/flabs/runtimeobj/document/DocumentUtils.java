@@ -2,7 +2,8 @@ package kz.flabs.runtimeobj.document;
 
 import java.util.Date;
 import java.util.HashMap;
-import kz.flabs.appenv.AppEnv;
+
+import kz.lof.appenv.AppEnv;
 
 public class DocumentUtils {
 	public static String getValFromFormAsString(String fieldName, HashMap<String, String[]> fields){

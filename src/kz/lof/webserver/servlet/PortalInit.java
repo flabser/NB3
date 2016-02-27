@@ -9,13 +9,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.runtimeobj.Application;
 import kz.flabs.users.User;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
@@ -70,6 +70,7 @@ public class PortalInit extends HttpServlet {
 					fields.add("description");
 					fields.add("notes");
 					fields.add("inv_number");
+					fields.add("balanceholder");
 					ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
 				}
 

@@ -22,19 +22,19 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.appenv.AppEnv;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
@@ -84,7 +84,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static String trustStorePwd;
 	public static boolean isClientSSLAuthEnable;
 
-	public static List<LanguageType> langs = new ArrayList<LanguageType>();
+	public static List<LanguageCode> langs = new ArrayList<LanguageCode>();
 
 	public static String smtpPort;
 	public static boolean smtpAuth;
@@ -195,7 +195,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			// TODO Need to add exception handler
 			NodeList l = XMLUtil.getNodeList(xmlDocument, "/nextbase/langs/entry");
 			for (int i = 0; i < l.getLength(); i++) {
-				langs.add(LanguageType.valueOf(XMLUtil.getTextContent(l.item(i), ".", false)));
+				langs.add(LanguageCode.valueOf(XMLUtil.getTextContent(l.item(i), ".", false)));
 			}
 
 			countOfApp = webAppToStart.size();

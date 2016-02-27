@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
@@ -21,6 +20,7 @@ import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.ElementScript;
+import kz.lof.appenv.AppEnv;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;

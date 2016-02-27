@@ -6,10 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.util.Util;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.deploying.InitializerHelper;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;

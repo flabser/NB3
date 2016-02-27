@@ -2,9 +2,10 @@ package kz.flabs.webrule.rulefile;
 
 import java.io.*;
 import java.util.*;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.util.XMLUtil;
+import kz.lof.appenv.AppEnv;
 import kz.pchelka.log.JavaConsoleLogger;
 
 public class RuleFile implements Const {

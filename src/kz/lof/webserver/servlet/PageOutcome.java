@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.servlets.pojo.OutcomeType;
@@ -18,10 +18,12 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class PageOutcome {
 	public PublishAsType publishAs = PublishAsType.HTML;
@@ -32,7 +34,7 @@ public class PageOutcome {
 	private List<PageOutcome> includedPage = new ArrayList<PageOutcome>();
 	private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
 	private _Session ses;
-	private LanguageType lang;
+	private LanguageCode lang;
 	private OutcomeType type = OutcomeType.OK;
 	private Map<String, String> captions = new HashMap<String, String>();
 	private boolean isScriptResult;
@@ -193,7 +195,7 @@ public class PageOutcome {
 
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		// mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 		// SimpleModule customSerializerModule = new SimpleModule();
 		// customSerializerModule.addSerializer(_POJOListWrapper.class, new
@@ -286,6 +288,7 @@ public class PageOutcome {
 			this.flash = flash;
 		}
 
+		@JsonIgnore
 		public ArrayList<IOutcomeObject> getObjects() {
 			return objects;
 		}

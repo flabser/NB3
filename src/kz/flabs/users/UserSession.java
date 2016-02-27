@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
@@ -32,6 +31,7 @@ import kz.flabs.servlets.ServletUtil;
 import kz.flabs.util.PageResponse;
 import kz.flabs.workspace.LoggedUser;
 import kz.flabs.workspace.WorkSpaceSession;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 
 public class UserSession implements Const {

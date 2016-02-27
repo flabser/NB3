@@ -6,10 +6,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
 import kz.flabs.users.User;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.SessionPool;
 import kz.lof.scripting._Session;

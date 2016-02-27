@@ -2,8 +2,8 @@ package kz.flabs.localization;
 
 import java.util.HashMap;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.util.XMLUtil;
+import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -11,7 +11,7 @@ import org.w3c.dom.NodeList;
 public class Sentence {
 	public boolean isOn = true;
 	public boolean isValid;
-	public LanguageType lang;
+	public LanguageCode lang;
 	public String keyWord;
 	public int code;
 	public HashMap<String, SentenceCaption> words = new HashMap<String, SentenceCaption>();
@@ -34,7 +34,7 @@ public class Sentence {
 			NodeList entries = XMLUtil.getNodeList(node, "entry");
 			for (int i = 0; i < entries.getLength(); i++) {
 				Node wordNode = entries.item(i);
-				LanguageType l = LanguageType.valueOf(XMLUtil.getTextContent(wordNode, "@lang", true, "UNKNOWN", false).toUpperCase());
+				LanguageCode l = LanguageCode.valueOf(XMLUtil.getTextContent(wordNode, "@lang", true, "UNKNOWN", false).toUpperCase());
 				String hint = XMLUtil.getTextContent(wordNode, "@hint", false);
 				SentenceCaption c = new SentenceCaption(wordNode.getTextContent(), hint);
 				words.put(l.toString(), c);

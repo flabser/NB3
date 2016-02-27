@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
@@ -21,6 +20,7 @@ import kz.flabs.webrule.handler.HandlerRule;
 import kz.flabs.webrule.handler.TriggerType;
 import kz.flabs.webrule.page.PageRule;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
+import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

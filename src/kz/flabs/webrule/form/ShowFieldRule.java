@@ -1,10 +1,11 @@
 package kz.flabs.webrule.form;
 
 import org.w3c.dom.Node;
-import kz.flabs.appenv.AppEnv;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 
 public class ShowFieldRule extends ShowField implements Const{
 	public String fieldSaveCondition = "";

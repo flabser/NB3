@@ -5,10 +5,10 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.users.User;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.exception.ApplicationException;
@@ -98,7 +98,7 @@ public class Unsecure extends ValveBase {
 	private _Session getAnonymousSes(Request request, Response response, HttpSession jses, AppEnv env) {
 		SessionCooks cooks = new SessionCooks(request, response);
 		_Session ses = new _Session(env, new User());
-		ses.setLang(LanguageType.valueOf(cooks.getCurrentLang()));
+		ses.setLang(LanguageCode.valueOf(cooks.getCurrentLang()));
 		return ses;
 	}
 

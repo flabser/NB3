@@ -6,7 +6,6 @@ import groovy.lang.GroovyObject;
 import java.io.File;
 import java.io.IOException;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IQueryFormula;
 import kz.flabs.parser.FormulaBlocks;
@@ -15,6 +14,7 @@ import kz.flabs.webrule.RuleValue;
 import kz.flabs.webrule.constants.QueryType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 
 import org.codehaus.groovy.control.CompilationFailedException;

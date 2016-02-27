@@ -1,7 +1,7 @@
 package kz.flabs.dataengine.postgresql.alter;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.DatabasePoolException;
+import kz.lof.appenv.AppEnv;
 
 public class CheckDataBase extends kz.flabs.dataengine.h2.alter.CheckDataBase {
 		

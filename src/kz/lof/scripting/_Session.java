@@ -10,11 +10,11 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
-import kz.flabs.appenv.AppEnv;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.localization.LanguageType;
+import kz.flabs.localization.LanguageCode;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
+import kz.lof.appenv.AppEnv;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.user.AuthModeType;
@@ -28,7 +28,7 @@ public class _Session extends PageCacheAdapter {
 	private IDatabase dataBase;
 	private User user;
 	private AppEnv env;
-	private LanguageType lang;
+	private LanguageCode lang;
 	public int pageSize = 30;
 	private AuthModeType authMode;
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
@@ -54,11 +54,11 @@ public class _Session extends PageCacheAdapter {
 		return env.globalSetting;
 	}
 
-	public void setLang(LanguageType lang) {
+	public void setLang(LanguageCode lang) {
 		this.lang = lang;
 	}
 
-	public LanguageType getLang() {
+	public LanguageCode getLang() {
 		return lang;
 	}
 

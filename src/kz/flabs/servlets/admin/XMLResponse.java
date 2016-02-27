@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import kz.flabs.exception.PortalException;
-import kz.flabs.servlets.SignalType;
 import kz.flabs.servlets.pojo.Outcome;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.XMLUtil;
@@ -27,7 +26,6 @@ public class XMLResponse {
 	private ArrayList<Script> scripts = new ArrayList<>();
 	private ArrayList<Message> messages = new ArrayList<Message>();
 	private HashMap<String, Message> messagesHash = new HashMap<String, Message>();
-	private ArrayList<Signal> signals = new ArrayList<Signal>();
 	private int messageCount = 1;
 	private ArrayList<_IXMLContent> xml = new ArrayList<_IXMLContent>();
 	private String elapsed_time = "";
@@ -131,14 +129,6 @@ public class XMLResponse {
 		return messagesHash.get(key);
 	}
 
-	public void addSignal(SignalType signal) {
-		signals.add(new Signal(signal));
-	}
-
-	public void addReloadSignal() {
-		signals.add(new Signal(SignalType.RELOAD_PAGE));
-	}
-
 	public void addXMLDocumentElements(Collection<_IXMLContent> documents) {
 		xml.addAll(documents);
 	}
@@ -150,9 +140,7 @@ public class XMLResponse {
 	public String toXML() {
 		StringBuffer result = new StringBuffer(100);
 		result.append("<response type=\"" + type + "\" status=\"" + responseStatus + "\" " + elapsed_time + ">");
-		for (Signal sig : signals) {
-			result.append(sig.toXML());
-		}
+
 		for (Message msg : messages) {
 			result.append(msg.toXML());
 		}
@@ -195,20 +183,6 @@ public class XMLResponse {
 
 		String toXML() {
 			return "<message id=\"" + id + "\" " + formSesID + ">" + XMLUtil.getAsTagValue(text) + "</message>";
-		}
-
-	}
-
-	@Deprecated
-	class Signal {
-		SignalType signal;
-
-		Signal(SignalType signal) {
-			this.signal = signal;
-		}
-
-		String toXML() {
-			return "<signal>" + signal.toString() + "</signal>";
 		}
 
 	}
