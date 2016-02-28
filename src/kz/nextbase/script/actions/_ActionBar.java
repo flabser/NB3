@@ -66,7 +66,7 @@ public class _ActionBar implements IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		// TODO Auto-generated method stub
 		return null;
 	}

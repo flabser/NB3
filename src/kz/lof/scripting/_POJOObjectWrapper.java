@@ -18,7 +18,7 @@ public class _POJOObjectWrapper implements IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
-		return null;
+	public Object toJSON() {
+		return object.getJSONObj(ses);
 	}
 }

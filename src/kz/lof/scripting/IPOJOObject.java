@@ -11,6 +11,8 @@ public interface IPOJOObject {
 
 	String getShortXMLChunk(_Session ses);
 
+	Object getJSONObj(_Session ses);
+
 	public boolean isEditable();
 
 }

@@ -170,6 +170,11 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	}
 
 	@Override
+	public Object getJSONObj(_Session ses) {
+		return this;
+	}
+
+	@Override
 	public String getURL() {
 		return "Provider?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&amp;docid=" + getId();
 	}

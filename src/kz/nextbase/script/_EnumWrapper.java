@@ -55,13 +55,16 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 
 	@Override
 	public String getShortXMLChunk(_Session ses) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Object getJSONObj(_Session ses) {
+		return this;
 	}
 }

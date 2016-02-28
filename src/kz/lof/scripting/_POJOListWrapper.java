@@ -12,6 +12,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	private long count;
 	private int currentPage;
 	private List<T> list;
+	private List<Object> jsList;
 	private String keyWord = "";
 	private _Session ses;
 
@@ -81,9 +82,12 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
-		return null;
-
+	public Object toJSON() {
+		jsList = new ArrayList<Object>();
+		for (T obj : list) {
+			jsList.add(obj.getJSONObj(ses));
+		}
+		return jsList;
 	}
 
 	private void recognizeName() {
@@ -128,6 +132,11 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		@Override
 		public String getShortXMLChunk(_Session ses) {
 			return getFullXMLChunk(ses);
+		}
+
+		@Override
+		public Object getJSONObj(_Session ses) {
+			return this;
 		}
 
 	}

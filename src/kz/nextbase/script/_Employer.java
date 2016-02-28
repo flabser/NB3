@@ -26,7 +26,7 @@ public class _Employer implements _IXMLContent, Const {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		// TODO Auto-generated method stub
 		return null;
 	}

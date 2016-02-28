@@ -153,4 +153,9 @@ public class _Tag implements IPOJOObject {
 		return runtimeTag.name + "=" + runtimeTag.value;
 	}
 
+	@Override
+	public Object getJSONObj(_Session ses) {
+		return this;
+	}
+
 }

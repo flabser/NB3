@@ -18,7 +18,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -207,6 +206,7 @@ public class PageOutcome {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
+		System.out.println(jsonInString);
 		return jsonInString;
 	}
 
@@ -249,7 +249,7 @@ public class PageOutcome {
 	// straight through PageOutcome instance
 	@JsonRootName("outcome")
 	class JSONClass {
-		private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
+		private ArrayList<Object> objects = new ArrayList<Object>();
 		private Map<String, String> captions;
 		private OutcomeType type;
 		private String redirectURL;
@@ -288,13 +288,14 @@ public class PageOutcome {
 			this.flash = flash;
 		}
 
-		@JsonIgnore
-		public ArrayList<IOutcomeObject> getObjects() {
+		public ArrayList<Object> getObjects() {
 			return objects;
 		}
 
 		public void setObjects(ArrayList<IOutcomeObject> objects) {
-			this.objects = objects;
+			for (IOutcomeObject obj : objects) {
+				this.objects.add(obj.toJSON());
+			}
 		}
 
 		public void setValidation(_Validation vp) {

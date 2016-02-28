@@ -121,7 +121,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -29,4 +29,9 @@ public class POJOObjectAdapter implements IPOJOObject {
 		return false;
 	}
 
+	@Override
+	public Object getJSONObj(_Session ses) {
+		return this;
+	}
+
 }

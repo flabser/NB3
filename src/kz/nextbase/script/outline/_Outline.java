@@ -51,7 +51,7 @@ public class _Outline implements IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		return null;
 	}
 

@@ -127,7 +127,7 @@ public class ScriptShowField implements IShowField, IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		return null;
 	}
 

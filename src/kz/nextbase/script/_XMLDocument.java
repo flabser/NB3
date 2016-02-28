@@ -27,7 +27,7 @@ public class _XMLDocument implements _IXMLContent, IOutcomeObject {
 	}
 
 	@Override
-	public String toJSON() {
+	public Object toJSON() {
 		return null;
 	}
 
