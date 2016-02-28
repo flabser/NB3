@@ -226,7 +226,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 			return false;
 		} else {
 			AppEntity tmp = (AppEntity) obj;
-			if (tmp.id == this.id) {
+			if (tmp.id.equals(this.id)) {
 				return true;
 			} else {
 				return false;
