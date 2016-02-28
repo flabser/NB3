@@ -105,7 +105,12 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 	@JsonIgnore
 	@Override
 	public String toString() {
-		return getId().toString();
+		UUID id = getId();
+		if (id != null) {
+			return id.toString() + " " + this.getClass().getName();
+		} else {
+			return "null " + this.getClass().getName();
+		}
 	}
 
 	/**
