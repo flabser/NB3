@@ -17,13 +17,13 @@ import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
 import kz.lof.scripting._POJOObjectWrapper;
 import kz.lof.scripting._Session;
+import kz.lof.scripting._Validation;
+import kz.lof.scripting._WebFormData;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IXMLContent;
-import kz.nextbase.script._Validation;
-import kz.nextbase.script._WebFormData;
 
 public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	private _WebFormData formData;
@@ -191,8 +191,10 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	protected void finishSaveFormTransact(IAppEntity entity) {
 		result.setRedirectURL(getSes().getTransactRedirect(entity));
-		result.setFlash(entity.getId().toString());
-		result.setType(OutcomeType.DOCUMENT_SAVED);
+		if (result.getType() != OutcomeType.VALIDATION_ERROR && result.getType() != OutcomeType.SERVER_ERROR) {
+			result.setFlash(entity.getId().toString());
+			result.setType(OutcomeType.DOCUMENT_SAVED);
+		}
 
 	}
 

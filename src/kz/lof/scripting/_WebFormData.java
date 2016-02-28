@@ -1,4 +1,4 @@
-package kz.nextbase.script;
+package kz.lof.scripting;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -6,6 +6,8 @@ import java.util.Map;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.util.Util;
+import kz.nextbase.script._Exception;
+import kz.nextbase.script._ExceptionType;
 
 public class _WebFormData {
 	private Map<String, String[]> formData;

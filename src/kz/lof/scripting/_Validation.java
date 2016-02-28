@@ -1,4 +1,4 @@
-package kz.nextbase.script;
+package kz.lof.scripting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class _Validation implements IOutcomeObject {
 	public void addError(String field, String regex) {
 		errors.add(new Error(field, regex, ""));
 	}
-	
+
 	public List<Error> getErrors() {
 		return errors;
 	}
@@ -79,7 +79,7 @@ public class _Validation implements IOutcomeObject {
 
 	@Override
 	public Object toJSON() {
-		return null;
+		return this;
 	}
 
 }

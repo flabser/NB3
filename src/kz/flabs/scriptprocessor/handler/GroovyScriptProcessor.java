@@ -13,7 +13,7 @@ import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
-import kz.nextbase.script._WebFormData;
+import kz.lof.scripting._WebFormData;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class GroovyScriptProcessor extends ScriptProcessor implements Runnable, IProcessInitiator {

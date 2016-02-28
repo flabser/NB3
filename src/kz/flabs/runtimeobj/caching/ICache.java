@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import kz.flabs.exception.RuleException;
 import kz.flabs.runtimeobj.page.Page;
+import kz.lof.scripting._WebFormData;
 import kz.lof.webserver.servlet.PageOutcome;
-import kz.nextbase.script._WebFormData;
 import net.sf.saxon.s9api.SaxonApiException;
 
 public interface ICache {

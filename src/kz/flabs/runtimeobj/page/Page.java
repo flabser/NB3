@@ -16,8 +16,8 @@ import kz.flabs.webrule.page.ElementRule;
 import kz.flabs.webrule.page.PageRule;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
+import kz.lof.scripting._WebFormData;
 import kz.lof.webserver.servlet.PageOutcome;
-import kz.nextbase.script._WebFormData;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.apache.http.HttpStatus;

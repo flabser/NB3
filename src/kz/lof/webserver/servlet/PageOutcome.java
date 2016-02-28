@@ -12,7 +12,7 @@ import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
-import kz.nextbase.script._Validation;
+import kz.lof.scripting._Validation;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;
@@ -94,6 +94,10 @@ public class PageOutcome {
 			keyWord = "validation_error";
 		}
 		captions.put("type", Environment.vocabulary.getWord(keyWord, lang));
+	}
+
+	public OutcomeType getType() {
+		return type;
 	}
 
 	public void setScriptResult(boolean isScriptResult) {

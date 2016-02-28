@@ -5,7 +5,7 @@ import java.util.Map;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.util.PageResponse;
 import kz.lof.scripting._Session;
-import kz.nextbase.script._WebFormData;
+import kz.lof.scripting._WebFormData;
 
 public interface IHandlerScript {	
 	void setSession(_Session ses);	

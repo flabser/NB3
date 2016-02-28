@@ -4,7 +4,7 @@ import java.util.Map;
 
 import kz.flabs.scriptprocessor.handler.AbstractHandler;
 import kz.lof.scripting._Session;
-import kz.nextbase.script._WebFormData;
+import kz.lof.scripting._WebFormData;
 
 public abstract class _DoHandler extends AbstractHandler {
 	
