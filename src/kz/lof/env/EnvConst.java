@@ -22,7 +22,13 @@ public class EnvConst {
 	public static final String ERROR_XSLT = "xsl" + File.separator + "errors" + File.separator + "error.xsl";
 	public static final String FSID_FIELD_NAME = "fsid";
 	public static final String TIME_FIELD_NAME = "time";
+	public static final String JDBC_DRIVER = "org.postgresql.Driver";
+	public static final int DEFAULT_HTTP_PORT = 38700;
 
+	public static String DB_USER = "postgres";
+	public static String DB_PWD = "smartdoc";
+	public static String DATABASE_HOST = "localhost";
+	public static String CONN_PORT = "5432";
 	public static String STAFF_APP_NAME = "Staff";
 	public static String STAFF_DAO_CLASS = "staff.dao.EmployeeDAO";
 	public static String RESOURCES_DIR = "resources";

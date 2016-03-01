@@ -78,7 +78,6 @@ public class Log4jLogger implements ILogger {
 	public void debugLogEntry(String logtext) {
 		if (Environment.verboseLogging) {
 			log4jLogger.debug(logtext);
-
 		}
 	}
 

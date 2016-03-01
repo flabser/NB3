@@ -2,6 +2,7 @@ package kz.lof.server;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -42,6 +43,10 @@ public class Console implements Runnable {
 			System.out.println("os=" + System.getProperty("os.name") + " " + System.getProperty("os.version") + "(" + System.getProperty("os.arch")
 			        + ")");
 			System.out.println("jvm=" + System.getProperty("java.version"));
+			System.out.println("application server naem=" + Environment.appServerName);
+			if (Environment.isDevMode) {
+				System.out.println("developer mode is on");
+			}
 			File jarFile = new File(EnvConst.NB_JAR_FILE);
 			System.out.println("jar=" + EnvConst.NB_JAR_FILE + ", path=" + jarFile.getAbsolutePath() + ", exist=" + jarFile.exists());
 		} else if (command.equalsIgnoreCase("show logged users") || command.equalsIgnoreCase("slu")) {
@@ -116,6 +121,8 @@ public class Console implements Runnable {
 							cliHandler(line);
 						}
 					}
+				} catch (FileNotFoundException e) {
+					System.err.println("\"" + batch + "\" batch file not found");
 				} catch (IOException e) {
 					System.err.println(e);
 				}

@@ -42,6 +42,10 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 
 	protected String externalStructureApp;
 
+	public Database() {
+
+	}
+
 	public Database(AppEnv env, DatabaseType dbType) throws DatabasePoolException, InstantiationException, IllegalAccessException,
 	        ClassNotFoundException {
 		this.env = env;
@@ -54,18 +58,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		}
 
 		databaseType = dbType;
-
-	}
-
-	public Database(AppEnv env) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		this.env = env;
-		dbID = env.globalSetting.databaseName;
-		connectionURL = env.globalSetting.dbURL;
-		dbPool = new DBConnectionPool();
-		dbPool.initConnectionPool(env.globalSetting.driver, connectionURL);
-
-		activity = new Activity(this);
-		initStructPool();
 
 	}
 

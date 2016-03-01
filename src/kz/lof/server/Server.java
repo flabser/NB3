@@ -15,7 +15,7 @@ import org.apache.catalina.LifecycleException;
 
 public class Server {
 	public static kz.pchelka.log.ILogger logger;
-	public static final String serverVersion = "3.0.4";
+	public static final String serverVersion = "3.0.5";
 	public static String compilationTime = "";
 	public static final String serverTitle = "NextBase " + serverVersion;
 	public static Date startTime = new Date();
@@ -25,8 +25,11 @@ public class Server {
 	public static void start() throws MalformedURLException, LifecycleException, URISyntaxException {
 		logger = new Log4jLogger("Server");
 		logger.infoLogEntry(serverTitle + " start");
+		if (Environment.isDevMode) {
+			Environment.verboseLogging = true;
+			logger.warningLogEntry("Debug logging is turned on");
+		}
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
-		logger.debugLogEntry("Build " + compilationTime);
 		logger.infoLogEntry("Copyright(c) Lab of the Future 2014. All Right Reserved");
 
 		Environment.init();

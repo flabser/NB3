@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,12 +60,13 @@ import org.xml.sax.SAXException;
 public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static boolean verboseLogging;
-	public static String serverName;
+	public static String appServerName;
 	public static String hostName;
-	public static int httpPort = 38779;
-	public static boolean noWSAuth = false;
+	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
 	public static String httpSchema = "http";
-
+	private static String dbURL;
+	private static String dbUserName;
+	private static String dbPassword;
 	public static ISystemDatabase systemBase;
 	public static String defaultSender = "";
 	public static HashMap<String, String> mimeHash = new HashMap<String, String>();
@@ -144,28 +146,24 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			logger.infoLogEntry("Initialize runtime environment");
 			initMimeTypes();
 
+			appServerName = Paths.get(System.getProperty("user.dir")).getFileName().toString();
+
 			hostName = XMLUtil.getTextContent(xmlDocument, "/nextbase/hostname");
 			if (hostName.isEmpty()) {
 				hostName = getHostName();
 			}
 
-			serverName = XMLUtil.getTextContent(xmlDocument, "/nextbase/name");
 			String portAsText = XMLUtil.getTextContent(xmlDocument, "/nextbase/port");
 			try {
 				httpPort = Integer.parseInt(portAsText);
 				logger.infoLogEntry("WebServer is going to use port: " + httpPort);
 			} catch (NumberFormatException nfe) {
-				logger.infoLogEntry("WebServer is going to use standart port");
+				logger.infoLogEntry("WebServer is going to use default port (" + httpPort + ")");
 			}
 
-			try {
-				String auth = XMLUtil.getTextContent(xmlDocument, "/nextbase/no-ws-auth");
-				if ("true".equalsIgnoreCase(auth)) {
-					noWSAuth = true;
-				}
-			} catch (Exception e) {
-				noWSAuth = false;
-			}
+			dbURL = XMLUtil.getTextContent(xmlDocument, "/rule/database/url");
+			dbUserName = XMLUtil.getTextContent(xmlDocument, "/rule/database/username");
+			dbPassword = XMLUtil.getTextContent(xmlDocument, "/rule/database/password");
 
 			delaySchedulerStart = XMLUtil.getNumberContent(xmlDocument, "/nextbase/scheduler/startdelaymin", 1);
 
@@ -241,16 +239,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 				logger.infoLogEntry("MailAgent is not set");
 				SMTPHost = "";
 				defaultSender = "";
-			}
-
-			try {
-				String res = XMLUtil.getTextContent(xmlDocument, "/nextbase/logging/verbose");
-				if (res.equalsIgnoreCase("true")) {
-					verboseLogging = true;
-					logger.warningLogEntry("Verbose logging is turned on");
-				}
-			} catch (Exception e) {
-				verboseLogging = false;
 			}
 
 			File tmp = new File("tmp");
@@ -398,6 +386,30 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static HashMap<String, IDatabase> getDatabases() {
 		return dataBases;
+	}
+
+	public static String getDbURL() {
+		return dbURL;
+	}
+
+	public static void setDbURL(String dbURL) {
+		Environment.dbURL = dbURL;
+	}
+
+	public static String getDbUserName() {
+		return dbUserName;
+	}
+
+	public static void setDbUserName(String dbUserName) {
+		Environment.dbUserName = dbUserName;
+	}
+
+	public static String getDbPassword() {
+		return dbPassword;
+	}
+
+	public static void setDbPassword(String dbPassword) {
+		Environment.dbPassword = dbPassword;
 	}
 
 	public static Collection<AppEnv> getApplications() {

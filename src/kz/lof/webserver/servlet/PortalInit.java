@@ -35,15 +35,9 @@ public class PortalInit extends HttpServlet {
 		String global = Environment.webAppToStart.get(app).global;
 		AppEnv env = new AppEnv(app, global);
 		if (env.globalSetting.databaseEnable) {
-			IDatabaseDeployer dd = null;
 			try {
-				@SuppressWarnings("rawtypes")
-				Class[] intArgsClass = new Class[] { AppEnv.class };
-				Constructor<?> deployerConstr = env.globalSetting.dbImpl.getDeployerClass().getConstructor(intArgsClass);
-				dd = (IDatabaseDeployer) deployerConstr.newInstance(new Object[] { env });
-
-				Constructor<?> dbConstr = env.globalSetting.dbImpl.getDatabaseClass().getConstructor(intArgsClass);
-				IDatabase db = (IDatabase) dbConstr.newInstance(new Object[] { env });
+				IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(env);
+				IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
 
 				if (env.globalSetting.autoDeployEnable) {
 					Server.logger.infoLogEntry("Checking database structure ...");
