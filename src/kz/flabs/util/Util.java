@@ -187,6 +187,15 @@ public class Util {
 		}
 	}
 
+	public static int convertStringToInt(String d, int defaultValue) {
+		d = d.replaceAll("\\s+", "").replaceAll(",", "").replaceAll("/\\D/g", "");
+		try {
+			return Integer.parseInt(d);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
 	public static float convertStringToFloat(String d) {
 		d = d.replaceAll("\\s+", "").replaceAll(",", ".").replaceAll("/\\D/g", "");
 		try {
