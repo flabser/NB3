@@ -1,4 +1,4 @@
-package kz.flabs.localization;
+package kz.lof.localization;
 
 /**
  * https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes

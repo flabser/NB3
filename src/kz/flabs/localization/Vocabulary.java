@@ -3,6 +3,7 @@ package kz.flabs.localization;
 import java.util.HashMap;
 
 import kz.flabs.util.XMLUtil;
+import kz.lof.localization.LanguageCode;
 import kz.pchelka.log.Log4jLogger;
 
 import org.w3c.dom.Document;

@@ -2,8 +2,8 @@ package kz.lof.dataengine.jpa.deploying;
 
 import java.util.List;
 
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 
 /**

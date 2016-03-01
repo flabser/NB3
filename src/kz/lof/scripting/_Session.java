@@ -11,12 +11,12 @@ import java.util.UUID;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
 import kz.lof.appenv.AppEnv;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.dataengine.jpa.IAppEntity;
+import kz.lof.localization.LanguageCode;
 import kz.lof.user.AuthModeType;
 import kz.nextbase.script._AppEntourage;
 import kz.nextbase.script._UserActivity;

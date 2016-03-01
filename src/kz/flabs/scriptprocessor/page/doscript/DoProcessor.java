@@ -1,9 +1,9 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
 import groovy.lang.GroovyObject;
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.lof.appenv.AppEnv;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.server.Server;

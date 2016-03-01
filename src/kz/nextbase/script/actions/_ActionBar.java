@@ -3,8 +3,8 @@ package kz.nextbase.script.actions;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.webrule.constants.RunMode;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.nextbase.script._Exception;

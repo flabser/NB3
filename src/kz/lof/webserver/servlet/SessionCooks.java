@@ -4,8 +4,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kz.flabs.localization.LanguageCode;
 import kz.lof.env.EnvConst;
+import kz.lof.localization.LanguageCode;
 
 public class SessionCooks {
 

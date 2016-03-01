@@ -13,10 +13,10 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.localization.LanguageCode;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ViewPage;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 
 public class FTSearchEngine implements IFTIndexEngine, Const {

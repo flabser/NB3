@@ -1,7 +1,7 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.webserver.servlet.PageOutcome;

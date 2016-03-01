@@ -20,7 +20,6 @@ import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.PortalException;
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
 import kz.flabs.users.User;
@@ -29,6 +28,7 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.env.SessionPool;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 
 import org.apache.catalina.realm.RealmBase;

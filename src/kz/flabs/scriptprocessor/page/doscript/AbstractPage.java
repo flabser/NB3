@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kz.flabs.localization.LanguageCode;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
@@ -206,11 +206,11 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	public PageOutcome processCode(String method) {
 		try {
 			if (method.equalsIgnoreCase("POST")) {
-				doPOST(getSes(), formData, lang);
+				doPOST(getSes(), formData);
 			} else if (method.equalsIgnoreCase("DELETE")) {
-				doDELETE(getSes(), formData, lang);
+				doDELETE(getSes(), formData);
 			} else {
-				doGET(getSes(), formData, lang);
+				doGET(getSes(), formData);
 			}
 		} catch (Exception e) {
 			addContent("msg", e.toString());
@@ -222,9 +222,9 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	}
 
-	public abstract void doGET(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
+	public abstract void doGET(_Session session, _WebFormData formData) throws _Exception;
 
-	public abstract void doPOST(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
+	public abstract void doPOST(_Session session, _WebFormData formData) throws _Exception;
 
-	public abstract void doDELETE(_Session session, _WebFormData formData, LanguageCode lang) throws _Exception;
+	public abstract void doDELETE(_Session session, _WebFormData formData) throws _Exception;
 }
