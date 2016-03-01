@@ -38,9 +38,4 @@ public class SessionScriptProcessor extends ScriptProcessor {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "type" + ScriptProcessorType.SESSION;
-	}
-
 }

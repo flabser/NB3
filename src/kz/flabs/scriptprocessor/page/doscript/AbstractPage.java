@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
-import kz.lof.localization.LanguageCode;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
@@ -96,12 +94,6 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		this.formData = formData;
 	}
 
-	@Override
-	public void setCurrentLang(Vocabulary vocabulary, LanguageCode lang) {
-		this.lang = lang;
-		this.vocabulary = vocabulary;
-	}
-
 	protected void setValidation(_Validation obj) {
 		result.setType(OutcomeType.VALIDATION_ERROR);
 		result.setValidation(obj);
@@ -112,18 +104,6 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		ve.addError("", "", localizedMessage);
 		setValidation(ve);
 	}
-
-	/*
-	 * @SuppressWarnings({ "unchecked", "rawtypes" }) protected void
-	 * addContent(String elementName, List<?> list) { result.addObject(new
-	 * _POJOListWrapper(list, lang)); }
-	 */
-
-	/*
-	 * @SuppressWarnings({ "unchecked", "rawtypes" }) protected void
-	 * addContent(String elementName, Set<?> list) { List mainList = new
-	 * ArrayList(); mainList.addAll(list); addContent(elementName, list); }
-	 */
 
 	protected void addContent(String elementName, List<?> list) {
 		List<IPOJOObject> newList = new ArrayList<IPOJOObject>();

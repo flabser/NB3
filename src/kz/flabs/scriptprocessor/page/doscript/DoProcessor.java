@@ -1,27 +1,16 @@
 package kz.flabs.scriptprocessor.page.doscript;
 
-import groovy.lang.GroovyObject;
-import kz.flabs.localization.Vocabulary;
-import kz.lof.appenv.AppEnv;
-import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 
 public class DoProcessor {
-
-	private LanguageCode lang;
-	private GroovyObject groovyObject = null;
 	private _Session ses;
-	private Vocabulary vocabulary;
 	private _WebFormData webFormData;
 
-	// TODO need to refactoring to reduce count of the parameters
-	public DoProcessor(AppEnv env, _Session ses, _WebFormData webFormData) {
+	public DoProcessor(_Session ses, _WebFormData webFormData) {
 		this.ses = ses;
-		vocabulary = env.vocabulary;
-		lang = ses.getLang();
 		this.webFormData = webFormData;
 	}
 
@@ -40,7 +29,6 @@ public class DoProcessor {
 
 		myObject.setSession(ses);
 		myObject.setFormData(webFormData);
-		myObject.setCurrentLang(vocabulary, lang);
 
 		return myObject.processCode(method);
 	}

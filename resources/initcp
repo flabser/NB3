@@ -1,5 +1,7 @@
 stini administrator.init.FillLangs
 stini municipalproperty.init.FillReportTemplates
+stini reference.init.FillRegionTypes
+stini reference.init.FillLocalityTypes
 stini reference.init.FillCountries
 stini reference.init.FillRegions
 stini reference.init.FillDistricts

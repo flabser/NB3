@@ -23,7 +23,6 @@ public class ScriptEvent {
 	protected Vocabulary vocabulary;
 	protected String redirectURL = "";
 	protected ArrayList<_IXMLContent> toPublishElement = new ArrayList<_IXMLContent>();
-	protected LanguageCode lang;
 	private _Session ses;
 
 	public String getTmpDirPath() {
@@ -36,6 +35,7 @@ public class ScriptEvent {
 
 	public void setSes(_Session ses) {
 		this.ses = ses;
+		vocabulary = ses.getAppEnv().vocabulary;
 	}
 
 	public String getWord(String word, Vocabulary vocabulary, String lang) {
@@ -79,22 +79,6 @@ public class ScriptEvent {
 	public void log(String text) {
 		Server.logger.infoLogEntry(text);
 	}
-
-	/*
-	 * public void publishElement(String spot, String launcher, _AJAXHandler
-	 * value, boolean async, _JSONTemplate template) { _JSONHandler jsHandler =
-	 * new _JSONHandler(spot, launcher, value, template); UserSession
-	 * userSession = ses.getUser().getSession();
-	 * userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
-	 * toPublishElement.add(jsHandler); }
-	 * 
-	 * public void publishElement(String id, String spot, String launcher,
-	 * _AJAXHandler value, boolean async, _JSONTemplate template) { _JSONHandler
-	 * jsHandler = new _JSONHandler(id, spot, launcher, value, "", template);
-	 * UserSession userSession = ses.getUser().getSession();
-	 * userSession.addDynmaicClass(jsHandler.id, jsHandler.getInstance());
-	 * toPublishElement.add(jsHandler); }
-	 */
 
 	public String getGroovyError(StackTraceElement stack[]) {
 		for (int i = 0; i < stack.length; i++) {

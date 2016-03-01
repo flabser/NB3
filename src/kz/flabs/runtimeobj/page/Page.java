@@ -37,16 +37,6 @@ public class Page implements IProcessInitiator, Const {
 
 	private _Session ses;
 
-	// private HttpServletRequest request;
-	// private HttpServletResponse response;
-
-	/*
-	 * public Page(AppEnv env, UserSession userSession, PageRule rule,
-	 * HttpServletRequest request, HttpServletResponse response){ this.request =
-	 * request; this.response = response; this.userSession = userSession;
-	 * this.env = env; this.rule = rule; }
-	 */
-
 	@Deprecated
 	public Page(AppEnv env, UserSession userSession, PageRule rule) {
 		this.userSession = userSession;
@@ -77,7 +67,7 @@ public class Page implements IProcessInitiator, Const {
 
 	public PageOutcome pageProcess(_WebFormData formData, String method) throws ClassNotFoundException, RuleException {
 		PageOutcome resultOut = null;
-		long start_time = System.currentTimeMillis();
+		// long start_time = System.currentTimeMillis();
 		switch (rule.caching) {
 		case NO_CACHING:
 			resultOut = getPageContent(formData, method);
@@ -113,7 +103,7 @@ public class Page implements IProcessInitiator, Const {
 
 				switch (elementRule.type) {
 				case SCRIPT:
-					DoProcessor sProcessor = new DoProcessor(env, ses, fields);
+					DoProcessor sProcessor = new DoProcessor(ses, fields);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
 						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);

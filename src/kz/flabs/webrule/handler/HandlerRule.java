@@ -23,7 +23,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.xml.Tag;
-import kz.flabs.scriptprocessor.ScriptProcessor;
 import kz.flabs.sourcesupplier.DocumentCollectionMacro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
@@ -97,7 +96,7 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 					ClassLoader parent = getClass().getClassLoader();
 					GroovyClassLoader loader = new GroovyClassLoader(parent);
 					try {
-						handlerClass = loader.parseClass(ScriptProcessor.normalizeScript(script));
+
 					} catch (MultipleCompilationErrorsException e) {
 						AppEnv.logger.errorLogEntry("Handler Script compilation error at compiling=" + id + ":" + e.getMessage());
 						isValid = false;
@@ -315,9 +314,7 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 			Class<GroovyObject> querySave = null;
 			if (qsSourceType == ValueSourceType.STATIC) {
 				if (!value.equals("")) {
-					GroovyClassLoader loader = new GroovyClassLoader(parent);
-					Class<GroovyObject> go = loader.parseClass(ScriptProcessor.normalizeScript(value));
-					return go.getName();
+
 				}
 			} else if (qsSourceType == ValueSourceType.FILE) {
 				CompilerConfiguration compiler = new CompilerConfiguration();

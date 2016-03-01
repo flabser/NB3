@@ -9,7 +9,6 @@ import java.util.Map;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.IScriptSource;
 import kz.flabs.scriptprocessor.ScriptProcessor;
-import kz.flabs.scriptprocessor.ScriptProcessorType;
 import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
@@ -83,11 +82,6 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 			logger.errorLogEntry(e);
 			return xmlResp;
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "type:" + ScriptProcessorType.PROVIDER;
 	}
 
 	@Override
