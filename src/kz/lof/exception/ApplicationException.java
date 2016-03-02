@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -13,6 +15,7 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.server.Server;
+import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.lof.webserver.servlet.JSONClass;
 import net.sf.saxon.s9api.SaxonApiException;
 
@@ -24,7 +27,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-public class ApplicationException extends Exception {
+public class ApplicationException extends Exception implements IOutcomeObject {
 	private static final long serialVersionUID = 1L;
 	private String location;
 	private String type = "APPLICATION";
@@ -32,6 +35,7 @@ public class ApplicationException extends Exception {
 	private String exception;
 	private String appType;
 	private LanguageCode lang;
+	private int code;
 
 	public ApplicationException(String appType, String error, LanguageCode lang) {
 		super(error);
@@ -73,12 +77,40 @@ public class ApplicationException extends Exception {
 			Server.logger.errorLogEntry(e);
 		}
 
+		return toXML();
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toXML() {
+		String xmlText = null;
+
+		ExceptionXML document = new ExceptionXML(getMessage(), code, location, type, servletName, exception);
+		document.setAppType(appType);
+		String xslt = "webapps" + File.separator + appType + File.separator + EnvConst.ERROR_XSLT;
+		File errorXslt = new File(xslt);
+		if (!errorXslt.exists()) {
+			errorXslt = new File("webapps" + File.separator + Environment.workspaceName + File.separator + EnvConst.ERROR_XSLT);
+		}
+
+		try {
+			xmlText = new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
+		} catch (IOException | SaxonApiException e) {
+			Server.logger.errorLogEntry(e);
+		}
+
 		return xmlText;
 	}
 
-	public String getJSON() {
+	@Override
+	public Object toJSON() {
 		JSONClass clazz = new JSONClass();
-		// clazz.setObjects(objects);
+		List<IOutcomeObject> list = new ArrayList<IOutcomeObject>();
+		list.add(this);
+		clazz.setObjects(list);
 		clazz.setType(OutcomeType.SERVER_ERROR);
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -92,9 +124,5 @@ public class ApplicationException extends Exception {
 			e.printStackTrace();
 		}
 		return jsonInString;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 }

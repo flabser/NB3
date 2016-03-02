@@ -1,6 +1,7 @@
 package kz.lof.webserver.servlet;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import kz.flabs.servlets.pojo.OutcomeType;
@@ -53,7 +54,7 @@ public class JSONClass {
 		return objects;
 	}
 
-	public void setObjects(ArrayList<IOutcomeObject> objects) {
+	public void setObjects(List<IOutcomeObject> objects) {
 		for (IOutcomeObject obj : objects) {
 			this.objects.add(obj.toJSON());
 		}

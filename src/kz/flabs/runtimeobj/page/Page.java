@@ -65,36 +65,12 @@ public class Page implements IProcessInitiator, Const {
 
 	}
 
-	public PageOutcome pageProcess(_WebFormData formData, String method) throws ClassNotFoundException, RuleException {
-		PageOutcome resultOut = null;
-		// long start_time = System.currentTimeMillis();
-		switch (rule.caching) {
-		case NO_CACHING:
-			resultOut = getPageContent(formData, method);
-			break;
-		case CACHING_IN_USER_SESSION_SCOPE:
-			// resultOut = userSession.getCachedPage(this, formData);
-			break;
-		case CACHING_IN_APPLICATION_SCOPE:
-			// resultOut = env.getCachedPage(this, formData);
-			break;
-		case CACHING_IN_SERVER_SCOPE:
-			// resultOut = new Environment().getCachedPage(this, formData);
-			break;
-
-		default:
-			resultOut = getPageContent(formData, method);
-		}
-
-		return resultOut;
-	}
-
 	public String getCacheID() {
 		return "PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang;
 
 	}
 
-	public PageOutcome getPageContent(_WebFormData webFormData, String method) throws ClassNotFoundException, RuleException {
+	public PageOutcome getPageContent(PageOutcome outcome, _WebFormData webFormData, String method) throws ClassNotFoundException, RuleException {
 		fields = webFormData;
 		PageOutcome output = new PageOutcome();
 
@@ -103,7 +79,7 @@ public class Page implements IProcessInitiator, Const {
 
 				switch (elementRule.type) {
 				case SCRIPT:
-					DoProcessor sProcessor = new DoProcessor(ses, fields);
+					DoProcessor sProcessor = new DoProcessor(outcome, ses, fields);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
 						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
@@ -123,7 +99,8 @@ public class Page implements IProcessInitiator, Const {
 					PageRule rule = env.ruleProvider.getRule(elementRule.value);
 					// System.out.println(rule.getRuleID());
 					IncludedPage page = new IncludedPage(env, ses, rule);
-					output.addPageOutcome(page.getPageContent(fields, method));
+					PageOutcome includedOutcome = new PageOutcome();
+					output.addPageOutcome(page.getPageContent(includedOutcome, fields, method));
 					break;
 				default:
 					break;

@@ -10,7 +10,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 public interface ICache {
 
-	PageOutcome getCachedPage(Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException;
+	PageOutcome getCachedPage(PageOutcome outcome, Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException;
 
 	void flush();
 }

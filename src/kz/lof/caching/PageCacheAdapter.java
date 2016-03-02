@@ -14,16 +14,17 @@ public abstract class PageCacheAdapter implements ICache {
 	private HashMap<String, Object> cache = new HashMap<String, Object>();
 
 	@Override
-	public PageOutcome getCachedPage(Page page, _WebFormData formData) throws ClassNotFoundException, RuleException, IOException, SaxonApiException {
+	public PageOutcome getCachedPage(PageOutcome outcome, Page page, _WebFormData formData) throws ClassNotFoundException, RuleException,
+	        IOException, SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
 		String cacheParam[] = formData.getFormData().get("cache");
 		if (cacheParam == null) {
-			PageOutcome buffer = page.getPageContent(formData, "GET");
+			PageOutcome buffer = page.getPageContent(outcome, formData, "GET");
 			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else if (cacheParam[0].equalsIgnoreCase("reload")) {
-			PageOutcome buffer = page.getPageContent(formData, "GET");
+			PageOutcome buffer = page.getPageContent(outcome, formData, "GET");
 			cache.put(cacheKey, buffer.getValue());
 			return buffer;
 		} else {

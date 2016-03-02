@@ -25,7 +25,12 @@ import kz.nextbase.script._IXMLContent;
 
 public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	private _WebFormData formData;
-	private PageOutcome result = new PageOutcome();
+	private PageOutcome result;
+
+	@Override
+	public void setPageOutcome(PageOutcome o) {
+		result = o;
+	}
 
 	@Override
 	public void setSession(_Session ses) {
@@ -67,7 +72,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	public void setPublishAsType(PublishAsType respType) {
-		result.publishAs = respType;
+		result.setPublishAs(respType);
 	}
 
 	public <T extends Enum<?>> String[] getLocalizedWord(T[] enumObj, String lang) {
@@ -85,7 +90,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	public void showFile(String filePath, String fileName) {
-		result.publishAs = PublishAsType.OUTPUTSTREAM;
+		result.setPublishAs(PublishAsType.OUTPUTSTREAM);
 		result.setFile(filePath, fileName);
 	}
 

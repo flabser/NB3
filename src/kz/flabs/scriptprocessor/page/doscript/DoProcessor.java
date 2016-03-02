@@ -6,10 +6,12 @@ import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 
 public class DoProcessor {
+	private PageOutcome outcome;
 	private _Session ses;
 	private _WebFormData webFormData;
 
-	public DoProcessor(_Session ses, _WebFormData webFormData) {
+	public DoProcessor(PageOutcome outcome, _Session ses, _WebFormData webFormData) {
+		this.outcome = outcome;
 		this.ses = ses;
 		this.webFormData = webFormData;
 	}
@@ -27,6 +29,7 @@ public class DoProcessor {
 
 		IPageScript myObject = (IPageScript) object;
 
+		myObject.setPageOutcome(outcome);
 		myObject.setSession(ses);
 		myObject.setFormData(webFormData);
 

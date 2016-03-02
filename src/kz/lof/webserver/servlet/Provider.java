@@ -62,7 +62,9 @@ public class Provider extends HttpServlet {
 		String id = request.getParameter("id");
 		String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
 		if (acceptHeader != null && acceptHeader.indexOf("application/json") != -1) {
-			result.publishAs = PublishAsType.JSON;
+			result.setPublishAs(PublishAsType.JSON);
+		} else {
+			result.setPublishAs(PublishAsType.HTML);
 		}
 
 		try {
@@ -72,32 +74,32 @@ public class Provider extends HttpServlet {
 			String referrer = request.getHeader("referer");
 			_WebFormData formData = new _WebFormData(request.getParameterMap(), referrer);
 			if (formData.containsField("as")) {
-				result = page.getPageContent(formData, request.getMethod());
+				result = page.getPageContent(result, formData, request.getMethod());
 				if (formData.getValue("as").equalsIgnoreCase("json")) {
-					result.publishAs = PublishAsType.JSON;
+					result.setPublishAs(PublishAsType.JSON);
 				} else {
-					result.publishAs = PublishAsType.XML;
+					result.setPublishAs(PublishAsType.XML);
 				}
 			} else {
 				if (request.getMethod().equalsIgnoreCase("GET")) {
 					switch (rule.caching) {
 					case NO_CACHING:
-						result = page.getPageContent(formData, "GET");
+						result = page.getPageContent(result, formData, "GET");
 						break;
 					case CACHING_IN_USER_SESSION_SCOPE:
-						result = ses.getCachedPage(page, formData);
+						result = ses.getCachedPage(result, page, formData);
 						break;
 					case CACHING_IN_APPLICATION_SCOPE:
-						result = env.getCachedPage(page, formData);
+						result = env.getCachedPage(result, page, formData);
 						break;
 					case CACHING_IN_SERVER_SCOPE:
-						result = new Environment().getCachedPage(page, formData);
+						result = new Environment().getCachedPage(result, page, formData);
 						break;
 					default:
-						result = page.getPageContent(formData, "GET");
+						result = page.getPageContent(result, formData, "GET");
 					}
 				} else {
-					result = page.getPageContent(formData, request.getMethod());
+					result = page.getPageContent(result, formData, request.getMethod());
 				}
 
 			}
@@ -109,7 +111,7 @@ public class Provider extends HttpServlet {
 				throw e;
 			}
 
-			if (result.publishAs == PublishAsType.HTML) {
+			if (result.getPublishAs() == PublishAsType.HTML) {
 				if (result.disableClientCache) {
 					disableCash(response);
 				}
@@ -125,13 +127,13 @@ public class Provider extends HttpServlet {
 					out.println(outputContent);
 					out.close();
 				}
-			} else if (result.publishAs == PublishAsType.JSON) {
+			} else if (result.getPublishAs() == PublishAsType.JSON) {
 				response.setContentType("application/json;charset=utf-8");
 				PrintWriter out = response.getWriter();
 				String json = result.getJSON();
 				out.println(json);
 				out.close();
-			} else if (result.publishAs == PublishAsType.XML) {
+			} else if (result.getPublishAs() == PublishAsType.XML) {
 				if (result.disableClientCache) {
 					disableCash(response);
 				}
@@ -139,7 +141,7 @@ public class Provider extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.println(result.toCompleteXML());
 				out.close();
-			} else if (result.publishAs == PublishAsType.OUTPUTSTREAM) {
+			} else if (result.getPublishAs() == PublishAsType.OUTPUTSTREAM) {
 				String disposition = "attachment";
 				if (formData.containsField("disposition")) {
 					disposition = formData.getValue("disposition");
@@ -163,9 +165,9 @@ public class Provider extends HttpServlet {
 		Server.logger.errorLogEntry(ae.toString());
 		response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		try {
-			if (result.publishAs == PublishAsType.JSON) {
+			if (result.getPublishAs() == PublishAsType.JSON) {
 				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().println(ae.getJSON());
+				response.getWriter().println(ae.toJSON());
 			} else {
 				response.setContentType("text/html");
 				response.getWriter().println(ae.getHTMLMessage());

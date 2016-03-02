@@ -24,9 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class PageOutcome {
-	public PublishAsType publishAs = PublishAsType.HTML;
 	public String name;
 	public boolean disableClientCache;
+	private PublishAsType publishAs;
 	private int httpStatus = HttpStatus.SC_OK;
 	private static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	private List<PageOutcome> includedPage = new ArrayList<PageOutcome>();
@@ -45,6 +45,14 @@ public class PageOutcome {
 	public void setSession(_Session ses) {
 		this.ses = ses;
 		lang = ses.getLang();
+	}
+
+	public PublishAsType getPublishAs() {
+		return publishAs;
+	}
+
+	public void setPublishAs(PublishAsType publishAs) {
+		this.publishAs = publishAs;
 	}
 
 	public String getName() {
