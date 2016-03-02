@@ -4,24 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.core.Response;
 
 import kz.flabs.servlets.SaxonTransformator;
-import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.IOutcomeObject;
-import kz.lof.webserver.servlet.JSONClass;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,12 +27,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class ApplicationException extends Exception implements IOutcomeObject {
 	private static final long serialVersionUID = 1L;
 	private String location;
-	private String type = "APPLICATION";
-	private String servletName = "";
+	private String type = Environment.appServerName;
+	private String servletName = "Provider";
 	private String exception;
 	private String appType;
 	private LanguageCode lang;
-	private int code;
+	private int code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
 	public ApplicationException(String appType, String error, LanguageCode lang) {
 		super(error);
@@ -56,10 +53,12 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 
 	}
 
+	@JsonIgnore
 	public String getHTMLMessage() {
 		return getHTMLMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 
+	@JsonIgnore
 	public String getHTMLMessage(int code) {
 		String xmlText = null;
 
@@ -107,19 +106,12 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 
 	@Override
 	public Object toJSON() {
-		JSONClass clazz = new JSONClass();
-		List<IOutcomeObject> list = new ArrayList<IOutcomeObject>();
-		list.add(this);
-		clazz.setObjects(list);
-		clazz.setType(OutcomeType.SERVER_ERROR);
-
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-		;
 		String jsonInString = null;
 		try {
-			jsonInString = mapper.writeValueAsString(clazz);
+			jsonInString = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

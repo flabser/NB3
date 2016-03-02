@@ -60,6 +60,10 @@ public class JSONClass {
 		}
 	}
 
+	public void setObject(IOutcomeObject object) {
+		this.objects.add(object);
+	}
+
 	public void setValidation(_Validation vp) {
 		this.validation = vp;
 	}
