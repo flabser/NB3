@@ -58,8 +58,12 @@ public class Provider extends HttpServlet {
 		HttpSession jses = request.getSession(false);
 		_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 		AppEnv env = ses.getAppEnv();
-		PageOutcome result = null;
+		PageOutcome result = new PageOutcome();
 		String id = request.getParameter("id");
+		String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+		if (acceptHeader != null && acceptHeader.indexOf("application/json") != -1) {
+			result.publishAs = PublishAsType.JSON;
+		}
 
 		try {
 			request.setCharacterEncoding(EnvConst.SUPPOSED_CODE_PAGE);
@@ -96,18 +100,12 @@ public class Provider extends HttpServlet {
 					result = page.getPageContent(formData, request.getMethod());
 				}
 
-				// TODO, need a HttpHeaders parser
-				String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
-				if (acceptHeader != null && acceptHeader.indexOf("application/json") != -1) {
-					result.publishAs = PublishAsType.JSON;
-				}
 			}
 
 			response.setStatus(result.getHttpStatus());
 			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
 				// TODO need to Improvement
-				result.publishAs = PublishAsType.XML;
-				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getValue());
+				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getValue(), ses.getLang());
 				throw e;
 			}
 
@@ -131,9 +129,6 @@ public class Provider extends HttpServlet {
 				response.setContentType("application/json;charset=utf-8");
 				PrintWriter out = response.getWriter();
 				String json = result.getJSON();
-				// System.out.println("json=" + json);
-				// json = json.replaceAll("\u003d", "=").replaceAll("\u0026",
-				// "&");
 				out.println(json);
 				out.close();
 			} else if (result.publishAs == PublishAsType.XML) {
@@ -153,20 +148,30 @@ public class Provider extends HttpServlet {
 				attachHandler.publish(result.getFilePath(), result.getFileName(), disposition);
 			}
 		} catch (ApplicationException ae) {
-			Server.logger.errorLogEntry(ae.toString());
-			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println(ae.getHTMLMessage());
+			pushError(result, response, ae);
 		} catch (RuleException e) {
-			ApplicationException ae = new ApplicationException(env.appType, "rule_not_found (" + id + ")");
-			Server.logger.errorLogEntry(ae.toString());
-			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println(ae.getHTMLMessage());
+			ApplicationException ae = new ApplicationException(env.appType, "rule_not_found (" + id + ")", ses.getLang());
+			pushError(result, response, ae);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ApplicationException ae = new ApplicationException(env.appType, e.toString(), e);
-			Server.logger.errorLogEntry(ae.toString());
-			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println(ae.getHTMLMessage());
+			ApplicationException ae = new ApplicationException(env.appType, e.toString(), e, ses.getLang());
+			pushError(result, response, ae);
+		}
+	}
+
+	private void pushError(PageOutcome result, HttpServletResponse response, ApplicationException ae) {
+		Server.logger.errorLogEntry(ae.toString());
+		response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		try {
+			if (result.publishAs == PublishAsType.JSON) {
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().println(ae.getJSON());
+			} else {
+				response.setContentType("text/html");
+				response.getWriter().println(ae.getHTMLMessage());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

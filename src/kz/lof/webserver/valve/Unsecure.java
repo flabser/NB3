@@ -59,7 +59,8 @@ public class Unsecure extends ValveBase {
 
 						} catch (RuleException e) {
 							Server.logger.errorLogEntry(e.getMessage());
-							ApplicationException ae = new ApplicationException(ru.getAppType(), e.getMessage());
+							ApplicationException ae = new ApplicationException(ru.getAppType(), e.getMessage(),
+							        new _Session(env, new User()).getLang());
 							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 							response.getWriter().println(ae.getHTMLMessage());
 						}
@@ -73,7 +74,7 @@ public class Unsecure extends ValveBase {
 			} else {
 				String msg = "unknown application type \"" + ru.getAppType() + "\"";
 				Server.logger.warningLogEntry(msg);
-				ApplicationException ae = new ApplicationException(ru.getAppType(), msg);
+				ApplicationException ae = new ApplicationException(ru.getAppType(), msg, new _Session(env, new User()).getLang());
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println(ae.getHTMLMessage());
 			}

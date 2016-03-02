@@ -1,6 +1,8 @@
 package kz.lof.exception;
 
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
+import kz.lof.localization.LanguageCode;
 import kz.lof.server.Server;
 
 public class ExceptionXML {
@@ -26,9 +28,17 @@ public class ExceptionXML {
 		appType = t;
 	}
 
-	public String toXML() {
-		return "<?xml version = \"1.0\" encoding=\"" + EnvConst.DEFAULT_XML_ENC + "\"?><error><apptype>" + appType + "</apptype><message>"
-		        + errorMessage + "</message><code>" + code + "</code><location>" + location + "</location><type>" + type + "</type><name>"
-		        + servletName + "</name><exception><![CDATA[" + exception + "]]></exception><server>" + Server.serverTitle + "</server></error>";
+	public String toXML(LanguageCode lang) {
+		if (Environment.isDevMode) {
+			return "<?xml version = \"1.0\" encoding=\"" + EnvConst.DEFAULT_XML_ENC + "\"?><error><apptype>" + appType + "</apptype><message>"
+			        + errorMessage + "</message><code>" + code + "</code><location>" + location + "</location><type>" + type + "</type><name>"
+			        + servletName + "</name><exception><![CDATA[" + exception + "]]></exception><server>" + Server.serverTitle + "</server></error>";
+		} else {
+			return "<?xml version = \"1.0\" encoding=\"" + EnvConst.DEFAULT_XML_ENC + "\"?><error><apptype>" + appType + "</apptype><message>"
+			        + Environment.vocabulary.getWord("internal_server_error", lang) + "</message><code>" + code + "</code><location>" + location
+			        + "</location><type>" + type + "</type><name>" + servletName + "</name><exception></exception><server>" + Server.serverTitle
+			        + "</server></error>";
+		}
 	}
+
 }

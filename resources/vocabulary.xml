@@ -44,6 +44,17 @@
 		<entry lang="KAZ">Поле не заполнено</entry>
 		<entry lang="ENG">The field is empty</entry>
 	</sentence>
+	<sentence mode="on" keyword="date_format_does_not_match_to">
+		<entry lang="RUS">Формат даты не соответствует шаблону</entry>
+		<entry lang="KAZ">Формат даты не соответствует шаблону</entry>
+		<entry lang="ENG">Date format does not match to pattern</entry>
+	</sentence>
+	<sentence mode="on" keyword="required">
+		<entry lang="RUS">Обязательноe</entry>
+		<entry lang="KAZ">Обязательноe</entry>
+		<entry lang="ENG">Required</entry>
+	</sentence>
+	
 	<sentence mode="on" keyword="the_field">
 		<entry lang="RUS">Поле</entry>
 		<entry lang="KAZ"></entry>
@@ -55,9 +66,9 @@
 		<entry lang="ENG">has been not filled</entry>
 	</sentence>
 	<sentence mode="on" keyword="should_be_contain_value_more_than_zero">
-		<entry lang="RUS">должно содержать значение больше нуля</entry>
-		<entry lang="KAZ">должно содержать значение больше нуля</entry>
-		<entry lang="ENG">should be contain value more than zero</entry>
+		<entry lang="RUS">Поле должно содержать значение больше нуля</entry>
+		<entry lang="KAZ">Поле должно содержать значение больше нуля</entry>
+		<entry lang="ENG">The fiels should be contain value more than zero</entry>
 	</sentence>	
 	<sentence mode="on" keyword="change_skin">
 		<entry lang="RUS">Изменить оформление</entry>
@@ -314,6 +325,24 @@
 		<entry lang="ENG">Close</entry>
 		<entry lang="CHI">关闭</entry>
 	</sentence>
+	<sentence mode="on" keyword="just_close">
+		<entry lang="RUS">Закрыть форму</entry>
+		<entry lang="KAZ">Жабу</entry>
+		<entry lang="ENG">Just close the form</entry>
+		<entry lang="CHI">关闭</entry>
+	</sentence>
+	<sentence mode="on" keyword="back">
+		<entry lang="RUS">Назад</entry>
+		<entry lang="KAZ">Назад</entry>
+		<entry lang="ENG">Back</entry>
+		<entry lang="CHI"></entry>
+	</sentence>
+	<sentence mode="on" keyword="just_back">
+		<entry lang="RUS">Вернутся на предыдущую страницу</entry>
+		<entry lang="KAZ">Жабу</entry>
+		<entry lang="ENG">Return to the previous page</entry>
+		<entry lang="CHI"></entry>
+	</sentence>
 	<sentence mode="on" keyword="basic_properties">
 		<entry lang="RUS">Основные свойства</entry>
 		<entry lang="KAZ">Негізгі қасиеттері</entry>
@@ -559,16 +588,40 @@
 		<entry lang="ENG">interface</entry>
 		<entry lang="CHI">它的界面 </entry>
 	</sentence>
-	<sentence mode="on" keyword="Район/регион">
-		<entry lang="KAZ">Аудан/аймақ</entry>
-		<entry lang="ENG">Area/region</entry>
-		<entry lang="CHI">区/地区</entry>
+    <sentence mode="on" keyword="country">
+        <entry lang="ENG">Country</entry>
+        <entry lang="RUS">Страна</entry>
+        <entry lang="KAZ"></entry>
+        <entry lang="CHO"></entry>
+    </sentence>
+	<sentence mode="on" keyword="region">
+		<entry lang="RUS">Область</entry>
+		<entry lang="KAZ">Облыс</entry>
+		<entry lang="ENG">Region</entry>
 	</sentence>
+    <sentence mode="on" keyword="locality">
+        <entry lang="ENG">Locality</entry>
+        <entry lang="RUS">Населенный пункт</entry>
+        <entry lang="KAZ"></entry>
+        <entry lang="CHO"></entry>
+    </sentence>
+    <sentence mode="on" keyword="street">
+        <entry lang="ENG">Street</entry>
+        <entry lang="RUS">Улица</entry>
+        <entry lang="KAZ"></entry>
+        <entry lang="CHO"></entry>
+    </sentence>
 	<sentence mode="on" keyword="Телефон">
 		<entry lang="KAZ">Телефон</entry>
 		<entry lang="ENG">Phone</entry>
 		<entry lang="CHI">电话</entry>
 	</sentence>
+   <sentence mode="on" keyword="district">
+        <entry lang="ENG">District</entry>
+        <entry lang="RUS">Район</entry>
+        <entry lang="KAZ"></entry>
+        <entry lang="CHO"></entry>
+    </sentence>
 	<sentence mode="on" keyword="Роли">
 		<entry lang="KAZ">Рөлдер</entry>
 		<entry lang="ENG">Roles</entry>
@@ -668,11 +721,23 @@
 		<entry lang="ENG">Short name</entry>
 		<entry lang="CHI">短名称</entry>
 	</sentence>
+	<sentence mode="on" keyword="organization">
+		<entry lang="RUS">Организация</entry>
+		<entry lang="KAZ">Мекеме</entry>
+		<entry lang="ENG">Organization</entry>
+		<entry lang="CHI">组织</entry>
+	</sentence>
 	<sentence mode="on" keyword="org_name">
 		<entry lang="RUS">Организация</entry>
 		<entry lang="KAZ">Мекеме</entry>
 		<entry lang="ENG">Organization</entry>
 		<entry lang="CHI">组织</entry>
+	</sentence>
+	<sentence mode="on" keyword="org_category">
+		<entry lang="RUS">Тип организации</entry>
+		<entry lang="KAZ">Мекеме</entry>
+		<entry lang="ENG">Organization type</entry>
+		<entry lang="CHI"></entry>
 	</sentence>
 	<sentence mode="on" keyword="Все">
 		<entry lang="KAZ">Барлығы</entry>
