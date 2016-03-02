@@ -3,6 +3,8 @@ package kz.flabs.servlets;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import kz.lof.env.EnvConst;
+
 @Deprecated
 public class Cookies {
 	public boolean wAuthCookiesIsValid;
@@ -20,7 +22,7 @@ public class Cookies {
 		Cookie[] cooks = request.getCookies();
 		if (cooks != null) {
 			for (int i = 0; i < cooks.length; i++) {
-				if (cooks[i].getName().equals("lang")) {
+				if (cooks[i].getName().equals(EnvConst.LANG_COOKIE_NAME)) {
 					currentLang = cooks[i].getValue();
 				} else if (cooks[i].getName().equals("wauth")) {
 					wAuthHash = cooks[i].getValue();

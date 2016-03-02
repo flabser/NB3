@@ -3,6 +3,8 @@ package kz.lof.webserver.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -23,6 +25,7 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.exception.ApplicationException;
 import kz.lof.scripting._Session;
+import kz.lof.scripting._Session.PersistValue;
 import kz.lof.scripting._WebFormData;
 import kz.lof.server.Server;
 
@@ -109,6 +112,16 @@ public class Provider extends HttpServlet {
 				// TODO need to Improvement
 				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getValue(), ses.getLang());
 				throw e;
+			}
+
+			if (ses.getPersistValuesMap().size() > 0) {
+				Map<String, PersistValue> pMap = ses.getPersistValuesMap();
+				for (Entry<String, PersistValue> entry : pMap.entrySet()) {
+					String key = entry.getKey();
+					response.addCookie(pMap.get(key).getCookie());
+					pMap.remove(key);
+				}
+
 			}
 
 			if (result.getPublishAs() == PublishAsType.HTML) {
