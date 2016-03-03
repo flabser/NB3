@@ -83,33 +83,16 @@ public class WebServer {
 
 		context.addServletMapping("/Provider", "Provider");
 
-		/*
-		 * FilterDef filter2definition = new FilterDef();
-		 * filter2definition.setFilterName(AccessGuard.class.getSimpleName());
-		 * filter2definition.setFilterClass(AccessGuard.class.getName());
-		 * context.addFilterDef(filter2definition);
-		 * 
-		 * FilterMap filter2mapping = new FilterMap();
-		 * filter2mapping.setFilterName(AccessGuard.class.getSimpleName());
-		 * filter2mapping.addURLPattern("/*");
-		 * context.addFilterMap(filter2mapping);
-		 */
-
 		Tomcat.addServlet(context, "Login", "kz.flabs.servlets.Login");
 		context.addServletMapping("/Login", "Login");
 
 		Tomcat.addServlet(context, "Logout", "kz.flabs.servlets.Logout");
 		context.addServletMapping("/Logout", "Logout");
 
-		// Wrapper w = Tomcat.addServlet(context, "PortalInit",
-		// "kz.flabs.servlets.PortalInit");
 		Wrapper w = Tomcat.addServlet(context, "PortalInit", "kz.lof.webserver.servlet.PortalInit");
 		w.setLoadOnStartup(1);
 
 		context.addServletMapping("/PortalInit", "PortalInit");
-
-		// Tomcat.addServlet(context, "Uploader", "kz.flabs.servlets.Uploader");
-		// context.addServletMapping("/Uploader", "Uploader");
 
 		Tomcat.addServlet(context, "UploadFile", "kz.lof.webserver.servlet.UploadFile");
 		context.addServletMapping("/UploadFile", "UploadFile");
@@ -172,7 +155,6 @@ public class WebServer {
 	public void startContainer() {
 		try {
 			tomcat.start();
-			// tomcat.getServer().await();
 		} catch (LifecycleException e) {
 			Server.logger.errorLogEntry(e);
 		}

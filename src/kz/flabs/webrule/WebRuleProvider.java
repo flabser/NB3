@@ -17,7 +17,6 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.handler.HandlerRule;
-import kz.flabs.webrule.handler.TriggerType;
 import kz.flabs.webrule.page.PageRule;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
 import kz.lof.appenv.AppEnv;
@@ -37,6 +36,7 @@ public class WebRuleProvider implements Const {
 
 	public WebRuleProvider(AppEnv env) {
 		try {
+			// System.out.println("type= " + env.appType);
 			this.env = env;
 		} catch (Exception ne) {
 			AppEnv.logger.errorLogEntry(ne);
@@ -223,34 +223,6 @@ public class WebRuleProvider implements Const {
 		}
 	}
 
-	private void loadHandlers() {
-		try {
-			File docFile = new File(global.rulePath + File.separator + "Handler");
-			ArrayList<File> fl = getFiles(docFile);
-			int n = 0;
-			while (n != fl.size()) {
-				File file = null;
-				try {
-					file = fl.get(n);
-					AppEnv.logger.infoLogEntry("Loading handler  rules " + file.getAbsolutePath());
-					HandlerRule ruleObj = new HandlerRule(env, file);
-
-					if (ruleObj.isOn != RunMode.ON) {
-						AppEnv.logger.debugLogEntry("rule " + ruleObj.id + " turn off ");
-					} else {
-						handlerRuleMap.put(ruleObj.id.toLowerCase(), ruleObj);
-						addScheduledRule(ruleObj);
-					}
-				} finally {
-					n++;
-				}
-
-			}
-		} catch (Exception e) {
-			AppEnv.logger.errorLogEntry(e);
-		}
-	}
-
 	private ArrayList<File> getFiles(File docFile) {
 		ArrayList<File> fl = new ArrayList<File>();
 
@@ -264,13 +236,6 @@ public class WebRuleProvider implements Const {
 			}
 		}
 		return fl;
-	}
-
-	private void addScheduledRule(IScheduledProcessRule rule) {
-
-		if (rule.getTriggerType() == TriggerType.SCHEDULER) {
-			scheduledRules.add(rule);
-		}
 	}
 
 	public PageRule getRule(String id) throws RuleException {
