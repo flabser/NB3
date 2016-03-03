@@ -41,7 +41,7 @@ public class SessionCooks {
 
 	public String getCurrentLang() {
 		if (currentLang == null) {
-			return LanguageCode.ENG.name();
+			return EnvConst.DEFAULT_LANG.name();
 		} else {
 			return currentLang;
 		}

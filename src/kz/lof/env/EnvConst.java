@@ -2,6 +2,8 @@ package kz.lof.env;
 
 import java.io.File;
 
+import kz.lof.localization.LanguageCode;
+
 /**
  *
  *
@@ -25,6 +27,7 @@ public class EnvConst {
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";
 	public static final int DEFAULT_HTTP_PORT = 38700;
 
+	public static LanguageCode DEFAULT_LANG = LanguageCode.ENG;
 	public static String DB_USER = "postgres";
 	public static String DB_PWD = "smartdoc";
 	public static String DATABASE_HOST = "localhost";
