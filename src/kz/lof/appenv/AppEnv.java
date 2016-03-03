@@ -61,10 +61,8 @@ public class AppEnv extends PageCacheAdapter implements Const {
 			globalSetting.appName = appType;
 			isWorkspace = globalSetting.isWorkspace;
 			if (globalSetting.isOn == RunMode.ON) {
-				if (globalSetting.langsList.size() > 0) {
-					// Server.logger.infoLogEntry("Dictionary is loading...");
-					loadVocabulary();
-				}
+				// Server.logger.infoLogEntry("Dictionary is loading...");
+				loadVocabulary();
 				isValid = true;
 			} else {
 				Server.logger.warningLogEntry("Application: \"" + appType + "\" is off");
