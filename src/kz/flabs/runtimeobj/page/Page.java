@@ -126,6 +126,7 @@ public class Page implements IProcessInitiator, Const {
 	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageCode lang) {
 		HashMap<String, String> translated = new HashMap<String, String>();
 		for (Caption cap : captions) {
+			System.out.println(env + " " + cap + " " + lang + " " + cap.captionID);
 			translated.put(cap.captionID, env.vocabulary.getWord(cap.captionID, lang));
 		}
 		return translated;
