@@ -165,7 +165,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 			pst.close();
 			rs.close();
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -227,7 +227,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 			pst.close();
 			rs.close();
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -326,7 +326,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 			rs.close();
 			pst.close();
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}

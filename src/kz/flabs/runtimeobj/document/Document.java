@@ -18,7 +18,7 @@ public class Document extends BaseDocument implements Const {
 		this.env = db.getParent();
 		this.db = db;
 		this.currentUserID = currentUser;
-		dbID = db.getDbID();
+		// dbID = db.getDbID();
 		setNewDoc(true);
 		setAuthor(currentUser);
 	}
@@ -27,7 +27,7 @@ public class Document extends BaseDocument implements Const {
 		docType = Const.DOCTYPE_MAIN;
 		this.env = env;
 		db = env.getDataBase();
-		dbID = db == null ? "" : db.getDbID();
+		// dbID = db == null ? "" : db.getDbID();
 		this.currentUserID = currentUser.getUserID();
 		setNewDoc(true);
 		setAuthor(currentUser.getUserID());

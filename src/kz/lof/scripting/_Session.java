@@ -104,7 +104,7 @@ public class _Session extends PageCacheAdapter {
 
 	@Override
 	public String toString() {
-		return "userid=" + user.getUserID() + ", database=" + dataBase.toString();
+		return "userid=" + user.getUserID() + ", database=" + dataBase.toString() + " app=" + env;
 	}
 
 	public Set<String> getExpandedThread() {

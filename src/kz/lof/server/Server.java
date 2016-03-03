@@ -24,13 +24,14 @@ public class Server {
 
 	public static void start() throws MalformedURLException, LifecycleException, URISyntaxException {
 		logger = new Log4jLogger("Server");
+		logger.infoLogEntry(":-)");
 		logger.infoLogEntry(serverTitle + " start");
 		if (Environment.isDevMode) {
 			Environment.verboseLogging = true;
 			logger.warningLogEntry("Debug logging is turned on");
 		}
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
-		logger.infoLogEntry("Copyright(c) Lab of the Future 2014. All Right Reserved");
+		logger.infoLogEntry("Copyright(c) Lab of the Future 2015. All Right Reserved");
 
 		Environment.init();
 

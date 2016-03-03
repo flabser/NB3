@@ -23,7 +23,6 @@ import org.apache.http.HttpStatus;
 
 public class Unsecure extends ValveBase {
 	private RequestURL ru;
-	private AppEnv env;
 
 	public void invoke(Request request, Response response, RequestURL ru) throws IOException, ServletException {
 		this.ru = ru;
@@ -32,11 +31,11 @@ public class Unsecure extends ValveBase {
 
 	@Override
 	public void invoke(Request request, Response response) throws IOException, ServletException {
-		if (ru.getAppType().equals(EnvConst.SHARED_RESOURCES_APP_NAME) || ru.getAppType().equals(EnvConst.ADMINISTRATOR_APP_NAME)) {
+		String appType = ru.getAppType();
+		if (appType.equals(EnvConst.SHARED_RESOURCES_APP_NAME) || ru.getAppType().equals(EnvConst.ADMINISTRATOR_APP_NAME)) {
 			getNext().getNext().invoke(request, response);
 		} else {
-			env = Environment.getAppEnv(ru.getAppType());
-
+			AppEnv env = Environment.getAppEnv(appType);
 			if (env != null) {
 
 				if (ru.isAuthRequest()) {
@@ -54,25 +53,24 @@ public class Unsecure extends ValveBase {
 								gettingSession(request, response, env);
 								getNext().getNext().invoke(request, response);
 							} else {
-								((Secure) getNext()).invoke(request, response, ru, env);
+								((Secure) getNext()).invoke(request, response, appType);
 							}
 
 						} catch (RuleException e) {
 							Server.logger.errorLogEntry(e.getMessage());
-							ApplicationException ae = new ApplicationException(ru.getAppType(), e.getMessage(),
-							        new _Session(env, new User()).getLang());
+							ApplicationException ae = new ApplicationException(appType, e.getMessage(), new _Session(env, new User()).getLang());
 							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 							response.getWriter().println(ae.getHTMLMessage());
 						}
 					} else if (ru.isProtected()) {
-						((Secure) getNext()).invoke(request, response, ru, env);
+						((Secure) getNext()).invoke(request, response, appType);
 					} else {
 						gettingSession(request, response, env);
 						getNext().getNext().invoke(request, response);
 					}
 				}
 			} else {
-				String msg = "unknown application type \"" + ru.getAppType() + "\"";
+				String msg = "unknown application type \"" + appType + "\"";
 				Server.logger.warningLogEntry(msg);
 				ApplicationException ae = new ApplicationException(ru.getAppType(), msg, EnvConst.DEFAULT_LANG);
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);

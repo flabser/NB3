@@ -11,9 +11,9 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
-import kz.flabs.dataengine.h2.DBConnectionPool;
 import kz.flabs.dataengine.postgresql.useractivity.UsersActivityDDEScripts;
 import kz.lof.appenv.AppEnv;
+import kz.lof.env.Environment;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
@@ -25,9 +25,7 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 
 	public DatabaseDeployer(AppEnv env) throws InstantiationException, IllegalAccessException, ClassNotFoundException, DatabasePoolException {
 		this.env = env;
-		connectionURL = env.globalSetting.dbURL;
-		dbPool = new DBConnectionPool();
-		dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, env.globalSetting.getDbUserName(), env.globalSetting.getDbPassword());
+		dbPool = Environment.dataBase.getConnectionPool();
 
 	}
 

@@ -226,7 +226,7 @@ public class AdminProvider extends HttpServlet implements Const {
 		String dbID = "";
 		if (app != null) {
 			appEnv = Environment.getApplication(app);
-			dbID = Environment.getApplication(app).getDataBase().getDbID();
+			// dbID = Environment.getApplication(app).getDataBase().getDbID();
 			// sh = new ServiceHandler(dbID);
 		} else {
 			// sh = new ServiceHandler();
@@ -286,7 +286,7 @@ public class AdminProvider extends HttpServlet implements Const {
 		IDatabase db = null;
 		if (app != null && !"".equalsIgnoreCase(app)) {
 			env = Environment.getApplication(app);
-			dbID = env.getDataBase().getDbID();
+			// dbID = env.getDataBase().getDbID();
 			db = DatabaseFactory.getDatabaseByName(dbID);
 		} else if (dbID != null && !"".equalsIgnoreCase(dbID)) {
 			db = DatabaseFactory.getDatabaseByName(dbID);

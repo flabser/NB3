@@ -8,8 +8,6 @@ public interface IDatabase {
 
 	int getVersion();
 
-	String getDbID();
-
 	IDBConnectionPool getConnectionPool();
 
 	AppEnv getParent();

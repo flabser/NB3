@@ -62,7 +62,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 			isWorkspace = globalSetting.isWorkspace;
 			if (globalSetting.isOn == RunMode.ON) {
 				if (globalSetting.langsList.size() > 0) {
-					Server.logger.infoLogEntry("Dictionary is loading...");
+					// Server.logger.infoLogEntry("Dictionary is loading...");
 					loadVocabulary();
 				}
 				isValid = true;
@@ -78,14 +78,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	}
 
 	public void setDataBase(IDatabase db) {
-		if (!db.getDbID().equalsIgnoreCase("NoDatabase")) {
-			int cv = db.getVersion();
-
-			this.dataBase = db;
-			// checkLangsSupport();
-		} else {
-			this.dataBase = db;
-		}
+		this.dataBase = db;
 	}
 
 	public ArrayList<Role> getRolesList() {
@@ -122,7 +115,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 
 	@Override
 	public String toString() {
-		return Server.serverTitle + "-" + appType;
+		return "[ ]" + Server.serverTitle + "-" + appType;
 	}
 
 	public void reloadVocabulary() {
@@ -140,7 +133,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		String vocabuarFilePath = globalSetting.rulePath + File.separator + "Resources" + File.separator + "vocabulary.xml";
 		vocabulary = l.populate(appType, vocabuarFilePath);
 		if (vocabulary != null) {
-			Server.logger.infoLogEntry("Dictionary has loaded");
+			// Server.logger.infoLogEntry("Dictionary has loaded");
 		}
 	}
 

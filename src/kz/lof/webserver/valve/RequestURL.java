@@ -20,7 +20,7 @@ public class RequestURL {
 			appType = matcher.group(1) == null ? "" : matcher.group(1);
 			appID = matcher.group(2) == null ? "" : matcher.group(2).substring(1);
 		}
-
+		// System.out.println(urlVal + " == " + appType);
 		if (!isPage()) {
 			return;
 		}

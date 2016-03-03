@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 import kz.flabs.dataengine.ActivityStatusType;
-import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IActivity;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
@@ -141,10 +140,10 @@ public class Activity implements IActivity {
 			conn.commit();
 			pst.close();
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 			return -1;
 		} catch (Exception e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 			return -1;
 		} finally {
 			dbPool.returnConnection(conn);
@@ -177,7 +176,7 @@ public class Activity implements IActivity {
 
 			col.setCount(count);
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -207,7 +206,7 @@ public class Activity implements IActivity {
 
 			col.setCount(count);
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -329,7 +328,7 @@ public class Activity implements IActivity {
 			conn.commit();
 
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -518,7 +517,7 @@ public class Activity implements IActivity {
 			conn.commit();
 			return content;
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
@@ -671,7 +670,7 @@ public class Activity implements IActivity {
 			conn.commit();
 			return count;
 		} catch (SQLException e) {
-			DatabaseUtil.errorPrint(db.getDbID(), e);
+			// DatabaseUtil.errorPrint(db.getDbID(), e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}

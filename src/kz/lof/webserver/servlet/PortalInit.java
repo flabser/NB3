@@ -40,10 +40,11 @@ public class PortalInit extends HttpServlet {
 				IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
 
 				if (env.globalSetting.autoDeployEnable) {
-					Server.logger.infoLogEntry("Checking database structure ...");
+					// Server.logger.infoLogEntry("Checking database structure ...");
 					dd.deploy();
 				}
-				AppEnv.logger.debugLogEntry("Application will use \"" + db + "\" database");
+				// AppEnv.logger.debugLogEntry("Application will use \"" + db +
+				// "\" database");
 				env.setDataBase(db);
 
 				if (env.appType.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {

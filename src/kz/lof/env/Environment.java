@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,6 +36,7 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
+import kz.lof.dataengine.jpadatabase.Database;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.scripting._Session;
@@ -68,6 +70,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static String dbUserName;
 	private static String dbPassword;
 	public static ISystemDatabase systemBase;
+	public static IDatabase dataBase;
 	public static String defaultSender = "";
 	public static HashMap<String, String> mimeHash = new HashMap<String, String>();
 	public static HashMap<String, Site> webAppToStart = new HashMap<String, Site>();
@@ -103,7 +106,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	private static boolean schedulerStarted;
 	private static HashMap<String, ExternalHost> externalHost = new HashMap<String, ExternalHost>();
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
-	private static HashMap<String, AppEnv> allApplications = new HashMap<String, AppEnv>();
+	private static ConcurrentHashMap<String, AppEnv> allApplications = new ConcurrentHashMap<String, AppEnv>();
 	private static HashMap<String, IDatabase> dataBases = new HashMap<String, IDatabase>();
 
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
@@ -123,6 +126,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		initProcess();
 		try {
 			Environment.systemBase = new kz.flabs.dataengine.h2.SystemDatabase();
+			Environment.dataBase = new Database();
 		} catch (DatabasePoolException e) {
 			Server.logger.errorLogEntry(e);
 			Server.logger.fatalLogEntry("Server has not connected to system database");
@@ -369,7 +373,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	public static void addDatabases(IDatabase dataBase) {
-		dataBases.put(dataBase.getDbID(), dataBase);
+		// dataBases.put(dataBase.getDbID(), dataBase);
 	}
 
 	public static AppEnv getAppEnv(String appID) {

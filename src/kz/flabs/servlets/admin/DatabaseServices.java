@@ -67,10 +67,9 @@ public class DatabaseServices implements Const {
 
 		for (BaseDocument doc : col) {
 
-			xmlFragment.append("<entry dbid=\"" + db.getDbID() + "\" docid=\"" + doc.getDdbID() + "\" " + " parentdocid=\"" + doc.parentDocID
-			        + "\" parentdoctype=\"" + doc.parentDocType + "\" " + "author=\"" + doc.getAuthorID() + "\" regdate=\""
-			        + Util.convertDataTimeToString(doc.getRegDate()) + "\" " + " lastupdated=\"" + Util.convertDataTimeToString(doc.getLastUpdate())
-			        + "\">");
+			xmlFragment.append("<entry  docid=\"" + doc.getDdbID() + "\" " + " parentdocid=\"" + doc.parentDocID + "\" parentdoctype=\""
+			        + doc.parentDocType + "\" " + "author=\"" + doc.getAuthorID() + "\" regdate=\"" + Util.convertDataTimeToString(doc.getRegDate())
+			        + "\" " + " lastupdated=\"" + Util.convertDataTimeToString(doc.getLastUpdate()) + "\">");
 			xmlFragment.append("<form>" + doc.form + "</form>");
 			xmlFragment.append("<viewtext>" + XMLUtil.getAsTagValue(doc.getViewText()) + "</viewtext>");
 			xmlFragment.append("</entry>");

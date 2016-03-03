@@ -30,10 +30,13 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	public static final SimpleDateFormat sqlDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static ILogger logger = Server.logger;
 
-	protected String connectionURL = "";
+	// TODO need to improve to make it more secure
+	protected static String dbUser = "ss";
+	protected static String dbPwd = "maza";
+	protected static String connectionURL = "";
 	protected IDBConnectionPool dbPool;
 	protected IDBConnectionPool structDbPool;
-	protected IDBConnectionPool forumDbPool;
+	// protected IDBConnectionPool forumDbPool;
 	protected String dbID;
 	protected AppEnv env;
 	protected IUsersActivity usersActivity;
@@ -51,33 +54,13 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		this.env = env;
 		if (env.globalSetting.databaseEnable) {
 			dbID = env.globalSetting.databaseName;
-			connectionURL = env.globalSetting.dbURL;
+			// connectionURL = env.globalSetting.dbURL;
 			dbPool = new DBConnectionPool();
-			dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, env.globalSetting.getDbUserName(), env.globalSetting.getDbPassword());
+			dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, dbUser, dbPwd);
 
 		}
 
 		databaseType = dbType;
-
-	}
-
-	public Database(AppEnv env, boolean auth) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		this.env = env;
-		if (env.globalSetting.databaseEnable) {
-			dbID = env.globalSetting.databaseName;
-			connectionURL = env.globalSetting.dbURL;
-			if (auth) {
-				dbPool = new DBConnectionPool();
-				dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, env.globalSetting.getDbUserName(),
-				        env.globalSetting.getDbPassword());
-			} else {
-				dbPool = new DBConnectionPool();
-				dbPool.initConnectionPool(env.globalSetting.driver, connectionURL);
-			}
-
-		}
-
-		initStructPool();
 
 	}
 
@@ -96,11 +79,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	@Override
 	public int getVersion() {
 		return 0;
-	}
-
-	@Override
-	public String getDbID() {
-		return dbID;
 	}
 
 	@Override

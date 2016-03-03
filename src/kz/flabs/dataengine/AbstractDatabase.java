@@ -45,11 +45,6 @@ public abstract class AbstractDatabase implements IDatabase {
 		return env;
 	}
 
-	@Override
-	public String getDbID() {
-		return dbID;
-	}
-
 	public boolean clearDocuments() {
 		return false;
 	}

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
-import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFilters;
@@ -88,7 +87,7 @@ public class Filters implements IFilters {
 				dateSQL = tableName + ".regdate between '" + Util.simpleDateTimeFormat.format(dateFrom) + "' and '"
 				        + Util.simpleDateTimeFormat.format(dateTo) + "'";
 			} catch (ParseException e) {
-				DatabaseUtil.errorPrint(db.getDbID(), e);
+				// DatabaseUtil.errorPrint(db.getDbID(), e);
 			}
 		}
 		boolean needAnd = false;
