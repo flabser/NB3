@@ -20,8 +20,8 @@
 	</sentence>
 	<sentence mode="on" keyword="validation_error">
 		<entry lang="ENG">Validation error</entry>
-		<entry lang="RUS">Ошибка сохранения формы</entry>
-		<entry lang="KAZ">Ошибка сохранения формы</entry>		
+		<entry lang="RUS">Ошибка значения формы</entry>
+		<entry lang="KAZ">Ошибка значения формы</entry>		
 		<entry lang="CHI"></entry>
 	</sentence>
 	<sentence mode="on" keyword="search">
