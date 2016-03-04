@@ -15,6 +15,7 @@ import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
+import kz.lof.user.IUser;
 
 public class ViewEntry implements IViewEntry, Const {
 	public String ddbID;
@@ -335,7 +336,7 @@ public class ViewEntry implements IViewEntry, Const {
 		this.hasResp = 1;
 	}
 
-	public StringBuilder toXML(User user) {
+	public StringBuilder toXML(IUser user) {
 
 		if (type == ViewEntryType.DOCUMENT) {
 			Connection conn = null;

@@ -15,13 +15,13 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
-import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.util.XMLUtil;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.util.UUIDConverter;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._Session;
+import kz.lof.user.IUser;
 
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
@@ -82,8 +82,8 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		this.author = author;
 	}
 
-	public void setAuthor(User user) {
-		author = (long) user.docID;
+	public void setAuthor(IUser user) {
+		author = user.getId();
 	}
 
 	@JsonIgnore

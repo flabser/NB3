@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 import kz.flabs.localization.Localizator;
@@ -47,6 +50,7 @@ public class Console implements Runnable {
 			if (Environment.isDevMode) {
 				System.out.println("developer mode is on");
 			}
+			System.out.println("default language=" + EnvConst.DEFAULT_LANG);
 			File jarFile = new File(EnvConst.NB_JAR_FILE);
 			System.out.println("jar=" + EnvConst.NB_JAR_FILE + ", path=" + jarFile.getAbsolutePath() + ", exist=" + jarFile.exists());
 		} else if (command.equalsIgnoreCase("show logged users") || command.equalsIgnoreCase("slu")) {
@@ -136,6 +140,21 @@ public class Console implements Runnable {
 					System.out.println(ci);
 				}
 			}
+		} else if (command.equalsIgnoreCase("import from h2") || command.equalsIgnoreCase("ifh2")) {
+			try {
+				Class<?> clazz = Class.forName(EnvConst.ADMINISTRATOR_SERVICE_CLASS);
+				Constructor<?> contructor = clazz.getConstructor();
+				Method method = clazz.getMethod("importFromH2");
+				Object instance = contructor.newInstance();
+				method.invoke(instance);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+			        | SecurityException e) {
+				System.err.println(e);
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				System.err.println(e);
+			}
+
 		} else if (command.equals("help") || command.equalsIgnoreCase("h")) {
 			System.out.println(Util.readFile(EnvConst.RESOURCES_DIR + File.separator + "console_commands.txt"));
 		} else {

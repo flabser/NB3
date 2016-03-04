@@ -13,6 +13,7 @@ import kz.flabs.users.RunTimeParameters.Filter;
 import kz.flabs.users.RunTimeParameters.Sorting;
 import kz.flabs.users.User;
 import kz.lof.scripting._Session;
+import kz.lof.user.AnonymousUser;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
@@ -24,7 +25,7 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	        "viewtext7", "viewnumber", "viewdate" };
 
 	public _ViewEntryCollection(User user, ViewEntryCollection parentObj) {
-		session = new _Session(user.getAppEnv(), user);
+		session = new _Session(user.getAppEnv(), new AnonymousUser());
 		this.parentObj = parentObj;
 		HashSet<IViewEntry> entries = parentObj.getEntries();
 		for (IViewEntry entry : entries) {

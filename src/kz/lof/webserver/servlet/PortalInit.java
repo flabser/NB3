@@ -14,7 +14,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.runtimeobj.Application;
-import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.dataengine.system.IEmployeeDAO;
@@ -22,6 +21,7 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.lof.user.AnonymousUser;
 
 public class PortalInit extends HttpServlet {
 
@@ -51,7 +51,7 @@ public class PortalInit extends HttpServlet {
 					Class<?> clazz = Class.forName(EnvConst.STAFF_DAO_CLASS);
 					Class[] args = new Class[] { _Session.class };
 					Constructor<?> contructor = clazz.getConstructor(args);
-					_Session ses = new _Session(env, new User(env));
+					_Session ses = new _Session(env, new AnonymousUser());
 					IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
 					Environment.systemBase.setEmployeeDAO(aDao);
 					AppEnv.logger.debugLogEntry("Module \"" + env.appType + "\" has been connected to system");

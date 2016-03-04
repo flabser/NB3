@@ -8,13 +8,13 @@ import javax.servlet.http.HttpSession;
 
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
-import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.env.SessionPool;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.lof.user.AnonymousUser;
 import kz.lof.webserver.servlet.SessionCooks;
 
 import org.apache.catalina.connector.Request;
@@ -37,7 +37,7 @@ public class Secure extends ValveBase {
 			HttpSession jses = http.getSession(false);
 			if (jses != null) {
 				_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
-				if (ses != null && !ses.getUser().getLogin().equals(User.ANONYMOUS_USER)) {
+				if (ses != null && !ses.getUser().getUserID().equals(AnonymousUser.USER_NAME)) {
 					getNext().invoke(request, response);
 				} else {
 					gettingSession(request, response);
@@ -64,7 +64,7 @@ public class Secure extends ValveBase {
 				_Session clonedSes = ses.clone(env);
 				jses.setAttribute(EnvConst.SESSION_ATTR, clonedSes);
 				clonedSes.setJses(jses);
-				Server.logger.debugLogEntry(ses.getUser().getLogin() + "\" got from session pool " + jses.getServletContext().getContextPath());
+				Server.logger.debugLogEntry(ses.getUser().getUserID() + "\" got from session pool " + jses.getServletContext().getContextPath());
 				invoke(request, response);
 			} else {
 				Server.logger.warningLogEntry("there is no associated user session for the token");

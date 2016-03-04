@@ -18,8 +18,6 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.h2.DBConnectionPool;
-import kz.flabs.webrule.module.ExternalModule;
-import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
@@ -148,19 +146,6 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		} else {
 			return 1;
 		}
-	}
-
-	@Override
-	protected void initStructPool() {
-		for (ExternalModule module : env.globalSetting.extModuleMap.values()) {
-			if (module.getType() == ExternalModuleType.STAFF) {
-				externalStructureApp = module.getName();
-				Environment.addDelayedInit(this);
-			} else {
-				Environment.addDelayedInit(this);
-			}
-		}
-		structDbPool = dbPool;
 	}
 
 	@Override

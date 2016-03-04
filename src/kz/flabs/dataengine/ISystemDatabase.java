@@ -6,8 +6,11 @@ import java.util.HashMap;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.system.IEmployeeDAO;
+import kz.lof.user.IUser;
 
 public interface ISystemDatabase {
+	IUser getUser(String login, String pwd);
+
 	User checkUser(String userID, String pwd, User user);
 
 	User checkUser(String userID, String pwd, String hash, User user);
@@ -39,8 +42,6 @@ public interface ISystemDatabase {
 	boolean deleteUser(int docID);
 
 	ArrayList<User> getUsers(String keyWord);
-
-	void removeAppEntry(User user);
 
 	void setEmployeeDAO(IEmployeeDAO dao);
 

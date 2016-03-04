@@ -12,7 +12,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.users.User;
 import kz.flabs.webrule.GlobalSetting;
 import kz.lof.appenv.AppEnv;
 import kz.lof.caching.PageCacheAdapter;
@@ -20,15 +19,15 @@ import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.env.EnvConst;
 import kz.lof.localization.LanguageCode;
 import kz.lof.user.AuthModeType;
+import kz.lof.user.IUser;
 import kz.nextbase.script._AppEntourage;
-import kz.nextbase.script._UserActivity;
 import kz.nextbase.script._ViewEntryCollectionParam;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.mail._MailAgent;
 
 public class _Session extends PageCacheAdapter {
 	private IDatabase dataBase;
-	private User user;
+	private IUser user;
 	private AppEnv env;
 	private LanguageCode lang;
 	public int pageSize = 30;
@@ -40,7 +39,7 @@ public class _Session extends PageCacheAdapter {
 	private Map<String, Object> valuesMap = new HashMap<String, Object>();
 	private Map<String, PersistValue> persistValuesMap = new HashMap<String, PersistValue>();
 
-	public _Session(AppEnv env, User user) {
+	public _Session(AppEnv env, IUser user) {
 		this.env = env;
 		this.user = user;
 		dataBase = env.getDataBase();
@@ -90,15 +89,11 @@ public class _Session extends PageCacheAdapter {
 		return dataBase;
 	}
 
-	public _UserActivity getUserActivity() {
-		return new _UserActivity(dataBase, user);
-	}
-
 	public _MailAgent getMailAgent() {
 		return new _MailAgent(this);
 	}
 
-	public User getUser() {
+	public IUser getUser() {
 		return user;
 	}
 

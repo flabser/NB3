@@ -18,6 +18,7 @@ import kz.lof.dataengine.jpa.ISimpleAppEntity;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
+import kz.lof.user.AnonymousUser;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 import com.eztech.util.JavaClassFinder;
@@ -152,7 +153,7 @@ public class InitializerHelper implements IProcessInitiator {
 			AppEnv env = Environment.getAppEnv(p);
 			if (env != null) {
 				User user = new User(Const.sysUser, env);
-				_Session ses = new _Session(env, user);
+				_Session ses = new _Session(env, new AnonymousUser());
 				pcInstance = (IInitialData<ISimpleAppEntity, IDAO>) Class.forName(populatingClass.getCanonicalName()).newInstance();
 				List<ISimpleAppEntity> entities = pcInstance.getData(ses, null, null);
 				Class<?> daoClass = pcInstance.getDAO();

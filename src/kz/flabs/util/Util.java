@@ -536,4 +536,23 @@ public class Util {
 		return "";
 	}
 
+	public static String getAsTagValue(String value) {
+		if (value != null && value.length() > 0) {
+
+			if (value.startsWith("<![CDATA[") && value.endsWith("]]>")) {
+				return value;
+			}
+
+			String val = value.replace("&", "&amp;");
+			val = val.replace("\n", "");
+			val = val.replace("\"", "'");
+			val = val.replace("\r", "");
+			val = val.replace("\"", "&quot;");
+			val = val.replace("<", "&lt;").replace(">", "&gt;");
+			return val;
+		} else {
+			return "";
+		}
+	}
+
 }

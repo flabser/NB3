@@ -13,7 +13,7 @@ public class SessionPool {
 
 	public static String put(_Session us) {
 		String sesID = Util.generateRandomAsText();
-		int key = Base64.encodeBase64String(us.getUser().getLogin().getBytes(Charset.forName("UTF-8"))).hashCode();
+		int key = Base64.encodeBase64String(us.getUser().getUserID().getBytes(Charset.forName("UTF-8"))).hashCode();
 		userSessions.put(key, us);
 		String token = sesID + "#" + key;
 		return token;
@@ -35,7 +35,7 @@ public class SessionPool {
 	}
 
 	public static void remove(_Session us) {
-		userSessions.remove(us.getUser().getLogin());
+		userSessions.remove(us.getUser().getUserID());
 	}
 
 	public static HashMap<Integer, _Session> getUserSessions() {

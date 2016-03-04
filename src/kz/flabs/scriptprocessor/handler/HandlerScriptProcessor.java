@@ -15,6 +15,7 @@ import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
+import kz.lof.user.AnonymousUser;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 @Deprecated
@@ -28,7 +29,7 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 
 	public HandlerScriptProcessor(AppEnv env, User user, String lang) {
 		super();
-		session = new _Session(env, user);
+		session = new _Session(env, new AnonymousUser());
 
 		vocabulary = env.vocabulary;
 		this.lang = lang;
@@ -37,7 +38,7 @@ public class HandlerScriptProcessor extends ScriptProcessor implements Runnable,
 	@Deprecated
 	public HandlerScriptProcessor(AppEnv env, User user, Map<String, String[]> formData, String lang) {
 		super();
-		session = new _Session(env, user);
+		session = new _Session(env, new AnonymousUser());
 
 		if (formData != null) {
 			this.formData.putAll(formData);

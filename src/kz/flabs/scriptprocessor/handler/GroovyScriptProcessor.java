@@ -13,6 +13,7 @@ import kz.flabs.util.Util;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
+import kz.lof.user.AnonymousUser;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 public class GroovyScriptProcessor extends ScriptProcessor implements Runnable, IProcessInitiator {
@@ -23,7 +24,7 @@ public class GroovyScriptProcessor extends ScriptProcessor implements Runnable, 
 
 	public GroovyScriptProcessor(AppEnv env, User user, Map<String, String[]> formData) {
 		super();
-		session = new _Session(env, user);
+		session = new _Session(env, new AnonymousUser());
 		webFormData = new _WebFormData(formData, "");
 	}
 

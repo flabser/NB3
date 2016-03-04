@@ -1,7 +1,6 @@
 package kz.flabs.workspace;
 
 import kz.flabs.users.User;
-import kz.lof.scripting._Session;
 
 public class LoggedUser {
 	private String login;
@@ -22,21 +21,6 @@ public class LoggedUser {
 			pwd = user.getPassword();
 		}
 		this.user = user;
-	}
-
-	public LoggedUser(_Session ses) {
-		user = ses.getUser();
-		login = user.getUserID();
-		if (user.getPasswordHash() != null) {
-			if (!user.getPasswordHash().trim().equals("")) {
-
-				pwd = user.getPasswordHash();
-			} else {
-				pwd = user.getPassword();
-			}
-		} else {
-			pwd = user.getPassword();
-		}
 	}
 
 	public String getLogin() {

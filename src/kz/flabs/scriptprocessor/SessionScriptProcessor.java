@@ -4,13 +4,14 @@ import groovy.lang.GroovyObject;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.users.User;
 import kz.lof.scripting._Session;
+import kz.lof.user.AnonymousUser;
 
 public class SessionScriptProcessor extends ScriptProcessor {
 	private _Session session;
 
 	public SessionScriptProcessor(IDatabase db, User user) {
 		super();
-		session = new _Session(db.getParent(), user);
+		session = new _Session(db.getParent(), new AnonymousUser());
 	}
 
 	@Override

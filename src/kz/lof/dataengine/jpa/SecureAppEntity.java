@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
 
-import kz.flabs.users.User;
+import kz.lof.user.IUser;
 
 @MappedSuperclass
 public abstract class SecureAppEntity extends AppEntity {
@@ -24,10 +24,10 @@ public abstract class SecureAppEntity extends AppEntity {
 		this.editors = editors;
 	}
 
-	public void addReaderEditor(User user) {
-		int id = user.docID;
+	public void addReaderEditor(IUser user) {
+		long id = user.getId();
 		if (id != 0) {
-			this.editors.add((long) id);
+			this.editors.add(id);
 			addReader(user);
 		}
 	}
@@ -40,10 +40,10 @@ public abstract class SecureAppEntity extends AppEntity {
 		this.readers = readers;
 	}
 
-	public void addReader(User user) {
-		int id = user.docID;
+	public void addReader(IUser user) {
+		long id = user.getId();
 		if (id != 0) {
-			this.readers.add((long) id);
+			this.readers.add(id);
 		}
 	}
 
@@ -52,8 +52,8 @@ public abstract class SecureAppEntity extends AppEntity {
 	}
 
 	@Override
-	public void setAuthor(User user) {
-		author = (long) user.docID;
+	public void setAuthor(IUser user) {
+		author = user.getId();
 		if (author != 0) {
 			addReader(user);
 			addReaderEditor(user);

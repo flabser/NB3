@@ -9,7 +9,7 @@ import kz.lof.env.EnvConst;
 public class Cookies {
 	public boolean wAuthCookiesIsValid;
 	public boolean authCookiesIsValid;
-	public String currentLang = EnvConst.DEFAULT_LANG.name();
+	public String currentLang = EnvConst.DEFAULT_LANG;
 	public String currentSkin;
 	public String wAuthHash = "0";
 	public String authHash = "0";

@@ -16,14 +16,14 @@ import javax.persistence.criteria.Root;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
-import kz.flabs.users.User;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.lof.user.IUser;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
-	public User user;
+	public IUser user;
 	protected final Class<T> entityClass;
 	private EntityManagerFactory emf;
 	protected _Session ses;
@@ -66,12 +66,12 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			cq.where(condition);
 			Query query = em.createQuery(cq);
 			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-				condition = cb.and(c.get("readers").in((long) user.docID), condition);
+				condition = cb.and(c.get("readers").in(user.getId()), condition);
 				isSecureEntity = true;
 			}
 			T entity = (T) query.getSingleResult();
 			if (isSecureEntity) {
-				if (!((SecureAppEntity) entity).getEditors().contains(user.docID)) {
+				if (!((SecureAppEntity) entity).getEditors().contains(user.getId())) {
 					entity.setEditable(false);
 				}
 			}
@@ -119,7 +119,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			EntityTransaction t = em.getTransaction();
 			try {
 				t.begin();
-				entity.setAuthor(user.docID);
+				entity.setAuthor(user.getId());
 				entity.setForm(entity.getDefaultFormName());
 				em.persist(entity);
 				t.commit();
@@ -199,7 +199,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			countCq.select(cb.count(c));
 			Predicate condition = cb.equal(c.get(fieldName), value);
 			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-				condition = cb.and(c.get("readers").in((long) user.docID), condition);
+				condition = cb.and(c.get("readers").in(user.getId()), condition);
 			}
 			cq.where(condition);
 			countCq.where(condition);
@@ -233,7 +233,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			countCq.select(cb.count(c));
 			Predicate condition = c.get(fieldName).in(value);
 			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-				condition = cb.and(c.get("readers").in((long) user.docID), condition);
+				condition = cb.and(c.get("readers").in(user.getId()), condition);
 			}
 			cq.orderBy(cb.asc(c.get("regDate")));
 			cq.where(condition);

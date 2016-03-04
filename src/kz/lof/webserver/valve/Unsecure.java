@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.exception.RuleException;
-import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
@@ -14,6 +13,7 @@ import kz.lof.exception.ApplicationException;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.lof.user.AnonymousUser;
 import kz.lof.webserver.servlet.SessionCooks;
 
 import org.apache.catalina.connector.Request;
@@ -41,7 +41,7 @@ public class Unsecure extends ValveBase {
 				if (ru.isAuthRequest()) {
 					// if (request.getMethod().equalsIgnoreCase("POST")) {
 					HttpSession jses = request.getSession(true);
-					jses.setAttribute(EnvConst.SESSION_ATTR, new _Session(env, new User()));
+					jses.setAttribute(EnvConst.SESSION_ATTR, new _Session(env, new AnonymousUser()));
 					getNext().getNext().invoke(request, response);
 					// } else {
 					// ((Secure) getNext()).invoke(request, response, ru, env);
@@ -58,7 +58,8 @@ public class Unsecure extends ValveBase {
 
 						} catch (RuleException e) {
 							Server.logger.errorLogEntry(e.getMessage());
-							ApplicationException ae = new ApplicationException(appType, e.getMessage(), new _Session(env, new User()).getLang());
+							ApplicationException ae = new ApplicationException(appType, e.getMessage(),
+							        new _Session(env, new AnonymousUser()).getLang());
 							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 							response.getWriter().println(ae.getHTMLMessage());
 						}
@@ -72,7 +73,7 @@ public class Unsecure extends ValveBase {
 			} else {
 				String msg = "unknown application type \"" + appType + "\"";
 				Server.logger.warningLogEntry(msg);
-				ApplicationException ae = new ApplicationException(ru.getAppType(), msg, EnvConst.DEFAULT_LANG);
+				ApplicationException ae = new ApplicationException(ru.getAppType(), msg, LanguageCode.valueOf(EnvConst.DEFAULT_LANG));
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println(ae.getHTMLMessage());
 			}
@@ -96,7 +97,7 @@ public class Unsecure extends ValveBase {
 
 	private _Session getAnonymousSes(Request request, Response response, HttpSession jses, AppEnv env) {
 		SessionCooks cooks = new SessionCooks(request, response);
-		_Session ses = new _Session(env, new User());
+		_Session ses = new _Session(env, new AnonymousUser());
 		ses.setLang(LanguageCode.valueOf(cooks.getCurrentLang()));
 		return ses;
 	}

@@ -1,6 +1,9 @@
 package kz.flabs.dataengine.h2;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,8 +25,10 @@ import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
+import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
+import kz.lof.user.IUser;
 import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.apache.catalina.realm.RealmBase;
@@ -68,21 +73,39 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	}
 
 	@Override
-	public void removeAppEntry(User user) {
-		Connection conn = dbPool.getConnection();
-		AppEnv env = user.getAppEnv();
+	public IUser getUser(String login, String pwd) {
+		IUser user = null;
 		try {
-			conn.setAutoCommit(false);
-			Statement s = conn.createStatement();
-			String sql = "DELETE FROM ENABLEDAPPS WHERE DOCID = (SELECT DOCID FROM USERS WHERE USERID = '" + user.getUserID() + "') AND APP = '"
-			        + env.appType + "'";
-			s.execute(sql);
-			conn.commit();
-		} catch (SQLException e) {
-			DatabaseUtil.debugErrorPrint(e);
-		} finally {
-			dbPool.returnConnection(conn);
+			Class<?> clazz = Class.forName(EnvConst.ADMINISTRATOR_SERVICE_CLASS);
+			Constructor<?> contructor = clazz.getConstructor();
+			Object instance = clazz.newInstance();
+			Class[] paramTypes = { String.class };
+			Method method = clazz.getDeclaredMethod("getUser", paramTypes);
+			user = (IUser) method.invoke(instance, login);
+		} catch (IllegalArgumentException | NoSuchMethodException | SecurityException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (ClassNotFoundException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (IllegalAccessException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (InvocationTargetException e) {
+			Server.logger.errorLogEntry(e);
+		} catch (InstantiationException e) {
+			Server.logger.errorLogEntry(e);
 		}
+
+		String pwdHash = RealmBase.Digest(pwd, "MD5", "UTF-8");
+		if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
+			user.setAuthorized(true);
+			if (eDao != null) {
+				IEmployee emp = eDao.getEmployee(login);
+				if (emp != null) {
+					user.setUserName(emp.getName());
+				}
+			}
+		}
+		return user;
+
 	}
 
 	@Override

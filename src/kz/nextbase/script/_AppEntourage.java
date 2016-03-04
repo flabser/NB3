@@ -7,7 +7,6 @@ import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
-import kz.flabs.users.User;
 import kz.flabs.webrule.Lang;
 import kz.flabs.webrule.Skin;
 import kz.lof.appenv.AppEnv;
@@ -15,6 +14,8 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
+import kz.lof.user.IUser;
+
 //import kz.nextbase.script.struct._Employer;
 
 public class _AppEntourage {
@@ -79,13 +80,13 @@ public class _AppEntourage {
 	public _ViewEntryCollection getAvailableApps() throws _Exception {
 		ViewEntryCollection vec = new ViewEntryCollection(ses, 100);
 		// _Employer emp = ses.getCurrentAppUser();
-		User user = ses.getUser();
+		IUser user = ses.getUser();
 
 		for (AppEnv appEnv : Environment.getApplications()) {
 			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {
-				if (user.authorized) {
+				if (user.isAuthorized()) {
 					Collection<UserApplicationProfile> enabledApps;
-					enabledApps = user.enabledApps.values();
+				/*	enabledApps = user.enabledApps.values();
 					for (UserApplicationProfile uap : enabledApps) {
 						if (uap.appName.equals(appEnv.appType) && !appEnv.appType.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
 
@@ -99,7 +100,7 @@ public class _AppEntourage {
 							}
 
 						}
-					}
+					}*/
 				}
 			}
 		}

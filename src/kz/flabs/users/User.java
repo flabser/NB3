@@ -25,6 +25,7 @@ import kz.lof.appenv.AppEnv;
 
 import org.apache.catalina.realm.RealmBase;
 
+@Deprecated
 public class User extends BaseDocument implements Const {
 	public int docID;
 	public HashMap<String, UserApplicationProfile> enabledApps = new HashMap<String, UserApplicationProfile>();

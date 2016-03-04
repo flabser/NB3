@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
-import kz.lof.scripting._Session;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -34,15 +33,6 @@ public class WorkSpaceSession {
 		}
 		LoggedUser loggetUser = loggedUsers.get(key);
 		return loggetUser;
-	}
-
-	public static String addUserSession(_Session ses) {
-		String sesID = Util.generateRandomAsText();
-		LoggedUser loggetUser = new LoggedUser(ses);
-		int key = Base64.encodeBase64String(loggetUser.getLogin().getBytes(Charset.forName("UTF-8"))).hashCode();
-		loggedUsers.put(key, loggetUser);
-		return sesID + "#" + key;
-
 	}
 
 }
