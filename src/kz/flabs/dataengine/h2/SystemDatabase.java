@@ -95,14 +95,16 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		}
 
 		String pwdHash = RealmBase.Digest(pwd, "MD5", "UTF-8");
-		if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
+		if (user != null && user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
 			user.setAuthorized(true);
+
 			if (eDao != null) {
-				IEmployee emp = eDao.getEmployee(login);
+				IEmployee emp = eDao.getEmployee(user.getId());
 				if (emp != null) {
 					user.setUserName(emp.getName());
 				}
 			}
+
 		}
 		return user;
 
@@ -339,7 +341,7 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		boolean isNext = true;
 		User user = new User(login, env);
 		if (eDao != null) {
-			IEmployee emp = eDao.getEmployee(login);
+			IEmployee emp = eDao.getEmployee(0);
 			if (emp != null) {
 				user.setUserName(emp.getName());
 			}

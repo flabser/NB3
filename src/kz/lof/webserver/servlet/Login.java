@@ -1,9 +1,6 @@
 package kz.lof.webserver.servlet;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -53,7 +50,7 @@ public class Login extends HttpServlet implements Const {
 
 			IUser user = systemDatabase.getUser(login, pwd);
 
-			if (user.isAuthorized()) {
+			if (user != null && user.isAuthorized()) {
 				jses = request.getSession(true);
 				ses = new _Session(env, user);
 				ses.setJses(jses);
@@ -110,26 +107,6 @@ public class Login extends HttpServlet implements Const {
 		} catch (Exception e) {
 			new PortalException(e, response, ProviderExceptionType.INTERNAL, PublishAsType.HTML);
 		}
-	}
-
-	public String getMD5Hash(String password) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-
-			byte[] passBytes = password.getBytes(Charset.forName("UTF-8"));
-			md.reset();
-			byte[] digested = md.digest(passBytes);
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < digested.length; i++) {
-				sb.append(Integer.toHexString(0xff & digested[i]));
-			}
-
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
-		}
-
 	}
 
 	private String getRedirect(HttpSession jses, Cookies appCookies) {
