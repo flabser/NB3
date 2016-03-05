@@ -63,6 +63,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static boolean verboseLogging;
 	public static String appServerName;
+	public static String orgName;
 	public static String hostName;
 	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
 	public static String httpSchema = "http";
@@ -151,6 +152,11 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			initMimeTypes();
 
 			appServerName = Paths.get(System.getProperty("user.dir")).getFileName().toString();
+
+			orgName = XMLUtil.getTextContent(xmlDocument, "/nextbase/orgname");
+			if (orgName.isEmpty()) {
+				hostName = appServerName;
+			}
 
 			hostName = XMLUtil.getTextContent(xmlDocument, "/nextbase/hostname");
 			if (hostName.isEmpty()) {

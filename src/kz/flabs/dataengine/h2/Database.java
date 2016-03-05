@@ -14,17 +14,18 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.IStructure;
 import kz.flabs.dataengine.IUsersActivity;
-import kz.flabs.webrule.WebRuleProvider;
 import kz.flabs.webrule.module.ExternalModule;
 import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.appenv.AppEnv;
+import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
 import kz.pchelka.log.ILogger;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
 	public boolean isValid;
-	public WebRuleProvider ruleProvider;
+	public RuleProvider ruleProvider;
 	public static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 	public static final SimpleDateFormat sqlDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -52,13 +53,11 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	public Database(AppEnv env, DatabaseType dbType) throws DatabasePoolException, InstantiationException, IllegalAccessException,
 	        ClassNotFoundException {
 		this.env = env;
-		if (env.globalSetting.databaseEnable) {
-			dbID = env.globalSetting.databaseName;
-			// connectionURL = env.globalSetting.dbURL;
-			dbPool = new DBConnectionPool();
-			dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, dbUser, dbPwd);
 
-		}
+		// dbID = env.globalSetting.databaseName;
+		// connectionURL = env.globalSetting.dbURL;
+		dbPool = new DBConnectionPool();
+		dbPool.initConnectionPool(EnvConst.JDBC_DRIVER, connectionURL, dbUser, dbPwd);
 
 		databaseType = dbType;
 

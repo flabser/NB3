@@ -13,7 +13,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.exception.PortalException;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 
 public class Logout extends HttpServlet implements Const {
@@ -102,11 +101,9 @@ public class Logout extends HttpServlet implements Const {
 			if (env.isSystem) {
 				return "";
 			} else {
-				if (Environment.workspaceAuth) {
-					return /* Environment.getFullHostName() + */"/Workspace/Provider?type=page&id=workspace";
-				} else {
-					return env.globalSetting.entryPoint + "&reason=session_lost&autologin=0";
-				}
+
+				return "/Workspace/Provider?type=page&id=workspace";
+
 			}
 		} else {
 			return "";

@@ -121,7 +121,7 @@ public class Login extends HttpServlet implements Const {
 				// if (appCookies.redirectURLIsValid){
 				// return appCookies.redirectURL;
 				// }else{
-				return env.globalSetting.defaultRedirectURL;
+				return "Provider?id=workspace";
 				// }
 			}
 		}

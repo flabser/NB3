@@ -32,7 +32,7 @@ public class Unsecure extends ValveBase {
 	@Override
 	public void invoke(Request request, Response response) throws IOException, ServletException {
 		String appType = ru.getAppType();
-		if (appType.equals(EnvConst.SHARED_RESOURCES_APP_NAME) || ru.getAppType().equals(EnvConst.ADMINISTRATOR_APP_NAME)) {
+		if (appType.equals(EnvConst.SHARED_RESOURCES_APP_NAME)) {
 			getNext().getNext().invoke(request, response);
 		} else {
 			AppEnv env = Environment.getAppEnv(appType);

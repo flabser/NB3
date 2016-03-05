@@ -64,19 +64,16 @@ public class WebServer {
 		Context context = null;
 		String db = new File("webapps/" + docBase).getAbsolutePath();
 
-		if (docBase.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
+	/*	if (docBase.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
 			context = tomcat.addContext(URLPath, db);
-			for (int i = 0; i < defaultWelcomeList.length; i++) {
-				context.addWelcomeFile(defaultWelcomeList[i]);
-			}
 			Tomcat.addServlet(context, "Provider", "kz.flabs.servlets.admin.AdminProvider");
 			context.setDisplayName(EnvConst.ADMINISTRATOR_APP_NAME);
-		} else {
+		} else {*/
 			context = tomcat.addContext(URLPath, db);
 			context.setDisplayName(URLPath.substring(1));
 			context.addWelcomeFile("Provider");
 			Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
-		}
+		//}
 
 		Tomcat.addServlet(context, "default", "org.apache.catalina.servlets.DefaultServlet");
 		context.addServletMapping("/", "default");

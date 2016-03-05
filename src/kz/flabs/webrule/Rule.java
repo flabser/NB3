@@ -20,13 +20,12 @@ import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.ActionType;
 import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
-import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.form.FormActionRule;
 import kz.flabs.webrule.form.GlossaryRule;
-import kz.flabs.webrule.page.ElementRule;
-import kz.flabs.webrule.page.IElement;
 import kz.flabs.webrule.scheduler.ScheduleSettings;
 import kz.lof.appenv.AppEnv;
+import kz.lof.rule.page.ElementRule;
+import kz.lof.rule.page.IElement;
 
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
@@ -38,7 +37,6 @@ public abstract class Rule implements IElement, IRule {
 	public RunMode isOn = RunMode.ON;
 	public boolean isValid = true;
 	public String description;
-	public RuleValue runUnderUser;
 	public String id = "unknown";
 	public String xsltFile;
 	public PublishAsType publishAs = PublishAsType.XML;
@@ -71,7 +69,7 @@ public abstract class Rule implements IElement, IRule {
 			doc = xmlFileDoc;
 			filePath = docFile.getAbsolutePath();
 			parentDirPath = docFile.getParentFile().getAbsolutePath();
-			scriptDirPath = env.globalSetting.rulePath + File.separator + "Resources" + File.separator + "scripts";
+			scriptDirPath = "rule" + File.separator + env.appType + File.separator + "Resources" + File.separator + "scripts";
 			id = XMLUtil.getTextContent(doc, "/rule/@id", true);
 			if (id.equals("")) {
 				id = FilenameUtils.removeExtension(docFile.getName());
@@ -133,15 +131,6 @@ public abstract class Rule implements IElement, IRule {
 
 	protected void setCaptions(String[] id) {
 
-	}
-
-	protected String getRunUnderUserSource() {
-		String value = "<rununderusersource><query>";
-		value += "<entry viewtext=\"" + ValueSourceType.STATIC + "\"></entry>";
-		value += "<entry viewtext=\"" + ValueSourceType.MACRO + "\"></entry>";
-		value += "</query></rununderusersource>";
-
-		return value;
 	}
 
 	public Collection<GlossaryRule> getGlossary() {

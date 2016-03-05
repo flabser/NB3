@@ -1,4 +1,4 @@
-package kz.nextbase.script.events;
+package kz.lof.scripting.event;
 
 import kz.flabs.scriptprocessor.page.doscript.AbstractPage;
 import kz.lof.scripting._Session;

@@ -1,4 +1,4 @@
-package kz.flabs.webrule.page;
+package kz.lof.rule.page;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
 
 import org.w3c.dom.NodeList;
 
@@ -27,6 +26,7 @@ public class PageRule extends Rule implements IElement, Const {
 
 	public PageRule(AppEnv env, File ruleFile) throws RuleException {
 		super(env, ruleFile);
+
 		try {
 
 			String cachingValue = XMLUtil.getTextContent(doc, "/rule/caching", false);
@@ -42,18 +42,19 @@ public class PageRule extends Rule implements IElement, Const {
 				}
 			}
 
+			String xsltAppsPath = "webapps" + File.separator + env.appType + File.separator + "xsl";
 			type = RuleType.PAGE;
 
 			xsltFile = XMLUtil.getTextContent(doc, "/rule/xsltfile");
 			if (!xsltFile.equals("")) {
 				publishAs = PublishAsType.HTML;
 				if (xsltFile.equalsIgnoreCase("default") || xsltFile.equals("*")) {
-					xsltFile = env.globalSetting.xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
+					xsltFile = xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else if (xsltFile.equalsIgnoreCase("default_staff")) {
-					AppEnv staffEnv = Environment.getAppEnv(EnvConst.STAFF_APP_NAME);
-					xsltFile = staffEnv.globalSetting.xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
+					String xsltStaffAppsPath = "webapps" + File.separator + EnvConst.STAFF_APP_NAME + File.separator + "xsl";
+					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else {
-					xsltFile = env.globalSetting.xsltAppsPath + File.separator + xsltFile;
+					xsltFile = xsltAppsPath + File.separator + xsltFile;
 				}
 			}
 

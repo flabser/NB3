@@ -13,7 +13,6 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.runtimeobj.Application;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.dataengine.system.IEmployeeDAO;
@@ -34,62 +33,55 @@ public class PortalInit extends HttpServlet {
 		String app = context.getServletContextName();
 		String global = Environment.webAppToStart.get(app).global;
 		AppEnv env = new AppEnv(app, global);
-		if (env.globalSetting.databaseEnable) {
-			try {
-				IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(env);
-				IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
 
-				if (env.globalSetting.autoDeployEnable) {
-					// Server.logger.infoLogEntry("Checking database structure ...");
-					dd.deploy();
-				}
-				// AppEnv.logger.debugLogEntry("Application will use \"" + db +
-				// "\" database");
-				env.setDataBase(db);
+		try {
+			IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(env);
+			IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
 
-				if (env.appType.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {
-					Class<?> clazz = Class.forName(EnvConst.STAFF_DAO_CLASS);
-					Class[] args = new Class[] { _Session.class };
-					Constructor<?> contructor = clazz.getConstructor(args);
-					_Session ses = new _Session(env, new AnonymousUser());
-					IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
-					Environment.systemBase.setEmployeeDAO(aDao);
-					AppEnv.logger.debugLogEntry("Module \"" + env.appType + "\" has been connected to system");
-				}
+			// Server.logger.infoLogEntry("Checking database structure ...");
+			dd.deploy();
 
-				// TODO it need to improve
-				IFTIndexEngine ftEngine = db.getFTSearchEngine();
-				if (env.appType.equalsIgnoreCase("municipalproperty")) {
-					List<String> fields = new ArrayList<String>();
-					fields.add("object_name");
-					fields.add("description");
-					fields.add("notes");
-					fields.add("inv_number");
-					fields.add("balanceholder");
-					ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
-				}
+			// AppEnv.logger.debugLogEntry("Application will use \"" + db +
+			// "\" database");
+			env.setDataBase(db);
 
-				isValid = true;
-
-			} catch (Exception e) {
-				if (e instanceof DatabasePoolException) {
-					Server.logger.fatalLogEntry("Application \"" + env.appType + "\" has not connected to database " + env.globalSetting.databaseType
-					        + "(" + env.globalSetting.dbURL + ")");
-					Environment.reduceApplication();
-				} else {
-					Server.logger.errorLogEntry(e);
-					Environment.reduceApplication();
-				}
+			if (env.appType.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {
+				Class<?> clazz = Class.forName(EnvConst.STAFF_DAO_CLASS);
+				Class[] args = new Class[] { _Session.class };
+				Constructor<?> contructor = clazz.getConstructor(args);
+				_Session ses = new _Session(env, new AnonymousUser());
+				IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
+				Environment.systemBase.setEmployeeDAO(aDao);
+				AppEnv.logger.debugLogEntry("Module \"" + env.appType + "\" has been connected to system");
 			}
 
-		} else {
+			// TODO it need to improve
+			IFTIndexEngine ftEngine = db.getFTSearchEngine();
+			if (env.appType.equalsIgnoreCase("municipalproperty")) {
+				List<String> fields = new ArrayList<String>();
+				fields.add("object_name");
+				fields.add("description");
+				fields.add("notes");
+				fields.add("inv_number");
+				fields.add("balanceholder");
+				ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
+			}
 
 			isValid = true;
+
+		} catch (Exception e) {
+			if (e instanceof DatabasePoolException) {
+				Server.logger.fatalLogEntry("Application \"" + env.appType + "\" has not connected to database " + env.globalSetting.databaseType
+				        + "(" + env.globalSetting.dbURL + ")");
+				Environment.reduceApplication();
+			} else {
+				Server.logger.errorLogEntry(e);
+				Environment.reduceApplication();
+			}
 		}
 
 		if (isValid) {
 			Environment.addApplication(env);
-			env.application = new Application(env);
 		}
 
 		if (isValid) {

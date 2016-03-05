@@ -18,9 +18,9 @@ import kz.flabs.webrule.RuleUser;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
-import kz.flabs.webrule.page.ElementRule;
-import kz.flabs.webrule.page.ElementScript;
 import kz.lof.appenv.AppEnv;
+import kz.lof.rule.page.ElementRule;
+import kz.lof.rule.page.ElementScript;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;

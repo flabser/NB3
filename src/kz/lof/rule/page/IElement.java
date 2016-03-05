@@ -1,4 +1,4 @@
-package kz.flabs.webrule.page;
+package kz.lof.rule.page;
 
 import java.util.ArrayList;
 

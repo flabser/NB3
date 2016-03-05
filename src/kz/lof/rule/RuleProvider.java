@@ -1,4 +1,4 @@
-package kz.flabs.webrule;
+package kz.lof.rule;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,26 +15,26 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.parser.QueryFormulaParserException;
+import kz.flabs.webrule.GlobalSetting;
+import kz.flabs.webrule.IRule;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.handler.HandlerRule;
-import kz.flabs.webrule.page.PageRule;
-import kz.flabs.webrule.scheduler.IScheduledProcessRule;
 import kz.lof.appenv.AppEnv;
+import kz.lof.rule.page.PageRule;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXParseException;
 
-public class WebRuleProvider implements Const {
+public class RuleProvider implements Const {
 	public GlobalSetting global;
 
 	private HashMap<String, PageRule> pageRuleMap = new HashMap<String, PageRule>();
 	private HashMap<String, HandlerRule> handlerRuleMap = new HashMap<String, HandlerRule>();
-	private ArrayList<IScheduledProcessRule> scheduledRules = new ArrayList<IScheduledProcessRule>();
 	private AppEnv env;
 	private Element root;
 
-	public WebRuleProvider(AppEnv env) {
+	public RuleProvider(AppEnv env) {
 		try {
 			// System.out.println("type= " + env.appType);
 			this.env = env;
@@ -172,12 +172,6 @@ public class WebRuleProvider implements Const {
 		return true;
 	}
 
-	public ArrayList<IScheduledProcessRule> getScheduledRules() {
-
-		return scheduledRules;
-
-	}
-
 	private void loadGlobal(String globalFileName) {
 		String globalPath = "rule" + File.separator + env.appType + File.separator + globalFileName;
 		global = new GlobalSetting(globalPath, env);
@@ -247,7 +241,7 @@ public class WebRuleProvider implements Const {
 			if (pageRuleMap.containsKey(ruleID)) {
 				rule = pageRuleMap.get(ruleID);
 			} else {
-				docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
+				docFile = new File("rule" + File.separator + env.appType + File.separator + "Page" + File.separator + ruleID + ".xml");
 				rule = new PageRule(env, docFile);
 				pageRuleMap.put(ruleID.toLowerCase(), rule);
 			}

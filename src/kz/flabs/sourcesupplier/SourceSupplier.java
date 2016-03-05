@@ -31,7 +31,6 @@ import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.webrule.IRuleValue;
 import kz.flabs.webrule.Lang;
-import kz.flabs.webrule.Role;
 import kz.flabs.webrule.Skin;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
@@ -278,13 +277,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 					}
 				}
 				break;
-			case APPLICATION_ROLES:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					for (Role role : env.getRolesList()) {
-						xmlContent.append("<entry>" + role.toXML() + "</entry>");
-					}
-				}
-				break;
+
 			case APPLICATION_TYPE:
 				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
 					xmlContent.append(env.appType);

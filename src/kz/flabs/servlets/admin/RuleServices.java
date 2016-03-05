@@ -5,8 +5,8 @@ import java.util.Collection;
 import kz.flabs.exception.RuleException;
 import kz.flabs.util.Util;
 import kz.flabs.webrule.handler.HandlerRule;
-import kz.flabs.webrule.page.PageRule;
 import kz.lof.env.Environment;
+import kz.lof.rule.page.PageRule;
 
 public class RuleServices {
 

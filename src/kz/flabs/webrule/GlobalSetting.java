@@ -34,7 +34,6 @@ import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.module.ExternalModule;
-import kz.flabs.webrule.synchronizer.SynchroGlobalSetting;
 import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Document;
@@ -80,7 +79,7 @@ public class GlobalSetting {
 	@Deprecated
 	public HashMap<String, Skin> skinsMap = new HashMap<String, Skin>();
 	@Deprecated
-	public SynchroGlobalSetting syncroGlobalSettings;
+	// public SynchroGlobalSetting syncroGlobalSettings;
 	public int markAsReadMsDelay;
 	public ArrayList<AppDaemonRule> schedSettings = new ArrayList<AppDaemonRule>();
 	public static final String vocabulary = "vocabulary.xml";

@@ -1,8 +1,7 @@
 package kz.lof.dataengine.jpa.constants;
 
-
 public enum AppCode {
-	UNKNOWN(0), CUSTOM(900), STAFF(901), REFERENCE(902), WORKSPACE(903);
+	UNKNOWN(0), ADMINISTRATOR(899), CUSTOM(900), STAFF(901), REFERENCE(902), WORKSPACE(903);
 
 	private int code;
 
