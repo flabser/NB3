@@ -5,7 +5,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.LicenseException;
 import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 
@@ -34,7 +33,7 @@ public class Document extends BaseDocument implements Const {
 	}
 
 	@Override
-	public int save(User user) throws DocumentAccessException, DocumentException, LicenseException, ComplexObjectException {
+	public int save(User user) throws DocumentAccessException, DocumentException, ComplexObjectException {
 
 		int docID = 0;
 

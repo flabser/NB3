@@ -34,7 +34,6 @@ import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.DocumentExceptionType;
-import kz.flabs.exception.LicenseException;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
@@ -1186,7 +1185,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 
 	public String getDdbID() {
 		if (ddbID.equals("")) {
-			ddbID = Util.generateRandomAsText(env.appType);
+			ddbID = Util.generateRandomAsText(env.appName);
 		}
 		return ddbID;
 	}
@@ -1198,7 +1197,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 			schema = "https";
 			port = Environment.secureHttpPort;
 		}
-		String httpHost = schema + "://" + Environment.hostName + ":" + port + "/" + env.appType;
+		String httpHost = schema + "://" + Environment.hostName + ":" + port + "/" + env.appName;
 		return httpHost + "/" + getURL();
 	}
 
@@ -1206,7 +1205,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 		return fieldsMap;
 	}
 
-	public int save(User user) throws DocumentAccessException, DocumentException, LicenseException, ComplexObjectException {
+	public int save(User user) throws DocumentAccessException, DocumentException, ComplexObjectException {
 		return -1;
 	}
 

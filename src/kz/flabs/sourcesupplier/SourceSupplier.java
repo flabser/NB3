@@ -2,7 +2,6 @@ package kz.flabs.sourcesupplier;
 
 import groovy.lang.GroovyObject;
 
-import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +14,6 @@ import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.Localizator;
 import kz.flabs.localization.LocalizatorException;
 import kz.flabs.localization.SentenceCaption;
 import kz.flabs.localization.Vocabulary;
@@ -30,13 +28,9 @@ import kz.flabs.scriptprocessor.SimpleScriptProcessorWithLang;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
 import kz.flabs.webrule.IRuleValue;
-import kz.flabs.webrule.Lang;
-import kz.flabs.webrule.Skin;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.lof.appenv.AppEnv;
-import kz.lof.env.Environment;
-import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
@@ -249,58 +243,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 
 		switch (sourceType) {
 		case VOCABULARY:
-			Vocabulary v = staticGlossaries.get(value);
-			if (v == null) {
-				Localizator l = new Localizator();
-				String vocabuarFilePath = env.globalSetting.rulePath + File.separator + "Resources" + File.separator + "vocabulary.xml";
-				v = l.populate(env.appType, vocabuarFilePath);
-				staticGlossaries.put(value, v);
-			}
-			xmlContent.append(v.toXML(lang));
-			break;
-		case QUERY:
 
-			break;
-		case MACRO:
-			switch (macro) {
-			case AVAILABLE_LANGS:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					for (Lang l : env.globalSetting.langsList) {
-						xmlContent.append("<entry>" + l.toXML() + "</entry>");
-					}
-				}
-				break;
-			case AVAILABLE_SKINS:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					for (Skin skin : env.globalSetting.skinsList) {
-						xmlContent.append("<entry>" + skin.toXML() + "</entry>");
-					}
-				}
-				break;
-
-			case APPLICATION_TYPE:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					xmlContent.append(env.appType);
-				}
-				break;
-			case APPLICATION_LOGO:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					xmlContent.append(env.globalSetting.logo);
-				}
-				break;
-			case APPLICATION_NAME:
-				if (contextType == SourceSupplierContextType.APP_ENVIRONMENT || contextType == SourceSupplierContextType.SIMPLE_WITH_LANG) {
-					xmlContent.append(env.globalSetting.appName);
-				}
-				break;
-			case AVAILABLE_APPLICATIONS:
-				xmlContent.append(getAvailableApps(user));
-				break;
-			case ALL_APPLICATIONS:
-				xmlContent.append(getAllApps());
-				break;
-			}
-			break;
 		case STATIC:
 			xmlContent.append(value);
 			break;
@@ -411,88 +354,14 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		case COMPILATION_TIME:
 			return Server.compilationTime;
 		case ORG_NAME:
-			return env.globalSetting.orgName;
+			// return env.globalSetting.orgName;
 		case APPLICATION_TYPE:
-			return env.appType;
+			return env.appName;
 		case APPLICATION_LOGO:
-			return env.globalSetting.logo;
+			// return env.globalSetting.logo;
 		default:
 			return "";
 		}
-	}
-
-	public String getAvailableApps(User user) {
-		String result = "";
-		SourceSupplier ss = new SourceSupplier(env, LanguageCode.RUS.name());
-		// user.getSession().lang
-		for (AppEnv appEnv : Environment.getApplications()) {
-			if (appEnv.isValid && !appEnv.globalSetting.isWorkspace) {
-				if (user.authorized) {
-					if (user.enabledApps.containsKey(appEnv.appType)) {
-						if (appEnv.globalSetting.defaultRedirectURL.equalsIgnoreCase("")) {
-							result += "<entry  mode=\"off\"><apptype>" + appEnv.appType + "</apptype>";
-							result += "<redirect>Error?type=ws_no_redirect_url</redirect>";
-						} else {
-							result += "<entry  mode=\"on\"><apptype>" + appEnv.appType + "</apptype>";
-							// result += "<redirect>" +
-							// Environment.getFullHostName() + "/" +
-							// appEnv.appType + "/" +
-							// appEnv.globalSetting.defaultRedirectURL.replace("&","&amp;")
-							// + "</redirect>";
-							result += "<redirect>" + appEnv.appType + "/" + appEnv.globalSetting.defaultRedirectURL.replace("&", "&amp;")
-							        + "</redirect>";
-						}
-						result += "<logo>" + appEnv.globalSetting.logo + "</logo>";
-						result += "<orgname>" + appEnv.globalSetting.orgName + "</orgname>";
-						// result += "<description>" +
-						// appEnv.globalSetting.description +
-						// "</description></entry>";
-						// caption =
-						// captionTextSupplier.getValueAsCaption(entry.captionValueSource,
-						// entry.captionValue).toAttrValue();
-						try {
-							result += "<description>" + ss.getValueAsCaption(ValueSourceType.KEYWORD, appEnv.globalSetting.description).word
-							        + "</description></entry>";
-						} catch (DocumentException e) {
-							result += "<description>" + appEnv.globalSetting.description + "</description></entry>";
-						}
-					}
-				} else {
-					/*
-					 * xmlContent.append("<entry  mode=\"off\"><apptype>" +
-					 * appEnv.appType + "</apptype>"); xmlContent.append(
-					 * "<redirect>Error?type=ws_auth_error</redirect>");
-					 * xmlContent.append("<logo>" + appEnv.globalSetting.logo +
-					 * "</logo>"); xmlContent.append("<orgname>" +
-					 * appEnv.globalSetting.orgName + "</orgname>");
-					 * xmlContent.append("<description>" +
-					 * appEnv.globalSetting.description +
-					 * "</description></entry>");
-					 */
-				}
-			}
-		}
-		if (user.isSupervisor()) {
-			result += "<entry  mode=\"on\"><apptype>Administrator</apptype>";
-			result += "<redirect>Administrator</redirect>";
-			result += "<logo>nextbase_logo.png</logo>";
-			result += "<orgname></orgname>";
-			result += "<description>Control panel</description></entry>";
-		}
-		return result;
-	}
-
-	protected String getAllApps() {
-		String result = "";
-		for (AppEnv appEnv : Environment.getApplications()) {
-			if (!appEnv.globalSetting.isWorkspace) {
-				result += "<entry><apptype>" + appEnv.appType + "</apptype>";
-				result += "<logo>" + appEnv.globalSetting.logo + "</logo>";
-				result += "<orgname>" + appEnv.globalSetting.orgName + "</orgname>";
-				result += "<description>" + appEnv.globalSetting.description + "</description></entry>";
-			}
-		}
-		return result;
 	}
 
 	@Override

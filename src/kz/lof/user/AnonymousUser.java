@@ -1,12 +1,7 @@
 package kz.lof.user;
 
-public class AnonymousUser implements IUser {
+public class AnonymousUser implements IUser<Long> {
 	public final static String USER_NAME = "anonymous";
-
-	@Override
-	public long getId() {
-		return 0;
-	}
 
 	@Override
 	public String getPwdHash() {
@@ -36,6 +31,16 @@ public class AnonymousUser implements IUser {
 	@Override
 	public void setUserName(String name) {
 
+	}
+
+	@Override
+	public void setId(Long id) {
+
+	}
+
+	@Override
+	public Long getId() {
+		return null;
 	}
 
 }

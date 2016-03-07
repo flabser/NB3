@@ -23,12 +23,8 @@ public class _AppEntourage {
 		return Server.compilationTime;
 	}
 
-	public String getGeneralName() {
-		return env.globalSetting.orgName;
-	}
-
 	public String getAppName() {
-		return env.appType;
+		return env.appName;
 	}
 
 }

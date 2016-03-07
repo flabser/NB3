@@ -6,13 +6,13 @@ import java.util.Map;
 
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.scriptprocessor.Msg;
-import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptProcessorUtil;
 import kz.flabs.util.PageResponse;
 import kz.flabs.util.ResponseType;
 import kz.flabs.util.Util;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
+import kz.lof.scriptprocessor.page.ScriptEvent;
 
 public abstract class AbstractHandler extends ScriptEvent implements IHandlerScript {
 	public String lang;

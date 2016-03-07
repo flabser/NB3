@@ -8,7 +8,6 @@ import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.sourcesupplier.SourceSupplier;
-import kz.flabs.users.UserSession;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Caption;
 import kz.lof.appenv.AppEnv;
@@ -33,16 +32,8 @@ public class Page implements IProcessInitiator, Const {
 	public PageResponse response;
 
 	protected _WebFormData fields;
-	protected UserSession userSession;
 
-	private _Session ses;
-
-	@Deprecated
-	public Page(AppEnv env, UserSession userSession, PageRule rule) {
-		this.userSession = userSession;
-		this.env = env;
-		this.rule = rule;
-	}
+	protected _Session ses;
 
 	public Page(AppEnv env, _Session ses, PageRule pageRule) {
 		this.ses = ses;
@@ -66,7 +57,7 @@ public class Page implements IProcessInitiator, Const {
 	}
 
 	public String getCacheID() {
-		return "PAGE_" + env.appType + "_" + rule.id + "_" + userSession.lang;
+		return "PAGE_" + env.appName + "_" + rule.id + "_" + ses.getLang();
 
 	}
 

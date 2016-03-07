@@ -99,9 +99,9 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
 
 		PersistenceProvider pp = new PersistenceProvider();
-		factory = pp.createEntityManagerFactory(env.appType, properties);
+		factory = pp.createEntityManagerFactory(env.appName, properties);
 		if (factory == null) {
-			Server.logger.errorLogEntry("the entity manager of \"" + env.appType + "\" has not been initialized");
+			Server.logger.errorLogEntry("the entity manager of \"" + env.appName + "\" has not been initialized");
 
 		}
 		ftEngine = new FTSearchEngine(this);

@@ -25,7 +25,7 @@ public abstract class SecureAppEntity extends AppEntity {
 	}
 
 	public void addReaderEditor(IUser user) {
-		long id = user.getId();
+		long id = (long) user.getId();
 		if (id != 0) {
 			this.editors.add(id);
 			addReader(user);
@@ -41,7 +41,7 @@ public abstract class SecureAppEntity extends AppEntity {
 	}
 
 	public void addReader(IUser user) {
-		long id = user.getId();
+		long id = (long) user.getId();
 		if (id != 0) {
 			this.readers.add(id);
 		}
@@ -53,7 +53,7 @@ public abstract class SecureAppEntity extends AppEntity {
 
 	@Override
 	public void setAuthor(IUser user) {
-		author = user.getId();
+		author = (Long) user.getId();
 		if (author != 0) {
 			addReader(user);
 			addReaderEditor(user);

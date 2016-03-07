@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.ws.rs.core.Response;
-
 import kz.flabs.servlets.SaxonTransformator;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
@@ -49,10 +47,6 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 		this.lang = lang;
 	}
 
-	public ApplicationException(Response r) {
-
-	}
-
 	@JsonIgnore
 	public String getHTMLMessage() {
 		return getHTMLMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -60,8 +54,6 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 
 	@JsonIgnore
 	public String getHTMLMessage(int code) {
-		String xmlText = null;
-
 		ExceptionXML document = new ExceptionXML(getMessage(), code, location, type, servletName, exception);
 		document.setAppType(appType);
 		String xslt = "webapps" + File.separator + appType + File.separator + EnvConst.ERROR_XSLT;
@@ -71,7 +63,7 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 		}
 
 		try {
-			xmlText = new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
+			new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
 		} catch (IOException | SaxonApiException e) {
 			Server.logger.errorLogEntry(e);
 		}
@@ -107,6 +99,7 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 	@Override
 	public Object toJSON() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.addMixIn(ApplicationException.class, MapperMixIn.class);
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 		String jsonInString = null;

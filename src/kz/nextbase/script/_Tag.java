@@ -3,7 +3,6 @@ package kz.nextbase.script;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import java.util.UUID;
 
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.util.Util;
@@ -11,7 +10,7 @@ import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._Session;
 
 @Deprecated
-public class _Tag implements IPOJOObject {
+public class _Tag<UUID> implements IPOJOObject {
 
 	private Tag runtimeTag;
 
@@ -124,11 +123,6 @@ public class _Tag implements IPOJOObject {
 	}
 
 	@Override
-	public UUID getId() {
-		return null;
-	}
-
-	@Override
 	public String getURL() {
 		return null;
 	}
@@ -156,6 +150,12 @@ public class _Tag implements IPOJOObject {
 	@Override
 	public Object getJSONObj(_Session ses) {
 		return this;
+	}
+
+	@Override
+	public String getIdentifier() {
+
+		return "null";
 	}
 
 }

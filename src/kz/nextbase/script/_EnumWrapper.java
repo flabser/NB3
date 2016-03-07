@@ -1,7 +1,5 @@
 package kz.nextbase.script;
 
-import java.util.UUID;
-
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._Session;
 
@@ -27,12 +25,6 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	public _EnumWrapper(T[] enumObj, String[] translatedWords) {
 		this.enumObj = enumObj;
 		this.translatedWords = translatedWords;
-	}
-
-	@Override
-	public UUID getId() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -66,5 +58,10 @@ public class _EnumWrapper<T extends Enum<?>> implements IPOJOObject {
 	@Override
 	public Object getJSONObj(_Session ses) {
 		return this;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "null";
 	}
 }

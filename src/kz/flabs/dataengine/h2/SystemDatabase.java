@@ -1,7 +1,6 @@
 package kz.flabs.dataengine.h2;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -73,11 +72,10 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 	}
 
 	@Override
-	public IUser getUser(String login, String pwd) {
-		IUser user = null;
+	public IUser<Long> getUser(String login, String pwd) {
+		IUser<Long> user = null;
 		try {
 			Class<?> clazz = Class.forName(EnvConst.ADMINISTRATOR_SERVICE_CLASS);
-			Constructor<?> contructor = clazz.getConstructor();
 			Object instance = clazz.newInstance();
 			Class[] paramTypes = { String.class };
 			Method method = clazz.getDeclaredMethod("getUser", paramTypes);

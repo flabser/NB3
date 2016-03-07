@@ -26,9 +26,11 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 
 	public DatabaseDeployer(AppEnv env) throws InstantiationException, IllegalAccessException, ClassNotFoundException, DatabasePoolException {
 		this.env = env;
-		connectionURL = env.globalSetting.dbURL;
+		// connectionURL = env.globalSetting.dbURL;
 		dbPool = new DBConnectionPool();
-		dbPool.initConnectionPool(env.globalSetting.driver, connectionURL, env.globalSetting.getDbUserName(), env.globalSetting.getDbPassword());
+		// dbPool.initConnectionPool(env.globalSetting.driver, connectionURL,
+		// env.globalSetting.getDbUserName(),
+		// env.globalSetting.getDbPassword());
 
 	}
 
@@ -148,9 +150,9 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 			checkAndCreateNamedTrigger(DDEScripts.getDiscussionFlagTrigger(), "SET_REMOVE_DISCUSSION_FLAG_MAINDOCS", "TOPICS");
 			CheckDataBase checker = new CheckDataBase(env);
 
-			if (checker.check()) {
-				deployed = true;
-			}
+			/*
+			 * if (checker.check()) { deployed = true; }
+			 */
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
 		}

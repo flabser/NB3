@@ -20,7 +20,6 @@ import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.LicenseException;
 import kz.flabs.exception.PortalException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
@@ -30,11 +29,9 @@ import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.ProviderResult;
 import kz.flabs.servlets.PublishAsType;
-import kz.flabs.servlets.SaxonTransformator;
 import kz.flabs.servlets.ServletUtil;
 import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.users.User;
-import kz.flabs.users.UserSession;
 import kz.flabs.util.ResponseType;
 import kz.flabs.webrule.IRule;
 import kz.flabs.webrule.handler.HandlerRule;
@@ -154,8 +151,9 @@ public class AdminProvider extends HttpServlet implements Const {
 				result.publishAs = PublishAsType.XML;
 			}
 
-			AdminProviderOutput po = new AdminProviderOutput(type, element, id, result.output, request, response, new UserSession(new User(
-			        Const.sysUser), request), jses, dbID);
+			// AdminProviderOutput po = new AdminProviderOutput(type, element,
+			// id, result.output, request, response, null, request), jses,
+			// dbID);
 
 			if (result.publishAs == PublishAsType.HTML) {
 				if (result.disableClientCache) {
@@ -164,22 +162,6 @@ public class AdminProvider extends HttpServlet implements Const {
 
 				response.setContentType("text/html");
 
-				if (po.prepareXSLT(result.xslt)) {
-					String outputContent = po.getStandartOutput();
-					// long start_time = System.currentTimeMillis(); // for
-					// speed debuging
-					new SaxonTransformator().toTrans(response, po.xslFile, outputContent);
-					// System.out.println(getClass().getSimpleName() +
-					// " transformation  >>> " +
-					// Util.getTimeDiffInMilSec(start_time)); // for speed
-					// debuging
-				} else {
-					String outputContent = po.getStandartOutput();
-					response.setContentType("text/xml;charset=utf-8");
-					PrintWriter out = response.getWriter();
-					out.println(outputContent);
-					out.close();
-				}
 			} else if (result.publishAs == PublishAsType.XML) {
 				if (result.disableClientCache) {
 					// disableCash(response);
@@ -358,7 +340,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult save(HttpServletRequest request, String app, String dbID, String element, String id) throws WebFormValueException,
-	        RuleException, QueryFormulaParserException, DocumentException, DocumentAccessException, ComplexObjectException, LicenseException {
+	        RuleException, QueryFormulaParserException, DocumentException, DocumentAccessException, ComplexObjectException {
 		ProviderResult result = new ProviderResult();
 		XMLResponse xmlResp = new XMLResponse(ResponseType.SAVE_FORM, true);
 

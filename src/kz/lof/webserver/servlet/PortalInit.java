@@ -45,19 +45,19 @@ public class PortalInit extends HttpServlet {
 			// "\" database");
 			env.setDataBase(db);
 
-			if (env.appType.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {
+			if (env.appName.equalsIgnoreCase(EnvConst.STAFF_APP_NAME)) {
 				Class<?> clazz = Class.forName(EnvConst.STAFF_DAO_CLASS);
 				Class[] args = new Class[] { _Session.class };
 				Constructor<?> contructor = clazz.getConstructor(args);
 				_Session ses = new _Session(env, new AnonymousUser());
 				IEmployeeDAO aDao = (IEmployeeDAO) contructor.newInstance(new Object[] { ses });
 				Environment.systemBase.setEmployeeDAO(aDao);
-				AppEnv.logger.debugLogEntry("Module \"" + env.appType + "\" has been connected to system");
+				AppEnv.logger.debugLogEntry("Module \"" + env.appName + "\" has been connected to system");
 			}
 
 			// TODO it need to improve
 			IFTIndexEngine ftEngine = db.getFTSearchEngine();
-			if (env.appType.equalsIgnoreCase("municipalproperty")) {
+			if (env.appName.equalsIgnoreCase("municipalproperty")) {
 				List<String> fields = new ArrayList<String>();
 				fields.add("object_name");
 				fields.add("description");
@@ -71,8 +71,7 @@ public class PortalInit extends HttpServlet {
 
 		} catch (Exception e) {
 			if (e instanceof DatabasePoolException) {
-				Server.logger.fatalLogEntry("Application \"" + env.appType + "\" has not connected to database " + env.globalSetting.databaseType
-				        + "(" + env.globalSetting.dbURL + ")");
+				Server.logger.fatalLogEntry("Application \"" + env.appName + "\" has not connected to database ");
 				Environment.reduceApplication();
 			} else {
 				Server.logger.errorLogEntry(e);

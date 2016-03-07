@@ -108,7 +108,7 @@ public class Filter extends BaseDocument {
 
 	@Override
 	public String getURL() {
-		return "/" + env.appType + "/Provider?type=outline&id=outline&subtype=filter&subid=" + this.filterID;
+		return "/" + env.appName + "/Provider?type=outline&id=outline&subtype=filter&subid=" + this.filterID;
 	}
 
 	@Override

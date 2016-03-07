@@ -2,7 +2,6 @@ package kz.lof.scripting;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import kz.lof.webserver.servlet.IOutcomeObject;
 
@@ -75,7 +74,7 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		String result = "<query entity=\"" + entityType + "\"  maxpage=\"" + maxPage + "\" count=\"" + count + "\" currentpage=\"" + currentPage
 		        + "\"" + keyWord + ">";
 		for (T val : list) {
-			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getId() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
+			result += "<entry isread=\"1\" hasattach=\"0\" id=\"" + val.getIdentifier() + "\" " + "url=\"" + val.getURL() + "\"><viewcontent>";
 			result += val.getShortXMLChunk(ses) + "</viewcontent></entry>";
 		}
 		return result + "</query>";
@@ -109,11 +108,6 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		}
 
 		@Override
-		public UUID getId() {
-			return null;
-		}
-
-		@Override
 		public String getURL() {
 			return msg;
 
@@ -137,6 +131,11 @@ public class _POJOListWrapper<T extends IPOJOObject> implements IOutcomeObject {
 		@Override
 		public Object getJSONObj(_Session ses) {
 			return this;
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "null";
 		}
 
 	}

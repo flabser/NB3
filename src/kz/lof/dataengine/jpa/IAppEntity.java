@@ -1,8 +1,9 @@
 package kz.lof.dataengine.jpa;
 
 import java.util.Date;
+import java.util.UUID;
 
-public interface IAppEntity extends ISimpleAppEntity {
+public interface IAppEntity extends ISimpleAppEntity<UUID> {
 
 	long getAuthor();
 

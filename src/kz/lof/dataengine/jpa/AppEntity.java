@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @MappedSuperclass
 @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
 @UuidGenerator(name = "uuid-gen")
-public abstract class AppEntity implements IAppEntity, IPOJOObject {
+public abstract class AppEntity<K extends UUID> implements IAppEntity, IPOJOObject {
 	@Id
 	@GeneratedValue(generator = "uuid-gen")
 	@Convert("uuidConverter")
@@ -71,6 +71,11 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		return id;
 	}
 
+	@Override
+	public String getIdentifier() {
+		return getId().toString();
+	}
+
 	@JsonIgnore
 	@Override
 	public long getAuthor() {
@@ -82,7 +87,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 		this.author = author;
 	}
 
-	public void setAuthor(IUser user) {
+	public void setAuthor(IUser<Long> user) {
 		author = user.getId();
 	}
 
@@ -181,7 +186,7 @@ public abstract class AppEntity implements IAppEntity, IPOJOObject {
 
 	@Override
 	public String getURL() {
-		return "Provider?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&amp;docid=" + getId();
+		return "Provider?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&amp;docid=" + getIdentifier();
 	}
 
 	@JsonIgnore

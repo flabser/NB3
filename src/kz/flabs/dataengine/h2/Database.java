@@ -14,11 +14,8 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.IStructure;
 import kz.flabs.dataengine.IUsersActivity;
-import kz.flabs.webrule.module.ExternalModule;
-import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
 import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
 import kz.pchelka.log.ILogger;
@@ -64,14 +61,13 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	}
 
 	protected void initStructPool() {
-		for (ExternalModule module : env.globalSetting.extModuleMap.values()) {
-			if (module.getType() == ExternalModuleType.STRUCTURE) {
-				externalStructureApp = module.getName();
-				Environment.addDelayedInit(this);
-			} else {
-				Environment.addDelayedInit(this);
-			}
-		}
+		/*
+		 * for (ExternalModule module : env.globalSetting.extModuleMap.values())
+		 * { if (module.getType() == ExternalModuleType.STRUCTURE) {
+		 * externalStructureApp = module.getName();
+		 * Environment.addDelayedInit(this); } else {
+		 * Environment.addDelayedInit(this); } }
+		 */
 		structDbPool = dbPool;
 	}
 

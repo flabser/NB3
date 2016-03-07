@@ -1,8 +1,8 @@
 package kz.lof.user;
 
-public interface IUser {
+import kz.lof.dataengine.jpa.ISimpleAppEntity;
 
-	long getId();
+public interface IUser<K> extends ISimpleAppEntity<K> {
 
 	String getPwdHash();
 

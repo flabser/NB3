@@ -42,7 +42,7 @@ public class InitializerHelper implements IProcessInitiator {
 			for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
 				String resource = entry.getName().replace("/", ".");
 				for (AppEnv env : Environment.getApplications()) {
-					if (!entry.isDirectory() && resource.startsWith(env.appType.toLowerCase() + ".init")) {
+					if (!entry.isDirectory() && resource.startsWith(env.appName.toLowerCase() + ".init")) {
 						try {
 							String name = resource.substring(0, resource.indexOf(".class"));
 							Class<?> clazz = Class.forName(name);
@@ -50,7 +50,7 @@ public class InitializerHelper implements IProcessInitiator {
 							if (instance instanceof IInitialData) {
 								inits.put(name, (Class<IInitialData>) instance.getClass());
 								if (showConsoleOutput) {
-									System.out.println(env.appType + ":" + name);
+									System.out.println(env.appName + ":" + name);
 								}
 							}
 						} catch (InstantiationException e) {
@@ -80,7 +80,7 @@ public class InitializerHelper implements IProcessInitiator {
 						if (env != null) {
 							inits.put(name, (Class<IInitialData>) populatingClass);
 							if (showConsoleOutput) {
-								System.out.println(env.appType + ":" + populatingClass.getCanonicalName());
+								System.out.println(env.appName + ":" + populatingClass.getCanonicalName());
 							}
 						} else {
 							if (showConsoleOutput) {

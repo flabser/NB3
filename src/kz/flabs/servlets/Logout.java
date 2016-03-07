@@ -48,7 +48,7 @@ public class Logout extends HttpServlet implements Const {
 
 				}
 
-				if (env != null && !env.isSystem) {
+				if (env != null) {
 					String addParameters = "&autologin=0";
 					if (mode != null && mode.equalsIgnoreCase("session_lost")) {
 						addParameters = "&reason=session_lost&autologin=0";
@@ -98,13 +98,9 @@ public class Logout extends HttpServlet implements Const {
 
 	private String getRedirect() {
 		if (env != null) {
-			if (env.isSystem) {
-				return "";
-			} else {
 
-				return "/Workspace/Provider?type=page&id=workspace";
+			return "/Workspace/Provider?type=page&id=workspace";
 
-			}
 		} else {
 			return "";
 		}

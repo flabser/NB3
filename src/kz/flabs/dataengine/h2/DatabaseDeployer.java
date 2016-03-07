@@ -8,7 +8,6 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
-import kz.flabs.dataengine.h2.alter.CheckDataBase;
 import kz.lof.appenv.AppEnv;
 import kz.pchelka.scheduler.IProcessInitiator;
 
@@ -21,7 +20,8 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 	public DatabaseDeployer(AppEnv env) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		dbPool = new DBConnectionPool();
 		this.env = env;
-		dbPool.initConnectionPool(env.globalSetting.driver, env.globalSetting.dbURL);
+		// dbPool.initConnectionPool(env.globalSetting.driver,
+		// env.globalSetting.dbURL);
 	}
 
 	@Override
@@ -139,10 +139,10 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 		}
 
 		try {
-			CheckDataBase checker = new CheckDataBase(env, false);
-			if (checker.check()) {
-				deployed = true;
-			}
+			// CheckDataBase checker = new CheckDataBase(env, false);
+			/*
+			 * if (checker.check()) { deployed = true; }
+			 */
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
 		}

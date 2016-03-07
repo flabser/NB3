@@ -17,7 +17,6 @@ public final class FormulaBlocks implements Const {
 	public String customFieldsTable;
 	public boolean hasCustomTable;
 
-	private GroupByBlock groupByBlock;
 	private SortByBlock sortByBlock;
 	private Filter quickFilter;
 
@@ -48,25 +47,8 @@ public final class FormulaBlocks implements Const {
 		}
 	}
 
-	public GroupByBlock getGroupByBlock() {
-		return groupByBlock;
-	}
-
 	public SortByBlock getSortByBlock() {
 		return sortByBlock;
-	}
-
-	public Filter getQuickFilter() {
-		return quickFilter;
-	}
-
-	public void setQuickFilter(Filter quickFilter) {
-		this.quickFilter = quickFilter;
-	}
-
-	public void setGroupByBlock(GroupByBlock groupByBlock) {
-		this.groupByBlock = groupByBlock;
-		isGroupBy = true;
 	}
 
 	public void setSortByBlock(SortByBlock sortByBlock) {

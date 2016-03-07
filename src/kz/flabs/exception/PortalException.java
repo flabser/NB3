@@ -150,7 +150,7 @@ public class PortalException extends Exception implements Const{
 	
 	private Source getXSLT(){
 		Source xsltSource = null;
-		if (env.appType.equalsIgnoreCase("administrator")){
+		if (env.appName.equalsIgnoreCase("administrator")){
 			xsltSource =	new StreamSource(new File("xsl" + File.separator + "error.xsl"));
 		}else{
 			xsltSource =	new StreamSource(new File("xsl" + File.separator + "error.xsl"));

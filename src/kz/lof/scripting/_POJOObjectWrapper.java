@@ -13,7 +13,7 @@ public class _POJOObjectWrapper implements IOutcomeObject {
 
 	@Override
 	public String toXML() {
-		return "<document entity=\"" + object.getClass().getSimpleName().toLowerCase() + "\"  docid=\"" + object.getId() + "\" editable=\""
+		return "<document entity=\"" + object.getClass().getSimpleName().toLowerCase() + "\"  docid=\"" + object.getIdentifier() + "\" editable=\""
 		        + object.isEditable() + "\"><fields>" + object.getFullXMLChunk(ses) + "</fields></document>";
 	}
 

@@ -1,11 +1,10 @@
-package kz.flabs.scriptprocessor.page.doscript;
+package kz.lof.scriptprocessor.page;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kz.flabs.scriptprocessor.ScriptEvent;
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.pojo.OutcomeType;
@@ -198,7 +197,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 				doGET(getSes(), formData);
 			}
 		} catch (Exception e) {
-			addContent("msg", e.toString());
+			result.setException(e);
 			result.setType(OutcomeType.SERVER_ERROR);
 			result.setVeryBadRequest();
 			error(e);

@@ -347,9 +347,9 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	}
 
 	public static void addApplication(AppEnv env) {
-		applications.put(env.appType, env);
-		allApplications.put(env.appType, env);
-		allApplications.put(env.appType.toLowerCase(), env);
+		applications.put(env.appName, env);
+		allApplications.put(env.appName, env);
+		allApplications.put(env.appName.toLowerCase(), env);
 		if (env.isWorkspace) {
 			workspaceAuth = true;
 		}
@@ -519,7 +519,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		List<String> cachesList = new ArrayList<String>();
 		for (AppEnv env : applications.values()) {
 			String ci = env.getCacheInfo();
-			cachesList.add(env.appType + ":" + ci);
+			cachesList.add(env.appName + ":" + ci);
 		}
 		return cachesList;
 	}

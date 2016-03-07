@@ -69,7 +69,7 @@ public abstract class Rule implements IElement, IRule {
 			doc = xmlFileDoc;
 			filePath = docFile.getAbsolutePath();
 			parentDirPath = docFile.getParentFile().getAbsolutePath();
-			scriptDirPath = "rule" + File.separator + env.appType + File.separator + "Resources" + File.separator + "scripts";
+			scriptDirPath = "rule" + File.separator + env.appName + File.separator + "Resources" + File.separator + "scripts";
 			id = XMLUtil.getTextContent(doc, "/rule/@id", true);
 			if (id.equals("")) {
 				id = FilenameUtils.removeExtension(docFile.getName());

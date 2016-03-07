@@ -16,7 +16,7 @@ import org.eclipse.persistence.annotations.UuidGenerator;
 @MappedSuperclass
 @Converter(name = "uuidConverter", converterClass = UUIDConverter.class)
 @UuidGenerator(name = "uuid-gen")
-public abstract class SimpleAppEntity implements ISimpleAppEntity {
+public abstract class SimpleAppEntity implements ISimpleAppEntity<UUID> {
 	@Id
 	@GeneratedValue(generator = "uuid-gen")
 	@Convert("uuidConverter")

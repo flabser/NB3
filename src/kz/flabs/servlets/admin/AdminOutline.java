@@ -33,10 +33,10 @@ public class AdminOutline {
 			IDatabase db = appEnv.getDataBase();
 			if (db != null) {
 				// dbID = appEnv.getDataBase().getDbID();
-				XMLText += "<application appid= \"" + appEnv.appType.replace("\"", "'") + "\">";
-				XMLText += "<database appid= \"" + appEnv.appType.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\"></database>";
+				XMLText += "<application appid= \"" + appEnv.appName.replace("\"", "'") + "\">";
+				XMLText += "<database appid= \"" + appEnv.appName.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\"></database>";
 			} else {
-				XMLText += "<application appid= \"" + appEnv.appType.replace("\"", "'") + "\" dbid= \"\">";
+				XMLText += "<application appid= \"" + appEnv.appName.replace("\"", "'") + "\" dbid= \"\">";
 			}
 			XMLText += "</application>";
 		}
@@ -51,10 +51,10 @@ public class AdminOutline {
 			IDatabase db = appEnv.getDataBase();
 			if (db != null) {
 
-				XMLText += "<application appid= \"" + appEnv.appType.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\">";
-				XMLText += "<database appid= \"" + appEnv.appType.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\"></database>";
+				XMLText += "<application appid= \"" + appEnv.appName.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\">";
+				XMLText += "<database appid= \"" + appEnv.appName.replace("\"", "'") + "\" dbid= \"" + dbID.replace("\"", "'") + "\"></database>";
 			} else {
-				XMLText += "<application appid= \"" + appEnv.appType.replace("\"", "'") + "\" dbid= \"\">";
+				XMLText += "<application appid= \"" + appEnv.appName.replace("\"", "'") + "\" dbid= \"\">";
 			}
 			XMLText += "</application>";
 		}

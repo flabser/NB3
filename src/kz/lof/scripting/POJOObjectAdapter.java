@@ -1,13 +1,6 @@
 package kz.lof.scripting;
 
-import java.util.UUID;
-
-public class POJOObjectAdapter implements IPOJOObject {
-
-	@Override
-	public UUID getId() {
-		return null;
-	}
+public class POJOObjectAdapter<UUID> implements IPOJOObject {
 
 	@Override
 	public String getURL() {
@@ -32,6 +25,11 @@ public class POJOObjectAdapter implements IPOJOObject {
 	@Override
 	public Object getJSONObj(_Session ses) {
 		return this;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "null";
 	}
 
 }

@@ -3,7 +3,6 @@ package kz.lof.webserver.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -60,15 +59,6 @@ public class Provider extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession jses = request.getSession(false);
-		Enumeration enm = jses.getAttributeNames();
-		for (; enm.hasMoreElements();) {
-			// Get the name of the attribute
-			String name = (String) enm.nextElement();
-			// Get the value of the attribute
-			Object value = jses.getAttribute(name);
-			// System.out.println(name + "=" + value);
-		}
-		// System.out.println(jses.getId());
 		_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 		AppEnv env = ses.getAppEnv();
 		PageOutcome result = new PageOutcome();
@@ -120,7 +110,8 @@ public class Provider extends HttpServlet {
 			response.setStatus(result.getHttpStatus());
 			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
 				// TODO need to Improvement
-				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getValue(), ses.getLang());
+				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getException().toString(),
+				        result.getException(), ses.getLang());
 				throw e;
 			}
 
@@ -175,11 +166,11 @@ public class Provider extends HttpServlet {
 		} catch (ApplicationException ae) {
 			pushError(result, response, ae);
 		} catch (RuleException e) {
-			ApplicationException ae = new ApplicationException(env.appType, "rule_not_found (" + id + ")", ses.getLang());
+			ApplicationException ae = new ApplicationException(env.appName, "rule_not_found (" + id + ")", ses.getLang());
 			pushError(result, response, ae);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ApplicationException ae = new ApplicationException(env.appType, e.toString(), e, ses.getLang());
+			ApplicationException ae = new ApplicationException(env.appName, e.toString(), e, ses.getLang());
 			pushError(result, response, ae);
 		}
 	}
@@ -206,7 +197,4 @@ public class Provider extends HttpServlet {
 		response.setDateHeader("Expires", 0);
 	}
 
-	private void showAttrs(HttpServletRequest request) {
-
-	}
 }

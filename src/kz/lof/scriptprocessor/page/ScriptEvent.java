@@ -1,4 +1,4 @@
-package kz.flabs.scriptprocessor;
+package kz.lof.scriptprocessor.page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
+import kz.flabs.scriptprocessor.ScriptProcessor;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;

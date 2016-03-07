@@ -57,8 +57,6 @@ public class GlobalSetting {
 	public String rulePath;
 	public String xsltAppsPath;
 	@Deprecated
-	public DatabaseType databaseType;
-	@Deprecated
 	public String databaseHost;
 	@Deprecated
 	public String entryPoint;
@@ -72,8 +70,6 @@ public class GlobalSetting {
 	public RunMode isOn;
 	public boolean autoDeployEnable;
 	public boolean isValid;
-	public ArrayList<Lang> langsList = new ArrayList<Lang>();
-	public Lang primaryLang;
 	@Deprecated
 	public ArrayList<Skin> skinsList = new ArrayList<Skin>();
 	@Deprecated
@@ -100,8 +96,8 @@ public class GlobalSetting {
 	public GlobalSetting(String path, AppEnv env) {
 		globalFilePath = path;
 
-		rulePath = "rule" + File.separator + env.appType;
-		xsltAppsPath = "webapps" + File.separator + env.appType + File.separator + "xsl";
+		rulePath = "rule" + File.separator + env.appName;
+		xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
 
 		try {
 			Document doc = null;
@@ -111,7 +107,7 @@ public class GlobalSetting {
 			db = dbf.newDocumentBuilder();
 			doc = db.parse(path);
 
-			id = env.appType;
+			id = env.appName;
 			if (id.equalsIgnoreCase("system")) {
 				AppEnv.logger.warningLogEntry("a name \"system\" is reserved name of application.");
 			}
@@ -177,18 +173,9 @@ public class GlobalSetting {
 						deserializeKey();
 					}
 
-					databaseType = getDatabaseType(dbURL);
 					databaseHost = XMLUtil.getTextContent(doc, "/rule/database/host");
 					databaseEnable = true;
 
-					String deployerClass = "kz.lof.dataengine.jpadatabase.DatabaseDeployer";
-					String databaseClass = "kz.lof.dataengine.jpadatabase.Database";
-
-					if (!deployerClass.equals("") && !databaseClass.equals("")) {
-						dbImpl = new DataEngineImpl(deployerClass, databaseClass);
-					} else {
-						dbImpl = new DataEngineImpl(databaseType);
-					}
 				} else {
 					AppEnv.logger.errorLogEntry("Unable to determine name of database");
 				}
@@ -216,17 +203,6 @@ public class GlobalSetting {
 			NodeList rules = XMLUtil.getNodeList(doc, "/rule/rules/entry");
 			for (int i = 0; i < rules.getLength(); i++) {
 				rulePath = XMLUtil.getTextContent(rules.item(i), "@path", false);
-			}
-
-			NodeList langs = XMLUtil.getNodeList(doc, "/rule/langs/entry");
-			for (int i = 0; i < langs.getLength(); i++) {
-				Lang lang = new Lang(langs.item(i));
-				if (lang.isOn == RunMode.ON) {
-					langsList.add(lang);
-					if (lang.isPrimary) {
-						primaryLang = lang;
-					}
-				}
 			}
 
 			NodeList roles = XMLUtil.getNodeList(doc, "/rule/roles/entry");

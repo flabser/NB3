@@ -8,58 +8,33 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.Application;
-import kz.flabs.webrule.GlobalSetting;
 import kz.lof.caching.PageCacheAdapter;
-import kz.lof.env.Environment;
 import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
-import kz.pchelka.env.AuthTypes;
-import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
-	public String appType = "undefined";
+	public String appName = "undefined";
 	public RuleProvider ruleProvider;
 	public HashMap<String, File> xsltFileMap = new HashMap<String, File>();
-	public String adminXSLTPath;
-	public GlobalSetting globalSetting;
-	public boolean isSystem;
 	public boolean isWorkspace;
-	public AuthTypes authType = AuthTypes.WORKSPACE;
 	public Vocabulary vocabulary;
 	public Application application;
 	public static ILogger logger = Server.logger;
 
 	private IDatabase dataBase;
 
-	public AppEnv(String appType, String globalFileName) {
-		this.appType = appType;
+	public AppEnv(String n, String globalFileName) {
+		this.appName = n;
 		try {
-			Server.logger.infoLogEntry("# Start application \"" + appType + "\"");
-			Site appSite = Environment.webAppToStart.get(appType);
-			if (appSite != null) {
-				authType = appSite.authType;
-			}
-			// rulePath = "rule" + File.separator + appType;
+			Server.logger.infoLogEntry("# Start application \"" + appName + "\"");
 			ruleProvider = new RuleProvider(this);
-			// ruleProvider.initApp(globalFileName);
-			// globalSetting = ruleProvider.global;
-			// globalSetting.appName = appType;
-			// isWorkspace = globalSetting.isWorkspace;
-			// if (globalSetting.isOn == RunMode.ON) {
-			// Server.logger.infoLogEntry("Dictionary is loading...");
 			loadVocabulary();
 			isValid = true;
-			// } else {
-			// Server.logger.warningLogEntry("Application: \"" + appType +
-			// "\" is off");
-			// Environment.reduceApplication();
-			// }
 
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
-			// e.printStackTrace();
 		}
 	}
 
@@ -73,21 +48,18 @@ public class AppEnv extends PageCacheAdapter implements Const {
 
 	@Override
 	public String toString() {
-		return "[ ]" + Server.serverTitle + "-" + appType;
+		return "[ ]" + Server.serverTitle + "-" + appName;
 	}
 
 	public void reloadVocabulary() {
-		Server.logger.infoLogEntry("Dictionary is reloading (" + appType + ")...");
+		Server.logger.infoLogEntry("Dictionary is reloading (" + appName + ")...");
 		loadVocabulary();
 	}
 
 	private void loadVocabulary() {
 		Localizator l = new Localizator();
-		String vocabuarFilePath = "rule" + File.separator + appType + File.separator + "Resources" + File.separator + "vocabulary.xml";
-		vocabulary = l.populate(appType, vocabuarFilePath);
-		if (vocabulary != null) {
-			// Server.logger.infoLogEntry("Dictionary has loaded");
-		}
+		String vocabuarFilePath = "rule" + File.separator + appName + File.separator + "Resources" + File.separator + "vocabulary.xml";
+		vocabulary = l.populate(appName, vocabuarFilePath);
 	}
 
 }

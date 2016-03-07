@@ -455,7 +455,7 @@ public class ViewEntry implements IViewEntry, Const {
 		if (ddbID != null) {
 			return ddbID.hashCode();
 		} else {
-			return Util.generateRandomAsText(db.getParent().appType).hashCode();
+			return Util.generateRandomAsText(db.getParent().appName).hashCode();
 		}
 	}
 

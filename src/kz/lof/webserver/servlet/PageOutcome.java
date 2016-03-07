@@ -41,6 +41,7 @@ public class PageOutcome {
 	private String flash;
 	private String filePath, fileName;
 	private _Validation validation;
+	private Exception exception;
 
 	public void setSession(_Session ses) {
 		this.ses = ses;
@@ -191,6 +192,14 @@ public class PageOutcome {
 		return xmlTextUTF8Header + "<request  lang=\"" + lang + "\" id=\"" + pageId + "\" userid=\"" + userId + "\" username=\"" + localUserName
 		        + "\">" + toXML() + "</request>";
 
+	}
+
+	public Exception getException() {
+		return exception;
+	}
+
+	public void setException(Exception exception) {
+		this.exception = exception;
 	}
 
 	public String getJSON() {

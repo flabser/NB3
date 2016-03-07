@@ -1,9 +1,8 @@
 package kz.lof.scripting;
 
-import java.util.UUID;
 
 public interface IPOJOObject {
-	UUID getId();
+	String getIdentifier();
 
 	String getURL();
 

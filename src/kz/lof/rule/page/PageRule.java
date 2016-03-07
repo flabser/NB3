@@ -42,7 +42,7 @@ public class PageRule extends Rule implements IElement, Const {
 				}
 			}
 
-			String xsltAppsPath = "webapps" + File.separator + env.appType + File.separator + "xsl";
+			String xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
 			type = RuleType.PAGE;
 
 			xsltFile = XMLUtil.getTextContent(doc, "/rule/xsltfile");

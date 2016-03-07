@@ -24,7 +24,7 @@ public class ScheduledHandlerLauncher extends AbstractDaemon{
 				return -1;
 			}
 		} catch (Exception e) {
-			Server.logger.errorLogEntry(env.appType, e);
+			Server.logger.errorLogEntry(env.appName, e);
 			return -1;
 		}		
 	}

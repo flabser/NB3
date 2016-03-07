@@ -12,7 +12,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.webrule.GlobalSetting;
 import kz.lof.appenv.AppEnv;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.dataengine.jpa.IAppEntity;
@@ -51,10 +50,6 @@ public class _Session extends PageCacheAdapter {
 
 	public _AppEntourage getAppEntourage() {
 		return new _AppEntourage(this, env);
-	}
-
-	public GlobalSetting getGlobalSettings() {
-		return env.globalSetting;
 	}
 
 	public void setLang(LanguageCode lang) {

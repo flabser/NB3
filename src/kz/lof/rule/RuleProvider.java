@@ -161,7 +161,7 @@ public class RuleProvider implements Const {
 	}
 
 	public boolean resetRules() {
-		AppEnv.logger.infoLogEntry("Reload \"" + env.appType + "\" application rules ...");
+		AppEnv.logger.infoLogEntry("Reload \"" + env.appName + "\" application rules ...");
 
 		pageRuleMap.clear();
 		// handlerRuleMap.clear();
@@ -173,7 +173,7 @@ public class RuleProvider implements Const {
 	}
 
 	private void loadGlobal(String globalFileName) {
-		String globalPath = "rule" + File.separator + env.appType + File.separator + globalFileName;
+		String globalPath = "rule" + File.separator + env.appName + File.separator + globalFileName;
 		global = new GlobalSetting(globalPath, env);
 	}
 
@@ -241,7 +241,7 @@ public class RuleProvider implements Const {
 			if (pageRuleMap.containsKey(ruleID)) {
 				rule = pageRuleMap.get(ruleID);
 			} else {
-				docFile = new File("rule" + File.separator + env.appType + File.separator + "Page" + File.separator + ruleID + ".xml");
+				docFile = new File("rule" + File.separator + env.appName + File.separator + "Page" + File.separator + ruleID + ".xml");
 				rule = new PageRule(env, docFile);
 				pageRuleMap.put(ruleID.toLowerCase(), rule);
 			}
