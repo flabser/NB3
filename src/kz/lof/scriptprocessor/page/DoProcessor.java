@@ -1,8 +1,7 @@
-package kz.flabs.scriptprocessor.page.doscript;
+package kz.lof.scriptprocessor.page;
 
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
-import kz.lof.scriptprocessor.page.IPageScript;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.PageOutcome;
 

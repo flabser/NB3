@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.scripting._Validation;
 
 import com.fasterxml.jackson.annotation.JsonRootName;

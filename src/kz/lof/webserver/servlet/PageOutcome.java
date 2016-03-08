@@ -8,7 +8,6 @@ import java.util.Map;
 
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.SaxonTransformator;
-import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;

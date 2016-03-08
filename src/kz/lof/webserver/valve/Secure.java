@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.users.AuthFailedException;
@@ -63,7 +64,6 @@ public class Secure extends ValveBase {
 				AppEnv env = Environment.getAppEnv(ru.getAppType());
 				_Session clonedSes = ses.clone(env);
 				jses.setAttribute(EnvConst.SESSION_ATTR, clonedSes);
-				clonedSes.setJses(jses);
 				Server.logger.debugLogEntry(ses.getUser().getUserID() + "\" got from session pool " + jses.getServletContext().getContextPath());
 				invoke(request, response);
 			} else {
@@ -73,9 +73,12 @@ public class Secure extends ValveBase {
 			}
 		} else {
 			Server.logger.warningLogEntry("user session was expired");
-			AuthFailedException e = new AuthFailedException(AuthFailedExceptionType.NO_USER_SESSION, appType);
-			response.setStatus(e.getCode());
-			response.getWriter().println(e.getHTMLMessage());
+			HttpSession jses = request.getSession(false);
+			if (jses != null) {
+				jses.invalidate();
+			}
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			request.getRequestDispatcher("/Error?type=ws_auth_error").forward(request, response);
 		}
 	}
 }

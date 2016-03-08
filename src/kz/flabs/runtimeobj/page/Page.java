@@ -6,7 +6,6 @@ import java.util.HashMap;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.scriptprocessor.page.doscript.DoProcessor;
 import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Caption;
@@ -16,6 +15,7 @@ import kz.lof.rule.page.ElementRule;
 import kz.lof.rule.page.PageRule;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
+import kz.lof.scriptprocessor.page.DoProcessor;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.pchelka.scheduler.IProcessInitiator;
 

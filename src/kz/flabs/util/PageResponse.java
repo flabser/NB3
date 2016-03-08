@@ -7,7 +7,6 @@ import java.util.List;
 
 import kz.flabs.exception.PortalException;
 import kz.flabs.servlets.PublishAsType;
-import kz.flabs.servlets.pojo.Outcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._IXMLContent;
 
@@ -18,7 +17,6 @@ public class PageResponse {
 	public boolean resultFlag;
 	@Deprecated
 	public int status;
-	public Outcome outcome;
 	public PublishAsType publishAs = PublishAsType.HTML;
 	public String name;
 	protected static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";

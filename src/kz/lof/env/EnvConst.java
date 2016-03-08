@@ -18,6 +18,7 @@ public class EnvConst {
 	public static final String DEFAULT_PAGE = "index";
 	public final static String SESSION_ATTR = "usersession";
 	public static final String LANG_COOKIE_NAME = "lang";
+	public static final String PAGE_SIZE_COOKIE_NAME = "pagesize";
 	public static final String AUTH_COOKIE_NAME = "nb3ses";
 	public static final String ADMINISTRATOR_APP_NAME = "Administrator";
 	public final static String SHARED_RESOURCES_APP_NAME = "SharedResources";
@@ -29,6 +30,7 @@ public class EnvConst {
 	public static final String ADMINISTRATOR_SERVICE_CLASS = "administrator.services.UserServices";
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
+	public static String DEFAULT_PAGE_SIZE = "20";
 	public static String DB_USER = "postgres";
 	public static String DB_PWD = "smartdoc";
 	public static String DATABASE_HOST = "localhost";

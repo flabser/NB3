@@ -7,7 +7,6 @@ import java.util.List;
 
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
-import kz.flabs.servlets.pojo.OutcomeType;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
@@ -17,6 +16,7 @@ import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
 import kz.lof.scripting._WebFormData;
 import kz.lof.webserver.servlet.IOutcomeObject;
+import kz.lof.webserver.servlet.OutcomeType;
 import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;

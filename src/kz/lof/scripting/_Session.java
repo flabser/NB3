@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.IDatabase;
 import kz.lof.appenv.AppEnv;
@@ -26,19 +25,18 @@ import kz.nextbase.script.mail._MailAgent;
 
 public class _Session extends PageCacheAdapter {
 	private IDatabase dataBase;
-	private IUser user;
+	private IUser<Long> user;
 	private AppEnv env;
 	private LanguageCode lang;
 	public int pageSize = 30;
 	private AuthModeType authMode;
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
 	private _Session parent;
-	private HttpSession jses;
 	private HashMap<UUID, FormTransaction> formTrans = new HashMap<UUID, FormTransaction>();
 	private Map<String, Object> valuesMap = new HashMap<String, Object>();
 	private Map<String, PersistValue> persistValuesMap = new HashMap<String, PersistValue>();
 
-	public _Session(AppEnv env, IUser user) {
+	public _Session(AppEnv env, IUser<Long> user) {
 		this.env = env;
 		this.user = user;
 		dataBase = env.getDataBase();
@@ -88,7 +86,7 @@ public class _Session extends PageCacheAdapter {
 		return new _MailAgent(this);
 	}
 
-	public IUser getUser() {
+	public IUser<Long> getUser() {
 		return user;
 	}
 
@@ -111,10 +109,6 @@ public class _Session extends PageCacheAdapter {
 
 	public Map<String, PersistValue> getPersistValuesMap() {
 		return persistValuesMap;
-	}
-
-	public void setJses(HttpSession jses) {
-		this.jses = jses;
 	}
 
 	public _Session clone(AppEnv env) {

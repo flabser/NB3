@@ -26,7 +26,9 @@ import org.apache.tomcat.util.descriptor.web.ErrorPage;
 public class WebServer {
 	private static Tomcat tomcat;
 	private static Engine engine;
-	private static final String defaultWelcomeList[] = { "index.html", "index.htm" };
+
+	// private static final String defaultWelcomeList[] = { "index.html",
+	// "index.htm" };
 
 	public void init(String defaultHostName) throws MalformedURLException, LifecycleException {
 		Server.logger.debugLogEntry("Init webserver ...");
@@ -37,7 +39,7 @@ public class WebServer {
 		tomcat.setBaseDir("webserver");
 		engine = tomcat.getEngine();
 
-		StandardServer server = (StandardServer) this.tomcat.getServer();
+		StandardServer server = (StandardServer) tomcat.getServer();
 		AprLifecycleListener listener = new AprLifecycleListener();
 		server.addLifecycleListener(listener);
 
@@ -64,16 +66,17 @@ public class WebServer {
 		Context context = null;
 		String db = new File("webapps/" + docBase).getAbsolutePath();
 
-	/*	if (docBase.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
-			context = tomcat.addContext(URLPath, db);
-			Tomcat.addServlet(context, "Provider", "kz.flabs.servlets.admin.AdminProvider");
-			context.setDisplayName(EnvConst.ADMINISTRATOR_APP_NAME);
-		} else {*/
-			context = tomcat.addContext(URLPath, db);
-			context.setDisplayName(URLPath.substring(1));
-			context.addWelcomeFile("Provider");
-			Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
-		//}
+		/*
+		 * if (docBase.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
+		 * context = tomcat.addContext(URLPath, db); Tomcat.addServlet(context,
+		 * "Provider", "kz.flabs.servlets.admin.AdminProvider");
+		 * context.setDisplayName(EnvConst.ADMINISTRATOR_APP_NAME); } else {
+		 */
+		context = tomcat.addContext(URLPath, db);
+		context.setDisplayName(URLPath.substring(1));
+		context.addWelcomeFile("Provider");
+		Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
+		// }
 
 		Tomcat.addServlet(context, "default", "org.apache.catalina.servlets.DefaultServlet");
 		context.addServletMapping("/", "default");
@@ -83,7 +86,7 @@ public class WebServer {
 		Tomcat.addServlet(context, "Login", "kz.lof.webserver.servlet.Login");
 		context.addServletMapping("/Login", "Login");
 
-		Tomcat.addServlet(context, "Logout", "kz.flabs.servlets.Logout");
+		Tomcat.addServlet(context, "Logout", "kz.lof.webserver.servlet.Logout");
 		context.addServletMapping("/Logout", "Logout");
 
 		Wrapper w = Tomcat.addServlet(context, "PortalInit", "kz.lof.webserver.servlet.PortalInit");
@@ -94,7 +97,7 @@ public class WebServer {
 		Tomcat.addServlet(context, "UploadFile", "kz.lof.webserver.servlet.UploadFile");
 		context.addServletMapping("/UploadFile", "UploadFile");
 
-		Tomcat.addServlet(context, "Error", "kz.flabs.servlets.Error");
+		Tomcat.addServlet(context, "Error", "kz.lof.webserver.servlet.Error");
 		context.addServletMapping("/Error", "Error");
 
 		context.addMimeMapping("css", "text/css");

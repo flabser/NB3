@@ -9,7 +9,7 @@ import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.user.IUser;
 
 public interface ISystemDatabase {
-	IUser getUser(String login, String pwd);
+	IUser<Long> getUser(String login, String pwd);
 
 	User checkUser(String userID, String pwd, User user);
 
