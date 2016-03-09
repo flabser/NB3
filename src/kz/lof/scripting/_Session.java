@@ -155,15 +155,15 @@ public class _Session extends PageCacheAdapter {
 
 		FormTransaction ft = formTrans.get(entity.getId());
 		if (ft != null) {
-			ft.isExpired = true;
-			return ft.getRefrerrer();
+			String refURL = ft.getRefrerrer();
+			formTrans.remove(entity.getId());
+			return refURL;
 		} else {
 			return "Provider?id=" + entity.getDefaultViewName() + "&page=0";
 		}
 
 	}
 
-	// TODO Need a ft flusher
 	class FormTransaction {
 		public boolean isExpired;
 

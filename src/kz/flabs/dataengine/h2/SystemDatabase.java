@@ -20,25 +20,21 @@ import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
-import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
 import kz.lof.server.Server;
 import kz.lof.user.IUser;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.apache.catalina.realm.RealmBase;
 
-public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const {
+public class SystemDatabase implements ISystemDatabase, Const {
 	public static boolean isValid;
 	public static String jdbcDriver = "org.h2.Driver";
 
 	private IDBConnectionPool dbPool;
-	private static String connectionURL = "jdbc:h2:system_data" + File.separator + "system_data;MVCC=TRUE;AUTO_SERVER="
-	        + (Environment.debugMode == RunMode.ON ? "TRUE" : "FALSE");
+	private static String connectionURL = "jdbc:h2:system_data" + File.separator + "system_data;MVCC=TRUE;AUTO_SERVER=TRUE";
 
 	private IEmployeeDAO eDao;
 
@@ -951,11 +947,6 @@ public class SystemDatabase implements ISystemDatabase, IProcessInitiator, Const
 		}
 		return dropUserTab;
 
-	}
-
-	@Override
-	public String getOwnerID() {
-		return "System";
 	}
 
 }

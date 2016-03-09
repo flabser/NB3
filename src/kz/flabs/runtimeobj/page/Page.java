@@ -16,12 +16,11 @@ import kz.lof.rule.page.PageRule;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.page.DoProcessor;
-import kz.lof.webserver.servlet.PageOutcome;
-import kz.pchelka.scheduler.IProcessInitiator;
+import kz.lof.scriptprocessor.page.PageOutcome;
 
 import org.apache.http.HttpStatus;
 
-public class Page implements IProcessInitiator, Const {
+public class Page implements Const {
 	public boolean fileGenerated;
 	public boolean toJSON;
 	public String generatedFilePath;
@@ -107,11 +106,6 @@ public class Page implements IProcessInitiator, Const {
 		output.setCaptions(getCaptions(rule.captions, ses.getLang()));
 		return output;
 
-	}
-
-	@Override
-	public String getOwnerID() {
-		return rule.getRuleID();
 	}
 
 	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageCode lang) {

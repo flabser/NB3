@@ -4,10 +4,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
+import kz.lof.dataengine.jpa.DAO;
 import kz.lof.dataengine.jpa.IAppEntity;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
 import kz.lof.scripting._POJOListWrapper;
@@ -15,19 +19,22 @@ import kz.lof.scripting._POJOObjectWrapper;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
 import kz.lof.scripting._WebFormData;
+import kz.lof.scriptprocessor.ScriptHelper;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import kz.lof.webserver.servlet.OutcomeType;
-import kz.lof.webserver.servlet.PageOutcome;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IXMLContent;
+import kz.nextbase.script.actions._Action;
+import kz.nextbase.script.actions._ActionBar;
+import kz.nextbase.script.actions._ActionType;
 
-public abstract class AbstractPage extends ScriptEvent implements IPageScript {
+public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 	private _WebFormData formData;
 	private PageOutcome result;
 
 	@Override
-	public void setPageOutcome(PageOutcome o) {
+	public void setOutcome(PageOutcome o) {
 		result = o;
 	}
 
@@ -35,11 +42,6 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	public void setSession(_Session ses) {
 		setSes(ses);
 		result.setSession(ses);
-	}
-
-	@Deprecated
-	public void publishElement(String entryName, String value) {
-		result.addContent(new ScriptShowField(entryName, value));
 	}
 
 	@Deprecated
@@ -57,11 +59,6 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 		} else if (value instanceof BigDecimal) {
 			result.addContent(new ScriptShowField(entryName, value.toString()));
 		}
-	}
-
-	@Deprecated
-	public void publishElement(_IXMLContent value) {
-		toPublishElement.add(value);
 	}
 
 	public void setError(String m) {
@@ -112,7 +109,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	protected void addContent(String elementName, List<?> list) {
 		List<IPOJOObject> newList = new ArrayList<IPOJOObject>();
 		for (Object element : list) {
-			newList.add(new POJOObjectAdapter() {
+			newList.add(new POJOObjectAdapter<Object>() {
 				@Override
 				public String getShortXMLChunk(_Session ses) {
 					StringBuffer val = new StringBuffer(500);
@@ -127,7 +124,7 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 	}
 
 	protected void addContent(String elementName, String someValue) {
-		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter() {
+		result.addObject(new _POJOObjectWrapper(new POJOObjectAdapter<Object>() {
 			@Override
 			public String getFullXMLChunk(_Session ses) {
 				StringBuffer val = new StringBuffer(500);
@@ -184,6 +181,32 @@ public abstract class AbstractPage extends ScriptEvent implements IPageScript {
 
 	protected void setBadRequest() {
 		result.setBadRequest();
+	}
+
+	protected _ActionBar getSimpleActionBar(_Session session, String type, LanguageCode lang) {
+		_ActionBar actionBar = new _ActionBar(session);
+		_Action newDocAction = new _Action(getLocalizedWord("new_", lang), getLocalizedWord("add_new_", lang), "new_" + type);
+		newDocAction.setURL("Provider?id=" + type + "&key=");
+		actionBar.addAction(newDocAction);
+		actionBar.addAction(new _Action(getLocalizedWord("del_document", lang), getLocalizedWord("del_document", lang), _ActionType.DELETE_DOCUMENT));
+		return actionBar;
+	}
+
+	protected _POJOListWrapper getViewPage(DAO<? extends IPOJOObject, UUID> dao, _WebFormData formData) {
+		int pageNum = 1;
+		int pageSize = dao.getSession().pageSize;
+		if (formData.containsField("page")) {
+			pageNum = formData.getNumberValueSilently("page", pageNum);
+		}
+		long count = dao.getCount();
+		int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+		if (pageNum == 0) {
+			pageNum = maxPage;
+		}
+		int startRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+		List<? extends IPOJOObject> list = dao.findAll(startRec, pageSize);
+		return new _POJOListWrapper(list, maxPage, count, pageNum, getSes());
+
 	}
 
 	@Override

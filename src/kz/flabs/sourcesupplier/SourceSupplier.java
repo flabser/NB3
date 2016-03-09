@@ -34,10 +34,9 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 @Deprecated
-public class SourceSupplier implements IProcessInitiator, Const {
+public class SourceSupplier implements Const {
 	public SourceSupplierContextType contextType;
 	public HashMap<String, Vocabulary> staticGlossaries = new HashMap<String, Vocabulary>();
 
@@ -290,14 +289,7 @@ public class SourceSupplier implements IProcessInitiator, Const {
 					DocID subKey = keys.get(0);
 					if (subKey != null) {
 						String[] id = { String.valueOf(subKey.id) };
-						switch (subKey.type) {
-						case DOCTYPE_ORGANIZATION:
-							return this.publishAs(TagPublicationFormatType.ORGANIZATION, id);
-						case DOCTYPE_DEPARTMENT:
-							return this.publishAs(TagPublicationFormatType.DEPARTMENT, id);
-						case DOCTYPE_EMPLOYER:
-							return this.publishAs(TagPublicationFormatType.EMPLOYER, id);
-						}
+
 					}
 				}
 			case ORGANIZATION:
@@ -369,8 +361,4 @@ public class SourceSupplier implements IProcessInitiator, Const {
 		return "context=" + contextType + ", currentuser=" + user.getUserID() + ", scriptprocessor = " + scriptProcessor;
 	}
 
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
-	}
 }

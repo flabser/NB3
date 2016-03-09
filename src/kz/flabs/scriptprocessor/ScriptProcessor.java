@@ -4,11 +4,10 @@ import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import kz.lof.server.Server;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
-public class ScriptProcessor implements IScriptProcessor, IProcessInitiator {
+public class ScriptProcessor implements IScriptProcessor {
 	public static ILogger logger = Server.logger;
 
 	@Override
@@ -61,11 +60,6 @@ public class ScriptProcessor implements IScriptProcessor, IProcessInitiator {
 			}
 			return new ScriptSource();
 		}
-	}
-
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
 	}
 
 }

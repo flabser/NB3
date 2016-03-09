@@ -73,7 +73,12 @@ public abstract class AppEntity<K extends UUID> implements IAppEntity, IPOJOObje
 
 	@Override
 	public String getIdentifier() {
-		return getId().toString();
+		if (id != null) {
+			return id.toString();
+		} else {
+			return "null";
+		}
+
 	}
 
 	@JsonIgnore

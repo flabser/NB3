@@ -34,23 +34,17 @@ import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
-import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.Database;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
+import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
-import kz.lof.webserver.servlet.PageOutcome;
-import kz.pchelka.daemon.system.LogsZipRule;
-import kz.pchelka.daemon.system.TempFileCleanerRule;
 import kz.pchelka.env.AuthTypes;
-import kz.pchelka.env.ExternalHost;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
-import kz.pchelka.scheduler.IDaemon;
-import kz.pchelka.scheduler.IProcessInitiator;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.jdom.input.SAXHandler;
@@ -59,7 +53,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Environment implements Const, ICache, IProcessInitiator {
+public class Environment implements Const, ICache {
 
 	public static boolean verboseLogging;
 	public static String appServerName;
@@ -79,8 +73,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static String trash;
 	public static ArrayList<String> fileToDelete = new ArrayList<String>();
 	public static ILogger logger;
-	public static int delaySchedulerStart;
-	// public static Scheduler scheduler = new Scheduler();
 
 	public static Boolean isSSLEnable = false;
 	public static int secureHttpPort;
@@ -102,10 +94,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 	public static boolean workspaceAuth;
 	private static String defaultRedirectURL;
 
-	public static RunMode debugMode = RunMode.OFF;
-
-	private static boolean schedulerStarted;
-	private static HashMap<String, ExternalHost> externalHost = new HashMap<String, ExternalHost>();
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
 	private static ConcurrentHashMap<String, AppEnv> allApplications = new ConcurrentHashMap<String, AppEnv>();
 	private static HashMap<String, IDatabase> dataBases = new HashMap<String, IDatabase>();
@@ -175,8 +163,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 			dbUserName = XMLUtil.getTextContent(xmlDocument, "/rule/database/username");
 			dbPassword = XMLUtil.getTextContent(xmlDocument, "/rule/database/password");
 
-			delaySchedulerStart = XMLUtil.getNumberContent(xmlDocument, "/nextbase/scheduler/startdelaymin", 1);
-
 			defaultRedirectURL = "/" + XMLUtil.getTextContent(xmlDocument, "/nextbase/applications/@default", false, "Workspace", true);
 
 			NodeList nodeList = XMLUtil.getNodeList(xmlDocument, "/nextbase/applications");
@@ -189,7 +175,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 						String appName = XMLUtil.getTextContent(appNode, "name", false);
 						Site site = new Site();
 						site.appBase = appName;
-						site.authType = AuthTypes.valueOf(XMLUtil.getTextContent(appNode, "authtype", false, "WORKSPACE", false));
+						site.authType = AuthTypes.WORKSPACE;
 						site.name = XMLUtil.getTextContent(appNode, "name/@sitename", false);
 						String globalAttrValue = XMLUtil.getTextContent(appNode, "name/@global", false);
 						if (!globalAttrValue.isEmpty()) {
@@ -271,68 +257,19 @@ public class Environment implements Const, ICache, IProcessInitiator {
 				vocabulary = new Vocabulary("system");
 			}
 
-			NodeList hosts = XMLUtil.getNodeList(xmlDocument, "/nextbase/externalhost/host");
-			for (int i = 0; i < hosts.getLength(); i++) {
-				ExternalHost host = new ExternalHost(hosts.item(i));
-				if (host.isOn != RunMode.OFF && host.isValid) {
-					externalHost.put(host.id.toLowerCase(), host);
-				}
-			}
-
-			if (XMLUtil.getTextContent(xmlDocument, "/nextbase/debug/@mode").equalsIgnoreCase("on")) {
-				debugMode = RunMode.ON;
-			}
-
 			{
-				TempFileCleanerRule tfcr = new TempFileCleanerRule();
-				tfcr.init(new Environment());
-				try {
-					Class c = Class.forName(tfcr.getClassName());
-					IDaemon daemon = (IDaemon) c.newInstance();
-					daemon.init(tfcr);
-					// scheduler.addProcess(tfcr, daemon);
-				} catch (InstantiationException e) {
-					logger.errorLogEntry(e);
-				} catch (IllegalAccessException e) {
-					logger.errorLogEntry(e);
-				} catch (ClassNotFoundException e) {
-					logger.errorLogEntry(e);
-				}
+				/*
+				 * LogsZipRule lzr = new LogsZipRule(); lzr.init(new
+				 * Environment()); try { Class c =
+				 * Class.forName(lzr.getClassName()); IDaemon daemon = (IDaemon)
+				 * c.newInstance(); daemon.init(lzr); //
+				 * scheduler.addProcess(lzr, daemon); } catch
+				 * (InstantiationException e) { logger.errorLogEntry(e); } catch
+				 * (IllegalAccessException e) { logger.errorLogEntry(e); } catch
+				 * (ClassNotFoundException e) { logger.errorLogEntry(e); }
+				 */
 			}
 
-			{
-				LogsZipRule lzr = new LogsZipRule();
-				lzr.init(new Environment());
-				try {
-					Class c = Class.forName(lzr.getClassName());
-					IDaemon daemon = (IDaemon) c.newInstance();
-					daemon.init(lzr);
-					// scheduler.addProcess(lzr, daemon);
-				} catch (InstantiationException e) {
-					logger.errorLogEntry(e);
-				} catch (IllegalAccessException e) {
-					logger.errorLogEntry(e);
-				} catch (ClassNotFoundException e) {
-					logger.errorLogEntry(e);
-				}
-			}
-
-			{
-				// BackupServiceRule bsr = new BackupServiceRule();
-				// bsr.init(new Environment());
-				// try{
-				// Class c = Class.forName(bsr.getClassName());
-				// IDaemon daemon = (IDaemon)c.newInstance();
-				// daemon.init(bsr);
-				// scheduler.addProcess(bsr, daemon);
-				// }catch (InstantiationException e) {
-				// logger.errorLogEntry(e);
-				// } catch (IllegalAccessException e) {
-				// logger.errorLogEntry(e);
-				// } catch (ClassNotFoundException e) {
-				// logger.errorLogEntry(e);
-				// }
-			}
 		} catch (SAXException se) {
 			logger.errorLogEntry(se);
 		} catch (ParserConfigurationException pce) {
@@ -355,22 +292,7 @@ public class Environment implements Const, ICache, IProcessInitiator {
 		}
 
 		if (applications.size() >= countOfApp) {
-			if (delayedStart.size() > 0) {
-				for (IDatabase db : delayedStart) {
-					// logger.normalLogEntry("Connecting to external module " +
-					// db.initExternalPool(ExternalModuleType.STRUCTURE));
-					if (!schedulerStarted) {
-						// Thread schedulerThread = new Thread(scheduler);
-						// schedulerThread.start();
-						schedulerStarted = true;
-					}
-				}
-			} else {
-				// Thread schedulerThread = new Thread(scheduler);
-				// schedulerThread.start();
-				schedulerStarted = true;
-			}
-			delayedStart = new ArrayList<>();
+
 		}
 	}
 
@@ -436,20 +358,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static String getWorkspaceURL() {
 		return "Workspace";
-	}
-
-	public static String getExtHost(String id) {
-		String h = externalHost.get(id.toLowerCase()).host;
-		return h;
-	}
-
-	public static ExternalHost getExternalHost(String id) {
-		return externalHost.get(id.toLowerCase());
-	}
-
-	public static void addExtHost(String id, String host, String name) {
-		externalHost.put(id.toLowerCase(), new ExternalHost(id.toLowerCase(), host, name));
-		return;
 	}
 
 	private static void initMimeTypes() {
@@ -538,11 +446,6 @@ public class Environment implements Const, ICache, IProcessInitiator {
 
 	public static void shutdown() {
 		// if (XMPPServerEnable) Environment.connection.disconnect();
-	}
-
-	@Override
-	public String getOwnerID() {
-		return "";
 	}
 
 	private static void loadProperties() {

@@ -27,6 +27,7 @@ import kz.lof.rule.page.PageRule;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._Session.PersistValue;
 import kz.lof.scripting._WebFormData;
+import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
 
 import org.apache.http.HttpHeaders;

@@ -37,8 +37,6 @@ import kz.flabs.webrule.scheduler.RunUnderUser;
 import kz.flabs.webrule.scheduler.ScheduleSettings;
 import kz.flabs.webrule.scheduler.ScheduleType;
 import kz.lof.appenv.AppEnv;
-import kz.pchelka.scheduler.DaemonType;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -61,9 +59,7 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 	public ValueSourceType qsSourceType = ValueSourceType.STATIC;
 	public String handlerClassName;
 
-	protected DaemonType daemonType;
 	private String script = "";
-	private IProcessInitiator owner;
 
 	public HandlerRule(AppEnv env, File file) throws IOException, RuleException {
 		super(env, file);
@@ -344,18 +340,8 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 	}
 
 	@Override
-	public String getProcessID() {
-		return getDaemonType() + "_" + getClassName();
-	}
-
-	@Override
 	public ScheduleType getScheduleType() {
 		return scheduleSettings.schedulerType;
-	}
-
-	@Override
-	public DaemonType getDaemonType() {
-		return daemonType;
 	}
 
 	@Override
@@ -383,17 +369,6 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 	}
 
 	@Override
-	public IProcessInitiator getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void init(IProcessInitiator owner) {
-		this.owner = owner;
-		daemonType = DaemonType.HANDLER;
-	}
-
-	@Override
 	public boolean scriptIsValid() {
 		return scriptIsValid;
 	}
@@ -402,5 +377,11 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 	public ArrayList<DaysOfWeek> getDaysOfWeek() {
 		return scheduleSettings.daysOfWeek;
 
+	}
+
+	@Override
+	public String getProcessID() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

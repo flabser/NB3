@@ -19,7 +19,6 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.user.AnonymousUser;
-import kz.pchelka.scheduler.IProcessInitiator;
 
 import com.eztech.util.JavaClassFinder;
 
@@ -29,7 +28,7 @@ import com.eztech.util.JavaClassFinder;
  * @author Kayra created 28-12-2015
  */
 
-public class InitializerHelper implements IProcessInitiator {
+public class InitializerHelper {
 
 	// TODO it need to improve for checking if an application switched off
 	public Map<String, Class<IInitialData>> getAllinitializers(boolean showConsoleOutput) throws IOException {
@@ -196,8 +195,4 @@ public class InitializerHelper implements IProcessInitiator {
 		return dao;
 	}
 
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
-	}
 }

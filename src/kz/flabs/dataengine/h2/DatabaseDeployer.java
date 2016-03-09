@@ -9,9 +9,8 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.lof.appenv.AppEnv;
-import kz.pchelka.scheduler.IProcessInitiator;
 
-public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
+public class DatabaseDeployer implements IDatabaseDeployer {
 	public boolean deployed;
 
 	private AppEnv env;
@@ -276,11 +275,6 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 	public boolean patch() {
 
 		return false;
-	}
-
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
 	}
 
 }

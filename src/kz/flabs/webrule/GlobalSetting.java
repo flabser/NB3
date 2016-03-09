@@ -29,7 +29,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import kz.flabs.appdaemon.AppDaemonRule;
 import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
@@ -77,7 +76,7 @@ public class GlobalSetting {
 	@Deprecated
 	// public SynchroGlobalSetting syncroGlobalSettings;
 	public int markAsReadMsDelay;
-	public ArrayList<AppDaemonRule> schedSettings = new ArrayList<AppDaemonRule>();
+
 	public static final String vocabulary = "vocabulary.xml";
 	public DataEngineImpl dbImpl;
 

@@ -3,7 +3,6 @@ package kz.lof.scriptprocessor.page;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.server.Server;
-import kz.lof.webserver.servlet.PageOutcome;
 
 public class DoProcessor {
 	private PageOutcome outcome;
@@ -29,7 +28,7 @@ public class DoProcessor {
 
 		IPageScript myObject = (IPageScript) object;
 
-		myObject.setPageOutcome(outcome);
+		myObject.setOutcome(outcome);
 		myObject.setSession(ses);
 		myObject.setFormData(webFormData);
 

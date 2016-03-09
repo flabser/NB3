@@ -14,9 +14,8 @@ import kz.flabs.users.RunTimeParameters.Sorting;
 import kz.flabs.users.User;
 import kz.lof.scripting._Session;
 import kz.lof.user.AnonymousUser;
-import kz.pchelka.scheduler.IProcessInitiator;
 
-public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
+public class _ViewEntryCollection implements _IXMLContent {
 
 	private ViewEntryCollection parentObj;
 	private LinkedHashSet<_ViewEntry> _entries = new LinkedHashSet<_ViewEntry>();
@@ -114,11 +113,6 @@ public class _ViewEntryCollection implements _IXMLContent, IProcessInitiator {
 	public void add(_ViewEntry entry) {
 		_entries.add(entry);
 
-	}
-
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
 	}
 
 	@Override

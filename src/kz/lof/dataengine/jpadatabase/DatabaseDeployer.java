@@ -14,9 +14,8 @@ import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.postgresql.useractivity.UsersActivityDDEScripts;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
-import kz.pchelka.scheduler.IProcessInitiator;
 
-public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
+public class DatabaseDeployer implements IDatabaseDeployer {
 	public boolean deployed;
 
 	private AppEnv env;
@@ -247,8 +246,4 @@ public class DatabaseDeployer implements IDatabaseDeployer, IProcessInitiator {
 		return false;
 	}
 
-	@Override
-	public String getOwnerID() {
-		return this.getClass().getSimpleName();
-	}
 }

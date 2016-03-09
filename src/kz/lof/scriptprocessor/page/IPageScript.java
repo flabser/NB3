@@ -2,12 +2,11 @@ package kz.lof.scriptprocessor.page;
 
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
-import kz.lof.webserver.servlet.PageOutcome;
 
 public interface IPageScript {
 	void setSession(_Session ses);
 
-	void setPageOutcome(PageOutcome outcome);
+	void setOutcome(PageOutcome outcome);
 
 	void setFormData(_WebFormData formData);
 

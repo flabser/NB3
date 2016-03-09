@@ -1,4 +1,4 @@
-package kz.lof.webserver.servlet;
+package kz.lof.scriptprocessor.page;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
+import kz.lof.webserver.servlet.IOutcomeObject;
+import kz.lof.webserver.servlet.JSONClass;
+import kz.lof.webserver.servlet.OutcomeType;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;

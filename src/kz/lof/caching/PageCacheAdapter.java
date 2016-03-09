@@ -7,7 +7,7 @@ import kz.flabs.exception.RuleException;
 import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.lof.scripting._WebFormData;
-import kz.lof.webserver.servlet.PageOutcome;
+import kz.lof.scriptprocessor.page.PageOutcome;
 import net.sf.saxon.s9api.SaxonApiException;
 
 public abstract class PageCacheAdapter implements ICache {
