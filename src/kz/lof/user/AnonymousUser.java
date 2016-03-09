@@ -40,7 +40,7 @@ public class AnonymousUser implements IUser<Long> {
 
 	@Override
 	public Long getId() {
-		return null;
+		return (long) 0;
 	}
 
 }
