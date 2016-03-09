@@ -37,15 +37,10 @@ public class Unsecure extends ValveBase {
 		} else {
 			AppEnv env = Environment.getAppEnv(appType);
 			if (env != null) {
-
 				if (ru.isAuthRequest()) {
-					// if (request.getMethod().equalsIgnoreCase("POST")) {
 					HttpSession jses = request.getSession(true);
 					jses.setAttribute(EnvConst.SESSION_ATTR, new _Session(env, new AnonymousUser()));
 					getNext().getNext().invoke(request, response);
-					// } else {
-					// ((Secure) getNext()).invoke(request, response, ru, env);
-					// }
 				} else {
 					if (ru.isPage()) {
 						try {
