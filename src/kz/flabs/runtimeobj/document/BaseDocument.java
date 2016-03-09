@@ -29,7 +29,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.IStructure;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
@@ -80,7 +79,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 	public DocumentCollection descendants = new DocumentCollection();
 	public transient IDatabase db;
 	public transient AppEnv env;
-	public transient IStructure struct;
+
 	public ArrayList<BigDecimal> viewNumberList = new ArrayList<BigDecimal>();
 	public ArrayList<Date> viewDateList = new ArrayList<Date>();
 	public boolean hasDiscussion = false;
@@ -202,10 +201,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 
 	public void setCurrentUserID(String currentID) {
 		this.currentUserID = currentID;
-	}
-
-	public void setStructure(IStructure struct) {
-		this.struct = struct;
 	}
 
 	public String getCurrentUserID() {

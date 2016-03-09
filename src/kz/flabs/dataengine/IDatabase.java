@@ -18,6 +18,4 @@ public interface IDatabase {
 
 	IFTIndexEngine getFTSearchEngine();
 
-	IStructure getStructure();
-
 }

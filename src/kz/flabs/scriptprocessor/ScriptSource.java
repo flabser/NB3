@@ -109,19 +109,18 @@ public class ScriptSource implements IScriptSource {
 
 	@Override
 	public String[] documentProcess() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public String[] documentLangProcess() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public String schedulerHandlerProcess() throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
