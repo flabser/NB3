@@ -4,9 +4,8 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseCore;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.IStructure;
 
-public class Structure extends DatabaseCore implements IStructure, Const {
+public class Structure extends DatabaseCore implements Const {
 	public int numberOfLicense = 200;
 	public IDBConnectionPool dbPool;
 

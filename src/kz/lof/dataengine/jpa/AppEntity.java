@@ -240,7 +240,7 @@ public abstract class AppEntity<K extends UUID> implements IAppEntity, IPOJOObje
 		if (!(getClass() == obj.getClass())) {
 			return false;
 		} else {
-			AppEntity tmp = (AppEntity) obj;
+			AppEntity<UUID> tmp = (AppEntity<UUID>) obj;
 
 			if (tmp.id == null) {
 				return false;

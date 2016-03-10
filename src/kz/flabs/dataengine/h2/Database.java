@@ -12,7 +12,6 @@ import kz.flabs.dataengine.IActivity;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
-import kz.flabs.dataengine.IStructure;
 import kz.flabs.dataengine.IUsersActivity;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
@@ -99,12 +98,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 
 	@Override
 	public IFTIndexEngine getFTSearchEngine() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IStructure getStructure() {
 		// TODO Auto-generated method stub
 		return null;
 	}

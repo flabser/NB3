@@ -10,7 +10,6 @@ import java.util.Set;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.IStructure;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.WebFormValueException;
@@ -77,18 +76,6 @@ public class User extends BaseDocument implements Const {
 			 */
 		}
 
-	}
-
-	public User(String u, IStructure struct) {
-
-		sysDatabase = DatabaseFactory.getSysDatabase();
-		sysDatabase.reloadUserData(this, u);
-		if (struct != null) {
-			/*
-			 * appUser = struct.getAppUser(userID); if (appUser == null) {
-			 * appUser = new Employer(struct); } appUser.setUser(this);
-			 */
-		}
 	}
 
 	public User(int userHash, AppEnv env) throws AuthFailedException {

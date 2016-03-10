@@ -110,7 +110,6 @@ public class Provider extends HttpServlet {
 
 			response.setStatus(result.getHttpStatus());
 			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-				// TODO need to Improvement
 				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getException().toString(),
 				        result.getException(), ses.getLang());
 				throw e;

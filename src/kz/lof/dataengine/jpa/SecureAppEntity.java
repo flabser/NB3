@@ -2,6 +2,7 @@ package kz.lof.dataengine.jpa;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
@@ -9,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 import kz.lof.user.IUser;
 
 @MappedSuperclass
-public abstract class SecureAppEntity extends AppEntity {
+public abstract class SecureAppEntity extends AppEntity<UUID> {
 	@ElementCollection
 	private Set<Long> editors = new HashSet<Long>();
 
@@ -24,8 +25,8 @@ public abstract class SecureAppEntity extends AppEntity {
 		this.editors = editors;
 	}
 
-	public void addReaderEditor(IUser user) {
-		long id = (long) user.getId();
+	public void addReaderEditor(IUser<Long> user) {
+		long id = user.getId();
 		if (id != 0) {
 			this.editors.add(id);
 			addReader(user);
@@ -40,8 +41,8 @@ public abstract class SecureAppEntity extends AppEntity {
 		this.readers = readers;
 	}
 
-	public void addReader(IUser user) {
-		long id = (long) user.getId();
+	public void addReader(IUser<Long> user) {
+		long id = user.getId();
 		if (id != 0) {
 			this.readers.add(id);
 		}
@@ -52,8 +53,8 @@ public abstract class SecureAppEntity extends AppEntity {
 	}
 
 	@Override
-	public void setAuthor(IUser user) {
-		author = (Long) user.getId();
+	public void setAuthor(IUser<Long> user) {
+		author = user.getId();
 		if (author != 0) {
 			addReader(user);
 			addReaderEditor(user);
