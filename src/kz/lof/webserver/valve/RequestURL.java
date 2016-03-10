@@ -48,7 +48,8 @@ public class RequestURL {
 	}
 
 	public boolean isAuthRequest() {
-		return url.matches("/Workspace/Login") || url.contains("Logout");
+		String ulc = url.toLowerCase();
+		return ulc.contains("login") || ulc.contains("logout");
 	}
 
 	public boolean isPage() {
@@ -64,12 +65,19 @@ public class RequestURL {
 	}
 
 	public boolean isProtected() {
-		if (url.startsWith("/SharedResources") || url.startsWith("/Workspace")) {
-			return false;
-		}
-		// return !appType.equals("") && !appID.equals("") || !(isDefault() ||
-		// url.matches(".*/[\\w\\.-]+$"));
-		return true;
+		return  !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
+	}
+
+	private boolean isSimpleObject(){
+		return url.matches(".+\\." +
+				"((css)|" +
+				"(js)|" +
+				"(htm)|" +
+				"(html)|" +
+				"(png)|" +
+				"(jpg)|" +
+				"(gif)|" +
+				"(bmp))$");
 	}
 
 	public void setAppType(String templateType) {
