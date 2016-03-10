@@ -28,7 +28,7 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 		this.dbPool = db.getConnectionPool();
 	}
 
-	// TODO It need improvement
+	// TODO It need to improve
 	@Override
 	public ViewPage<?> search(String keyWord, _Session ses, int pageNum, int pageSize) {
 		Connection conn = dbPool.getConnection();
@@ -53,7 +53,7 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 				if (ids.size() > 0) {
 					try {
 						Constructor<?> constructor = table.getDaoImpl().getConstructor(intArgsClass);
-						IDAO<? extends IAppEntity, UUID> dao = (IDAO<? extends IAppEntity, UUID>) constructor.newInstance(ses);
+						IDAO<? extends IAppEntity, UUID> dao = (IDAO<IAppEntity, UUID>) constructor.newInstance(ses);
 						ViewPage<?> vPage = dao.findAllByIds(ids, pageNum, pageSize);
 						return vPage;
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
