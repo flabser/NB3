@@ -3,81 +3,107 @@ package kz.lof.webserver.valve;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class RequestURL {
+    private String appType = "";
+    private String url;
+    private String pageID = "";
 
-	private String appType = "";
-	//private String appID = "";
-	private String url;
-	private String pageID = "";
+    public RequestURL(String url) {
+        this.url = url;
+        String urlVal = url != null ? url.trim() : "";
+        Pattern pattern = Pattern.compile("^/(\\p{Alpha}+)(/[\\p{Lower}0-9]{16})?.*$");
+        Matcher matcher = pattern.matcher(urlVal);
+        if (matcher.matches()) {
+            appType = matcher.group(1) == null ? "" : matcher.group(1);
+        }
 
-	@Deprecated
-	public RequestURL(String url) {
-		this.url = url;
-		String urlVal = url != null ? url.trim() : "";
-		Pattern pattern = Pattern.compile("^/(\\p{Alpha}+)(/[\\p{Lower}0-9]{16})?.*$");
-		Matcher matcher = pattern.matcher(urlVal);
-		if (matcher.matches()) {
-			appType = matcher.group(1) == null ? "" : matcher.group(1);
-//			appID = matcher.group(2) == null ? "" : matcher.group(2).substring(1);
-		}
-		// System.out.println(urlVal + " == " + appType);
-		if (!isPage()) {
-			return;
-		}
+        if (!isPage()) {
+            return;
+        }
 
-		for (String pageIdRegex : new String[] { "^.*/page/([\\w\\-~\\.]+)", "^.*/Provider\\?[\\w\\-~\\.=&]*id=([\\w\\-~\\.]+)[\\w\\-~\\.=&]*" }) {
-			if (urlVal.matches(pageIdRegex)) {
-				pageID = urlVal.replaceAll(pageIdRegex, "$1");
-				break;
-			}
-		}
+        for (String pageIdRegex : new String[]{"^.*/page/([\\w\\-~\\.]+)", "^.*/Provider.*?[\\?{1}|&{1}]id=([\\w\\-~\\.]+)[\\w\\-~\\.=&]*"}) {
+            if (urlVal.matches(pageIdRegex)) {
+                pageID = urlVal.replaceAll(pageIdRegex, "$1");
+                break;
+            }
+        }
+    }
 
-	}
+    public String getAppType() {
+        return appType;
+    }
 
-	public String getAppType() {
-		return appType;
-	}
+    public boolean isDefault() {
+        return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().isEmpty();
+    }
 
-//	public String getAppID() {
-//		return appID;
-//	}
+    public boolean isAuthRequest() {
+        String ulc = url.toLowerCase();
+        return ulc.contains("login") || ulc.contains("logout");
+    }
 
-	public boolean isDefault() {
-		return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().equals("");
-	}
+    public boolean isPage() {
+        // return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
+        return url.trim().isEmpty() || url.matches(".*/Provider.*") || url.matches("/" + appType + "/*");
+    }
 
-	public boolean isAuthRequest() {
-		return url.matches("/Workspace/Login") || url.contains("Logout");
-	}
+    public String getPageID() {
+        return pageID;
+    }
 
-	public boolean isPage() {
-		return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getPageID() {
-		return pageID;
-	}
+    public boolean isProtected() {
+        return !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    private boolean isSimpleObject() {
+        return url.matches(".+\\.((css)|(js)|(htm)|(html)|(png)|(jpg)|(gif)|(bmp))$");
+    }
 
-	public boolean isProtected() {
-		if (url.startsWith("/SharedResources") || url.startsWith("/Workspace")) {
-			return false;
-		}
-		// return !appType.equals("") && !appID.equals("") || !(isDefault() ||
-		// url.matches(".*/[\\w\\.-]+$"));
-		return true;
-	}
+    public void setAppType(String templateType) {
+        appType = templateType;
+    }
 
-	public void setAppType(String templateType) {
-		appType = templateType;
+    @Override
+    public String toString() {
+        return url;
+    }
 
-	}
+    public static void main(String[] args) {
 
-	@Override
-	public String toString() {
-		return url;
-	}
+        // ломай меня полностью )
+        String pageId = "user-form_page_form-user";
+        String urls[] = {"/Administrator/Provider?id=" + pageId,
+                "/Administrator/Provider?&id=" + pageId,
+                "/Administrator/Provider?id=" + pageId + "&",
+                "/Administrator/Provider?&id=" + pageId,
+                "/Administrator/Provider?id=" + pageId + "&docid=1",
+                "/Administrator/Provider?&id=" + pageId + "&docid=1",
+                "/Administrator/Provider?type=1&id=" + pageId + "&docid=1",
+                "/Administrator/Provider?&type=1&id=" + pageId + "&docid=1",
+                "/Administrator/Provider?&type=1&docid=2&id=" + pageId + "&docid=1",
+                "/Administrator/Provider?2&id=" + pageId + "&1",
+                "/Administrator/Provider?&2&id=" + pageId + "&1",
+                "/Administrator/Provider?&&&2&677&pageid=user&id=" + pageId + "&1",
+                "/Administrator/Provider?&&&2&677&page_id=user&id=" + pageId + "&1",
+                "/Administrator/Provider?&&&2&677&page-id=user&id=" + pageId + "&1"};
+        boolean hasError = false;
+
+        for (String url : urls) {
+            RequestURL r = new RequestURL(url);
+
+            if (!r.getPageID().equals(pageId)) {
+                hasError = true;
+                System.err.println("Сломали:( " + r.getAppType() + ", " + r.getPageID() + ", " + r.getUrl());
+            }
+        }
+
+        if (!hasError) {
+            System.out.println("Не смогли сломать!");
+        }
+    }
 }
