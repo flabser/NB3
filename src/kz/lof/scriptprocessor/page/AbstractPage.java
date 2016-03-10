@@ -179,6 +179,10 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 
 	}
 
+	protected void setRedirect(String url) {
+		result.setRedirectURL(url);
+	}
+
 	protected void setBadRequest() {
 		result.setBadRequest();
 	}
