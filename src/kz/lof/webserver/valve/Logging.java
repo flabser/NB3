@@ -3,6 +3,7 @@ package kz.lof.webserver.valve;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import kz.pchelka.log.Log4jLogger;
@@ -11,6 +12,7 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
 
+@WebFilter(asyncSupported = true)
 public class Logging extends ValveBase {
 	private Log4jLogger logger;
 

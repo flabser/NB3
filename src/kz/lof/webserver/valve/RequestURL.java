@@ -4,10 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RequestURL {
+
 	private String appType = "";
+	//private String appID = "";
 	private String url;
 	private String pageID = "";
 
+	@Deprecated
 	public RequestURL(String url) {
 		this.url = url;
 		String urlVal = url != null ? url.trim() : "";
@@ -15,8 +18,9 @@ public class RequestURL {
 		Matcher matcher = pattern.matcher(urlVal);
 		if (matcher.matches()) {
 			appType = matcher.group(1) == null ? "" : matcher.group(1);
+//			appID = matcher.group(2) == null ? "" : matcher.group(2).substring(1);
 		}
-
+		// System.out.println(urlVal + " == " + appType);
 		if (!isPage()) {
 			return;
 		}
@@ -34,18 +38,20 @@ public class RequestURL {
 		return appType;
 	}
 
+//	public String getAppID() {
+//		return appID;
+//	}
+
 	public boolean isDefault() {
 		return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().equals("");
 	}
 
 	public boolean isAuthRequest() {
-		String ulc = url.toLowerCase();
-		return ulc.contains("login") || ulc.contains("logout");
+		return url.matches("/Workspace/Login") || url.contains("Logout");
 	}
 
 	public boolean isPage() {
-//		return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
-		return url.trim().length() == 0 || url.matches(".*/Provider.*") || url.matches("/" + appType + "/*");
+		return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
 	}
 
 	public String getPageID() {
@@ -57,11 +63,12 @@ public class RequestURL {
 	}
 
 	public boolean isProtected() {
-		return !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
-	}
-
-	private boolean isSimpleObject() {
-		return url.matches(".+\\." + "((css)|" + "(js)|" + "(htm)|" + "(html)|" + "(png)|" + "(jpg)|" + "(gif)|" + "(bmp))$");
+		if (url.startsWith("/SharedResources") || url.startsWith("/Workspace")) {
+			return false;
+		}
+		// return !appType.equals("") && !appID.equals("") || !(isDefault() ||
+		// url.matches(".*/[\\w\\.-]+$"));
+		return true;
 	}
 
 	public void setAppType(String templateType) {
