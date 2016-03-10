@@ -4,13 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RequestURL {
-
 	private String appType = "";
-	// private String appID = "";
 	private String url;
 	private String pageID = "";
 
-	@Deprecated
 	public RequestURL(String url) {
 		this.url = url;
 		String urlVal = url != null ? url.trim() : "";
@@ -18,10 +15,8 @@ public class RequestURL {
 		Matcher matcher = pattern.matcher(urlVal);
 		if (matcher.matches()) {
 			appType = matcher.group(1) == null ? "" : matcher.group(1);
-			// appID = matcher.group(2) == null ? "" :
-			// matcher.group(2).substring(1);
 		}
-		// System.out.println(urlVal + " == " + appType);
+
 		if (!isPage()) {
 			return;
 		}
@@ -38,10 +33,6 @@ public class RequestURL {
 	public String getAppType() {
 		return appType;
 	}
-
-	// public String getAppID() {
-	// return appID;
-	// }
 
 	public boolean isDefault() {
 		return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().equals("");
@@ -65,19 +56,11 @@ public class RequestURL {
 	}
 
 	public boolean isProtected() {
-		return  !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
+		return !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
 	}
 
-	private boolean isSimpleObject(){
-		return url.matches(".+\\." +
-				"((css)|" +
-				"(js)|" +
-				"(htm)|" +
-				"(html)|" +
-				"(png)|" +
-				"(jpg)|" +
-				"(gif)|" +
-				"(bmp))$");
+	private boolean isSimpleObject() {
+		return url.matches(".+\\." + "((css)|" + "(js)|" + "(htm)|" + "(html)|" + "(png)|" + "(jpg)|" + "(gif)|" + "(bmp))$");
 	}
 
 	public void setAppType(String templateType) {

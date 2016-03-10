@@ -31,6 +31,7 @@ public class EnvConst {
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static String DEFAULT_PAGE_SIZE = "20";
+	public static String DEFAULT_COUNTRY_OF_NUMBER_FORMAT = "ru";
 	public static String DB_USER = "postgres";
 	public static String DB_PWD = "smartdoc";
 	public static String DATABASE_HOST = "localhost";
