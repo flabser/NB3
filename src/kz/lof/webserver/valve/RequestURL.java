@@ -22,7 +22,7 @@ public class RequestURL {
             return;
         }
 
-        for (String pageIdRegex : new String[]{"^.*/page/([\\w\\-~\\.]+)", "^.*/Provider.*?[\\?{1}|&{1}]id=([\\w\\-~\\.]+)[\\w\\-~\\.=&]*"}) {
+        for (String pageIdRegex : new String[]{"^.*/page/([\\w\\-~\\.]+)", "^.*/Provider.*[\\?{1}|&{1}]id=([\\w\\-~%\\.]+)[\\w\\-~%\\.=&]*"}) {
             if (urlVal.matches(pageIdRegex)) {
                 pageID = urlVal.replaceAll(pageIdRegex, "$1");
                 break;
@@ -76,7 +76,7 @@ public class RequestURL {
     public static void main(String[] args) {
 
         // ломай меня полностью )
-        String pageId = "user-form_page_form-user";
+        String pageId = "load-file-data";
         String urls[] = {"/Administrator/Provider?id=" + pageId,
                 "/Administrator/Provider?&id=" + pageId,
                 "/Administrator/Provider?id=" + pageId + "&",
@@ -87,10 +87,13 @@ public class RequestURL {
                 "/Administrator/Provider?&type=1&id=" + pageId + "&docid=1",
                 "/Administrator/Provider?&type=1&docid=2&id=" + pageId + "&docid=1",
                 "/Administrator/Provider?2&id=" + pageId + "&1",
-                "/Administrator/Provider?&2&id=" + pageId + "&1",
+                "/Reference/Provider?&2&id=" + pageId + "&1",
                 "/Administrator/Provider?&&&2&677&pageid=user&id=" + pageId + "&1",
                 "/Administrator/Provider?&&&2&677&page_id=user&id=" + pageId + "&1",
-                "/Administrator/Provider?&&&2&677&page-id=user&id=" + pageId + "&1"};
+                "/Administrator/Provider?&&&2&677&page-id=user&id=" + pageId + "&1",
+                "/Administrator/Provider?type=page&id=" + pageId + "&fileid=103%20%D0%A8%D0%93%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-correct.xls",
+                "/Accountant/Provider?type=page&id=" + pageId + "&fileid=103%20%D0%A8%D0%93%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-correct.xls&fsid=864194297",
+                "/Accountant/Provider?type=page&id=" + pageId + "&fileid=жаңарту.xls&fsid=864194297"};
         boolean hasError = false;
 
         for (String url : urls) {
