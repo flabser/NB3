@@ -1,6 +1,7 @@
 package kz.lof.env;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import kz.lof.localization.LanguageCode;
 
@@ -36,6 +37,7 @@ public class EnvConst {
 	public static String DB_PWD = "smartdoc";
 	public static String DATABASE_HOST = "127.0.0.1";
 	public static String CONN_PORT = "5432";
+	public static String APP_NAME = Paths.get(System.getProperty("user.dir")).getFileName().toString();
 	public static String STAFF_APP_NAME = "Staff";
 	public static String STAFF_DAO_CLASS = "staff.dao.EmployeeDAO";
 	public static String RESOURCES_DIR = "resources";

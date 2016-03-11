@@ -21,7 +21,6 @@ import kz.flabs.dataengine.h2.DBConnectionPool;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -40,16 +39,16 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		String sysDbURL = "jdbc:postgresql://" + EnvConst.DATABASE_HOST + ":" + EnvConst.CONN_PORT + "/postgres";
 
 		try {
-			if (!hasDatabase(Environment.appServerName, sysDbURL, props)) {
-				Server.logger.infoLogEntry("Creating database \"" + Environment.appServerName + "\"...");
+			if (!hasDatabase(EnvConst.APP_NAME, sysDbURL, props)) {
+				Server.logger.infoLogEntry("Creating database \"" + EnvConst.APP_NAME + "\"...");
 				registerUser(dbUser, dbPwd, sysDbURL, props);
-				createDatabase(Environment.appServerName, dbUser, sysDbURL, props);
+				createDatabase(EnvConst.APP_NAME, dbUser, sysDbURL, props);
 			}
 		} catch (SQLException e) {
 			Server.logger.errorLogEntry(e);
 		}
 
-		connectionURL = "jdbc:postgresql://" + EnvConst.DATABASE_HOST + ":" + EnvConst.CONN_PORT + "/" + Environment.appServerName;
+		connectionURL = "jdbc:postgresql://" + EnvConst.DATABASE_HOST + ":" + EnvConst.CONN_PORT + "/" + EnvConst.APP_NAME;
 
 		dbPool = new DBConnectionPool();
 		try {

@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,7 +55,7 @@ import org.xml.sax.SAXException;
 public class Environment implements Const, ICache {
 
 	public static boolean verboseLogging;
-	public static String appServerName;
+	// public static String appServerName;
 	public static String orgName;
 	public static String hostName;
 	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
@@ -139,11 +138,12 @@ public class Environment implements Const, ICache {
 			logger.infoLogEntry("Initialize runtime environment");
 			initMimeTypes();
 
-			appServerName = Paths.get(System.getProperty("user.dir")).getFileName().toString();
+			// appServerName =
+			// Paths.get(System.getProperty("user.dir")).getFileName().toString();
 
 			orgName = XMLUtil.getTextContent(xmlDocument, "/nextbase/orgname");
 			if (orgName.isEmpty()) {
-				hostName = appServerName;
+				hostName = EnvConst.APP_NAME;
 			}
 
 			hostName = XMLUtil.getTextContent(xmlDocument, "/nextbase/hostname");

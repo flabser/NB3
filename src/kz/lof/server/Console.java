@@ -46,7 +46,7 @@ public class Console implements Runnable {
 			System.out.println("os=" + System.getProperty("os.name") + " " + System.getProperty("os.version") + "(" + System.getProperty("os.arch")
 			        + ")");
 			System.out.println("jvm=" + System.getProperty("java.version"));
-			System.out.println("application server name=" + Environment.appServerName);
+			System.out.println("application server name=" + EnvConst.APP_NAME);
 			System.out.println("database=" + Environment.dataBase.getInfo());
 			if (Environment.isDevMode) {
 				System.out.println("developer mode is on");

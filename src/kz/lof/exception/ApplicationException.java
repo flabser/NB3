@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class ApplicationException extends Exception implements IOutcomeObject {
 	private static final long serialVersionUID = 1L;
 	private String location;
-	private String type = Environment.appServerName;
+	private String type = EnvConst.APP_NAME;
 	private String servletName = "Provider";
 	private String exception;
 	private String appType;
