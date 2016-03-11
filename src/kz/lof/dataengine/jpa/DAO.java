@@ -23,7 +23,7 @@ import kz.lof.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
-	public IUser<Long> user;
+	public IUser user;
 	protected final Class<T> entityClass;
 	private EntityManagerFactory emf;
 	protected _Session ses;
@@ -119,7 +119,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			EntityTransaction t = em.getTransaction();
 			try {
 				t.begin();
-				entity.setAuthor(user.getId());
+				entity.setAuthor((long) user.getId());
 				entity.setForm(entity.getDefaultFormName());
 				em.persist(entity);
 				t.commit();
@@ -222,7 +222,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 		}
 	}
 
-	public ViewPage<T> findAllin(String fieldName, List<?> value, int pageNum, int pageSize) {
+	public ViewPage<T> findAllin(String fieldName, List value, int pageNum, int pageSize) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		try {

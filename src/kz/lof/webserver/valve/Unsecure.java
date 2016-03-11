@@ -3,7 +3,6 @@ package kz.lof.webserver.valve;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.exception.RuleException;
@@ -22,7 +21,6 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
 import org.apache.http.HttpStatus;
 
-@WebFilter(asyncSupported = true)
 public class Unsecure extends ValveBase {
 	private RequestURL ru;
 

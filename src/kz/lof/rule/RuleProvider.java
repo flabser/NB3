@@ -241,10 +241,6 @@ public class RuleProvider implements Const {
 			if (pageRuleMap.containsKey(ruleID)) {
 				rule = pageRuleMap.get(ruleID);
 			} else {
-				if (id.isEmpty()) {
-					// TODO default url
-					// id = env.application.
-				}
 				docFile = new File("rule" + File.separator + env.appName + File.separator + "Page" + File.separator + ruleID + ".xml");
 				rule = new PageRule(env, docFile);
 				pageRuleMap.put(ruleID.toLowerCase(), rule);

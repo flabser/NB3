@@ -37,7 +37,6 @@ public class WebServer {
 		tomcat.setPort(Environment.httpPort);
 		tomcat.setHostname(defaultHostName);
 		tomcat.setBaseDir("webserver");
-
 		engine = tomcat.getEngine();
 
 		StandardServer server = (StandardServer) tomcat.getServer();
@@ -67,20 +66,22 @@ public class WebServer {
 		Context context = null;
 		String db = new File("webapps/" + docBase).getAbsolutePath();
 
+		/*
+		 * if (docBase.equalsIgnoreCase(EnvConst.ADMINISTRATOR_APP_NAME)) {
+		 * context = tomcat.addContext(URLPath, db); Tomcat.addServlet(context,
+		 * "Provider", "kz.flabs.servlets.admin.AdminProvider");
+		 * context.setDisplayName(EnvConst.ADMINISTRATOR_APP_NAME); } else {
+		 */
 		context = tomcat.addContext(URLPath, db);
 		context.setDisplayName(URLPath.substring(1));
-		// context.addWelcomeFile("Provider");
-
-		Tomcat.addServlet(context, "AProvider", "kz.lof.webserver.servlet.AsyncProvider");
-		context.addServletMapping("/AProvider", "AProvider");
+		context.addWelcomeFile("Provider");
+		Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
+		// }
 
 		Tomcat.addServlet(context, "default", "org.apache.catalina.servlets.DefaultServlet");
 		context.addServletMapping("/", "default");
 
-		Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
 		context.addServletMapping("/Provider", "Provider");
-		context.addServletMapping("/P", "Provider");
-		context.addServletMapping("/p", "Provider");
 
 		Tomcat.addServlet(context, "Login", "kz.lof.webserver.servlet.Login");
 		context.addServletMapping("/Login", "Login");

@@ -7,6 +7,7 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
+import kz.flabs.runtimeobj.Application;
 import kz.lof.caching.PageCacheAdapter;
 import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
@@ -19,6 +20,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	public HashMap<String, File> xsltFileMap = new HashMap<String, File>();
 	public boolean isWorkspace;
 	public Vocabulary vocabulary;
+	public Application application;
 	public static ILogger logger = Server.logger;
 
 	private IDatabase dataBase;
