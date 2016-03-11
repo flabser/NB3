@@ -206,7 +206,6 @@ public class ViewEntry implements IViewEntry, Const {
 		form = "";
 		if (type == ViewEntryType.ACTIVITY) {
 			viewTexts.add(new ViewText(UsersActivityType.getType(rs.getInt("TYPE")).name(), "type"));
-			viewTexts.add(new ViewText(rs.getTimestamp("EVENTTIME"), "time"));
 			viewTexts.add(new ViewText(rs.getString("DBID"), "dbid"));
 			viewTexts.add(new ViewText(rs.getString("VIEWTEXT"), "viewtext"));
 			viewTexts.add(new ViewText(rs.getString("DDBID"), "ddbid"));
@@ -243,7 +242,6 @@ public class ViewEntry implements IViewEntry, Const {
 		form = "";
 		if (type == ViewEntryType.ACTIVITY) {
 			viewTexts.add(new ViewText(UsersActivityType.getType(rs.getInt("TYPE")).name(), "type"));
-			viewTexts.add(new ViewText(rs.getTimestamp("EVENTTIME"), "time"));
 			viewTexts.add(new ViewText(rs.getString("DBID"), "dbid"));
 			viewTexts.add(new ViewText(rs.getString("VIEWTEXT"), "viewtext"));
 			viewTexts.add(new ViewText(rs.getString("DDBID"), "ddbid"));

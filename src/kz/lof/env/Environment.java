@@ -55,7 +55,6 @@ import org.xml.sax.SAXException;
 public class Environment implements Const, ICache {
 
 	public static boolean verboseLogging;
-	// public static String appServerName;
 	public static String orgName;
 	public static String hostName;
 	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
@@ -137,9 +136,6 @@ public class Environment implements Const, ICache {
 
 			logger.infoLogEntry("Initialize runtime environment");
 			initMimeTypes();
-
-			// appServerName =
-			// Paths.get(System.getProperty("user.dir")).getFileName().toString();
 
 			orgName = XMLUtil.getTextContent(xmlDocument, "/nextbase/orgname");
 			if (orgName.isEmpty()) {

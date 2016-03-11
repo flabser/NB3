@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
@@ -17,6 +20,7 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.deploying.InitializerHelper;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.util.StringUtil;
 
 public class Console implements Runnable {
 
@@ -163,5 +167,35 @@ public class Console implements Runnable {
 				System.err.println("error -command \"" + command + "\" is not recognized");
 			}
 		}
+	}
+
+	public static List<String> getValFromConsole(String prefix, String pattern) {
+		System.out.print(prefix);
+		List<String> result = new ArrayList<String>();
+		String value = "";
+		Scanner in = new Scanner(System.in);
+		try {
+			while (in.hasNext()) {
+				boolean isCorrect = false;
+				value = in.nextLine();
+				StringTokenizer tokenizer = new StringTokenizer(value);
+				while (tokenizer.hasMoreTokens()) {
+					String val = tokenizer.nextToken();
+					if (StringUtil.checkByPattren(val, pattern)) {
+						isCorrect = true;
+						result.add(val);
+					}
+				}
+				if (isCorrect) {
+					return result;
+				}
+				System.out.println("\"" + value + "\" is wrong value, enter another value ");
+			}
+		} catch (Exception e) {
+			Server.logger.errorLogEntry(e);
+		} finally {
+			in.close();
+		}
+		return null;
 	}
 }

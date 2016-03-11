@@ -3,13 +3,14 @@ package kz.lof.webserver.valve;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kz.lof.env.EnvConst;
+
 public class RequestURL {
 
 	private String appType = "";
 	private String url;
 	private String pageID = "";
 
-	@Deprecated
 	public RequestURL(String url) {
 		this.url = url;
 		String urlVal = url != null ? url.trim() : "";
@@ -60,7 +61,7 @@ public class RequestURL {
 	}
 
 	public boolean isProtected() {
-		return !(url.startsWith("/SharedResources") || isSimpleObject());
+		return !(url.startsWith("/" + EnvConst.SHARED_RESOURCES_APP_NAME) || isSimpleObject());
 	}
 
 	private boolean isSimpleObject() {

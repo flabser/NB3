@@ -1,7 +1,5 @@
 package kz.flabs.dataengine.h2;
 
-import java.text.SimpleDateFormat;
-
 import javax.persistence.EntityManagerFactory;
 
 import kz.flabs.dataengine.Const;
@@ -15,17 +13,8 @@ import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.IUsersActivity;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
-import kz.lof.rule.RuleProvider;
-import kz.lof.server.Server;
-import kz.pchelka.log.ILogger;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
-	public boolean isValid;
-	public RuleProvider ruleProvider;
-	public static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-	public static final SimpleDateFormat sqlDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	public static ILogger logger = Server.logger;
 
 	// TODO need to improve to make it more secure
 	protected static String dbUser = "ss";
@@ -57,22 +46,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 
 		databaseType = dbType;
 
-	}
-
-	protected void initStructPool() {
-		/*
-		 * for (ExternalModule module : env.globalSetting.extModuleMap.values())
-		 * { if (module.getType() == ExternalModuleType.STRUCTURE) {
-		 * externalStructureApp = module.getName();
-		 * Environment.addDelayedInit(this); } else {
-		 * Environment.addDelayedInit(this); } }
-		 */
-		structDbPool = dbPool;
-	}
-
-	@Override
-	public int getVersion() {
-		return 0;
 	}
 
 	@Override

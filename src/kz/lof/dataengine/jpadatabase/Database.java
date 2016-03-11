@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -21,7 +22,9 @@ import kz.flabs.dataengine.h2.DBConnectionPool;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
+import kz.lof.server.Console;
 import kz.lof.server.Server;
+import kz.lof.util.StringUtil;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
@@ -30,6 +33,7 @@ import org.postgresql.util.PSQLException;
 public class Database extends kz.flabs.dataengine.h2.Database implements IDatabase, Const {
 	protected EntityManagerFactory factory;
 	private FTSearchEngine ftEngine;
+	private boolean isNascence;
 
 	public Database() {
 
@@ -42,7 +46,9 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 			if (!hasDatabase(EnvConst.APP_NAME, sysDbURL, props)) {
 				Server.logger.infoLogEntry("Creating database \"" + EnvConst.APP_NAME + "\"...");
 				registerUser(dbUser, dbPwd, sysDbURL, props);
-				createDatabase(EnvConst.APP_NAME, dbUser, sysDbURL, props);
+				if (createDatabase(EnvConst.APP_NAME, dbUser, sysDbURL, props) == 0) {
+					isNascence = true;
+				}
 			}
 		} catch (SQLException e) {
 			Server.logger.errorLogEntry(e);
@@ -76,7 +82,11 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		factory = pp.createEntityManagerFactory(EnvConst.ADMINISTRATOR_APP_NAME, properties);
 		if (factory == null) {
 			Server.logger.errorLogEntry("the entity manager of \"" + EnvConst.ADMINISTRATOR_APP_NAME + "\" has not been initialized");
+		} else {
 
+			if (isNascence) {
+
+			}
 		}
 	}
 
@@ -149,7 +159,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 	@Override
 	public String toString() {
-		return "version JPA";
+		return "version NB3";
 	}
 
 	@Override
@@ -178,6 +188,34 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		} catch (Throwable e) {
 			return false;
 		}
+	}
+
+	private int theFirst() {
+		List<String> lwd = Console.getValFromConsole("enter user name> ", StringUtil.USERNAME_PATTERN);
+		if (lwd != null) {
+			if (lwd.contains("quit")) {
+				Server.shutdown();
+			} else {
+				String userName = lwd.get(0);
+				String pwd = "";
+				try {
+					pwd = lwd.get(1);
+				} catch (IndexOutOfBoundsException e) {
+					pwd = userName;
+				}
+
+				System.out.println(userName + " " + pwd);
+
+				/*
+				 * User entity = new User(); entity.setLogin(userName);
+				 * entity.setPwd(pwd); UserDAO uDao = new UserDAO(this);
+				 * uDao.add(entity);
+				 */
+
+			}
+		}
+		return 0;
+
 	}
 
 }

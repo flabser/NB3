@@ -1,71 +1,13 @@
 package kz.flabs.dataengine;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
-import kz.flabs.dataengine.h2.Database;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.util.XMLUtil;
 
 public abstract class DatabaseCore {
 	public DatabaseType databaseType = DatabaseType.DEFAULT;
-
-	protected static final String[] systemFields = { "docid", "doctype", "author", "parentdocid", "parentdoctype", "regdate", "lastupdate",
-	        "viewtext", "viewtext1", "viewtext2", "viewtext3", "viewtext4", "viewtext5", "viewtext6", "viewtext7", "viewnumber", "viewdate",
-	        "viewicon", "form", "syncstatus", "has_attachment" };
-	protected static final ArrayList<String> systemFieldsList = new ArrayList<String>(Arrays.asList(systemFields));
-
-	protected String getViewContent(ResultSet rs) throws SQLException {
-
-		String tempText = rs.getString("VIEWTEXT");
-		StringBuilder viewcontent = new StringBuilder(1000);
-		String viewtextName = "";
-		viewcontent.append("<viewtext>" + (tempText != null ? XMLUtil.getAsTagValue(tempText) : "") + "</viewtext>");
-
-		for (int i = 1; i <= DatabaseConst.VIEWTEXT_COUNT; i++) {
-			viewtextName = "viewtext" + i;
-			viewcontent.append("<" + viewtextName + ">");
-			tempText = rs.getString(viewtextName);
-			viewcontent.append(tempText != null ? XMLUtil.getAsTagValue(tempText) : "");
-			viewcontent.append("</" + viewtextName + ">");
-		}
-		BigDecimal viewNumber = rs.getBigDecimal("VIEWNUMBER");
-		tempText = String.valueOf((viewNumber != null ? viewNumber.stripTrailingZeros().toPlainString() : ""));
-
-		viewcontent.append("<viewnumber>" + tempText + "</viewnumber>");
-
-		Date tempDate = rs.getTimestamp("VIEWDATE");
-
-		return "<viewcontent>" + viewcontent.toString() + "<viewdate>" + (tempDate != null ? Database.dateTimeFormat.format(tempDate) : "")
-		        + "</viewdate></viewcontent>";
-	}
-
-	protected String getShortViewContent(ResultSet rs) throws SQLException {
-
-		String tempText = "";
-		String viewtextName = "";
-		StringBuilder viewcontent = new StringBuilder(1000);
-		for (int i = 1; i <= DatabaseConst.VIEWTEXT_COUNT; i++) {
-			viewtextName = "viewtext" + i;
-			viewcontent.append("<" + viewtextName + ">");
-			tempText = rs.getString(viewtextName);
-			viewcontent.append(tempText != null ? XMLUtil.getAsTagValue(tempText) : "");
-			viewcontent.append("</" + viewtextName + ">");
-		}
-		BigDecimal viewNumber = rs.getBigDecimal("VIEWNUMBER");
-		tempText = String.valueOf((viewNumber != null ? viewNumber.stripTrailingZeros().toPlainString() : ""));
-
-		viewcontent.append("<viewnumber>" + tempText + "</viewnumber>");
-
-		Date tempDate = rs.getTimestamp("VIEWDATE");
-
-		return "<viewcontent>" + viewcontent.toString() + "<viewdate>" + (tempDate != null ? Database.dateTimeFormat.format(tempDate) : "")
-		        + "</viewdate></viewcontent>";
-	}
 
 	@Deprecated
 	protected String getSimpleViewContent(ResultSet rs) throws SQLException {
@@ -215,10 +157,6 @@ public abstract class DatabaseCore {
 		} catch (SQLException e) {
 			DatabaseUtil.errorPrint(doc.dbID, e);
 		}
-	}
-
-	protected boolean isSystemField(String fieldName) {
-		return systemFieldsList.contains(fieldName);
 	}
 
 }

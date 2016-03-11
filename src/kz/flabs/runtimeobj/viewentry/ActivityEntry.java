@@ -20,7 +20,7 @@ public class ActivityEntry extends ViewEntry {
 		viewTexts.add(new ViewText(rs.getString("userid"), "userid"));
 		viewTexts.add(new ViewText(rs.getString("parameters"), "parameters"));
 		viewTexts.add(new ViewText((rs.getBoolean("ACTIVITY_TYPE") ? 1 : 0), "type"));
-		viewTexts.add(new ViewText(rs.getTimestamp("RETURN_TIME"), "returntime"));
+
 		viewTexts.add(new ViewText(rs.getString("COMMENT"), "comment"));
 		viewTexts.add(new ViewText(rs.getInt("PROCESSED_REC"), "processed_rec"));
 		viewTexts.add(new ViewText(rs.getInt("PROCESSED_SIZE"), "processed_size"));
@@ -28,8 +28,6 @@ public class ActivityEntry extends ViewEntry {
 		viewTexts.add(new ViewText(rs.getString("SERVICE_NAME"), "service_name"));
 		viewTexts.add(new ViewText(rs.getString("METHOD_NAME"), "method_name"));
 		viewTexts.add(new ViewText(rs.getString("SPRING_SERVER"), "spring_server"));
-		viewTexts.add(new ViewText(rs.getTimestamp("EVENT_TIME"), "eventtime"));
-		viewTexts.add(new ViewText(rs.getTimestamp("REQUEST_TIME"), "requesttime"));
 	}
 
 }

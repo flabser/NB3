@@ -36,11 +36,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	protected String dbID;
 
 	@Override
-	public int getVersion() {
-		return 0;
-	}
-
-	@Override
 	public AppEnv getParent() {
 		return env;
 	}

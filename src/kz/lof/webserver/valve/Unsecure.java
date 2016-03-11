@@ -32,9 +32,7 @@ public class Unsecure extends ValveBase {
 	@Override
 	public void invoke(Request request, Response response) throws IOException, ServletException {
 		String appType = ru.getAppType();
-		if (appType.equals(EnvConst.SHARED_RESOURCES_APP_NAME)) {
-			getNext().getNext().invoke(request, response);
-		} else {
+		if (ru.isProtected()) {
 			AppEnv env = Environment.getAppEnv(appType);
 			if (env != null) {
 				if (ru.isAuthRequest()) {
@@ -44,7 +42,6 @@ public class Unsecure extends ValveBase {
 				} else {
 					if (ru.isPage()) {
 						try {
-
 							if (request.getMethod().equalsIgnoreCase("get") && env.ruleProvider.getRule(ru.getPageID()).isAnonymousAccessAllowed()) {
 								gettingSession(request, response, env);
 								getNext().getNext().invoke(request, response);
@@ -73,7 +70,8 @@ public class Unsecure extends ValveBase {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println(ae.getHTMLMessage());
 			}
-
+		} else {
+			getNext().getNext().invoke(request, response);
 		}
 	}
 

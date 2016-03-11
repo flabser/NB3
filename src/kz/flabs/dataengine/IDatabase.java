@@ -6,8 +6,6 @@ import kz.lof.appenv.AppEnv;
 
 public interface IDatabase {
 
-	int getVersion();
-
 	IDBConnectionPool getConnectionPool();
 
 	AppEnv getParent();

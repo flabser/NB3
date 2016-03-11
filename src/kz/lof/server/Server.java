@@ -71,10 +71,13 @@ public class Server {
 	}
 
 	public static void shutdown() {
-		logger.infoLogEntry("Server is stopping ... ");
+		logger.infoLogEntry("server is stopping ... ");
 
 		Environment.shutdown();
-		webServerInst.stopContainer();
+		if (webServerInst != null) {
+			webServerInst.stopContainer();
+		}
+		logger.infoLogEntry("bye, bye... ");
 		System.exit(0);
 	}
 }

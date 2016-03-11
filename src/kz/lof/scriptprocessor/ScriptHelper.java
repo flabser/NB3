@@ -14,18 +14,18 @@ public class ScriptHelper {
 	protected Vocabulary vocabulary;
 	protected String redirectURL = "";
 	protected ArrayList<_IXMLContent> toPublishElement = new ArrayList<_IXMLContent>();
-	private _Session ses;
+	private _Session session;
 
 	public String getTmpDirPath() {
 		return Environment.tmpDir;
 	}
 
 	public _Session getSes() {
-		return ses;
+		return session;
 	}
 
 	public void setSes(_Session ses) {
-		this.ses = ses;
+		this.session = ses;
 		vocabulary = ses.getAppEnv().vocabulary;
 	}
 
