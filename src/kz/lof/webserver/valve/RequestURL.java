@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 public class RequestURL {
 
     private String appType = "";
-    // private String appID = "";
     private String url;
     private String pageID = "";
 
@@ -18,8 +17,6 @@ public class RequestURL {
         Matcher matcher = pattern.matcher(urlVal);
         if (matcher.matches()) {
             appType = matcher.group(1) == null ? "" : matcher.group(1);
-            // appID = matcher.group(2) == null ? "" :
-            // matcher.group(2).substring(1);
         }
 
         if (!isPage()) {
@@ -41,10 +38,6 @@ public class RequestURL {
         return appType;
     }
 
-    // public String getAppID() {
-    // return appID;
-    // }
-
     public boolean isDefault() {
         return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().equals("");
     }
@@ -55,7 +48,6 @@ public class RequestURL {
     }
 
     public boolean isPage() {
-//		return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
         return url.trim().length() == 0 || url.matches(".*/((Provider)|(P)|(p)).*") || url.matches("/" + appType + "/*");
     }
 
