@@ -303,6 +303,18 @@
 		<entry lang="ENG">Password</entry>
 		<entry lang="CHI">密码</entry>
 	</sentence>
+	<sentence mode="on" keyword="password_confirm">
+		<entry lang="ENG">Confirm password</entry>
+		<entry lang="RUS">Confirm password</entry>
+		<entry lang="KAZ">Confirm password</entry>
+		<entry lang="CHO">Confirm password</entry>
+	</sentence>
+	<sentence mode="on" keyword="password_confirm_not_equals">
+		<entry lang="ENG">Passwords do not match</entry>
+		<entry lang="RUS">Passwords do not match</entry>
+		<entry lang="KAZ">Passwords do not match</entry>
+		<entry lang="CHO">Passwords do not match</entry>
+	</sentence>
 	<sentence mode="on" keyword="Войти">
 		<entry lang="KAZ">Кіру</entry>
 		<entry lang="ENG">Login</entry>
