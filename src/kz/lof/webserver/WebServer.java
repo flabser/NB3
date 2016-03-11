@@ -79,6 +79,8 @@ public class WebServer {
 
 		Tomcat.addServlet(context, "Provider", "kz.lof.webserver.servlet.Provider");
 		context.addServletMapping("/Provider", "Provider");
+		context.addServletMapping("/P", "Provider");
+		context.addServletMapping("/p", "Provider");
 
 		Tomcat.addServlet(context, "Login", "kz.lof.webserver.servlet.Login");
 		context.addServletMapping("/Login", "Login");

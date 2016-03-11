@@ -3,110 +3,84 @@ package kz.lof.webserver.valve;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class RequestURL {
-    private String appType = "";
-    private String url;
-    private String pageID = "";
 
-    public RequestURL(String url) {
-        this.url = url;
-        String urlVal = url != null ? url.trim() : "";
-        Pattern pattern = Pattern.compile("^/(\\p{Alpha}+)(/[\\p{Lower}0-9]{16})?.*$");
-        Matcher matcher = pattern.matcher(urlVal);
-        if (matcher.matches()) {
-            appType = matcher.group(1) == null ? "" : matcher.group(1);
-        }
+	private String appType = "";
+	// private String appID = "";
+	private String url;
+	private String pageID = "";
 
-        if (!isPage()) {
-            return;
-        }
+	@Deprecated
+	public RequestURL(String url) {
+		this.url = url;
+		String urlVal = url != null ? url.trim() : "";
+		Pattern pattern = Pattern.compile("^/(\\p{Alpha}+)(/[\\p{Lower}0-9]{16})?.*$");
+		Matcher matcher = pattern.matcher(urlVal);
+		if (matcher.matches()) {
+			appType = matcher.group(1) == null ? "" : matcher.group(1);
+			// appID = matcher.group(2) == null ? "" :
+			// matcher.group(2).substring(1);
+		}
+		// System.out.println(urlVal + " == " + appType);
+		if (!isPage()) {
+			return;
+		}
 
-        for (String pageIdRegex : new String[]{"^.*/page/([\\w\\-~\\.]+)", "^.*/Provider.*[\\?{1}|&{1}]id=([\\w\\-~%\\.]+)[\\w\\-~%\\.=&]*"}) {
-            if (urlVal.matches(pageIdRegex)) {
-                pageID = urlVal.replaceAll(pageIdRegex, "$1");
-                break;
-            }
-        }
-    }
+		for (String pageIdRegex : new String[] { "^.*/page/([\\w\\-~\\.]+)", "^.*/Provider\\?(.+&)?id=([\\w\\-~\\.]+).*" }) {
+			Pattern pagePattern = Pattern.compile(pageIdRegex);
+			Matcher pageMatcher = pagePattern.matcher(urlVal);
+			if (pageMatcher.matches()) {
+				pageID = pageMatcher.group(2);
+				break;
+			}
+		}
 
-    public String getAppType() {
-        return appType;
-    }
+	}
 
-    public boolean isDefault() {
-        return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().isEmpty();
-    }
+	public String getAppType() {
+		return appType;
+	}
 
-    public boolean isAuthRequest() {
-        String ulc = url.toLowerCase();
-        return ulc.contains("login") || ulc.contains("logout");
-    }
+	// public String getAppID() {
+	// return appID;
+	// }
 
-    public boolean isPage() {
-        // return url.matches(".*/Provider\\?(\\w+=\\w+)(&\\w+=\\w+)*") || url.matches(".*/page/[\\w\\.]+");
-        return url.trim().isEmpty() || url.matches(".*/Provider.*") || url.matches("/" + appType + "/*");
-    }
+	public boolean isDefault() {
+		return url.matches("/" + appType + "(/(Provider)?)?/?") || url.trim().equals("");
+	}
 
-    public String getPageID() {
-        return pageID;
-    }
+	public boolean isAuthRequest() {
+		String ulc = url.toLowerCase();
+		return ulc.contains("login") || ulc.contains("logout");
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public boolean isPage() {
+		return url.trim().length() == 0 || url.matches(".*/Provider.*") || url.matches("/" + appType + "/*");
+	}
 
-    public boolean isProtected() {
-        return !(url.startsWith("/SharedResources") || url.startsWith("/Workspace") || isSimpleObject());
-    }
+	public String getPageID() {
+		return pageID;
+	}
 
-    private boolean isSimpleObject() {
-        return url.matches(".+\\.((css)|(js)|(htm)|(html)|(png)|(jpg)|(gif)|(bmp))$");
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setAppType(String templateType) {
-        appType = templateType;
-    }
+	public boolean isProtected() {
+		return !(url.startsWith("/SharedResources") || isSimpleObject());
+	}
 
-    @Override
-    public String toString() {
-        return url;
-    }
+	private boolean isSimpleObject() {
+		return url.matches(".+\\.(" + "(css)|" + "(js)|" + "(htm)|" + "(html)|" + "(png)|" + "(jpg)|" + "(gif)|" + "(bmp))$");
+	}
 
-    public static void main(String[] args) {
+	public void setAppType(String templateType) {
+		appType = templateType;
 
-        // ломай меня полностью )
-        String pageId = "load-file-data";
-        String urls[] = {"/Administrator/Provider?id=" + pageId,
-                "/Administrator/Provider?&id=" + pageId,
-                "/Administrator/Provider?id=" + pageId + "&",
-                "/Administrator/Provider?&id=" + pageId,
-                "/Administrator/Provider?id=" + pageId + "&docid=1",
-                "/Administrator/Provider?&id=" + pageId + "&docid=1",
-                "/Administrator/Provider?type=1&id=" + pageId + "&docid=1",
-                "/Administrator/Provider?&type=1&id=" + pageId + "&docid=1",
-                "/Administrator/Provider?&type=1&docid=2&id=" + pageId + "&docid=1",
-                "/Administrator/Provider?2&id=" + pageId + "&1",
-                "/Reference/Provider?&2&id=" + pageId + "&1",
-                "/Administrator/Provider?&&&2&677&pageid=user&id=" + pageId + "&1",
-                "/Administrator/Provider?&&&2&677&page_id=user&id=" + pageId + "&1",
-                "/Administrator/Provider?&&&2&677&page-id=user&id=" + pageId + "&1",
-                "/Administrator/Provider?type=page&id=" + pageId + "&fileid=103%20%D0%A8%D0%93%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-correct.xls",
-                "/Accountant/Provider?type=page&id=" + pageId + "&fileid=103%20%D0%A8%D0%93%20%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-correct.xls&fsid=864194297",
-                "/Accountant/Provider?type=page&id=" + pageId + "&fileid=жаңарту.xls&fsid=864194297"};
-        boolean hasError = false;
+	}
 
-        for (String url : urls) {
-            RequestURL r = new RequestURL(url);
-
-            if (!r.getPageID().equals(pageId)) {
-                hasError = true;
-                System.err.println("Сломали:( " + r.getAppType() + ", " + r.getPageID() + ", " + r.getUrl());
-            }
-        }
-
-        if (!hasError) {
-            System.out.println("Не смогли сломать!");
-        }
-    }
+	@Override
+	public String toString() {
+		return url;
+	}
 }
