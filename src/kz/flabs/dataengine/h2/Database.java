@@ -102,4 +102,9 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		return null;
 	}
 
+	@Override
+	public String getInfo() {
+		return connectionURL;
+	}
+
 }

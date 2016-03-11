@@ -34,7 +34,7 @@ public class EnvConst {
 	public static String DEFAULT_COUNTRY_OF_NUMBER_FORMAT = "ru";
 	public static String DB_USER = "postgres";
 	public static String DB_PWD = "smartdoc";
-	public static String DATABASE_HOST = "localhost";
+	public static String DATABASE_HOST = "127.0.0.1";
 	public static String CONN_PORT = "5432";
 	public static String STAFF_APP_NAME = "Staff";
 	public static String STAFF_DAO_CLASS = "staff.dao.EmployeeDAO";

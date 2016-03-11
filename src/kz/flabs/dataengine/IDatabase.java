@@ -18,4 +18,6 @@ public interface IDatabase {
 
 	IFTIndexEngine getFTSearchEngine();
 
+	String getInfo();
+
 }
