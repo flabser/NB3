@@ -102,10 +102,10 @@ public class Page implements Const {
 
 		}
 
+		output.setPublishAs(outcome.getPublishAs());
 		output.setPageId(rule.id);
 		output.setCaptions(getCaptions(rule.captions, ses.getLang()));
 		return output;
-
 	}
 
 	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageCode lang) {
