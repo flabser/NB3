@@ -27,6 +27,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileCleaningTracker;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.entity.ContentType;
 
 public class UploadFile extends HttpServlet {
@@ -79,6 +80,9 @@ public class UploadFile extends HttpServlet {
 
 				} else {
 					fn = item.getName();
+					if (fn != null) {
+						fn = FilenameUtils.getName(fn);
+					}
 					File f = new File(userTmpDir.getAbsolutePath() + File.separator + fn);
 					jses.setAttribute("filename", fn);
 					item.write(f);
