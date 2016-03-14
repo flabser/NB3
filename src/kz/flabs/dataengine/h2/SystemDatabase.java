@@ -26,6 +26,7 @@ import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.env.EnvConst;
 import kz.lof.server.Server;
 import kz.lof.user.IUser;
+import kz.lof.util.StringUtil;
 
 import org.apache.catalina.realm.RealmBase;
 
@@ -89,14 +90,11 @@ public class SystemDatabase implements ISystemDatabase, Const {
 		}
 
 		if (user != null) {
-			String pwdHash = RealmBase.Digest(pwd, "MD5", "UTF-8");
-			if (user.getPwd() != null && user.getPwd().equals(pwd)) {
-				user.setAuthorized(true);
-
-			} else if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
+			String pwdHash = StringUtil.encode(pwd);
+			if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
 				user.setAuthorized(true);
 			} else {
-				Server.logger.errorLogEntry("something wrong...");
+				Server.logger.errorLogEntry("password has not been encoded");
 			}
 
 			if (user.isAuthorized()) {
@@ -104,6 +102,8 @@ public class SystemDatabase implements ISystemDatabase, Const {
 					IEmployee emp = eDao.getEmployee(user.getId());
 					if (emp != null) {
 						user.setUserName(emp.getName());
+					} else {
+						user.setUserName(user.getLogin());
 					}
 				}
 			}

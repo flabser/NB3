@@ -48,4 +48,9 @@ public class AnonymousUser implements IUser<Long> {
 		return (long) 0;
 	}
 
+	@Override
+	public String getLogin() {
+		return USER_NAME;
+	}
+
 }

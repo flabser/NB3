@@ -8,6 +8,8 @@ public interface IUser<K> extends ISimpleAppEntity<K> {
 
 	String getPwd();
 
+	String getLogin();
+
 	boolean isAuthorized();
 
 	void setAuthorized(boolean isAuthorized);
