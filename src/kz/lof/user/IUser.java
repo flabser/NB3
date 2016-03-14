@@ -6,6 +6,8 @@ public interface IUser<K> extends ISimpleAppEntity<K> {
 
 	String getPwdHash();
 
+	String getPwd();
+
 	boolean isAuthorized();
 
 	void setAuthorized(boolean isAuthorized);

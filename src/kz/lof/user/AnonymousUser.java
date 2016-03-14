@@ -9,6 +9,11 @@ public class AnonymousUser implements IUser<Long> {
 	}
 
 	@Override
+	public String getPwd() {
+		return null;
+	}
+
+	@Override
 	public boolean isAuthorized() {
 		return true;
 	}

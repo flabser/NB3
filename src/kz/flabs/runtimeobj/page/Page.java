@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.sourcesupplier.SourceSupplier;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Caption;
 import kz.lof.appenv.AppEnv;
@@ -40,21 +38,6 @@ public class Page implements Const {
 		this.rule = pageRule;
 	}
 
-	public String getCaptions(SourceSupplier captionTextSupplier, ArrayList<Caption> captions) throws DocumentException {
-		StringBuffer captionsText = new StringBuffer(100);
-		for (Caption cap : captions) {
-			captionsText.append("<" + cap.captionID + captionTextSupplier.getValueAsCaption(cap.source, cap.value).toAttrValue() + "></"
-			        + cap.captionID + ">");
-		}
-
-		if (captionsText.toString().equals("")) {
-			return "";
-		} else {
-			return "<captions>" + captionsText.toString() + "</captions>";
-		}
-
-	}
-
 	public String getCacheID() {
 		return "PAGE_" + env.appName + "_" + rule.id + "_" + ses.getLang();
 
@@ -62,7 +45,6 @@ public class Page implements Const {
 
 	public PageOutcome getPageContent(PageOutcome outcome, _WebFormData webFormData, String method) throws ClassNotFoundException, RuleException {
 		fields = webFormData;
-		PageOutcome output = new PageOutcome();
 
 		if (rule.elements.size() > 0) {
 			for (ElementRule elementRule : rule.elements) {
@@ -72,10 +54,10 @@ public class Page implements Const {
 					DoProcessor sProcessor = new DoProcessor(outcome, ses, fields);
 					switch (elementRule.doClassName.getType()) {
 					case GROOVY_FILE:
-						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
+						outcome = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case JAVA_CLASS:
-						output = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
+						outcome = sProcessor.processScenario(elementRule.doClassName.getClassName(), method);
 						break;
 					case UNKNOWN:
 						break;
@@ -83,29 +65,27 @@ public class Page implements Const {
 						break;
 
 					}
-					output.setScriptResult(true);
+					outcome.setScriptResult(true);
 					break;
 				case INCLUDED_PAGE:
 					PageRule rule = env.ruleProvider.getRule(elementRule.value);
 					// System.out.println(rule.getRuleID());
 					IncludedPage page = new IncludedPage(env, ses, rule);
 					PageOutcome includedOutcome = new PageOutcome();
-					output.addPageOutcome(page.getPageContent(includedOutcome, fields, method));
+					outcome.addPageOutcome(page.getPageContent(includedOutcome, fields, method));
 					break;
 				default:
 					break;
 				}
 				if (elementRule.hasElementName) {
-					output.setName(elementRule.name);
+					outcome.setName(elementRule.name);
 				}
 			}
 
 		}
-
-		output.setPublishAs(outcome.getPublishAs());
-		output.setPageId(rule.id);
-		output.setCaptions(getCaptions(rule.captions, ses.getLang()));
-		return output;
+		outcome.setPageId(rule.id);
+		outcome.setCaptions(getCaptions(rule.captions, ses.getLang()));
+		return outcome;
 	}
 
 	private HashMap<String, String> getCaptions(ArrayList<Caption> captions, LanguageCode lang) {

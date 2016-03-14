@@ -88,18 +88,30 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			Server.logger.errorLogEntry(e);
 		}
 
-		String pwdHash = RealmBase.Digest(pwd, "MD5", "UTF-8");
-		if (user != null && user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
-			user.setAuthorized(true);
+		if (user != null) {
+			String pwdHash = RealmBase.Digest(pwd, "MD5", "UTF-8");
+			if (user.getPwd() != null && user.getPwd().equals(pwd)) {
+				user.setAuthorized(true);
 
-			if (eDao != null) {
-				IEmployee emp = eDao.getEmployee(user.getId());
-				if (emp != null) {
-					user.setUserName(emp.getName());
+			} else if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
+				user.setAuthorized(true);
+			} else {
+				Server.logger.errorLogEntry("something wrong...");
+			}
+
+			if (user.isAuthorized()) {
+				if (eDao != null) {
+					IEmployee emp = eDao.getEmployee(user.getId());
+					if (emp != null) {
+						user.setUserName(emp.getName());
+					}
 				}
 			}
 
+		} else {
+			Server.logger.warningLogEntry("\"" + login + "\" user not found");
 		}
+
 		return user;
 
 	}
