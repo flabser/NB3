@@ -585,6 +585,11 @@
         <entry lang="RUS">Электронная почта</entry>
         <entry lang="KAZ">Электронная почта</entry>
     </sentence>
+    <sentence mode="on" keyword="color">
+        <entry lang="ENG">Color</entry>
+        <entry lang="RUS">Цвет</entry>
+        <entry lang="KAZ">Түс</entry>
+    </sentence>
     <sentence mode="on" keyword="Сокращенное имя">
         <entry lang="KAZ">Қысқартылған есімі</entry>
         <entry lang="ENG">Short name</entry>
