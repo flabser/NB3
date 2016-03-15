@@ -32,6 +32,7 @@ public class Unsecure extends ValveBase {
 	@Override
 	public void invoke(Request request, Response response) throws IOException, ServletException {
 		String appType = ru.getAppType();
+		// System.out.println(ru);
 		if (ru.isProtected()) {
 			AppEnv env = Environment.getAppEnv(appType);
 			if (env != null) {
