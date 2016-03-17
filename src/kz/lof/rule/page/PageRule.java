@@ -45,13 +45,19 @@ public class PageRule extends Rule implements IElement, Const {
 			String xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
 			type = RuleType.PAGE;
 
+			// TODO need to improve
 			xsltFile = XMLUtil.getTextContent(doc, "/rule/xsltfile");
 			if (!xsltFile.equals("")) {
 				publishAs = PublishAsType.HTML;
 				if (xsltFile.equalsIgnoreCase("default") || xsltFile.equals("*")) {
 					xsltFile = xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
+				} else if (xsltFile.startsWith("\\")) {
+					xsltFile = "webapps" + File.separator + xsltFile;
 				} else if (xsltFile.equalsIgnoreCase("default_staff")) {
 					String xsltStaffAppsPath = "webapps" + File.separator + EnvConst.STAFF_APP_NAME + File.separator + "xsl";
+					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
+				} else if (xsltFile.equalsIgnoreCase("default_MunicipalProperty")) {
+					String xsltStaffAppsPath = "webapps" + File.separator + "MunicipalProperty" + File.separator + "xsl";
 					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else {
 					xsltFile = xsltAppsPath + File.separator + xsltFile;
