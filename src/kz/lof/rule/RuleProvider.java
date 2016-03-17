@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -88,41 +86,22 @@ public class RuleProvider implements Const {
 
 	public IRule getRule(int ruleType, String ruleID) throws RuleException {
 		File docFile;
-		try {
-			ruleID = ruleID.toLowerCase();
-			IRule rule = null;
 
-			switch (ruleType) {
+		ruleID = ruleID.toLowerCase();
+		IRule rule = null;
 
-			case PAGE_RULE:
-				if (pageRuleMap.containsKey(ruleID)) {
-					rule = pageRuleMap.get(ruleID);
-				} else {
-					docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
-					PageRule pageRule = new PageRule(env, docFile);
-					pageRuleMap.put(ruleID.toLowerCase(), pageRule);
-					rule = pageRule;
-				}
-				break;
-			case HANDLER_RULE:
-				if (handlerRuleMap.containsKey(ruleID)) {
-					rule = handlerRuleMap.get(ruleID);
-				} else {
-					docFile = new File(global.rulePath + File.separator + "Handler" + File.separator + ruleID + ".xml");
-					HandlerRule handlerRule = new HandlerRule(env, docFile);
-					handlerRuleMap.put(ruleID.toLowerCase(), handlerRule);
-					rule = handlerRule;
-				}
-				break;
-			}
-			rule.plusHit();
-			return rule;
-		} catch (FileNotFoundException fnf) {
-			throw new RuleException("rule \"" + ruleID + "\"(type:" + ruleType + "), not found ");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		if (pageRuleMap.containsKey(ruleID)) {
+			rule = pageRuleMap.get(ruleID);
+		} else {
+			docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
+			PageRule pageRule = new PageRule(env, docFile);
+			pageRuleMap.put(ruleID.toLowerCase(), pageRule);
+			rule = pageRule;
 		}
-		return null;
+
+		rule.plusHit();
+		return rule;
+
 	}
 
 	public Collection<HandlerRule> getHandlerRules(boolean reload) throws RuleException {
@@ -141,23 +120,6 @@ public class RuleProvider implements Const {
 		}
 		return pageRuleMap.values();
 
-	}
-
-	public boolean resetRule(int ruleType, String ruleID) {
-		AppEnv.logger.infoLogEntry("Reset rule \"" + ruleID + "\" from rule pool");
-		switch (ruleType) {
-
-		case HANDLER_RULE:
-			for (Iterator<Map.Entry<String, HandlerRule>> i = handlerRuleMap.entrySet().iterator(); i.hasNext();) {
-				Map.Entry<String, HandlerRule> entry = i.next();
-				if (entry.getValue().id.equalsIgnoreCase(ruleID)) {
-					i.remove();
-					break;
-				}
-			}
-			break;
-		}
-		return true;
 	}
 
 	public boolean resetRules() {

@@ -20,7 +20,10 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.deploying.InitializerHelper;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.exception.SecureException;
 import kz.lof.util.StringUtil;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 public class Console implements Runnable {
 
@@ -108,7 +111,11 @@ public class Console implements Runnable {
 				System.err.println("error -initializer name is empty");
 			} else {
 				InitializerHelper helper = new InitializerHelper();
-				helper.runInitializer(ini, true);
+				try {
+					helper.runInitializer(ini, true);
+				} catch (DatabaseException | SecureException e) {
+					System.err.println(e);
+				}
 				System.out.println("done");
 			}
 		} else if (command.contains("run batch") || command.startsWith("rubat")) {

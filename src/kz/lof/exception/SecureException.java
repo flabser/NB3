@@ -2,14 +2,11 @@ package kz.lof.exception;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import kz.flabs.servlets.SaxonTransformator;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
-import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
 import kz.lof.webserver.servlet.IOutcomeObject;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -23,7 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-public class ApplicationException extends Exception implements IOutcomeObject {
+public class SecureException extends Exception implements IOutcomeObject {
 	private static final long serialVersionUID = 1L;
 	private String location;
 	private String type = EnvConst.APP_NAME;
@@ -31,27 +28,17 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 	private String exception;
 	private String appType;
 	private LanguageCode lang;
-	private int code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+	private int code = HttpStatus.SC_FORBIDDEN;
 
-	public ApplicationException(String appType, String error, LanguageCode lang) {
+	public SecureException(String appType, String error, LanguageCode lang) {
 		super(error);
 		this.appType = appType;
 		this.lang = lang;
 	}
 
-	public ApplicationException(String appType, PageOutcome outcome, LanguageCode lang) {
-		super(outcome.getException().toString());
-		this.appType = appType;
-		StringWriter errors = new StringWriter();
-		outcome.getException().printStackTrace(new PrintWriter(errors));
-		exception = errors.toString();
-		this.lang = lang;
-		code = outcome.getHttpStatus();
-	}
-
 	@JsonIgnore
 	public String getHTMLMessage() {
-		return getHTMLMessage(code);
+		return getHTMLMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 
 	@JsonIgnore
@@ -101,7 +88,7 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 	@Override
 	public Object toJSON() {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.addMixIn(ApplicationException.class, MapperMixIn.class);
+		mapper.addMixIn(SecureException.class, MapperMixIn.class);
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 		String jsonInString = null;

@@ -14,11 +14,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import kz.flabs.dataengine.Const;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
+import kz.lof.exception.SecureException;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.user.IUser;
+import kz.lof.user.SuperUser;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
@@ -65,7 +66,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			Predicate condition = c.get("id").in(id);
 			cq.where(condition);
 			Query query = em.createQuery(cq);
-			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(c.get("readers").in(user.getId()), condition);
 				isSecureEntity = true;
 			}
@@ -113,7 +114,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	}
 
 	@Override
-	public T add(T entity) throws DatabaseException {
+	public T add(T entity) throws DatabaseException, SecureException {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		try {
 			EntityTransaction t = em.getTransaction();
@@ -138,9 +139,15 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	}
 
 	@Override
-	public T update(T entity) {
+	public T update(T entity) throws SecureException {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
+
 		try {
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+				if (!((SecureAppEntity) entity).getEditors().contains(user.getId())) {
+					throw new SecureException(ses.getAppEnv().appName, "editing_is_restricted", ses.getLang());
+				}
+			}
 			EntityTransaction t = em.getTransaction();
 			try {
 				t.begin();
@@ -152,15 +159,21 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 					t.rollback();
 				}
 			}
+
 		} finally {
 			em.close();
 		}
 	}
 
 	@Override
-	public void delete(T entity) {
+	public void delete(T entity) throws SecureException {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		try {
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+				if (!((SecureAppEntity) entity).getEditors().contains(user.getId())) {
+					throw new SecureException(ses.getAppEnv().appName, "deleting_is_restricted", ses.getLang());
+				}
+			}
 			EntityTransaction t = em.getTransaction();
 			try {
 				t.begin();
@@ -198,7 +211,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			cq.select(c);
 			countCq.select(cb.count(c));
 			Predicate condition = cb.equal(c.get(fieldName), value);
-			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(c.get("readers").in(user.getId()), condition);
 			}
 			cq.where(condition);
@@ -232,7 +245,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			cq.select(c);
 			countCq.select(cb.count(c));
 			Predicate condition = c.get(fieldName).in(value);
-			if (!user.getUserID().equals(Const.sysUser) && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(c.get("readers").in(user.getId()), condition);
 			}
 			cq.orderBy(cb.asc(c.get("regDate")));

@@ -17,8 +17,11 @@ import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ISimpleAppEntity;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.exception.SecureException;
 import kz.lof.scripting._Session;
 import kz.lof.user.AnonymousUser;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.eztech.util.JavaClassFinder;
 
@@ -105,7 +108,7 @@ public class InitializerHelper {
 		return inits;
 	}
 
-	public String runInitializer(String name, boolean showConsoleOutput) {
+	public String runInitializer(String name, boolean showConsoleOutput) throws DatabaseException, SecureException {
 		int count = 0;
 		IInitialData<ISimpleAppEntity, IDAO> pcInstance = null;
 		boolean isFound = false;
@@ -143,7 +146,7 @@ public class InitializerHelper {
 		return "";
 	}
 
-	private int runToPopulate(Class<?> populatingClass, boolean showConsoleOutput) {
+	private int runToPopulate(Class<?> populatingClass, boolean showConsoleOutput) throws DatabaseException, SecureException {
 		int count = 0;
 		IInitialData<ISimpleAppEntity, IDAO> pcInstance;
 		try {

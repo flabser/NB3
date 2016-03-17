@@ -1,8 +1,12 @@
 package kz.lof.user;
 
-public class AnonymousUser extends SystemUser {
-	public final static String USER_NAME = "anonymous";
-	public final static long ID = 0;
+/**
+ * @author Kayra on 17/03/16.
+ */
+
+public class SuperUser extends SystemUser {
+	public final static String USER_NAME = "supervisor";
+	public final static long ID = -1;
 
 	@Override
 	public String getUserID() {
