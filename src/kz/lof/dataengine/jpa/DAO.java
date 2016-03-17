@@ -23,7 +23,7 @@ import kz.lof.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
-	public IUser user;
+	public IUser<Long> user;
 	protected final Class<T> entityClass;
 	private EntityManagerFactory emf;
 	protected _Session ses;
@@ -119,7 +119,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			EntityTransaction t = em.getTransaction();
 			try {
 				t.begin();
-				entity.setAuthor((long) user.getId());
+				entity.setAuthor(user.getId());
 				entity.setForm(entity.getDefaultFormName());
 				em.persist(entity);
 				t.commit();

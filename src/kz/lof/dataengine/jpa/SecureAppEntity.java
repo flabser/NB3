@@ -48,10 +48,6 @@ public abstract class SecureAppEntity extends AppEntity<UUID> {
 		}
 	}
 
-	public void addEditor(String role) {
-
-	}
-
 	@Override
 	public void setAuthor(IUser<Long> user) {
 		author = user.getId();
