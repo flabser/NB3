@@ -58,7 +58,7 @@ public class Console implements Runnable {
 			System.out.println("default language=" + EnvConst.DEFAULT_LANG);
 			File jarFile = new File(EnvConst.NB_JAR_FILE);
 			System.out.println("jar=" + EnvConst.NB_JAR_FILE + ", path=" + jarFile.getAbsolutePath() + ", exist=" + jarFile.exists());
-		} else if (command.equalsIgnoreCase("show logged users") || command.equalsIgnoreCase("slu")) {
+		} else if (command.equalsIgnoreCase("show users") || command.equalsIgnoreCase("su")) {
 
 		} else if (command.equalsIgnoreCase("reset rules") || command.equalsIgnoreCase("rr")) {
 			for (AppEnv env : Environment.getApplications()) {
