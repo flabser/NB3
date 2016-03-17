@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import kz.flabs.dataengine.Const;
@@ -29,48 +30,61 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 	}
 
 	// TODO It need to improve
+	// работает при условии что FTEntity.fieldNames[0] является именем поля где нужно искать искомое слово
 	@Override
-	public ViewPage<?> search(String keyWord, _Session ses, int pageNum, int pageSize) {
+	public List<ViewPage<?>> search(String keyWord, _Session ses, int pageNum, int pageSize) {
 		Connection conn = dbPool.getConnection();
 		String lang = getLangString(ses.getLang());
+		List<ViewPage<?>> result = new ArrayList<>();
 		try {
 			conn.setAutoCommit(false);
 
-			String sql = "";
-
+			StringBuilder sql = new StringBuilder();
 			for (FTEntity table : indexTables) {
-				sql = "SELECT id FROM " + table.getTableName() + " where to_tsvector('" + lang + "', " + table.getFieldNames().get(0)
-				        + ") @@ to_tsquery('" + lang + "', '" + keyWord + "')";
+				sql.append("SELECT '").append(table.getTableName()).append("' as table_name, id FROM ").append(table.getTableName()).append(" where to_tsvector('").append(lang).append("', ").append(table.getFieldNames().get(0)).append(") @@ to_tsquery('").append(lang).append("', '").append(keyWord).append("') union all ");
+			}
 
-				List<UUID> ids = new ArrayList<UUID>();
-				PreparedStatement pst = conn.prepareStatement(sql);
-				ResultSet rs = null;
-				rs = pst.executeQuery();
-				while (rs.next()) {
-					ids.add(UUID.fromString(rs.getString("id")));
-				}
+			sql.append("SELECT 'EMPTY', '00000000-0000-0000-0000-000000000000'::uuid;");
 
-				if (ids.size() > 0) {
-					try {
-						Constructor<?> constructor = table.getDaoImpl().getConstructor(intArgsClass);
-						IDAO<? extends IAppEntity, UUID> dao = (IDAO<IAppEntity, UUID>) constructor.newInstance(ses);
-						ViewPage<?> vPage = dao.findAllByIds(ids, pageNum, pageSize);
-						return vPage;
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					        | NoSuchMethodException | SecurityException e) {
-						e.printStackTrace();
+			PreparedStatement pst = conn.prepareStatement(sql.toString());
+			ResultSet rs = pst.executeQuery();
+
+			List<UUID> ids = new ArrayList<>();
+			String currentTableName = "";
+			while (rs.next()) {
+				String tableName = rs.getString("table_name");
+				if(!currentTableName.equals(tableName)){
+					final String finalCurrentTableName = currentTableName;
+					Optional<FTEntity> table = indexTables.stream().filter(r -> r.getTableName().equals(finalCurrentTableName)).findFirst();
+
+					if (ids.size() > 0 && table.isPresent()) {
+						try {
+							Constructor<?> constructor =       table.get().getDaoImpl().getConstructor(intArgsClass);
+							IDAO<? extends IAppEntity, UUID> dao = (IDAO<IAppEntity, UUID>) constructor.newInstance(ses);
+							ViewPage<?> vPage = dao.findAllByIds(ids, pageNum, pageSize);
+							result.add(vPage);
+						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+								| NoSuchMethodException | SecurityException e) {
+							e.printStackTrace();
+						}
+
 					}
 
-				} else {
-					return null;
+					currentTableName = tableName;
+					ids.clear();
 				}
+
+				ids.add(UUID.fromString(rs.getString("id")));
 			}
+
 
 		} catch (Exception pe) {
 			System.out.println(pe);
-
+		} finally {
+			dbPool.returnConnection(conn);
 		}
-		return null;
+
+		return result.size() > 0 ? result : null;
 
 	}
 
