@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import kz.flabs.dataengine.Const;
@@ -428,7 +429,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 	}
 
 	@Override
-	public ViewPage search(String keyWord, _Session ses, int pageNum, int pageSize) {
+	public List<ViewPage<?>> search(String keyWord, _Session ses, int pageNum, int pageSize) {
 		return null;
 	}
 
