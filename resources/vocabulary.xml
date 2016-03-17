@@ -65,6 +65,16 @@
         <entry lang="KAZ">жолы толтырылмады</entry>
         <entry lang="ENG">has been not filled</entry>
     </sentence>
+    <sentence mode="on" keyword="code_is_not_unique">
+        <entry lang="RUS">Запись с таким кодом уже существует</entry>
+        <entry lang="KAZ">Запись с таким кодом уже существует</entry>
+        <entry lang="ENG">There is a record with such code</entry>
+    </sentence>
+    <sentence mode="on" keyword="name_is_not_unique">
+        <entry lang="RUS">Запись с таким значением поля уже существует</entry>
+        <entry lang="KAZ">Запись с таким значением поля уже существует</entry>
+        <entry lang="ENG">There is a record with such value</entry>
+    </sentence>
     <sentence mode="on" keyword="should_be_contain_value_more_than_zero">
         <entry lang="RUS">Поле должно содержать значение больше нуля</entry>
         <entry lang="KAZ">Поле должно содержать значение больше нуля</entry>
@@ -352,7 +362,7 @@
     </sentence>
     <sentence mode="on" keyword="back">
         <entry lang="RUS">Назад</entry>
-        <entry lang="KAZ">Назад</entry>
+        <entry lang="KAZ">Артқа</entry>
         <entry lang="ENG">Back</entry>
         <entry lang="CHI"></entry>
     </sentence>
@@ -366,6 +376,12 @@
         <entry lang="RUS">Основные свойства</entry>
         <entry lang="KAZ">Негізгі қасиеттері</entry>
         <entry lang="ENG">Basic properties</entry>
+        <entry lang="CHI">基本性能</entry>
+    </sentence>
+    <sentence mode="on" keyword="localized_names">
+        <entry lang="RUS">Локализованные названия</entry>
+        <entry lang="KAZ">Жекешелендірілген атақтары</entry>
+        <entry lang="ENG">Localized titles</entry>
         <entry lang="CHI">基本性能</entry>
     </sentence>
     <sentence mode="on" keyword="bin">
@@ -483,7 +499,8 @@
         <entry lang="ENG">Open</entry>
         <entry lang="CHI">开放</entry>
     </sentence>
-    <sentence mode="on" keyword="Тип">
+    <sentence mode="on" keyword="type">
+        <entry lang="RUS">Тип</entry>
         <entry lang="KAZ">Түрі</entry>
         <entry lang="ENG">Type</entry>
         <entry lang="CHI">类型</entry>
@@ -558,6 +575,12 @@
         <entry lang="ENG">Employee</entry>
         <entry lang="CHI">雇员</entry>
     </sentence>
+    <sentence mode="on" keyword="departments">
+        <entry lang="RUS">Подразделения</entry>
+        <entry lang="KAZ">Бөлім</entry>
+        <entry lang="ENG">Departments</entry>
+        <entry lang="CHI">部</entry>
+    </sentence>
     <sentence mode="on" keyword="department">
         <entry lang="RUS">Департамент</entry>
         <entry lang="KAZ">Бөлім</entry>
@@ -585,6 +608,11 @@
         <entry lang="RUS">Электронная почта</entry>
         <entry lang="KAZ">Электронная почта</entry>
     </sentence>
+    <sentence mode="on" keyword="color">
+        <entry lang="ENG">Color</entry>
+        <entry lang="RUS">Цвет</entry>
+        <entry lang="KAZ">Түс</entry>
+    </sentence>
     <sentence mode="on" keyword="Сокращенное имя">
         <entry lang="KAZ">Қысқартылған есімі</entry>
         <entry lang="ENG">Short name</entry>
@@ -610,7 +638,7 @@
     <sentence mode="on" keyword="country">
         <entry lang="ENG">Country</entry>
         <entry lang="RUS">Страна</entry>
-        <entry lang="KAZ"></entry>
+        <entry lang="KAZ">Страна</entry>
         <entry lang="CHO"></entry>
     </sentence>
     <sentence mode="on" keyword="region">
@@ -621,13 +649,13 @@
     <sentence mode="on" keyword="locality">
         <entry lang="ENG">Locality</entry>
         <entry lang="RUS">Населенный пункт</entry>
-        <entry lang="KAZ"></entry>
+        <entry lang="KAZ">Населенный пункт</entry>
         <entry lang="CHO"></entry>
     </sentence>
     <sentence mode="on" keyword="street">
         <entry lang="ENG">Street</entry>
         <entry lang="RUS">Улица</entry>
-        <entry lang="KAZ"></entry>
+        <entry lang="KAZ">Улица</entry>
         <entry lang="CHO"></entry>
     </sentence>
     <sentence mode="on" keyword="Телефон">
