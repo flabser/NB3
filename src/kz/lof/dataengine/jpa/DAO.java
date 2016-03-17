@@ -21,8 +21,6 @@ import kz.lof.server.Server;
 import kz.lof.user.IUser;
 import kz.lof.user.SuperUser;
 
-import org.eclipse.persistence.exceptions.DatabaseException;
-
 public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public IUser<Long> user;
 	protected final Class<T> entityClass;
@@ -114,7 +112,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	}
 
 	@Override
-	public T add(T entity) throws DatabaseException, SecureException {
+	public T add(T entity) throws SecureException {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		try {
 			EntityTransaction t = em.getTransaction();

@@ -38,7 +38,7 @@ public class SecureException extends Exception implements IOutcomeObject {
 
 	@JsonIgnore
 	public String getHTMLMessage() {
-		return getHTMLMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		return getHTMLMessage(HttpStatus.SC_FORBIDDEN);
 	}
 
 	@JsonIgnore
