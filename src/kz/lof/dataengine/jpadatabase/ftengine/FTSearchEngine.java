@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDBConnectionPool;
@@ -20,6 +21,8 @@ import kz.lof.dataengine.jpa.ViewPage;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 
+import javax.swing.text.View;
+
 public class FTSearchEngine implements IFTIndexEngine, Const {
 	private IDBConnectionPool dbPool;
 	private List<FTEntity> indexTables = new ArrayList<FTEntity>();
@@ -29,19 +32,26 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 		this.dbPool = db.getConnectionPool();
 	}
 
-	// TODO It need to improve
-	// работает при условии что FTEntity.fieldNames[0] является именем поля где нужно искать искомое слово
 	@Override
-	public List<ViewPage<?>> search(String keyWord, _Session ses, int pageNum, int pageSize) {
+	public ViewPage<?> search(String keyWord, _Session ses, int pageNum, int pageSize) {
+		if(keyWord == null || keyWord.trim().isEmpty() || indexTables.isEmpty())
+			return null;
+
 		Connection conn = dbPool.getConnection();
 		String lang = getLangString(ses.getLang());
-		List<ViewPage<?>> result = new ArrayList<>();
+		List result = new ArrayList<>();
+
 		try {
 			conn.setAutoCommit(false);
 
 			StringBuilder sql = new StringBuilder();
+
+			String tsVectorTemplate = "to_tsvector('" + lang + "', %s::character varying)";
+			String sqlPart = "select '%s' as table_name, id from %s where %s @@ to_tsquery('" + lang + "', '" + keyWord + "') union all ";
+
 			for (FTEntity table : indexTables) {
-				sql.append("SELECT '").append(table.getTableName()).append("' as table_name, id FROM ").append(table.getTableName()).append(" where to_tsvector('").append(lang).append("', ").append(table.getFieldNames().get(0)).append(") @@ to_tsquery('").append(lang).append("', '").append(keyWord).append("') union all ");
+				String tsVectors = table.getFieldNames().stream().map(colName-> String.format(tsVectorTemplate, colName)).collect(Collectors.joining("||"));
+				sql.append(String.format(sqlPart, table.getTableName(), table.getTableName(), tsVectors));
 			}
 
 			sql.append("SELECT 'EMPTY', '00000000-0000-0000-0000-000000000000'::uuid;");
@@ -62,7 +72,7 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 							Constructor<?> constructor =       table.get().getDaoImpl().getConstructor(intArgsClass);
 							IDAO<? extends IAppEntity, UUID> dao = (IDAO<IAppEntity, UUID>) constructor.newInstance(ses);
 							ViewPage<?> vPage = dao.findAllByIds(ids, pageNum, pageSize);
-							result.add(vPage);
+							result.addAll(vPage.getResult());
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 								| NoSuchMethodException | SecurityException e) {
 							e.printStackTrace();
@@ -84,7 +94,11 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 			dbPool.returnConnection(conn);
 		}
 
-		return result.size() > 0 ? result : null;
+//		List res = new ArrayList<>();
+//		result.stream().forEach(v -> res.addAll(v.getResult()));
+//		ViewPage<?> tem = new ViewPage<>(res, 0, 0, 0);
+
+		return result.size() > 0 ? new ViewPage<>(result, result.size(), pageNum, pageSize) : null;
 
 	}
 

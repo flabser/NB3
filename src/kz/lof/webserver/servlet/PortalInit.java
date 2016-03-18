@@ -58,7 +58,7 @@ public class PortalInit extends HttpServlet {
 				fields.add("description");
 				fields.add("notes");
 				fields.add("inv_number");
-				fields.add("balanceholder");
+//				fields.add("balanceholder");
 				ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
 			}
 

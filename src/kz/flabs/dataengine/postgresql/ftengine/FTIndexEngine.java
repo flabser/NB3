@@ -429,7 +429,7 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 	}
 
 	@Override
-	public List<ViewPage<?>> search(String keyWord, _Session ses, int pageNum, int pageSize) {
+	public ViewPage<?> search(String keyWord, _Session ses, int pageNum, int pageSize) {
 		return null;
 	}
 

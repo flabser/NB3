@@ -11,6 +11,6 @@ public interface IFTIndexEngine {
 	void registerTable(FTEntity table);
 
 	@SuppressWarnings("rawtypes")
-	List<ViewPage<?>> search(String keyWord, _Session ses, int pageNum, int pageSize);
+	ViewPage<?> search(String keyWord, _Session ses, int pageNum, int pageSize);
 
 }
