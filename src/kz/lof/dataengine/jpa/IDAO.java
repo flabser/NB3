@@ -2,6 +2,10 @@ package kz.lof.dataengine.jpa;
 
 import java.util.List;
 
+import kz.lof.exception.SecureException;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
+
 public interface IDAO<T, K> {
 
 	T findById(K id);
@@ -16,10 +20,10 @@ public interface IDAO<T, K> {
 
 	List<T> findAll(int firstRec, int pageSize);
 
-	T add(T entity);
+	T add(T entity) throws DatabaseException, SecureException;
 
-	T update(T entity);
+	T update(T entity) throws SecureException;
 
-	void delete(T uuid);
+	void delete(T uuid) throws SecureException;
 
 }

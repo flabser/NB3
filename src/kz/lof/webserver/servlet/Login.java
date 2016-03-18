@@ -83,7 +83,7 @@ public class Login extends HttpServlet implements Const {
 				throw new AuthFailedException(AuthFailedExceptionType.PASSWORD_INCORRECT, login);
 			}
 		} catch (AuthFailedException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			try {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				request.getRequestDispatcher("/Error?type=ws_auth_error").forward(request, response);

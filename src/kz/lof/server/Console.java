@@ -20,7 +20,10 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.deploying.InitializerHelper;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.exception.SecureException;
 import kz.lof.util.StringUtil;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 public class Console implements Runnable {
 
@@ -58,7 +61,7 @@ public class Console implements Runnable {
 			System.out.println("default language=" + EnvConst.DEFAULT_LANG);
 			File jarFile = new File(EnvConst.NB_JAR_FILE);
 			System.out.println("jar=" + EnvConst.NB_JAR_FILE + ", path=" + jarFile.getAbsolutePath() + ", exist=" + jarFile.exists());
-		} else if (command.equalsIgnoreCase("show logged users") || command.equalsIgnoreCase("slu")) {
+		} else if (command.equalsIgnoreCase("show users") || command.equalsIgnoreCase("su")) {
 
 		} else if (command.equalsIgnoreCase("reset rules") || command.equalsIgnoreCase("rr")) {
 			for (AppEnv env : Environment.getApplications()) {
@@ -108,7 +111,11 @@ public class Console implements Runnable {
 				System.err.println("error -initializer name is empty");
 			} else {
 				InitializerHelper helper = new InitializerHelper();
-				helper.runInitializer(ini, true);
+				try {
+					helper.runInitializer(ini, true);
+				} catch (DatabaseException | SecureException e) {
+					System.err.println(e);
+				}
 				System.out.println("done");
 			}
 		} else if (command.contains("run batch") || command.startsWith("rubat")) {

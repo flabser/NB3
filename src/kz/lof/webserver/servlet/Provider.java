@@ -109,9 +109,8 @@ public class Provider extends HttpServlet {
 			}
 
 			response.setStatus(result.getHttpStatus());
-			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-				ApplicationException e = new ApplicationException(context.getServletContextName(), result.getException().toString(),
-				        result.getException(), ses.getLang());
+			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR || response.getStatus() == HttpStatus.SC_FORBIDDEN) {
+				ApplicationException e = new ApplicationException(context.getServletContextName(), result, ses.getLang());
 				throw e;
 			}
 
@@ -169,15 +168,14 @@ public class Provider extends HttpServlet {
 			ApplicationException ae = new ApplicationException(env.appName, "rule_not_found (" + id + ")", ses.getLang());
 			pushError(result, response, ae);
 		} catch (Exception e) {
-			e.printStackTrace();
-			ApplicationException ae = new ApplicationException(env.appName, e.toString(), e, ses.getLang());
+			Server.logger.errorLogEntry(e);
+			ApplicationException ae = new ApplicationException(env.appName, e.toString(), ses.getLang());
 			pushError(result, response, ae);
 		}
 	}
 
 	private void pushError(PageOutcome result, HttpServletResponse response, ApplicationException ae) {
 		Server.logger.errorLogEntry(ae.toString());
-		response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		try {
 			if (result.getPublishAs() == PublishAsType.JSON) {
 				response.setContentType("application/json;charset=utf-8");

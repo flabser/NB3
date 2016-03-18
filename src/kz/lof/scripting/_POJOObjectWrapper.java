@@ -14,12 +14,14 @@ public class _POJOObjectWrapper implements IOutcomeObject {
 
     @Override
     public String toXML() {
-        String entity = "";
-        if (!object.getClass().getSimpleName().equals("_EnumWrapper")) {
-            entity = object.getClass().getSimpleName().toLowerCase();
+        String result;
+        if (object.getClass().getSimpleName().equals("_EnumWrapper")) {
+            result = object.getFullXMLChunk(ses);
+        } else {
+            result = "<document entity=\"" + object.getClass().getSimpleName().toLowerCase() + "\"  docid=\"" + object.getIdentifier() + "\" editable=\""
+                    + object.isEditable() + "\"><fields>" + object.getFullXMLChunk(ses) + "</fields></document>";
         }
-        return "<document entity=\"" + entity + "\"  docid=\"" + object.getIdentifier() + "\" editable=\""
-                + object.isEditable() + "\"><fields>" + object.getFullXMLChunk(ses) + "</fields></document>";
+        return result;
     }
 
     @Override

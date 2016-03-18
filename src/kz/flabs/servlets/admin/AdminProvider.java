@@ -33,11 +33,8 @@ import kz.flabs.servlets.ServletUtil;
 import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.users.User;
 import kz.flabs.util.ResponseType;
-import kz.flabs.webrule.IRule;
-import kz.flabs.webrule.handler.HandlerRule;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
-import kz.lof.rule.page.PageRule;
 import kz.lof.server.Server;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ViewEntryCollection;
@@ -110,8 +107,6 @@ public class AdminProvider extends HttpServlet implements Const {
 					result = save(request, app, dbID, element, id);
 				} else if (type.equalsIgnoreCase("get_form")) {
 					// xslt = "forms"+File.separator+"form.xsl";
-					IRule rule = Environment.getApplication(app).ruleProvider.getRule(FORM_RULE, id);
-					output.append(rule.getRuleAsXML(app));
 
 				} else if (type.equalsIgnoreCase("get_users_by_key")) {
 					result = new ProviderResult();
@@ -247,12 +242,10 @@ public class AdminProvider extends HttpServlet implements Const {
 			// result.output.append(b.toXML());
 		} else if (element.equalsIgnoreCase("handler_rule")) {
 			result.xslt = "forms" + File.separator + "handler.xsl";
-			HandlerRule rule = (HandlerRule) Environment.getApplication(app).ruleProvider.getRule(HANDLER_RULE, id);
-			result.output.append(rule.getRuleAsXML(app));
+
 		} else if (element.equalsIgnoreCase("page_rule")) {
 			result.xslt = "forms" + File.separator + "page.xsl";
-			PageRule rule = (PageRule) appEnv.ruleProvider.getRule(PAGE_RULE, id);
-			result.output.append(rule.getRuleAsXML(app));
+
 		}
 		result.output.append("</document>");
 		return result;

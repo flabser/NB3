@@ -11,6 +11,7 @@ import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.dataengine.jpa.IAppEntity;
+import kz.lof.exception.SecureException;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting.POJOObjectAdapter;
@@ -65,6 +66,16 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 		setBadRequest();
 		result.setType(OutcomeType.SERVER_ERROR);
 		addContent("msg", m);
+	}
+
+	protected void setError(Exception e) {
+		result.setException(e);
+		if (e instanceof SecureException) {
+			result.setForbiddenRequest();
+		} else {
+			setBadRequest();
+		}
+
 	}
 
 	public void setPublishAsType(PublishAsType respType) {
@@ -179,20 +190,20 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 
 	}
 
-	protected void setRedirect(String url){
+	protected void setRedirect(String url) {
 		result.setRedirectURL(url);
 	}
-	
+
 	protected void setBadRequest() {
 		result.setBadRequest();
 	}
 
 	protected _ActionBar getSimpleActionBar(_Session session, String type, LanguageCode lang) {
 		_ActionBar actionBar = new _ActionBar(session);
-		_Action newDocAction = new _Action(getLocalizedWord("new_", lang), getLocalizedWord("add_new_", lang), "new_" + type);
-		newDocAction.setURL("Provider?id=" + type + "&key=");
+		_Action newDocAction = new _Action(getLocalizedWord("new_", lang), "", "new_" + type);
+		newDocAction.setURL("Provider?id=" + type);
 		actionBar.addAction(newDocAction);
-		actionBar.addAction(new _Action(getLocalizedWord("del_document", lang), getLocalizedWord("del_document", lang), _ActionType.DELETE_DOCUMENT));
+		actionBar.addAction(new _Action(getLocalizedWord("del_document", lang), "", _ActionType.DELETE_DOCUMENT));
 		return actionBar;
 	}
 
@@ -210,7 +221,6 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 		int startRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 		List<? extends IPOJOObject> list = dao.findAll(startRec, pageSize);
 		return new _POJOListWrapper(list, maxPage, count, pageNum, getSes());
-
 	}
 
 	@Override

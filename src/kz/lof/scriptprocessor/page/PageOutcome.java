@@ -87,6 +87,10 @@ public class PageOutcome {
 		httpStatus = HttpStatus.SC_BAD_REQUEST;
 	}
 
+	public void setForbiddenRequest() {
+		httpStatus = HttpStatus.SC_FORBIDDEN;
+	}
+
 	public void setVeryBadRequest() {
 		httpStatus = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 	}
