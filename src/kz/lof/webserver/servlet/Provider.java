@@ -109,7 +109,7 @@ public class Provider extends HttpServlet {
 			}
 
 			response.setStatus(result.getHttpStatus());
-			if (response.getStatus() != HttpStatus.SC_OK) {
+			if (response.getStatus() == HttpStatus.SC_INTERNAL_SERVER_ERROR || response.getStatus() == HttpStatus.SC_FORBIDDEN) {
 				ApplicationException e = new ApplicationException(context.getServletContextName(), result, ses.getLang());
 				throw e;
 			}
