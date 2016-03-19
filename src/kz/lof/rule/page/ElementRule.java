@@ -7,11 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.IQueryFormula;
-import kz.flabs.parser.FormulaBlocks;
 import kz.flabs.util.XMLUtil;
-import kz.flabs.webrule.RuleValue;
-import kz.flabs.webrule.constants.QueryType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.lof.appenv.AppEnv;
@@ -30,10 +26,6 @@ public class ElementRule implements Const {
 	public RunMode isOn;
 	public String value;
 	public ElementScript doClassName;
-	public QueryType queryType = QueryType.UNKNOWN;
-	public RuleValue query;
-	public FormulaBlocks queryFormulaBlocks;
-	public IQueryFormula queryFormula;
 
 	private IElement parentRule;
 

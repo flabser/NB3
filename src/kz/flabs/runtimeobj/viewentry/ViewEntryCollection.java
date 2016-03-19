@@ -1,61 +1,58 @@
 package kz.flabs.runtimeobj.viewentry;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.runtimeobj.document.AbstractComplexObject;
-import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
 import kz.nextbase.script._ViewEntry;
 import kz.nextbase.script._ViewEntryCollection;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-
-
 public class ViewEntryCollection extends AbstractComplexObject implements IViewEntryCollection {
 
 	private int count = -1;
-    private int unreadcount = 0;
-	private HashSet <IViewEntry> entries = new HashSet <>();
+	private int unreadcount = 0;
+	private HashSet<IViewEntry> entries = new HashSet<>();
 	private int currentPage = 1;
 	private int maxPage = 1;
 	private int pageSize;
 	private _ViewEntryCollection scriptingObj;
-	private RunTimeParameters runTimePars;
 
-	public ViewEntryCollection(int pageSize, User user, RunTimeParameters p) {
-		entries = new HashSet <IViewEntry>();
+	public ViewEntryCollection(int pageSize, User user, Object p) {
+		entries = new HashSet<IViewEntry>();
 		this.pageSize = pageSize;
 		scriptingObj = new _ViewEntryCollection(user, this);
-		runTimePars = p;
+
 	}
 
 	public ViewEntryCollection(int pageSize) {
-		entries = new HashSet <IViewEntry>();
+		entries = new HashSet<IViewEntry>();
 		this.pageSize = pageSize;
 		scriptingObj = null;
 	}
 
 	public ViewEntryCollection(_Session session, int pageSize) {
-		entries = new HashSet <IViewEntry>();
+		entries = new HashSet<IViewEntry>();
 		this.pageSize = pageSize;
 		scriptingObj = new _ViewEntryCollection(session, this);
 	}
 
-	public ViewEntryCollection(HashSet <IViewEntry> entries, int pageSize, AppEnv env) {
+	public ViewEntryCollection(HashSet<IViewEntry> entries, int pageSize, AppEnv env) {
 		this.entries = entries;
 		this.pageSize = pageSize;
 		scriptingObj = new _ViewEntryCollection(new User(env), this);
 	}
 
 	public ViewEntryCollection(int pageSize2, User user, String[] strings, String[] strings2) {
-		entries = new HashSet <IViewEntry>();
+		entries = new HashSet<IViewEntry>();
 		this.pageSize = pageSize2;
 		scriptingObj = new _ViewEntryCollection(user, this);
-		runTimePars = new RunTimeParameters();
+
 	}
 
 	@Override
@@ -74,10 +71,10 @@ public class ViewEntryCollection extends AbstractComplexObject implements IViewE
 		}
 	}
 
-    @Override
-    public int getUnreadCount() {
-        return unreadcount;
-    }
+	@Override
+	public int getUnreadCount() {
+		return unreadcount;
+	}
 
 	public void setCurrentPage(int cp) {
 		currentPage = cp;
@@ -98,24 +95,21 @@ public class ViewEntryCollection extends AbstractComplexObject implements IViewE
 	}
 
 	@Override
-	public HashSet <IViewEntry> getEntries() {
+	public HashSet<IViewEntry> getEntries() {
 		return entries;
 	}
 
+	@Override
 	public void add(IViewEntry entry) {
 		entries.add(entry);
-        if (!((ViewEntry)entry).isRead()) {
-            unreadcount++;
-        }
+		if (!((ViewEntry) entry).isRead()) {
+			unreadcount++;
+		}
 		scriptingObj.add(new _ViewEntry((ViewEntry) entry, scriptingObj.getSession()));
 	}
 
 	public _ViewEntryCollection getScriptingObj() {
 		return scriptingObj;
-	}
-
-	public RunTimeParameters getRunTimePameters() {
-		return runTimePars;
 	}
 
 	public BigDecimal getViewNumberSum() {
@@ -144,13 +138,13 @@ public class ViewEntryCollection extends AbstractComplexObject implements IViewE
 		return result;
 	}
 
-    @Override
-    public void init(IDatabase db, String initString) throws ComplexObjectException {
+	@Override
+	public void init(IDatabase db, String initString) throws ComplexObjectException {
 
-    }
+	}
 
-    @Override
-    public String getContent() {
-        return null;
-    }
+	@Override
+	public String getContent() {
+		return null;
+	}
 }

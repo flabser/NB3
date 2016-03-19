@@ -12,7 +12,6 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.h2.DBConnectionPool;
-import kz.flabs.dataengine.postgresql.alter.CheckDataBase;
 import kz.flabs.dataengine.postgresql.useractivity.UsersActivityDDEScripts;
 import kz.lof.appenv.AppEnv;
 
@@ -147,7 +146,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 			 * (DDEScripts.getForAcquaintViewDDE(), "FORACQUAINT");
 			 */checkAndCreateFunction(DDEScripts.getDiscussionFlagFunction());
 			checkAndCreateNamedTrigger(DDEScripts.getDiscussionFlagTrigger(), "SET_REMOVE_DISCUSSION_FLAG_MAINDOCS", "TOPICS");
-			CheckDataBase checker = new CheckDataBase(env);
 
 			/*
 			 * if (checker.check()) { deployed = true; }

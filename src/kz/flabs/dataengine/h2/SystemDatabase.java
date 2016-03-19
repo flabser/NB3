@@ -354,15 +354,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			user.fill(rs);
 			while (isNext || rs.next()) {
 				UserApplicationProfile ap = new UserApplicationProfile(rs.getString("APP"), rs.getInt("LOGINMODE"));
-				if (ap.loginMod != LoginModeType.LOGIN_AND_REDIRECT) {
-					String qaSQL = "select * from QA where QA.DOCID=" + user.docID + " AND QA.APP='" + ap.appName + "'";
-					Statement s1 = conn.createStatement();
-					ResultSet rs1 = s1.executeQuery(qaSQL);
-					while (rs1.next()) {
-						ap.getQuestionAnswer().add(ap.new QuestionAnswer(rs1.getString("QUESTION"), rs1.getString("ANSWER")));
-					}
-					user.enabledApps.put(ap.appName, ap);
-				}
+
 				isNext = false;
 			}
 			return user;

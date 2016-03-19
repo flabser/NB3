@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,6 @@ import kz.flabs.webrule.constants.ActionType;
 import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.form.FormActionRule;
-import kz.flabs.webrule.form.GlossaryRule;
 import kz.flabs.webrule.scheduler.ScheduleSettings;
 import kz.lof.appenv.AppEnv;
 import kz.lof.rule.page.ElementRule;
@@ -58,7 +56,6 @@ public abstract class Rule implements IElement, IRule {
 	protected RuleType type = RuleType.UNKNOWN;
 
 	private boolean allowAnonymousAccess;
-	private HashMap<String, GlossaryRule> glossary = new HashMap<String, GlossaryRule>();
 
 	protected Rule(AppEnv env, File docFile) throws RuleException {
 		try {
@@ -131,14 +128,6 @@ public abstract class Rule implements IElement, IRule {
 
 	protected void setCaptions(String[] id) {
 
-	}
-
-	public Collection<GlossaryRule> getGlossary() {
-		return glossary.values();
-	}
-
-	public void addGlossary(String lang, GlossaryRule glos) {
-		glossary.put(lang, glos);
 	}
 
 	@Override

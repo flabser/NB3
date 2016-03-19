@@ -32,7 +32,6 @@ import javax.xml.transform.stream.StreamResult;
 import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
-import kz.flabs.webrule.module.ExternalModule;
 import kz.lof.appenv.AppEnv;
 
 import org.w3c.dom.Document;
@@ -79,8 +78,6 @@ public class GlobalSetting {
 
 	public static final String vocabulary = "vocabulary.xml";
 	public DataEngineImpl dbImpl;
-
-	public HashMap<String, ExternalModule> extModuleMap = new HashMap<String, ExternalModule>();
 
 	@Deprecated
 	private String dbPassword;
@@ -182,15 +179,6 @@ public class GlobalSetting {
 			} catch (Exception e) {
 				AppEnv.logger.errorLogEntry("Unable to determine parameters of the database");
 				databaseName = "";
-			}
-
-			NodeList modules = XMLUtil.getNodeList(doc, "/rule/externalmodule");
-			for (int i = 0; i < modules.getLength(); i++) {
-				ExternalModule module = new ExternalModule(modules.item(i));
-				if (module.isOn == RunMode.ON) {
-					extModuleMap.put(module.getType().toString(), module);
-
-				}
 			}
 
 			entryPoint = XMLUtil.getTextContent(doc, "/rule/entrypoint");

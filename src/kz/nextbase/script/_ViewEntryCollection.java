@@ -8,9 +8,6 @@ import java.util.Set;
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
-import kz.flabs.users.RunTimeParameters;
-import kz.flabs.users.RunTimeParameters.Filter;
-import kz.flabs.users.RunTimeParameters.Sorting;
 import kz.flabs.users.User;
 import kz.lof.scripting._Session;
 import kz.lof.user.AnonymousUser;
@@ -45,41 +42,6 @@ public class _ViewEntryCollection implements _IXMLContent {
 
 	public _Session getSession() {
 		return session;
-	}
-
-	@Override
-	public String toXML() {
-
-		RunTimeParameters pars = parentObj.getRunTimePameters();
-		String vtResult = "";
-		if (pars != null) {
-			for (String val : viewTextFileds) {
-				vtResult += "<" + val + ">";
-				Sorting sorting = pars.sortingMap.get(val);
-				if (sorting != null) {
-					vtResult += "<sorting mode=\"ON\" order=\"" + sorting.sortingDirection + "\"/>";
-				} else {
-					vtResult += "<sorting mode=\"OFF\"/>";
-				}
-
-				Filter filter = pars.filtersMap.get(val);
-				if (filter != null) {
-					vtResult += "<filter mode=\"ON\" keyword=\"" + filter.keyWord.replace("\"", "'") + "\"/>";
-				} else {
-					vtResult += "<filter mode=\"OFF\"/>";
-				}
-
-				vtResult += "</" + val + ">";
-			}
-		}
-
-		String result = "<query maxpage=\"" + parentObj.getMaxPage() + "\" count=\"" + parentObj.getCount() + "\" currentpage=\""
-		        + parentObj.getCurrentPage() + "\">";
-		result += "<columns>" + vtResult + "</columns>";
-		for (_ViewEntry val : _entries) {
-			result += val.toXML();
-		}
-		return result + "</query>";
 	}
 
 	public Set<_ViewEntry> getEntries() {
@@ -117,6 +79,12 @@ public class _ViewEntryCollection implements _IXMLContent {
 
 	@Override
 	public Object toJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String toXML() throws _Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

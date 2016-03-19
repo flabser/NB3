@@ -13,23 +13,18 @@ import java.util.Set;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.parser.FormulaBlocks;
 import kz.flabs.parser.QueryFormulaParserException;
-import kz.flabs.parser.SortByBlock;
 import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.document.Document;
 import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
-import kz.flabs.users.RunTimeParameters;
 import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.Role;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
-import kz.flabs.webrule.module.ExternalModuleType;
 import kz.lof.appenv.AppEnv;
-import kz.nextbase.script._ViewEntryCollection;
 
 public abstract class AbstractDatabase implements IDatabase {
 	protected AppEnv env;
@@ -42,10 +37,6 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	public boolean clearDocuments() {
 		return false;
-	}
-
-	public String initExternalPool(ExternalModuleType extModule) {
-		return null;
 	}
 
 	public IGlossaries getGlossaries() {
@@ -84,17 +75,8 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public IQueryFormula getQueryFormula(String id, FormulaBlocks blocks) {
-
-		return null;
-	}
-
 	public IFilters getFilters() {
 
-		return null;
-	}
-
-	public IForum getForum() {
 		return null;
 	}
 
@@ -201,12 +183,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	        DocumentAccessException, QueryFormulaParserException {
 
 		return 0;
-	}
-
-	public DocumentCollection getDescendants(int docID, int docType, SortByBlock sortBlock, int level, Set<String> complexUserID,
-	        String absoluteUserID) {
-
-		return null;
 	}
 
 	public boolean hasResponse(int docID, int docType, Set<String> complexUserID, String absoluteUserID) {
@@ -416,31 +392,7 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	}
 
-	public _ViewEntryCollection getCollectionByCondition(ISelectFormula condition, User user, int pageNum, int pageSize,
-	        Set<DocID> toExpandResponses, RunTimeParameters parameters, boolean checkResponse, boolean expandAllResponses) {
-
-		return null;
-	}
-
-	public _ViewEntryCollection getCollectionByCondition(ISelectFormula sf, User user, int pageNum, int pageSize, Set<DocID> toExpandResponses,
-	        RunTimeParameters parameters, boolean checkResponse) {
-
-		return null;
-	}
-
 	public ArrayList<ViewEntry> getGroupedEntries(String fieldName, int offset, int pageSize, User user) {
-
-		return null;
-	}
-
-	public _ViewEntryCollection getCollectionByCondition(ISelectFormula sf, User user, int pageNum, int pageSize, Set<DocID> expandedDocuments,
-	        RunTimeParameters parameters, boolean checkResponse, String responseQueryCondition) {
-
-		return null;
-	}
-
-	public DocumentCollection getDescendants(int docID, int docType, SortByBlock sortBlock, int level, Set<String> complexUserID,
-	        String absoluteUserID, String responseQueryCondition) {
 
 		return null;
 	}

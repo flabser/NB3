@@ -41,7 +41,6 @@ import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
-import kz.pchelka.env.AuthTypes;
 import kz.pchelka.env.Site;
 import kz.pchelka.log.ILogger;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -155,12 +154,6 @@ public class Environment implements Const, ICache {
 				logger.infoLogEntry("WebServer is going to use default port (" + httpPort + ")");
 			}
 
-			dbURL = XMLUtil.getTextContent(xmlDocument, "/rule/database/url");
-			dbUserName = XMLUtil.getTextContent(xmlDocument, "/rule/database/username");
-			dbPassword = XMLUtil.getTextContent(xmlDocument, "/rule/database/password");
-
-			defaultRedirectURL = "/" + XMLUtil.getTextContent(xmlDocument, "/nextbase/applications/@default", false, "Workspace", true);
-
 			NodeList nodeList = XMLUtil.getNodeList(xmlDocument, "/nextbase/applications");
 			if (nodeList.getLength() > 0) {
 				org.w3c.dom.Element root = xmlDocument.getDocumentElement();
@@ -171,7 +164,6 @@ public class Environment implements Const, ICache {
 						String appName = XMLUtil.getTextContent(appNode, "name", false);
 						Site site = new Site();
 						site.appBase = appName;
-						site.authType = AuthTypes.WORKSPACE;
 						site.name = XMLUtil.getTextContent(appNode, "name/@sitename", false);
 						String globalAttrValue = XMLUtil.getTextContent(appNode, "name/@global", false);
 						if (!globalAttrValue.isEmpty()) {

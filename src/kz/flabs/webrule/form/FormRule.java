@@ -35,7 +35,7 @@ public class FormRule extends Rule implements Const {
 	public String outlineRuleName;
 	public boolean isOutlineEnable;
 	public HashMap<String, DefaultFieldRule> defaultFieldsMap = new HashMap<String, DefaultFieldRule>();
-	public HashMap<String, ShowFieldRule> showFieldsMap = new HashMap<String, ShowFieldRule>();
+
 	public HashMap<String, ISaveField> saveFieldsMap = new HashMap<String, ISaveField>();
 	public HashMap<String, SaveFieldRule> saveFieldsMapAccess = new HashMap<String, SaveFieldRule>();
 	public HashMap<String, IShowField> signatureFieldsMap = new HashMap<String, IShowField>();
@@ -96,17 +96,6 @@ public class FormRule extends Rule implements Const {
 				}
 			}
 
-			NodeList showFields = XMLUtil.getNodeList(doc, "/rule/show/field");
-			for (int i = 0; i < showFields.getLength(); i++) {
-				ShowFieldRule sf = new ShowFieldRule(showFields.item(i), toString());
-				if (sf.isOn != RunMode.OFF && sf.isValid) {
-					showFieldsMap.put(sf.name, sf);
-				}
-				if (sf.toSign) {
-					signatureFieldsMap.put(sf.name, sf);
-				}
-			}
-
 			NodeList showActions = XMLUtil.getNodeList(doc, "/rule/show/action");
 			for (int i = 0; i < showActions.getLength(); i++) {
 				FormActionRule df = new FormActionRule(showActions.item(i));
@@ -163,15 +152,6 @@ public class FormRule extends Rule implements Const {
 			for (int i = 0; i < vdate.getLength(); i++) {
 				Node node = vdate.item(i);
 				viewdate.add(node.getTextContent());
-			}
-
-			NodeList glossaries = XMLUtil.getNodeList(doc, "/rule/glossary");
-			for (int i = 0; i < glossaries.getLength(); i++) {
-				Node node = glossaries.item(i);
-				GlossaryRule g = new GlossaryRule(node);
-				if (g.isOn && g.isValid) {
-					addGlossary(g.name, g);
-				}
 			}
 
 			if (XMLUtil.getTextContent(doc, "/rule/doctype").equalsIgnoreCase("main")) {
