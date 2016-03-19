@@ -3,9 +3,7 @@ package kz.lof.scripting;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -93,10 +91,6 @@ public class _Session extends PageCacheAdapter {
 	@Override
 	public String toString() {
 		return "userid=" + user.getUserID() + ", database=" + dataBase.toString() + " app=" + env;
-	}
-
-	public Set<String> getExpandedThread() {
-		return new HashSet<String>();
 	}
 
 	private void setPageSize(int ps) {

@@ -32,12 +32,10 @@ import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.ServletUtil;
 import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.users.User;
-import kz.flabs.util.ResponseType;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
 import kz.nextbase.script._Exception;
-import kz.nextbase.script._ViewEntryCollection;
 import kz.pchelka.log.LogFiles;
 
 public class AdminProvider extends HttpServlet implements Const {
@@ -222,12 +220,7 @@ public class AdminProvider extends HttpServlet implements Const {
 			result.publishAs = PublishAsType.OUTPUTSTREAM;
 		} else if (element.equalsIgnoreCase("user")) {
 			result.xslt = "forms" + File.separator + "user.xsl";
-			UserServices us = new UserServices();
-			if (key == null || key.equals("")) {
-				result.output.append(us.getBlankUserAsXML());
-			} else {
-				result.output.append(us.getUserAsXML(Integer.parseInt(key)));
-			}
+
 		} else if (element.equalsIgnoreCase("schedule")) {
 			result.xslt = "forms" + File.separator + "schedule.xsl";
 			// BackgroundProcCollection procCollection =
@@ -287,10 +280,7 @@ public class AdminProvider extends HttpServlet implements Const {
 
 		} else if (element.equalsIgnoreCase("users")) {
 			result.xslt = "views" + File.separator + "users_list.xsl";
-			UserServices us = new UserServices();
-			String keyWord = request.getParameter("keyword");
-			content = us.getUserListWrapper(keyWord, page, pageSize);
-			count = us.getCount();
+
 		} else if (element.equalsIgnoreCase("scheduler")) {
 			result.xslt = "views" + File.separator + "scheduler_list.xsl";
 			// BackgroundProcCollection pc =
@@ -304,27 +294,18 @@ public class AdminProvider extends HttpServlet implements Const {
 		} else if (element.equalsIgnoreCase("document_activity")) {
 
 		} else if (element.equalsIgnoreCase("pages")) {
-			result.xslt = "views" + File.separator + "pages_list.xsl";
-			RuleServices rs = new RuleServices();
-			content = rs.getPageRuleList(page, app, false);
 
 		} else if (element.equalsIgnoreCase("handlers")) {
-			result.xslt = "views" + File.separator + "handler_list.xsl";
-			RuleServices rs = new RuleServices();
-			content = rs.getHandlerRuleList(page, app, false);
+
 		} else if (element.equalsIgnoreCase("settings")) {
 			result.xslt = "forms" + File.separator + "settings.xsl";
 
 		} else if (element.equalsIgnoreCase("documents")) {
 			result.xslt = "views" + File.separator + "maindoc_list.xsl";
-			DatabaseServices ds = new DatabaseServices(dbID);
-			_ViewEntryCollection col = ds.getAllDocuments(env, page, pageSize);
-			count = col.getCount();
-			content = ds.wrapDocumentsList(col);
+
 		} else if (element.equalsIgnoreCase("glossaries")) {
 			result.xslt = "views" + File.separator + "glossary_list.xsl";
-			DatabaseServices ds = new DatabaseServices(dbID);
-			content = ds.getAllDocsAsXML("glossary", page, app);
+
 		}
 
 		result.output.append("<query count=\"" + count + "\" currentpage=\"" + page + "\" maxpage=\"" + RuntimeObjUtil.countMaxPage(count, pageSize)
@@ -335,17 +316,13 @@ public class AdminProvider extends HttpServlet implements Const {
 	private ProviderResult save(HttpServletRequest request, String app, String dbID, String element, String id) throws WebFormValueException,
 	        RuleException, QueryFormulaParserException, DocumentException, DocumentAccessException, ComplexObjectException {
 		ProviderResult result = new ProviderResult();
-		XMLResponse xmlResp = new XMLResponse(ResponseType.SAVE_FORM, true);
 
 		if (element.equalsIgnoreCase("user_profile")) {
-			UserServices us = new UserServices();
-			result.output
-			        .append(new XMLResponse(ResponseType.SAVE_FORM_OF_USER_PROFILE, us.saveUser(ServletUtil.showParametersMap(request))).toXML());
 
 		} else {
-			xmlResp.resultFlag = false;
+
 		}
-		result.output.append(xmlResp.toXML());
+
 		return result;
 	}
 

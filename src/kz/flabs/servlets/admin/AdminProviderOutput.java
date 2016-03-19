@@ -25,8 +25,8 @@ public class AdminProviderOutput extends ProviderOutput {
 	public String getStandartOutput() {
 		String localUserName = "";
 
-		return xmlTextUTF8Header + "<request type=\"" + type + "\" lang=\"RUS\" element=\"" + element + "\" id=\"" + id + "\" " + "useragent=\""
-		        + browser + "\"  skin=\"pchelka\" dbid=\"" + dbID + "\" " + "localusername=\"" + localUserName + "\">" + "<history>" + historyXML
+		return xmlTextUTF8Header + "<request type=\"" + type + "\" lang=\"RUS\" element=\"" + element + "\" id=\"" + id
+		        + "\"   skin=\"pchelka\" dbid=\"" + dbID + "\" " + "localusername=\"" + localUserName + "\">" + "<history>" + historyXML
 		        + "</history>" + new AdminOutline().getOutlineAsXML() + output + "</request>";
 	}
 

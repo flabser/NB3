@@ -28,7 +28,7 @@ public class EnvConst {
 	public static final String TIME_FIELD_NAME = "time";
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";
 	public static final int DEFAULT_HTTP_PORT = 38700;
-	public static final String ADMINISTRATOR_SERVICE_CLASS = "administrator.services.UserServices";
+	public static final String ADMINISTRATOR_SERVICE_CLASS = "kz.lof.administrator.services.UserServices";
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static String DEFAULT_PAGE_SIZE = "20";

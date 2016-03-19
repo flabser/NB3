@@ -31,8 +31,7 @@ public class PortalInit extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		ServletContext context = config.getServletContext();
 		String app = context.getServletContextName();
-		String global = Environment.webAppToStart.get(app).global;
-		AppEnv env = new AppEnv(app, global);
+		AppEnv env = new AppEnv(app);
 
 		try {
 			IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(env);

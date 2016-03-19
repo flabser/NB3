@@ -25,7 +25,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 
 	private IDatabase dataBase;
 
-	public AppEnv(String n, String globalFileName) {
+	public AppEnv(String n) {
 		this.appName = n;
 		try {
 			Server.logger.infoLogEntry("# Start application \"" + appName + "\"");

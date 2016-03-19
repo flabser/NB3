@@ -1,8 +1,6 @@
 package kz.flabs.dataengine.h2;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +18,10 @@ import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
+import kz.lof.administrator.services.UserServices;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
-import kz.lof.env.EnvConst;
 import kz.lof.server.Server;
 import kz.lof.user.IUser;
 import kz.lof.util.StringUtil;
@@ -71,23 +69,9 @@ public class SystemDatabase implements ISystemDatabase, Const {
 	@Override
 	public IUser<Long> getUser(String login, String pwd) {
 		IUser<Long> user = null;
-		try {
-			Class<?> clazz = Class.forName(EnvConst.ADMINISTRATOR_SERVICE_CLASS);
-			Object instance = clazz.newInstance();
-			Class[] paramTypes = { String.class };
-			Method method = clazz.getDeclaredMethod("getUser", paramTypes);
-			user = (IUser) method.invoke(instance, login);
-		} catch (IllegalArgumentException | NoSuchMethodException | SecurityException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (ClassNotFoundException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (IllegalAccessException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (InvocationTargetException e) {
-			Server.logger.errorLogEntry(e);
-		} catch (InstantiationException e) {
-			Server.logger.errorLogEntry(e);
-		}
+
+		UserServices us = new UserServices();
+		user = us.getUser(login);
 
 		if (user != null) {
 			String pwdHash = StringUtil.encode(pwd);

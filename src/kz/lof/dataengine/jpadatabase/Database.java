@@ -19,14 +19,24 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.h2.DBConnectionPool;
+import kz.lof.administrator.dao.ApplicationDAO;
+import kz.lof.administrator.dao.LanguageDAO;
+import kz.lof.administrator.init.FillApplications;
+import kz.lof.administrator.init.FillLangs;
+import kz.lof.administrator.model.Application;
+import kz.lof.administrator.model.Language;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
+import kz.lof.exception.SecureException;
+import kz.lof.scripting._Session;
 import kz.lof.server.Console;
 import kz.lof.server.Server;
+import kz.lof.user.SuperUser;
 import kz.lof.util.StringUtil;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import org.postgresql.util.PSQLException;
 
@@ -85,6 +95,32 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		} else {
 
 			if (isNascence) {
+				Server.logger.infoLogEntry("Loading primary data...");
+				AppEnv env = new AppEnv(EnvConst.ADMINISTRATOR_APP_NAME);
+				env.setDataBase(this);
+				_Session ses = new _Session(env, new SuperUser());
+
+				FillLangs fl = new FillLangs();
+				List<Language> entities = fl.getData(ses, null, null);
+				LanguageDAO dao = new LanguageDAO(ses);
+				for (Language entity : entities) {
+					try {
+						dao.add(entity);
+					} catch (DatabaseException | SecureException e) {
+						Server.logger.errorLogEntry(e);
+					}
+				}
+
+				FillApplications fa = new FillApplications();
+				List<Application> appEntities = fa.getData(ses, null, null);
+				ApplicationDAO aDao = new ApplicationDAO(ses);
+				for (Application entity : appEntities) {
+					try {
+						aDao.add(entity);
+					} catch (DatabaseException | SecureException e) {
+						Server.logger.errorLogEntry(e);
+					}
+				}
 
 			}
 		}

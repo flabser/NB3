@@ -2,13 +2,11 @@ package kz.flabs.servlets;
 
 import java.io.File;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.users.UserException;
-import kz.flabs.webrule.Skin;
 
 public class ProviderOutput {
 	public File xslFile;
@@ -16,7 +14,6 @@ public class ProviderOutput {
 
 	protected static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	protected String type;
-	public BrowserType browser;
 	protected StringBuffer output;
 	protected String historyXML = "";
 
@@ -42,8 +39,7 @@ public class ProviderOutput {
 			queryString = "";
 		}
 
-		return xmlTextUTF8Header + "<request " + queryString + "  id=\"" + id + "\" " + "useragent=\"" + browser + "\"   username=\"" + localUserName
-		        + "\">" + output + "</request>";
+		return xmlTextUTF8Header + "<request " + queryString + "  id=\"" + id + "\"   username=\"" + localUserName + "\">" + output + "</request>";
 	}
 
 	public String getStandartUTF8Output() {
@@ -56,21 +52,14 @@ public class ProviderOutput {
 			queryString = "";
 		}
 
-		String outputContent = xmlTextUTF8Header + "<request " + queryString + "  id=\"" + id + "\" " + "useragent=\"" + browser + "\" userid=\""
-		        + "\" " + "username=\"" + localUserName + "\">" + output + "</request>";
+		String outputContent = xmlTextUTF8Header + "<request " + queryString + "  id=\"" + id + "\"  userid=\"" + "\" " + "username=\""
+		        + localUserName + "\">" + output + "</request>";
 
 		return outputContent;
 	}
 
 	protected void addHistory() throws UserException {
 		String ref = request.getRequestURI() + "?" + request.getQueryString();
-
-	}
-
-	private void setDefaultSkin(Skin skin) {
-		Cookie loginCook = new Cookie("skin", skin.id);
-		loginCook.setMaxAge(604800);
-		response.addCookie(loginCook);
 
 	}
 
