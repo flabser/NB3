@@ -1330,7 +1330,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 			// field.valueAsObject.getPersistentValue()
 			AbstractComplexObject.marshall(field.valueAsObject.getClass().getName(), field.valueAsObject)
 			        : field.valueAsText;
-			// TODO replace with lang3 escape method
 			value = value.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&apos;", "'")
 			        .replace("&nbsp;", " ");
 			value = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;");

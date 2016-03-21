@@ -87,7 +87,6 @@ public class AuthFailedException extends Exception {
 	}
 
 	public int getCode() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

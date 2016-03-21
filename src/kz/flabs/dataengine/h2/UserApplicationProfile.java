@@ -62,7 +62,6 @@ public class UserApplicationProfile implements Serializable, _IXMLContent {
 
 	@Override
 	public Object toJSON() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

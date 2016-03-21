@@ -21,8 +21,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	protected static String dbPwd = "maza";
 	protected static String connectionURL = "";
 	protected IDBConnectionPool dbPool;
-	protected IDBConnectionPool structDbPool;
-	// protected IDBConnectionPool forumDbPool;
 	protected String dbID;
 	protected AppEnv env;
 	protected IUsersActivity usersActivity;
@@ -38,14 +36,9 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	public Database(AppEnv env, DatabaseType dbType) throws DatabasePoolException, InstantiationException, IllegalAccessException,
 	        ClassNotFoundException {
 		this.env = env;
-
-		// dbID = env.globalSetting.databaseName;
-		// connectionURL = env.globalSetting.dbURL;
 		dbPool = new DBConnectionPool();
 		dbPool.initConnectionPool(EnvConst.JDBC_DRIVER, connectionURL, dbUser, dbPwd);
-
 		databaseType = dbType;
-
 	}
 
 	@Override
@@ -65,13 +58,11 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 
 	@Override
 	public IDatabase getBaseObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public IFTIndexEngine getFTSearchEngine() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

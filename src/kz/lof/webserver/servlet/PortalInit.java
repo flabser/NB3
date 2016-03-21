@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
@@ -64,13 +63,7 @@ public class PortalInit extends HttpServlet {
 			isValid = true;
 
 		} catch (Exception e) {
-			if (e instanceof DatabasePoolException) {
-				Server.logger.fatalLogEntry("Application \"" + env.appName + "\" has not connected to database ");
-				Environment.reduceApplication();
-			} else {
-				Server.logger.errorLogEntry(e);
-				Environment.reduceApplication();
-			}
+			Server.logger.errorLogEntry(e);
 		}
 
 		if (isValid) {

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import kz.flabs.dataengine.Const;
@@ -435,7 +434,6 @@ public class FTIndexEngine implements IFTIndexEngine, Const {
 
 	@Override
 	public void registerTable(FTEntity table) {
-		// TODO Auto-generated method stub
 
 	}
 }

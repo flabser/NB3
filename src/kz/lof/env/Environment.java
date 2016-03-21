@@ -52,7 +52,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Environment implements Const, ICache {
-
 	public static boolean verboseLogging;
 	public static String orgName;
 	public static String hostName;
@@ -88,7 +87,6 @@ public class Environment implements Const, ICache {
 	public static String smtpPassword;
 	public static Boolean mailEnable = false;
 
-	public static boolean workspaceAuth;
 	private static String defaultRedirectURL;
 
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
@@ -96,7 +94,6 @@ public class Environment implements Const, ICache {
 	private static HashMap<String, IDatabase> dataBases = new HashMap<String, IDatabase>();
 
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
-	private static int countOfApp;
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
 	private static ArrayList<_Session> sess = new ArrayList<_Session>();
 	public static boolean isDevMode;
@@ -180,8 +177,6 @@ public class Environment implements Const, ICache {
 				langs.add(LanguageCode.valueOf(XMLUtil.getTextContent(l.item(i), ".", false)));
 			}
 
-			countOfApp = webAppToStart.size();
-
 			try {
 				isSSLEnable = XMLUtil.getTextContent(xmlDocument, "/nextbase/ssl/@mode").equalsIgnoreCase("on");
 				if (isSSLEnable) {
@@ -193,9 +188,6 @@ public class Environment implements Const, ICache {
 						trustStore = XMLUtil.getTextContent(xmlDocument, "/nextbase/ssl/clientauth/truststorefile");
 						trustStorePwd = XMLUtil.getTextContent(xmlDocument, "/nextbase/ssl/clientauth/truststorepass");
 					}
-					// logger.normalLogEntry("SSL is enabled. keyPass: " +
-					// keyPwd +", keyStore:" +
-					// keyStore);
 					logger.infoLogEntry("TLS is enabled");
 					httpSchema = "https";
 				}
@@ -245,19 +237,6 @@ public class Environment implements Const, ICache {
 				vocabulary = new Vocabulary("system");
 			}
 
-			{
-				/*
-				 * LogsZipRule lzr = new LogsZipRule(); lzr.init(new
-				 * Environment()); try { Class c =
-				 * Class.forName(lzr.getClassName()); IDaemon daemon = (IDaemon)
-				 * c.newInstance(); daemon.init(lzr); //
-				 * scheduler.addProcess(lzr, daemon); } catch
-				 * (InstantiationException e) { logger.errorLogEntry(e); } catch
-				 * (IllegalAccessException e) { logger.errorLogEntry(e); } catch
-				 * (ClassNotFoundException e) { logger.errorLogEntry(e); }
-				 */
-			}
-
 		} catch (SAXException se) {
 			logger.errorLogEntry(se);
 		} catch (ParserConfigurationException pce) {
@@ -267,21 +246,10 @@ public class Environment implements Const, ICache {
 		}
 	}
 
-	public static void reduceApplication() {
-		countOfApp--;
-	}
-
 	public static void addApplication(AppEnv env) {
 		applications.put(env.appName, env);
 		allApplications.put(env.appName, env);
 		allApplications.put(env.appName.toLowerCase(), env);
-		if (env.isWorkspace) {
-			workspaceAuth = true;
-		}
-
-		if (applications.size() >= countOfApp) {
-
-		}
 	}
 
 	public static void addDelayedInit(IDatabase db) {

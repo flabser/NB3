@@ -168,7 +168,6 @@ public class PageResponse {
 				}
 				result.append("</content>");
 			} catch (_Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
