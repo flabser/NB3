@@ -1,6 +1,7 @@
 package kz.lof.scheduler.tasks;
 
-import kz.pchelka.log.LogFiles;
+import kz.lof.log.LogFiles;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

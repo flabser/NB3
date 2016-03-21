@@ -34,9 +34,9 @@ import kz.flabs.servlets.sitefiles.AttachmentHandler;
 import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
+import kz.lof.log.LogFiles;
 import kz.lof.server.Server;
 import kz.nextbase.script._Exception;
-import kz.pchelka.log.LogFiles;
 
 public class AdminProvider extends HttpServlet implements Const {
 	public static final int pageSize = 30;

@@ -1,4 +1,4 @@
-package kz.pchelka.log;
+package kz.lof.log;
 
 import java.io.File;
 import java.io.IOException;

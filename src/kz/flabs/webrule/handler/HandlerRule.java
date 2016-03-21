@@ -22,15 +22,12 @@ import javax.xml.transform.stream.StreamResult;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.sourcesupplier.DocumentCollectionMacro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
 import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
-import kz.flabs.webrule.rulefile.RuleFile;
-import kz.flabs.webrule.rulefile.RuleTag;
 import kz.flabs.webrule.scheduler.DaysOfWeek;
 import kz.flabs.webrule.scheduler.IScheduledProcessRule;
 import kz.flabs.webrule.scheduler.RunUnderUser;
@@ -201,40 +198,6 @@ public class HandlerRule extends Rule implements IScheduledProcessRule, Const {
 	@Override
 	public String toString() {
 		return "id=" + id + ", ison=" + isOn + ", schedule=" + scheduleSettings;
-	}
-
-	private RuleFile getAsXML(String app) {
-
-		RuleFile rf = new RuleFile(filePath);
-		RuleTag ruleTag = rf.addTag("rule");
-		ruleTag.setAttr("type", "HANDLER");
-		ruleTag.setAttr("id", id);
-		ruleTag.setAttr("mode", isOn);
-		ruleTag.setAttr("isvalid", isValid);
-		ruleTag.setAttr("app", app);
-		ruleTag.addTag("description", description);
-		ruleTag.addTagWithSource("rununderuser", runUnderUser);
-		ruleTag.addTag("trigger", trigger);
-		if (scheduleSettings != null) {
-			ruleTag.addSchedulerTag(scheduleSettings);
-		}
-		ruleTag.addTagWithSource("tohandle", toHandle);
-
-		if (scriptIsValid) {
-			Tag eTag = ruleTag.addTag("events");
-			Tag tTag = eTag.addTag("trigger", handlerClassName);
-			tTag.setAttr("source", qsSourceType);
-		} else {
-			Tag eTag = ruleTag.addTag("events");
-			Tag tTag = eTag.addTag("trigger", handlerClassName);
-			tTag.setAttr("source", ValueSourceType.UNKNOWN);
-			ruleTag.addComment(getSignature(trigger));
-			ruleTag.addCDATATag("script", script);
-			ruleTag.addComment("}");
-		}
-
-		return rf;
-
 	}
 
 	@Override

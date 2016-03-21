@@ -6,15 +6,15 @@ import java.util.Date;
 
 import kz.flabs.dataengine.IDatabase;
 import kz.lof.env.Environment;
+import kz.lof.log.Log4jLogger;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.webserver.WebServer;
 import kz.pchelka.env.Site;
-import kz.pchelka.log.Log4jLogger;
 
 import org.apache.catalina.LifecycleException;
 
 public class Server {
-	public static kz.pchelka.log.ILogger logger;
+	public static kz.lof.log.ILogger logger;
 	public static final String serverVersion = "3.0.6";
 	public static String compilationTime = "";
 	public static final String serverTitle = "NextBase " + serverVersion;

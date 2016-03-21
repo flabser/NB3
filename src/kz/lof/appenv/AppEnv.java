@@ -9,9 +9,9 @@ import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.Application;
 import kz.lof.caching.PageCacheAdapter;
+import kz.lof.log.ILogger;
 import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
-import kz.pchelka.log.ILogger;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import kz.pchelka.log.Log4jLogger;
+import kz.lof.log.Log4jLogger;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;

@@ -192,20 +192,6 @@ public class GlobalSetting {
 				rulePath = XMLUtil.getTextContent(rules.item(i), "@path", false);
 			}
 
-			NodeList roles = XMLUtil.getNodeList(doc, "/rule/roles/entry");
-			for (int i = 0; i < roles.getLength(); i++) {
-				Role role = new Role(roles.item(i), id);
-
-				if (role.isValid && role.isOn == RunMode.ON) {
-					if (!role.name.equalsIgnoreCase("supervisor")) {
-
-					} else {
-						AppEnv.logger
-						        .warningLogEntry("A role name \"supervisor\" is reserved name of system roles. The role has not added to application");
-					}
-				}
-			}
-
 		} catch (FileNotFoundException fnfe) {
 			AppEnv.logger.errorLogEntry(fnfe.toString());
 		} catch (Exception e) {

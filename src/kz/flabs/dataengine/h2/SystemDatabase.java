@@ -52,7 +52,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			isValid = true;
 			conn.commit();
 		} catch (Throwable e) {
-			AppEnv.logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e.toString());
 			e.printStackTrace();
 			DatabaseUtil.debugErrorPrint(e);
 		} finally {

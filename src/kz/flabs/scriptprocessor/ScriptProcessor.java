@@ -2,8 +2,8 @@ package kz.flabs.scriptprocessor;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
+import kz.lof.log.ILogger;
 import kz.lof.server.Server;
-import kz.pchelka.log.ILogger;
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 

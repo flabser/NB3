@@ -11,7 +11,7 @@
 		</layout>
 	</appender>
 
-	<appender name="gui" class="kz.pchelka.log.TextAreaAppender">
+	<appender name="gui" class="kz.lof.log.TextAreaAppender">
 
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{kk:mm:ss} %p %c: %m%n" />
@@ -20,7 +20,7 @@
 
 
 	<appender name="server_main"
-		class="kz.pchelka.log.DailyRollingFileAppenderChanged">
+		class="kz.lof.log.DailyRollingFileAppenderChanged">
 		<param name="File" value="logs/today.log" />
 		<param name="DatePattern" value="dd-MM-yyyy'.log'" />
 		<!--<param name="MaxFileSize" value="500KB" /> -->
@@ -32,7 +32,7 @@
 	</appender>
 
 	<appender name="requests"
-		class="kz.pchelka.log.DailyRollingFileAppenderChanged">
+		class="kz.lof.log.DailyRollingFileAppenderChanged">
 		<param name="File" value="logs/request.log" />	
 		<param name="MaxFileSize" value="5MB" /> 
 		<param name="maxBackupIndex" value="5" />
@@ -43,7 +43,7 @@
 	</appender>
  	
 	<appender name="words"
-		class="kz.pchelka.log.DailyRollingFileAppenderChanged">
+		class="kz.lof.log.DailyRollingFileAppenderChanged">
 		<param name="File" value="logs/vocabulary.log" />
 		<param name="DatePattern" value="dd-MM-yyyy'.log'" />
 		<!--<param name="MaxFileSize" value="500KB" /> -->

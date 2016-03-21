@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import kz.flabs.dataengine.Const;
-import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.IDAO;
 import kz.lof.dataengine.jpa.ISimpleAppEntity;
@@ -154,7 +152,6 @@ public class InitializerHelper {
 			String p = packageName.substring(0, packageName.indexOf("."));
 			AppEnv env = Environment.getAppEnv(p);
 			if (env != null) {
-				User user = new User(Const.sysUser, env);
 				_Session ses = new _Session(env, new AnonymousUser());
 				pcInstance = (IInitialData<ISimpleAppEntity, IDAO>) Class.forName(populatingClass.getCanonicalName()).newInstance();
 				List<ISimpleAppEntity> entities = pcInstance.getData(ses, null, null);

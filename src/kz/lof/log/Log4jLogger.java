@@ -1,4 +1,4 @@
-package kz.pchelka.log;
+package kz.lof.log;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,42 +35,8 @@ public class Log4jLogger implements ILogger {
 	}
 
 	@Override
-	public void errorLogEntry(String agent, String logtext) {
-		log4jLogger.error(agent + "-" + logtext);
-
-	}
-
-	@Override
-	public void errorLogEntry(String agent, String logtext, String searchKey) {
-		log4jLogger.error(agent + "-" + logtext + " searchKey=" + searchKey);
-
-	}
-
-	@Override
-	public void errorLogEntry(String agent, Exception exception) {
-		String msg = agent + "-" + exception.toString();
-		msg += getErrorStackString(exception.getStackTrace());
-		log4jLogger.error(msg, exception);
-
-	}
-
-	@Override
-	public void errorLogEntry(String agent, Exception exception, String searchKey) {
-		String msg = exception.toString();
-		msg += getErrorStackString(exception.getStackTrace());
-		log4jLogger.error(agent + " searchKey=" + searchKey + " " + msg, exception);
-
-	}
-
-	@Override
 	public void infoLogEntry(String logtext) {
 		log4jLogger.info(logtext);
-
-	}
-
-	@Override
-	public void infoLogEntry(String agent, String logtext) {
-		log4jLogger.info(agent + "-" + logtext);
 
 	}
 
@@ -79,20 +45,6 @@ public class Log4jLogger implements ILogger {
 		if (Environment.verboseLogging) {
 			log4jLogger.debug(logtext);
 		}
-	}
-
-	@Override
-	public void debugLogEntry(String agent, String logtext) {
-		if (Environment.verboseLogging) {
-			log4jLogger.debug(agent + "-" + logtext);
-
-		}
-	}
-
-	@Override
-	public void warningLogEntry(String agent, String logtext) {
-		log4jLogger.info(agent + "-" + logtext);
-
 	}
 
 	@Override
@@ -127,7 +79,7 @@ public class Log4jLogger implements ILogger {
 				value = attrs.getValue("Built-Date");
 			}
 		} catch (Exception e) {
-			errorLogEntry(getClass().getName(), e);
+			errorLogEntry(e);
 		} finally {
 			if (jarFile != null) {
 				try {
@@ -140,10 +92,4 @@ public class Log4jLogger implements ILogger {
 		return value;
 	}
 
-	@Override
-	public void errorLogEntry(Throwable exception) {
-		log4jLogger.error(exception);
-		exception.printStackTrace();
-
-	}
 }

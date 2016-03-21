@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +21,6 @@ import kz.flabs.runtimeobj.viewentry.IViewEntry;
 import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
-import kz.flabs.webrule.Role;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.lof.appenv.AppEnv;
 
@@ -39,10 +37,6 @@ public abstract class AbstractDatabase implements IDatabase {
 		return false;
 	}
 
-	public IGlossaries getGlossaries() {
-		return null;
-	}
-
 	@Override
 	public IDBConnectionPool getConnectionPool() {
 		return null;
@@ -54,34 +48,11 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public IExecutions getExecutions() {
-		return null;
-	}
-
-	public IProjects getProjects() {
-		return null;
-	}
-
 	public IUsersActivity getUserActivity() {
 		return null;
 	}
 
 	public IActivity getActivity() {
-		return null;
-	}
-
-	public IMyDocsProcessor getMyDocsProcessor() {
-
-		return null;
-	}
-
-	public IFilters getFilters() {
-
-		return null;
-	}
-
-	public HashMap<String, Role> getAppRoles() {
-
 		return null;
 	}
 
@@ -143,26 +114,8 @@ public abstract class AbstractDatabase implements IDatabase {
 		return 0;
 	}
 
-	public int getDocsCountByCondition(IQueryFormula condition, Set<String> complexUserID, String absoluteUserID) {
-
-		return 0;
-	}
-
-	public StringBuffer getDocsByCondition(IQueryFormula condition, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize,
-	        String fieldCond, Set<DocID> toExpandResponses, Set<String> toExpandCategory, TagPublicationFormatType publishAs, int page)
-	        throws DocumentException {
-
-		return null;
-	}
-
 	public StringBuffer getDocsByCondition(String sql, Set<String> complexUserID, String absoluteUserID, String fieldCond,
 	        Set<DocID> toExpandResponses, Set<String> toExpandCategory, TagPublicationFormatType publishAs, int page) throws DocumentException {
-
-		return null;
-	}
-
-	public ArrayList<BaseDocument> getDocumentsByCondition(IQueryFormula condition, Set<String> complexUserID, String absoluteUserID, int limit,
-	        int offset) throws DocumentException, DocumentAccessException, ComplexObjectException {
 
 		return null;
 	}
@@ -381,11 +334,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	public int getFavoritesCount(Set<String> complexUserID, String absoluteUserID) {
 
 		return 0;
-	}
-
-	public StringBuffer getFavorites(IQueryFormula nf, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize, String fieldsCond,
-	        Set<DocID> toExpandResponses, Set<String> toExpandCategory, TagPublicationFormatType publishAs, int page) {
-		return null;
 	}
 
 	public void addCounter(String key, int num) {

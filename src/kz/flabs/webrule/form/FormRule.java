@@ -34,7 +34,6 @@ public class FormRule extends Rule implements Const {
 	public int docType = DOCTYPE_UNKNOWN;
 	public String outlineRuleName;
 	public boolean isOutlineEnable;
-	public HashMap<String, DefaultFieldRule> defaultFieldsMap = new HashMap<String, DefaultFieldRule>();
 
 	public HashMap<String, ISaveField> saveFieldsMap = new HashMap<String, ISaveField>();
 	public HashMap<String, SaveFieldRule> saveFieldsMapAccess = new HashMap<String, SaveFieldRule>();
@@ -75,17 +74,6 @@ public class FormRule extends Rule implements Const {
 			outlineRuleName = XMLUtil.getTextContent(doc, "/rule/outline");
 			if (!outlineRuleName.trim().equals("")) {
 				isOutlineEnable = true;
-			}
-
-			NodeList fields = XMLUtil.getNodeList(doc, "/rule/default/field");
-			for (int i = 0; i < fields.getLength(); i++) {
-				DefaultFieldRule df = new DefaultFieldRule(fields.item(i), toString());
-				if (df.isOn != RunMode.OFF && df.isValid) {
-					defaultFieldsMap.put(df.name, df);
-				}
-				if (df.toSign) {
-					signatureFieldsMap.put(df.name, df);
-				}
 			}
 
 			NodeList defaultActions = XMLUtil.getNodeList(doc, "/rule/default/action");
