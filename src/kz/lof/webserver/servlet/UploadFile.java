@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.exception.ApplicationException;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 
@@ -28,6 +30,7 @@ import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.HttpStatus;
 import org.apache.http.entity.ContentType;
 
 public class UploadFile extends HttpServlet {
@@ -72,8 +75,7 @@ public class UploadFile extends HttpServlet {
 			List<FileItem> items = upload.parseRequest(req);
 			for (FileItem item : items) {
 				if (item.isFormField()) {
-					// System.out.println(item.getString() + " " +
-					// item.getFieldName());
+					System.out.println(item.getString() + " " + item.getFieldName());
 					if (item.getFieldName().endsWith(EnvConst.FSID_FIELD_NAME)) {
 						fileItem = item;
 					}
@@ -102,20 +104,29 @@ public class UploadFile extends HttpServlet {
 		// System.out.println(fileItem.getString() + " " +
 		// fileItem.getFieldName());
 		List<String> formFiles = null;
-		Object obj = ses.getAttribute(fileItem.getString());
-		if (obj == null) {
-			formFiles = new ArrayList<String>();
+		if (fileItem != null) {
+			Object obj = ses.getAttribute(fileItem.getString());
+			if (obj == null) {
+				formFiles = new ArrayList<String>();
+			} else {
+				formFiles = (List<String>) obj;
+			}
+			if (!formFiles.contains(fn)) {
+				formFiles.add(fn);
+				ses.setAttribute(fileItem.getString(), formFiles);
+			}
+			resp.setContentType(ContentType.APPLICATION_JSON.toString());
+			PrintWriter out = resp.getWriter();
+			out.println(sb.toString());
+			out.close();
 		} else {
-			formFiles = (List<String>) obj;
+			String msg = "a field \"" + EnvConst.FSID_FIELD_NAME + "\" has not been pointed in the form";
+			Server.logger.errorLogEntry(msg);
+			ApplicationException ae = new ApplicationException(((AppEnv) context.getAttribute(EnvConst.APP_ATTR)).appName, msg, ses.getLang());
+			resp.setStatus(HttpStatus.SC_BAD_REQUEST);
+			resp.setContentType("text/html");
+			resp.getWriter().println(ae.getHTMLMessage());
 		}
-		if (!formFiles.contains(fn)) {
-			formFiles.add(fn);
-			ses.setAttribute(fileItem.getString(), formFiles);
-		}
-		resp.setContentType(ContentType.APPLICATION_JSON.toString());
-		PrintWriter out = resp.getWriter();
-		out.println(sb.toString());
-		out.close();
 	}
 
 	@Override
