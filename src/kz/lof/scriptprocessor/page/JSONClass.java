@@ -1,4 +1,4 @@
-package kz.lof.webserver.servlet;
+package kz.lof.scriptprocessor.page;
 
 import java.util.ArrayList;
 import java.util.List;

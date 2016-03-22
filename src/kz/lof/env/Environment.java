@@ -54,9 +54,6 @@ public class Environment implements Const, ICache {
 	public static String hostName;
 	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
 	public static String httpSchema = "http";
-	private static String dbURL;
-	private static String dbUserName;
-	private static String dbPassword;
 	public static IDatabase dataBase;
 	public static String defaultSender = "";
 	public static HashMap<String, String> mimeHash = new HashMap<String, String>();
@@ -243,48 +240,12 @@ public class Environment implements Const, ICache {
 		delayedStart.add(db);
 	}
 
-	public static void addDatabases(IDatabase dataBase) {
-		// dataBases.put(dataBase.getDbID(), dataBase);
-	}
-
 	public static AppEnv getAppEnv(String appID) {
 		return allApplications.get(appID);
 	}
 
 	public static AppEnv getApplication(String appID) {
 		return applications.get(appID);
-	}
-
-	public static IDatabase getDatabase(String dbID) {
-		return dataBases.get(dbID);
-	}
-
-	public static HashMap<String, IDatabase> getDatabases() {
-		return dataBases;
-	}
-
-	public static String getDbURL() {
-		return dbURL;
-	}
-
-	public static void setDbURL(String dbURL) {
-		Environment.dbURL = dbURL;
-	}
-
-	public static String getDbUserName() {
-		return dbUserName;
-	}
-
-	public static void setDbUserName(String dbUserName) {
-		Environment.dbUserName = dbUserName;
-	}
-
-	public static String getDbPassword() {
-		return dbPassword;
-	}
-
-	public static void setDbPassword(String dbPassword) {
-		Environment.dbPassword = dbPassword;
 	}
 
 	public static Collection<AppEnv> getApplications() {

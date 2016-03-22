@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
@@ -104,7 +103,6 @@ public class AdminProvider extends HttpServlet implements Const {
 				} else if (type.equalsIgnoreCase("get_users_by_key")) {
 
 				} else if (type.equalsIgnoreCase("delete_maindoc")) {
-					IDatabase db = DatabaseFactory.getDatabaseByName(dbID);
 
 				} else if (type.equalsIgnoreCase("delete_glossary")) {
 
@@ -242,9 +240,9 @@ public class AdminProvider extends HttpServlet implements Const {
 		if (app != null && !"".equalsIgnoreCase(app)) {
 			env = Environment.getApplication(app);
 			// dbID = env.getDataBase().getDbID();
-			db = DatabaseFactory.getDatabaseByName(dbID);
+
 		} else if (dbID != null && !"".equalsIgnoreCase(dbID)) {
-			db = DatabaseFactory.getDatabaseByName(dbID);
+
 		} else {
 
 		}

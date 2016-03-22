@@ -12,9 +12,9 @@ import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
-import kz.lof.webserver.servlet.IOutcomeObject;
-import kz.lof.webserver.servlet.JSONClass;
-import kz.lof.webserver.servlet.OutcomeType;
+import kz.lof.scriptprocessor.page.IOutcomeObject;
+import kz.lof.scriptprocessor.page.JSONClass;
+import kz.lof.scriptprocessor.page.OutcomeType;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;

@@ -1,7 +1,6 @@
 package kz.lof.webserver.servlet;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,6 +15,8 @@ import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PortalInit extends HttpServlet {
 
@@ -34,18 +35,21 @@ public class PortalInit extends HttpServlet {
 			dd.deploy();
 			env.setDataBase(db);
 
-			// TODO it need to improve
-			IFTIndexEngine ftEngine = db.getFTSearchEngine();
-			if (env.appName.equalsIgnoreCase("municipalproperty")) {
-				List<String> fields = new ArrayList<String>();
-				fields.add("object_name");
-				fields.add("description");
-				fields.add("notes");
-				fields.add("inv_number");
-				fields.add("balanceholder");
-				ftEngine.registerTable(new FTEntity("properties", fields, "municipalproperty.dao.PropertyDAO"));
-			}
+			try {
+				Class c = Class.forName(env.appName.toLowerCase() + ".init.AppConst");
+				ObjectMapper mapper = new ObjectMapper();
+				String result = "";
+				Field f = c.getDeclaredField("FT_INDEX_SCOPE");
+				f.setAccessible(true);
+				if (f.isAccessible()) {
+					result = (String) f.get(null);
+				}
+				FTEntity fe = mapper.readValue(result, FTEntity.class);
+				IFTIndexEngine ftEngine = db.getFTSearchEngine();
+				ftEngine.registerTable(fe);
+			} catch (ClassNotFoundException e) {
 
+			}
 			isValid = true;
 
 		} catch (Exception e) {

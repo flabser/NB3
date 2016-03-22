@@ -10,8 +10,4 @@ public class DatabaseFactory implements Const {
 		return appEnvironment.getDataBase();
 	}
 
-	public static IDatabase getDatabaseByName(String dbID) {
-		return Environment.getDatabase(dbID);
-	}
-
 }

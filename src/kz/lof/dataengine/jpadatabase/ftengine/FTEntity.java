@@ -9,6 +9,10 @@ public class FTEntity {
 	private List<String> fieldNames;
 	private Class<? extends IDAO> daoImpl;
 
+	public FTEntity() {
+
+	}
+
 	@SuppressWarnings("unchecked")
 	public FTEntity(String tableName, List<String> fieldNames, String daoImpl) {
 		this.tableName = tableName;

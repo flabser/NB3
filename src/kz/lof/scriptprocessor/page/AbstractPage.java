@@ -21,8 +21,6 @@ import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.ScriptHelper;
-import kz.lof.webserver.servlet.IOutcomeObject;
-import kz.lof.webserver.servlet.OutcomeType;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._Helper;
 import kz.nextbase.script._IXMLContent;

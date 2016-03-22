@@ -1,4 +1,4 @@
-package kz.lof.webserver.servlet;
+package kz.lof.scriptprocessor.page;
 
 
 public interface IOutcomeObject {

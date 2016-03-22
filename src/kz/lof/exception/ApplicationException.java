@@ -9,9 +9,9 @@ import kz.flabs.servlets.SaxonTransformator;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
+import kz.lof.scriptprocessor.page.IOutcomeObject;
 import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
-import kz.lof.webserver.servlet.IOutcomeObject;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.http.HttpStatus;

@@ -4,7 +4,7 @@ import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scripting.event._DoPage;
-import kz.lof.webserver.servlet.IOutcomeObject;
+import kz.lof.scriptprocessor.page.IOutcomeObject;
 import kz.nextbase.script.outline._Outline;
 import kz.nextbase.script.outline._OutlineEntry;
 

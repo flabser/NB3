@@ -1,6 +1,6 @@
 package kz.lof.scripting;
 
-import kz.lof.webserver.servlet.IOutcomeObject;
+import kz.lof.scriptprocessor.page.IOutcomeObject;
 
 import java.util.ArrayList;
 import java.util.List;
