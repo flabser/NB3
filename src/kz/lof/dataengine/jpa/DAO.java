@@ -30,7 +30,7 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 	public DAO(Class<T> entityClass, _Session session) {
 		this.entityClass = entityClass;
 		ses = session;
-		emf = session.getCurrentDatabase().getEntityManagerFactory();
+		emf = session.getDatabase().getEntityManagerFactory();
 		user = session.getUser();
 	}
 

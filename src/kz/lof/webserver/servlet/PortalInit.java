@@ -1,6 +1,7 @@
 package kz.lof.webserver.servlet;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,6 +17,7 @@ import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PortalInit extends HttpServlet {
@@ -36,20 +38,25 @@ public class PortalInit extends HttpServlet {
 			env.setDataBase(db);
 
 			try {
-				Class c = Class.forName(env.appName.toLowerCase() + ".init.AppConst");
-				ObjectMapper mapper = new ObjectMapper();
+				Class<?> c = Class.forName(env.appName.toLowerCase() + ".init.AppConst");
+
 				String result = "";
 				Field f = c.getDeclaredField("FT_INDEX_SCOPE");
 				f.setAccessible(true);
 				if (f.isAccessible()) {
 					result = (String) f.get(null);
 				}
-				FTEntity fe = mapper.readValue(result, FTEntity.class);
+				ObjectMapper mapper = new ObjectMapper();
+				ArrayList<FTEntity> fEntList = mapper.readValue(result, new TypeReference<ArrayList<FTEntity>>() {
+				});
 				IFTIndexEngine ftEngine = db.getFTSearchEngine();
-				ftEngine.registerTable(fe);
+				for (FTEntity fEnt : fEntList) {
+					ftEngine.registerTable(fEnt);
+				}
 			} catch (ClassNotFoundException e) {
 
 			}
+
 			isValid = true;
 
 		} catch (Exception e) {

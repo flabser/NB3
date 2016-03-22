@@ -29,8 +29,8 @@ public class FillApplications extends InitialDataAdapter<Application, Applicatio
 		        "Имущественный наем", "Реестродержатели" };
 		String[] dataRus = { "Администратор", "Структура", "Справочник", "Импорт объектов", "Коммунальное имущество", "Имущественный наем",
 		        "Реестродержатели" };
-		String[] urls = { "?id=user-view", "?id=organization-view", "?id=country-view", "?id=upload-updating-form",
-		        "?id=personalestate-view&kuf=101", "?id=personalestate-view&kuf=101", "?id=organization-view" };
+		String[] urls = { "p?id=user-view", "p?id=organization-view", "p?id=country-view", "p?id=upload-updating-form",
+		        "p?id=personalestate-view&kuf=101", "p?id=personalestate-view&kuf=101", "p?id=organization-view" };
 
 		AppCode[] code = { AppCode.ADMINISTRATOR, AppCode.STAFF, AppCode.REFERENCE, AppCode.CUSTOM, AppCode.CUSTOM, AppCode.CUSTOM, AppCode.CUSTOM };
 

@@ -19,7 +19,7 @@ public class Cookies {
 					try {
 						pageSize = Integer.parseInt(cooks[i].getValue());
 					} catch (NumberFormatException nfe) {
-						pageSize = Integer.parseInt(EnvConst.DEFAULT_PAGE_SIZE);
+						pageSize = EnvConst.DEFAULT_PAGE_SIZE;
 					}
 				}
 			}

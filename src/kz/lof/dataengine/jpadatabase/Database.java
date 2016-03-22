@@ -21,13 +21,15 @@ import kz.flabs.dataengine.h2.DBConnectionPool;
 import kz.lof.administrator.dao.ApplicationDAO;
 import kz.lof.administrator.dao.LanguageDAO;
 import kz.lof.administrator.init.FillApplications;
-import kz.lof.administrator.init.FillLangs;
+import kz.lof.administrator.init.ServerConst;
 import kz.lof.administrator.model.Application;
 import kz.lof.administrator.model.Language;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 import kz.lof.exception.SecureException;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.server.Console;
 import kz.lof.server.Server;
@@ -99,13 +101,12 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 				env.setDataBase(this);
 				_Session ses = new _Session(env, new SuperUser());
 
-				FillLangs fl = new FillLangs();
-				List<Language> entities = fl.getData(ses, null, null);
 				LanguageDAO dao = new LanguageDAO(ses);
-				for (Language entity : entities) {
+				for (LanguageCode lc : Environment.langs) {
+					Language entity = ServerConst.getData(lc);
 					try {
 						dao.add(entity);
-					} catch (DatabaseException | SecureException e) {
+					} catch (SecureException e) {
 						Server.logger.errorLogEntry(e);
 					}
 				}

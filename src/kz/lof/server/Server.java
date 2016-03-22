@@ -15,7 +15,7 @@ import org.apache.catalina.LifecycleException;
 
 public class Server {
 	public static kz.lof.log.ILogger logger;
-	public static final String serverVersion = "3.0.6";
+	public static final String serverVersion = "3.0.7";
 	public static String compilationTime = "";
 	public static final String serverTitle = "NextBase " + serverVersion;
 	public static Date startTime = new Date();

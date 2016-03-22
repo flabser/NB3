@@ -15,7 +15,7 @@ import kz.lof.server.Server;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
-	public String appName = "undefined";
+	public String appName;
 	public RuleProvider ruleProvider;
 	public HashMap<String, File> xsltFileMap = new HashMap<String, File>();
 	public boolean isWorkspace;

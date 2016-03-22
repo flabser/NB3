@@ -31,7 +31,7 @@ public class EnvConst {
 	public static final String ADMINISTRATOR_SERVICE_CLASS = "kz.lof.administrator.services.UserServices";
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
-	public static String DEFAULT_PAGE_SIZE = "20";
+	public static int DEFAULT_PAGE_SIZE = 20;
 	public static String DEFAULT_COUNTRY_OF_NUMBER_FORMAT = "ru";
 	public static String DB_USER = "postgres";
 	public static String DB_PWD = "smartdoc";

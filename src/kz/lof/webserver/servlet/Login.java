@@ -100,7 +100,7 @@ public class Login extends HttpServlet implements Const {
 	}
 
 	private String getRedirect(HttpSession jses, Cookies appCookies) {
-		return "?id=workspace";
+		return "p?id=workspace";
 
 	}
 

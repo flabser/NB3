@@ -26,7 +26,7 @@ public class _Session extends PageCacheAdapter {
 	private IUser<Long> user;
 	private AppEnv env;
 	private LanguageCode lang;
-	public int pageSize = 30;
+	public int pageSize = EnvConst.DEFAULT_PAGE_SIZE;
 	private AuthModeType authMode;
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
 	private _Session parent;
@@ -49,7 +49,6 @@ public class _Session extends PageCacheAdapter {
 	}
 
 	public void setLang(LanguageCode lang) {
-		// System.out.println("set lang" + lang);
 		if (this.lang != lang) {
 			this.lang = lang;
 			if (authMode == AuthModeType.LOGIN_THROUGH_TOKEN) {
@@ -58,9 +57,9 @@ public class _Session extends PageCacheAdapter {
 				for (_Session childSes : descendants) {
 					childSes.setLang(lang);
 				}
-				PersistValue pv = new PersistValue(EnvConst.LANG_COOKIE_NAME, lang.name());
-				persistValuesMap.put(EnvConst.LANG_COOKIE_NAME, pv);
 			}
+			PersistValue pv = new PersistValue(EnvConst.LANG_COOKIE_NAME, lang.name());
+			persistValuesMap.put(EnvConst.LANG_COOKIE_NAME, pv);
 		}
 	}
 
@@ -76,7 +75,7 @@ public class _Session extends PageCacheAdapter {
 		return new _ViewEntryCollectionParam(this);
 	}
 
-	public IDatabase getCurrentDatabase() {
+	public IDatabase getDatabase() {
 		return dataBase;
 	}
 
