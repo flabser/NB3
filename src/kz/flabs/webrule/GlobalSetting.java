@@ -29,7 +29,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
@@ -77,7 +76,6 @@ public class GlobalSetting {
 	public int markAsReadMsDelay;
 
 	public static final String vocabulary = "vocabulary.xml";
-	public DataEngineImpl dbImpl;
 
 	@Deprecated
 	private String dbPassword;
@@ -218,18 +216,6 @@ public class GlobalSetting {
 	 * (driver.trim().equalsIgnoreCase("net.sourceforge.jtds.jdbc.Driver")) {
 	 * return DatabaseType.MSSQL; } else { return DatabaseType.H2; } }
 	 */
-
-	private static DatabaseType getDatabaseType(String dbURL) {
-		if (dbURL.contains("postgresql")) {
-			return DatabaseType.POSTGRESQL;
-		} else if (dbURL.contains("sqlserver")) {
-			return DatabaseType.MSSQL;
-		} else if (dbURL.contains("oracle")) {
-			return DatabaseType.ORACLE;
-		} else {
-			return DatabaseType.H2;
-		}
-	}
 
 	public void deserializeKey() throws IOException, InterruptedException {
 		String tempPath = "";

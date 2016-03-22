@@ -1,7 +1,6 @@
 package kz.flabs.scriptprocessor;
 
 import groovy.lang.GroovyObject;
-import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
@@ -77,11 +76,6 @@ public class ScriptShowField implements IShowField, IOutcomeObject {
 	}
 
 	@Override
-	public Macro getMacro() {
-		return Macro.UNKNOWN_MACRO;
-	}
-
-	@Override
 	public boolean hasAttrValue() {
 		return hasAttr;
 	}
@@ -99,11 +93,6 @@ public class ScriptShowField implements IShowField, IOutcomeObject {
 	@Override
 	public TagPublicationFormatType getAttrValueType() {
 		return TagPublicationFormatType.AS_IS;
-	}
-
-	@Override
-	public Macro getAttrMacro() {
-		return Macro.UNKNOWN_MACRO;
 	}
 
 	@Override

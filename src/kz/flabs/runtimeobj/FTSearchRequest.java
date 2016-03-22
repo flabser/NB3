@@ -10,7 +10,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.util.XMLUtil;
 import kz.lof.appenv.AppEnv;
 
@@ -22,7 +21,7 @@ public class FTSearchRequest implements Const {
 
 	@Deprecated
 	public FTSearchRequest(AppEnv env, Set<String> complexUserID, String absoluteUserID, String keyWord, int pageNum, int pageSize)
-	        throws DocumentException, FTIndexEngineException, RuleException, QueryFormulaParserException, ComplexObjectException {
+	        throws DocumentException, FTIndexEngineException, RuleException, ComplexObjectException {
 		StringBuffer xmlContent = new StringBuffer(5000);
 
 		if (true) {

@@ -1,7 +1,5 @@
 package kz.flabs.dataengine;
 
-import static kz.flabs.runtimeobj.RuntimeObjUtil.cutText;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -39,10 +37,7 @@ public class DatabaseUtil implements Const {
 	public static String getViewTextValues(BaseDocument doc) {
 		String viewTextList = "";
 		int fieldSize = 0;
-		for (int i = 1; i <= DatabaseConst.VIEWTEXT_COUNT; i++) {
-			fieldSize = i < 4 ? 256 : 128;
-			viewTextList += "'" + cutText(doc.getViewTextList().get(i).replaceAll("'", "''"), fieldSize) + "',";
-		}
+
 		if (viewTextList.endsWith(",")) {
 			viewTextList = viewTextList.substring(0, viewTextList.length() - 1);
 		}
@@ -189,20 +184,6 @@ public class DatabaseUtil implements Const {
 		}
 	}
 
-	public static DatabaseType getDatabaseType(String dbURL) {
-		if (dbURL.contains("postgresql")) {
-			return DatabaseType.POSTGRESQL;
-		} else if (dbURL.contains("oracle")) {
-			return DatabaseType.ORACLE;
-		} else if (dbURL.contains("sqlserver")) {
-			return DatabaseType.MSSQL;
-		} else if (dbURL.contains("nsf")) {
-			return DatabaseType.NSF;
-		} else {
-			return DatabaseType.H2;
-		}
-	}
-
 	public static String prepareListToQuery(Collection<String> elements) {
 		StringBuffer result = new StringBuffer(1000);
 		if (elements != null) {
@@ -243,9 +224,7 @@ public class DatabaseUtil implements Const {
 
 	public static String getViewTextList(String prefix) {
 		String list = "";
-		for (int i = 1; i <= DatabaseConst.VIEWTEXT_COUNT; i++) {
-			list += (prefix.length() > 0 ? prefix + "." : "") + "VIEWTEXT" + i + ",";
-		}
+
 		if (list.endsWith(",")) {
 			list = list.substring(0, list.length() - 1);
 		}

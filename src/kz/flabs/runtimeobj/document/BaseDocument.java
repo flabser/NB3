@@ -774,11 +774,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 				val = getWebFormValue(saveField, fields);
 				break;
 			case MACRO:
-				switch (saveField.macro) {
-				case AUTHOR:
-					val = new Field(saveField.documentField, doc.authorID, saveField.type);
-					break;
-				}
 
 			}
 			if (saveField.type == FieldType.AUTHOR) {
@@ -926,12 +921,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 		case WEBFORMFIELD:
 			return getWebFormValue(saveField, fields);
 		case MACRO:
-			switch (saveField.getMacro()) {
-			case AUTHOR:
-				return new Field(saveField.getName(), this.getAuthorID());
-			case CURRENT_USER:
-				return new Field(saveField.getName(), currentUserID);
-			}
 
 		}
 		return null;

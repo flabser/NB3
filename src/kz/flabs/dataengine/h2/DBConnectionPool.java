@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabasePoolExceptionType;
-import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.lof.server.Server;
@@ -25,7 +24,6 @@ public class DBConnectionPool implements IDBConnectionPool {
 	protected static int timeBetweenEvictionRunsMillis = 1000 * 60 * 15;
 
 	private boolean isValid;
-	private DatabaseType dt = DatabaseType.DEFAULT;
 	private String DBMSVersion = "";
 
 	@Override
@@ -46,10 +44,7 @@ public class DBConnectionPool implements IDBConnectionPool {
 
 		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(dbURL, props);
 		String validationQuery = "SELECT 1";
-		dt = DatabaseUtil.getDatabaseType(dbURL);
-		if (dt == DatabaseType.ORACLE) {
-			validationQuery = "SELECT 1 FROM DUAL";
-		}
+
 		new PoolableConnectionFactory(connectionFactory, connectionPool, null, validationQuery, false, true);
 		new PoolingDataSource(connectionPool);
 		connectionPool.setMaxIdle(200);
@@ -75,9 +70,7 @@ public class DBConnectionPool implements IDBConnectionPool {
 		connectionPool.setMaxIdle(200);
 		connectionPool.setMaxActive(2000);
 
-		dt = DatabaseUtil.getDatabaseType(dbURL);
-
-		checkConnection();
+		// checkConnection();
 		isValid = true;
 	}
 
@@ -122,11 +115,6 @@ public class DBConnectionPool implements IDBConnectionPool {
 	}
 
 	@Override
-	public DatabaseType getDatabaseType() {
-		return dt;
-	}
-
-	@Override
 	public String getDatabaseVersion() {
 		return DBMSVersion;
 	}
@@ -159,23 +147,11 @@ public class DBConnectionPool implements IDBConnectionPool {
 			con.setAutoCommit(false);
 			Statement st = con.createStatement();
 			String checkVersionQuery = "";
-			switch (dt) {
-			case H2:
-				checkVersionQuery = "SELECT value\n" + "FROM information_schema.settings\n" + "WHERE name = 'info.VERSION'";
-				break;
-			case POSTGRESQL:
-				checkVersionQuery = "SELECT VERSION()";
-				break;
-			case ORACLE:
-				checkVersionQuery = "SELECT * FROM V$VERSION";
-				break;
-			case MSSQL:
-				checkVersionQuery = "select @@VERSION";
-				break;
-			default:
-				checkVersionQuery = "SELECT VERSION()";
-				break;
-			}
+
+			checkVersionQuery = "SELECT value\n" + "FROM information_schema.settings\n" + "WHERE name = 'info.VERSION'";
+
+			checkVersionQuery = "SELECT VERSION()";
+
 			ResultSet rs = st.executeQuery(checkVersionQuery);
 			if (rs.next()) {
 				DBMSVersion = rs.getString(1);

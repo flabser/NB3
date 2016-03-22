@@ -7,7 +7,6 @@ import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.util.XMLUtil;
 
 public abstract class DatabaseCore {
-	public DatabaseType databaseType = DatabaseType.DEFAULT;
 
 	@Deprecated
 	protected String getSimpleViewContent(ResultSet rs) throws SQLException {
@@ -33,10 +32,7 @@ public abstract class DatabaseCore {
 		 */
 		int i = 0;
 		boolean cont = true;
-		while (i <= DatabaseConst.VIEWTEXT_COUNT && cont) {
-			cont = fillViewText(rs, "VIEWTEXT" + (i != 0 ? i : ""), doc);
-			i++;
-		}
+
 		try {
 			doc.setViewNumber(rs.getBigDecimal("VIEWNUMBER"));
 			doc.setViewDate(rs.getTimestamp("VIEWDATE"));
@@ -52,10 +48,7 @@ public abstract class DatabaseCore {
 		 */
 		int i = 1;
 		boolean cont = true;
-		while (i <= DatabaseConst.VIEWTEXT_COUNT && cont) {
-			cont = fillViewText(rs, "VIEWTEXT" + i, doc);
-			i++;
-		}
+
 		try {
 			doc.setViewNumber(rs.getBigDecimal("VIEWNUMBER"));
 			doc.setViewDate(rs.getTimestamp("VIEWDATE"));

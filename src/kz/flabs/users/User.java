@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.dataengine.h2.UserApplicationProfile;
@@ -45,18 +44,18 @@ public class User extends BaseDocument implements Const {
 	private String userName;
 
 	public User() {
-		this.sysDatabase = DatabaseFactory.getSysDatabase();
+
 		userID = ANONYMOUS_USER;
 	}
 
 	public User(AppEnv env) {
 		this.env = env;
-		this.sysDatabase = DatabaseFactory.getSysDatabase();
+
 		userID = ANONYMOUS_USER;
 	}
 
 	public User(String u) {
-		this.sysDatabase = DatabaseFactory.getSysDatabase();
+
 		setUserID(u);
 	}
 
@@ -66,7 +65,7 @@ public class User extends BaseDocument implements Const {
 	}
 
 	public User(String u, IDatabase db) {
-		sysDatabase = DatabaseFactory.getSysDatabase();
+
 		sysDatabase.reloadUserData(this, u);
 		if (db != null) {
 			/*
@@ -80,7 +79,7 @@ public class User extends BaseDocument implements Const {
 
 	public User(int userHash, AppEnv env) throws AuthFailedException {
 		this.env = env;
-		sysDatabase = DatabaseFactory.getSysDatabase();
+
 		try {
 			sysDatabase.reloadUserData(this, userHash);
 		} catch (Exception e) {

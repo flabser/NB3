@@ -12,7 +12,6 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.h2.DBConnectionPool;
-import kz.flabs.dataengine.postgresql.useractivity.UsersActivityDDEScripts;
 import kz.lof.appenv.AppEnv;
 
 public class DatabaseDeployer implements IDatabaseDeployer {
@@ -102,10 +101,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 			checkAndCreateTable(DDEScripts.getGroupsDDE(), "GROUPS");
 			checkAndCreateTable(DDEScripts.getUserGroupsDDE(), "USER_GROUPS");
 			checkAndCreateTable(DDEScripts.getCustomBlobsDDEForStruct("EMPLOYERS"), "CUSTOM_BLOBS_EMPLOYERS");
-			checkAndCreateTable(UsersActivityDDEScripts.getUsersActivityDDE(), "USERS_ACTIVITY");
-			checkAndCreateTable(UsersActivityDDEScripts.getUsersActivityChangesDDE(), "USERS_ACTIVITY_CHANGES");
-			checkAndCreateTable(UsersActivityDDEScripts.getActivityDDE(), "ACTIVITY");
-			checkAndCreateTable(UsersActivityDDEScripts.getRecycleBinDDE(), "RECYCLE_BIN");
 
 			checkAndCreateIndex("maindocs", "maindocs_fts_idx");
 			checkAndCreateIndex("custom_fields", "custom_fields_fts_idx");
@@ -429,12 +424,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 			dbPool.returnConnection(conn);
 		}
 		return true;
-	}
-
-	@Override
-	public boolean patch() {
-
-		return false;
 	}
 
 	public boolean checkAndCreateView(String scriptCreateView, String viewName) {

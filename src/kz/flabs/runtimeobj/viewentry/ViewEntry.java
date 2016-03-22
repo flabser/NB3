@@ -10,7 +10,6 @@ import java.util.Set;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.UsersActivityType;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.users.User;
@@ -205,7 +204,6 @@ public class ViewEntry implements IViewEntry, Const {
 		ddbID = "";
 		form = "";
 		if (type == ViewEntryType.ACTIVITY) {
-			viewTexts.add(new ViewText(UsersActivityType.getType(rs.getInt("TYPE")).name(), "type"));
 			viewTexts.add(new ViewText(rs.getString("DBID"), "dbid"));
 			viewTexts.add(new ViewText(rs.getString("VIEWTEXT"), "viewtext"));
 			viewTexts.add(new ViewText(rs.getString("DDBID"), "ddbid"));
@@ -241,7 +239,6 @@ public class ViewEntry implements IViewEntry, Const {
 		ddbID = "";
 		form = "";
 		if (type == ViewEntryType.ACTIVITY) {
-			viewTexts.add(new ViewText(UsersActivityType.getType(rs.getInt("TYPE")).name(), "type"));
 			viewTexts.add(new ViewText(rs.getString("DBID"), "dbid"));
 			viewTexts.add(new ViewText(rs.getString("VIEWTEXT"), "viewtext"));
 			viewTexts.add(new ViewText(rs.getString("DDBID"), "ddbid"));

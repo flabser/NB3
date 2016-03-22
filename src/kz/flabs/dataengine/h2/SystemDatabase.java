@@ -71,7 +71,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 		IUser<Long> user = null;
 
 		UserServices us = new UserServices();
-		user = us.getUser(login);
+		// user = us.getUser(login);
 
 		if (user != null) {
 			String pwdHash = StringUtil.encode(pwd);

@@ -271,10 +271,4 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 		}
 	}
 
-	@Override
-	public boolean patch() {
-
-		return false;
-	}
-
 }

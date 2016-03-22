@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.DatabaseFactory;
-import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.PortalException;
 import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
+import kz.lof.administrator.services.UserServices;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.SessionPool;
@@ -44,11 +43,10 @@ public class Login extends HttpServlet implements Const {
 			String login = request.getParameter("login");
 			String pwd = request.getParameter("pwd");
 			HttpSession jses;
-			ISystemDatabase systemDatabase = DatabaseFactory.getSysDatabase();
 
 			Cookies appCookies = new Cookies(request);
 
-			IUser<Long> user = systemDatabase.getUser(login, pwd);
+			IUser<Long> user = new UserServices().getUser(login, pwd);
 
 			if (user != null && user.isAuthorized()) {
 				jses = request.getSession(true);

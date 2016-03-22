@@ -1,12 +1,9 @@
 package kz.flabs.sourcesupplier;
 
-import groovy.lang.GroovyObject;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
@@ -14,13 +11,9 @@ import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
-import kz.flabs.localization.LocalizatorException;
 import kz.flabs.localization.SentenceCaption;
 import kz.flabs.localization.Vocabulary;
-import kz.flabs.parser.ComplexKeyParser;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.document.BaseDocument;
-import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.scriptprocessor.IScriptProcessor;
 import kz.flabs.scriptprocessor.SessionScriptProcessor;
 import kz.flabs.scriptprocessor.SimpleScriptProcessor;
@@ -32,7 +25,6 @@ import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.lof.appenv.AppEnv;
 import kz.lof.scripting._Session;
-import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
 
 @Deprecated
@@ -129,7 +121,7 @@ public class SourceSupplier implements Const {
 	}
 
 	public ArrayList<BaseDocument> getDocuments(IRuleValue sourceVal, User user) throws DocumentException, DocumentAccessException, RuleException,
-	        QueryFormulaParserException, ComplexObjectException {
+	        ComplexObjectException {
 		ArrayList<BaseDocument> col = new ArrayList<BaseDocument>();
 		switch (sourceVal.getSourceType()) {
 		case QUERY:
@@ -153,49 +145,6 @@ public class SourceSupplier implements Const {
 		} else {
 			return "";
 		}
-	}
-
-	/** @deprecated **/
-	@Deprecated
-	public String[] getValueAsString(ValueSourceType sourceType, String value, Macro macro) throws DocumentException, DocumentAccessException,
-	        RuleException, QueryFormulaParserException {
-		String returnVal[] = { "" };
-
-		switch (sourceType) {
-		case DOCFIELD:
-			return doc.getValueAsString(value);
-		case MACRO:
-			returnVal[0] = macroProducer(macro);
-			return returnVal;
-		case STATIC:
-			returnVal[0] = value;
-			return returnVal;
-		case SCRIPT:
-			return scriptProcessor.processString(value);
-
-		}
-		return returnVal;
-
-	}
-
-	public String[] getValueAsStr(ValueSourceType sourceType, String value, Class<GroovyObject> compiledClass, Macro macro) throws DocumentException,
-	        DocumentAccessException, RuleException, QueryFormulaParserException, ComplexObjectException {
-		String returnVal[] = { "" };
-
-		switch (sourceType) {
-		case SCRIPT:
-			return scriptProcessor.processString(compiledClass);
-		case DOCFIELD:
-			return doc.getValueAsString(value);
-		case MACRO:
-			returnVal[0] = macroProducer(macro);
-			return returnVal;
-		case STATIC:
-			returnVal[0] = value;
-			return returnVal;
-		}
-		return returnVal;
-
 	}
 
 	public String[] getValueAsString(ValueSourceType sourceType, String value) throws DocumentException {
@@ -236,29 +185,6 @@ public class SourceSupplier implements Const {
 		}
 	}
 
-	public StringBuffer getDataAsXML(ValueSourceType sourceType, String value, Macro macro, String lang) throws RuleException, DocumentException,
-	        DocumentAccessException, QueryFormulaParserException, LocalizatorException {
-		StringBuffer xmlContent = new StringBuffer(5000);
-
-		switch (sourceType) {
-		case VOCABULARY:
-
-		case STATIC:
-			xmlContent.append(value);
-			break;
-		case SCRIPT:
-			String result[] = scriptProcessor.processString(value);
-			for (String res : result) {
-				xmlContent.append(res);
-			}
-			break;
-		default:
-			xmlContent.append("unknown source " + contextType);
-
-		}
-		return xmlContent;
-	}
-
 	public ArrayList<String[]> publishAs(TagPublicationFormatType publishAs, String[] tagValue) throws DocumentException {
 		ArrayList<String[]> vals = new ArrayList<String[]>();
 		String result[] = new String[2];
@@ -283,15 +209,7 @@ public class SourceSupplier implements Const {
 			case EMPLOYER:
 
 				break;
-			case COMPLEX_KEY:
-				for (String IDAString : tagValue) {
-					List<DocID> keys = ComplexKeyParser.parse(IDAString);
-					DocID subKey = keys.get(0);
-					if (subKey != null) {
-						String[] id = { String.valueOf(subKey.id) };
 
-					}
-				}
 			case ORGANIZATION:
 
 				break;
@@ -331,29 +249,6 @@ public class SourceSupplier implements Const {
 			}
 		}
 		return vals;
-	}
-
-	public String macroProducer(Macro macro) throws DocumentException {
-		// if (doc == null)macro = DocumentMacros.CURRENT_USER;
-		switch (macro) {
-		case CURRENT_USER:
-			return user.getUserID();
-		case AUTHOR:
-			return doc.getAuthorID();
-
-		case SERVER_VERSION:
-			return Server.serverVersion;
-		case COMPILATION_TIME:
-			return Server.compilationTime;
-		case ORG_NAME:
-			// return env.globalSetting.orgName;
-		case APPLICATION_TYPE:
-			return env.appName;
-		case APPLICATION_LOGO:
-			// return env.globalSetting.logo;
-		default:
-			return "";
-		}
 	}
 
 	@Override

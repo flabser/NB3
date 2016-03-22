@@ -24,9 +24,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
@@ -42,7 +40,6 @@ import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
-import kz.pchelka.env.Site;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.jdom.input.SAXHandler;
@@ -60,7 +57,6 @@ public class Environment implements Const, ICache {
 	private static String dbURL;
 	private static String dbUserName;
 	private static String dbPassword;
-	public static ISystemDatabase systemBase;
 	public static IDatabase dataBase;
 	public static String defaultSender = "";
 	public static HashMap<String, String> mimeHash = new HashMap<String, String>();
@@ -108,12 +104,7 @@ public class Environment implements Const, ICache {
 		loadProperties();
 		initProcess();
 		try {
-			Environment.systemBase = new kz.flabs.dataengine.h2.SystemDatabase();
 			Environment.dataBase = new Database();
-		} catch (DatabasePoolException e) {
-			Server.logger.errorLogEntry(e);
-			Server.logger.fatalLogEntry("Server has not connected to system database");
-			Server.shutdown();
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
 			Server.shutdown();
@@ -162,10 +153,6 @@ public class Environment implements Const, ICache {
 						Site site = new Site();
 						site.appBase = appName;
 						site.name = XMLUtil.getTextContent(appNode, "name/@sitename", false);
-						String globalAttrValue = XMLUtil.getTextContent(appNode, "name/@global", false);
-						if (!globalAttrValue.isEmpty()) {
-							site.global = globalAttrValue;
-						}
 						webAppToStart.put(appName, site);
 					}
 				}

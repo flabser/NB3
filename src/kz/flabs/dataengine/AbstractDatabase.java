@@ -12,7 +12,6 @@ import java.util.Set;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.DocID;
@@ -45,14 +44,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	@Override
 	public IFTIndexEngine getFTSearchEngine() {
 
-		return null;
-	}
-
-	public IUsersActivity getUserActivity() {
-		return null;
-	}
-
-	public IActivity getActivity() {
 		return null;
 	}
 
@@ -121,19 +112,19 @@ public abstract class AbstractDatabase implements IDatabase {
 	}
 
 	public ArrayList<BaseDocument> getDocumentsByCondition(String form, String query, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentException, DocumentAccessException, QueryFormulaParserException, ComplexObjectException {
+	        throws DocumentException, DocumentAccessException, ComplexObjectException {
 
 		return null;
 	}
 
 	public ArrayList<BaseDocument> getDocumentsByCondition(String query, Set<String> complexUserID, String absoluteUserID, int limit, int offset)
-	        throws DocumentException, DocumentAccessException, QueryFormulaParserException, ComplexObjectException {
+	        throws DocumentException, DocumentAccessException, ComplexObjectException {
 
 		return null;
 	}
 
 	public int getDocumentsCountByCondition(String query, Set<String> complexUserID, String absoluteUserID) throws DocumentException,
-	        DocumentAccessException, QueryFormulaParserException {
+	        DocumentAccessException {
 
 		return 0;
 	}
@@ -314,11 +305,6 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	public void setTopic(int topicID, int parentdocID, int parentDocType) {
 
-	}
-
-	public DatabaseType getRDBMSType() {
-
-		return null;
 	}
 
 	public int calcStartEntry(int pageNum, int pageSize) {

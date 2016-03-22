@@ -1,6 +1,5 @@
 package kz.flabs.users;
 
-import kz.flabs.sourcesupplier.Macro;
 import kz.flabs.webrule.constants.FieldType;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.flabs.webrule.form.ISaveField;
@@ -8,19 +7,19 @@ import kz.flabs.webrule.form.ISaveField;
 public class SaveField implements ISaveField {
 	private String name;
 	private String value;
-	
-	public SaveField(String value){
+
+	public SaveField(String value) {
 		this.name = value;
 		this.value = value;
 	}
-	
+
 	@Override
-	public String getName() {	
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public FieldType getType() {	
+	public FieldType getType() {
 		return FieldType.TEXT;
 	}
 
@@ -30,17 +29,12 @@ public class SaveField implements ISaveField {
 	}
 
 	@Override
-	public String getValue() {	
+	public String getValue() {
 		return value;
 	}
 
 	@Override
-	public Macro getMacro() {
-		return Macro.UNDEFINED;
-	}
-
-	@Override
-	public String getIfErrorValue() {	
+	public String getIfErrorValue() {
 		return "";
 	}
 

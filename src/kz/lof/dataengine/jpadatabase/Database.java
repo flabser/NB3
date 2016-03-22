@@ -14,7 +14,6 @@ import javax.persistence.EntityManagerFactory;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabasePoolException;
-import kz.flabs.dataengine.DatabaseType;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
@@ -127,7 +126,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 	}
 
 	public Database(AppEnv env) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		super(env, DatabaseType.JPA);
+		super(env);
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(PersistenceUnitProperties.JDBC_DRIVER, EnvConst.JDBC_DRIVER);
 		properties.put(PersistenceUnitProperties.JDBC_USER, dbUser);

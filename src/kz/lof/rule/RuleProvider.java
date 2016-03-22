@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.webrule.GlobalSetting;
 import kz.flabs.webrule.IRule;
 import kz.flabs.webrule.constants.RunMode;
@@ -45,7 +44,7 @@ public class RuleProvider implements Const {
 		loadGlobal(globalFileName);
 	}
 
-	public IRule getRule(String ruleType, String ruleID) throws RuleException, QueryFormulaParserException {
+	public IRule getRule(String ruleType, String ruleID) throws RuleException {
 		File docFile;
 		try {
 			if (ruleID != null) {

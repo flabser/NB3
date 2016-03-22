@@ -3,7 +3,6 @@ package kz.flabs.servlets.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseFactory;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
@@ -24,14 +22,12 @@ import kz.flabs.exception.PortalException;
 import kz.flabs.exception.RuleException;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.localization.LocalizatorException;
-import kz.flabs.parser.QueryFormulaParserException;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.ProviderResult;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.servlets.ServletUtil;
 import kz.flabs.servlets.sitefiles.AttachmentHandler;
-import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 import kz.lof.log.LogFiles;
@@ -42,13 +38,12 @@ public class AdminProvider extends HttpServlet implements Const {
 	public static final int pageSize = 30;
 
 	private static final long serialVersionUID = 2352885167311108325L;
-	private ISystemDatabase sysDb;
 	private AppEnv env;
 	private String defaultSkin = "pchelka";
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		sysDb = DatabaseFactory.getSysDatabase();
+
 		try {
 			ServletContext context = config.getServletContext();
 			env = (AppEnv) context.getAttribute("portalenv");
@@ -107,14 +102,6 @@ public class AdminProvider extends HttpServlet implements Const {
 					// xslt = "forms"+File.separator+"form.xsl";
 
 				} else if (type.equalsIgnoreCase("get_users_by_key")) {
-					result = new ProviderResult();
-					String keyWord = request.getParameter("keyword");
-					ArrayList<User> users = sysDb.getUsers(keyWord);
-					result.output.append("<users>");
-					for (User user : users) {
-						result.output.append("<entry>" + user.usersByKeytoXML() + "</entry>");
-					}
-					result.output.append("</users>");
 
 				} else if (type.equalsIgnoreCase("delete_maindoc")) {
 					IDatabase db = DatabaseFactory.getDatabaseByName(dbID);
@@ -193,7 +180,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult edit(HttpServletRequest request, String app, String element, String id, String key) throws NumberFormatException,
-	        RuleException, DocumentException, DocumentAccessException, QueryFormulaParserException, LocalizatorException, ComplexObjectException {
+	        RuleException, DocumentException, DocumentAccessException, LocalizatorException, ComplexObjectException {
 		ProviderResult result = new ProviderResult();
 		result.publishAs = PublishAsType.HTML;
 
@@ -314,7 +301,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult save(HttpServletRequest request, String app, String dbID, String element, String id) throws WebFormValueException,
-	        RuleException, QueryFormulaParserException, DocumentException, DocumentAccessException, ComplexObjectException {
+	        RuleException, DocumentException, DocumentAccessException, ComplexObjectException {
 		ProviderResult result = new ProviderResult();
 
 		if (element.equalsIgnoreCase("user_profile")) {

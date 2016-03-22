@@ -11,21 +11,16 @@ import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabaseDeployer;
-import kz.flabs.dataengine.postgresql.useractivity.UsersActivityDDEScripts;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.Environment;
 
 public class DatabaseDeployer implements IDatabaseDeployer {
 	public boolean deployed;
 
-	private AppEnv env;
 	private IDBConnectionPool dbPool;
-	private String connectionURL = "";
 
 	public DatabaseDeployer(AppEnv env) throws InstantiationException, IllegalAccessException, ClassNotFoundException, DatabasePoolException {
-		this.env = env;
 		dbPool = Environment.dataBase.getConnectionPool();
-
 	}
 
 	@Override
@@ -33,9 +28,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 		try {
 			checkAndCreateTable(DDEScripts.getDBVersionTableDDE(), "DBVERSION");
 			checkAndCreateTable(DDEScripts.getCountersTableDDE(), "COUNTERS");
-			checkAndCreateTable(UsersActivityDDEScripts.getUsersActivityDDE(), "USERS_ACTIVITY");
-			checkAndCreateTable(UsersActivityDDEScripts.getUsersActivityChangesDDE(), "USERS_ACTIVITY_CHANGES");
-			checkAndCreateTable(UsersActivityDDEScripts.getActivityDDE(), "ACTIVITY");
 			String dbVersion = dbPool.getDatabaseVersion();
 			dbVersion = dbVersion.substring(dbVersion.indexOf(" ") + 1, dbVersion.indexOf(","));
 			deployed = true;
@@ -238,12 +230,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 			dbPool.returnConnection(conn);
 		}
 		return true;
-	}
-
-	@Override
-	public boolean patch() {
-
-		return false;
 	}
 
 }
