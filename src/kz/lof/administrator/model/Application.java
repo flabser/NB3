@@ -126,7 +126,7 @@ public class Application extends AppEntity<UUID> {
 
 	@Override
 	public String getShortXMLChunk(_Session ses) {
-		return "<app id=\"" + name + "\">" + localizedName.get(ses.getLang()) + "</app>" + "<pos>" + position + "</pos><url>"
+		return "<app id=\"" + name + "\">" + getLocalizedName(ses.getLang()) + "</app>" + "<pos>" + position + "</pos><url>"
 		        + Util.getAsTagValue(defaultURL) + "</url>";
 	}
 

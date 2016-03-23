@@ -201,7 +201,7 @@ public class Console implements Runnable {
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
 		} finally {
-			in.close();
+			// in.close();
 		}
 		return null;
 	}

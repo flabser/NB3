@@ -20,14 +20,16 @@ import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.h2.DBConnectionPool;
 import kz.lof.administrator.dao.ApplicationDAO;
 import kz.lof.administrator.dao.LanguageDAO;
-import kz.lof.administrator.init.FillApplications;
+import kz.lof.administrator.dao.UserDAO;
 import kz.lof.administrator.init.ServerConst;
 import kz.lof.administrator.model.Application;
 import kz.lof.administrator.model.Language;
+import kz.lof.administrator.model.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
+import kz.lof.env.Site;
 import kz.lof.exception.SecureException;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
@@ -37,7 +39,6 @@ import kz.lof.user.SuperUser;
 import kz.lof.util.StringUtil;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
-import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import org.postgresql.util.PSQLException;
 
@@ -103,7 +104,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 				LanguageDAO dao = new LanguageDAO(ses);
 				for (LanguageCode lc : Environment.langs) {
-					Language entity = ServerConst.getData(lc);
+					Language entity = ServerConst.getLanguage(lc);
 					try {
 						dao.add(entity);
 					} catch (SecureException e) {
@@ -111,17 +112,17 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 					}
 				}
 
-				FillApplications fa = new FillApplications();
-				List<Application> appEntities = fa.getData(ses, null, null);
 				ApplicationDAO aDao = new ApplicationDAO(ses);
-				for (Application entity : appEntities) {
+				for (Site site : Environment.webAppToStart.values()) {
+					Application entity = ServerConst.getApplication(site);
 					try {
 						aDao.add(entity);
-					} catch (DatabaseException | SecureException e) {
+					} catch (SecureException e) {
 						Server.logger.errorLogEntry(e);
 					}
 				}
 
+				theFirst(ses);
 			}
 		}
 	}
@@ -226,7 +227,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		}
 	}
 
-	private int theFirst() {
+	private int theFirst(_Session ses) {
 		List<String> lwd = Console.getValFromConsole("enter user name> ", StringUtil.USERNAME_PATTERN);
 		if (lwd != null) {
 			if (lwd.contains("quit")) {
@@ -240,13 +241,15 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 					pwd = userName;
 				}
 
-				System.out.println(userName + " " + pwd);
+				System.out.println("user \"" + userName + "\" has been registered");
 
-				/*
-				 * User entity = new User(); entity.setLogin(userName);
-				 * entity.setPwd(pwd); UserDAO uDao = new UserDAO(this);
-				 * uDao.add(entity);
-				 */
+				User entity = new User();
+				entity.setLogin(userName);
+				entity.setPwd(pwd);
+				ApplicationDAO aDao = new ApplicationDAO(ses);
+				entity.setAllowedApps(aDao.findAll());
+				UserDAO uDao = new UserDAO(this);
+				uDao.add(entity);
 
 			}
 		}

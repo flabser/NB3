@@ -40,18 +40,16 @@ public class PortalInit extends HttpServlet {
 			try {
 				Class<?> c = Class.forName(env.appName.toLowerCase() + ".init.AppConst");
 
-				String result = "";
 				Field f = c.getDeclaredField("FT_INDEX_SCOPE");
-				f.setAccessible(true);
-				if (f.isAccessible()) {
-					result = (String) f.get(null);
-				}
-				ObjectMapper mapper = new ObjectMapper();
-				ArrayList<FTEntity> fEntList = mapper.readValue(result, new TypeReference<ArrayList<FTEntity>>() {
-				});
-				IFTIndexEngine ftEngine = db.getFTSearchEngine();
-				for (FTEntity fEnt : fEntList) {
-					ftEngine.registerTable(fEnt);
+				String result = (String) f.get(null);
+				if (!result.isEmpty()) {
+					ObjectMapper mapper = new ObjectMapper();
+					ArrayList<FTEntity> fEntList = mapper.readValue(result, new TypeReference<ArrayList<FTEntity>>() {
+					});
+					IFTIndexEngine ftEngine = db.getFTSearchEngine();
+					for (FTEntity fEnt : fEntList) {
+						ftEngine.registerTable(fEnt);
+					}
 				}
 			} catch (ClassNotFoundException e) {
 

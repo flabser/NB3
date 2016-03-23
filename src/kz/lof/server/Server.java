@@ -39,7 +39,7 @@ public class Server {
 		webServerInst.init(Environment.hostName);
 
 		for (Site webApp : Environment.webAppToStart.values()) {
-			webServerInst.addApplication(webApp.name, "/" + webApp.appBase, webApp.appBase);
+			webServerInst.addApplication(webApp.siteName, "/" + webApp.name, webApp.name);
 		}
 
 		String info = webServerInst.initConnectors();

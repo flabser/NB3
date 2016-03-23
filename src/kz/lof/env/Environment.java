@@ -84,7 +84,6 @@ public class Environment implements Const, ICache {
 
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
 	private static ConcurrentHashMap<String, AppEnv> allApplications = new ConcurrentHashMap<String, AppEnv>();
-	private static HashMap<String, IDatabase> dataBases = new HashMap<String, IDatabase>();
 
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
@@ -148,8 +147,8 @@ public class Environment implements Const, ICache {
 					if (XMLUtil.getTextContent(appNode, "name/@mode", false).equals("on")) {
 						String appName = XMLUtil.getTextContent(appNode, "name", false);
 						Site site = new Site();
-						site.appBase = appName;
-						site.name = XMLUtil.getTextContent(appNode, "name/@sitename", false);
+						site.name = appName;
+						site.siteName = XMLUtil.getTextContent(appNode, "name/@sitename", false);
 						webAppToStart.put(appName, site);
 					}
 				}
