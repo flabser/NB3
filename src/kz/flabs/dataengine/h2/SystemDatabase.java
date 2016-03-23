@@ -61,12 +61,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 	}
 
 	@Override
-	public void setEmployeeDAO(IEmployeeDAO dao) {
-		eDao = dao;
-
-	}
-
-	@Override
 	public IUser<Long> getUser(String login, String pwd) {
 		IUser<Long> user = null;
 
@@ -337,7 +331,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			}
 			user.fill(rs);
 			while (isNext || rs.next()) {
-				UserApplicationProfile ap = new UserApplicationProfile(rs.getString("APP"), rs.getInt("LOGINMODE"));
 
 				isNext = false;
 			}
@@ -398,10 +391,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 					String addSQL = "select * from ENABLEDAPPS where ENABLEDAPPS.DOCID=" + user.docID;
 					Statement statement = conn.createStatement();
 					ResultSet resultSet = statement.executeQuery(addSQL);
-					while (resultSet.next()) {
-						UserApplicationProfile ap = new UserApplicationProfile(resultSet.getString("APP"), resultSet.getInt("LOGINMODE"));
-						user.enabledApps.put(ap.appName, ap);
-					}
+
 					resultSet.close();
 					statement.close();
 				}
@@ -532,16 +522,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 					String addSQL = "select * from ENABLEDAPPS where ENABLEDAPPS.DOCID=" + user.docID;
 					Statement statement = conn.createStatement();
 					ResultSet resultSet = statement.executeQuery(addSQL);
-					while (resultSet.next()) {
-						UserApplicationProfile ap = new UserApplicationProfile(resultSet.getString("APP"), resultSet.getInt("LOGINMODE"));
-						String qaSQL = "select * from QA where QA.DOCID=" + user.docID + " AND QA.APP='" + ap.appName + "'";
-						Statement s1 = conn.createStatement();
-						ResultSet rs1 = s1.executeQuery(qaSQL);
-						while (rs1.next()) {
-							ap.getQuestionAnswer().add(ap.new QuestionAnswer(rs1.getString("QUESTION"), rs1.getString("ANSWER")));
-						}
-						user.enabledApps.put(ap.appName, ap);
-					}
+
 					resultSet.close();
 					statement.close();
 				}
@@ -580,16 +561,7 @@ public class SystemDatabase implements ISystemDatabase, Const {
 					String addSQL = "select * from ENABLEDAPPS where ENABLEDAPPS.DOCID=" + docID;
 					Statement statement = conn.createStatement();
 					ResultSet resultSet = statement.executeQuery(addSQL);
-					while (resultSet.next()) {
-						UserApplicationProfile ap = new UserApplicationProfile(resultSet.getString("APP"), resultSet.getInt("LOGINMODE"));
-						String qaSQL = "select * from QA where QA.DOCID=" + docID + " AND QA.APP='" + ap.appName + "'";
-						Statement s1 = conn.createStatement();
-						ResultSet rs1 = s1.executeQuery(qaSQL);
-						while (rs1.next()) {
-							ap.getQuestionAnswer().add(ap.new QuestionAnswer(rs1.getString("QUESTION"), rs1.getString("ANSWER")));
-						}
-						user.enabledApps.put(ap.appName, ap);
-					}
+
 					resultSet.close();
 					statement.close();
 				}
@@ -744,20 +716,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			 * user.setEnabledApp(ap.appName, ap); } } }
 			 */
 
-			for (UserApplicationProfile app : user.enabledApps.values()) {
-				String insertURL = "insert into ENABLEDAPPS(DOCID, APP, LOGINMODE)values(" + key + ", '" + app.appName + "'," + app.loginMode + ")";
-				pst = conn.prepareStatement(insertURL);
-				pst.executeUpdate();
-				if (app.loginMode == UserApplicationProfile.LOGIN_AND_QUESTION) {
-					for (UserApplicationProfile.QuestionAnswer qa : app.getQuestionAnswer()) {
-						insertURL = "insert into QA(DOCID, APP, QUESTION, ANSWER)values(" + key + ",'" + app.appName + "','" + qa.controlQuestion
-						        + "','" + qa.answer + "')";
-						pst = conn.prepareStatement(insertURL);
-						pst.executeUpdate();
-					}
-				}
-			}
-
 			conn.commit();
 			pst.close();
 			stmt.close();
@@ -796,25 +754,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			pst = conn.prepareStatement(delSQL);
 			pst.executeUpdate();
 
-			for (UserApplicationProfile app : user.enabledApps.values()) {
-				String insertURL = "insert into ENABLEDAPPS(DOCID, APP, LOGINMODE)values (" + user.docID + ", '" + app.appName + "'," + app.loginMode
-				        + ")";
-				PreparedStatement pst0 = conn.prepareStatement(insertURL);
-				pst0.executeUpdate();
-
-				delSQL = "delete from QA where DOCID = " + user.docID + " AND QA.APP='" + app.appName + "'";
-				PreparedStatement pst2 = conn.prepareStatement(delSQL);
-				pst2.executeUpdate();
-
-				if (app.loginMode == UserApplicationProfile.LOGIN_AND_QUESTION) {
-					for (UserApplicationProfile.QuestionAnswer qa : app.getQuestionAnswer()) {
-						insertURL = "insert into QA(DOCID, APP, QUESTION, ANSWER)values(" + user.docID + ",'" + app.appName + "','"
-						        + qa.controlQuestion + "','" + qa.answer + "')";
-						PreparedStatement pst1 = conn.prepareStatement(insertURL);
-						pst1.executeUpdate();
-					}
-				}
-			}
 			conn.commit();
 			pst.close();
 			return 1;
@@ -834,23 +773,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			Statement s = conn.createStatement();
 			String sql = "select * from USERS where LOGINHASH = " + hash;
 			ResultSet rs = s.executeQuery(sql);
-
-			if (rs.next()) {
-				user.fill(rs);
-				if (user.isValid) {
-					String addSQL = "select * from ENABLEDAPPS where ENABLEDAPPS.DOCID=" + user.docID;
-					Statement statement = conn.createStatement();
-					ResultSet resultSet = statement.executeQuery(addSQL);
-					while (resultSet.next()) {
-						UserApplicationProfile ap = new UserApplicationProfile(resultSet.getString("APP"), resultSet.getInt("LOGINMODE"));
-						user.enabledApps.put(ap.appName, ap);
-					}
-					resultSet.close();
-					statement.close();
-				}
-			} else {
-				user.setUserID("anonymous");
-			}
 
 			rs.close();
 			s.close();
@@ -934,6 +856,12 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			dbPool.returnConnection(conn);
 		}
 		return dropUserTab;
+
+	}
+
+	@Override
+	public void setEmployeeDAO(IEmployeeDAO dao) {
+		// TODO Auto-generated method stub
 
 	}
 

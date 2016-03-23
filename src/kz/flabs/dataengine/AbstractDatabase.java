@@ -27,11 +27,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	protected AppEnv env;
 	protected String dbID;
 
-	@Override
-	public AppEnv getParent() {
-		return env;
-	}
-
 	public boolean clearDocuments() {
 		return false;
 	}

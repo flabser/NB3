@@ -13,7 +13,6 @@ import kz.flabs.dataengine.IDatabase;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.xml.Tag;
 import kz.flabs.users.User;
-import kz.flabs.util.Util;
 import kz.lof.user.IUser;
 
 public class ViewEntry implements IViewEntry, Const {
@@ -443,15 +442,6 @@ public class ViewEntry implements IViewEntry, Const {
 		}
 
 		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		if (ddbID != null) {
-			return ddbID.hashCode();
-		} else {
-			return Util.generateRandomAsText(db.getParent().appName).hashCode();
-		}
 	}
 
 }

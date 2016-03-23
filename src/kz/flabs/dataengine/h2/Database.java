@@ -12,17 +12,11 @@ import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
-
-	// TODO need to improve to make it more secure
-	protected static String dbUser = "ss";
-	protected static String dbPwd = "maza";
+	protected static String dbUser = EnvConst.APP_DB_USER;
+	protected static String dbPwd = EnvConst.APP_DB_PWD;
 	protected static String connectionURL = "";
 	protected IDBConnectionPool dbPool;
-	protected String dbID;
 	protected AppEnv env;
-	protected static String baseTable = "MAINDOCS";
-
-	protected String externalStructureApp;
 
 	public Database() {
 
@@ -38,11 +32,6 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 	@Override
 	public IDBConnectionPool getConnectionPool() {
 		return dbPool;
-	}
-
-	@Override
-	public AppEnv getParent() {
-		return null;
 	}
 
 	@Override

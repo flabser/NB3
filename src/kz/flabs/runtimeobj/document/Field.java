@@ -20,7 +20,6 @@ public class Field implements Const, Serializable {
 
 	public String name = "undefined";
 	public String valueAsText;
-	public IComplexObject valueAsObject;
 	public Date valueAsDate;
 	public BigDecimal valueAsNumber;
 	public Enum valueAsEnum;
@@ -175,17 +174,6 @@ public class Field implements Const, Serializable {
 			valueAsText = ListConvertor.listToString(valuesAsGlossaryData);
 			break;
 		default:
-
-		}
-	}
-
-	public Field(String name, IComplexObject value) {
-		if (name != null) {
-			this.name = name;
-			valueAsObject = value;
-			valueAsText = value.getContent();
-
-			this.type = FieldType.COMPLEX_OBJECT;
 
 		}
 	}

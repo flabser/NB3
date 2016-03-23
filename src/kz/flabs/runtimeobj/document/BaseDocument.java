@@ -57,14 +57,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @XmlAccessorType(XmlAccessType.NONE)
-public class BaseDocument extends AbstractComplexObject implements Const, Serializable {
+public class BaseDocument implements Const, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public int docType;
-	@Deprecated
-	public int parentDocID;
-	@Deprecated
-	public int parentDocType = Const.DOCTYPE_UNKNOWN;
+
 	public int editMode = EDITMODE_NOACCESS;
 	public boolean isValid;
 	public String toDeleteAfterSave;
@@ -491,21 +488,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 		}
 	}
 
-	public void addComplexObjectField(String name, IComplexObject obj) {
-		if (name != null) {
-			Field field = new Field(name, obj);
-			fieldsMap.put(field.name, field);
-		}
-	}
-
-	public void addCoordinationField(String name, IComplexObject obj) {
-		if (name != null) {
-			Field field = new Field(name, obj);
-			field.setType(FieldType.COORDINATION);
-			fieldsMap.put(field.name, field);
-		}
-	}
-
 	public <T extends Number> void addNumberField(String name, T value) {
 		if (name != null) {
 			Field field = new Field(name, value);
@@ -624,19 +606,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 			// return field.valuesAsStringList;
 		} else {
 			return new HashSet<String>();
-		}
-	}
-
-	public Object getValueAsObject(String fieldName) throws DocumentException {
-		Field field = getFields().get(fieldName);
-		if (field != null) {
-			if (field.getType() == FieldType.COMPLEX_OBJECT || field.getType() == FieldType.COORDINATION) {
-				return field.valueAsObject;
-			} else {
-				throw new DocumentException(DocumentExceptionType.COMPLEX_OBJECT_INCORRECT, fieldName);
-			}
-		} else {
-			throw new DocumentException(DocumentExceptionType.FIELD_NOT_FOUND, fieldName);
 		}
 	}
 
@@ -1202,10 +1171,9 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 	        ClassNotFoundException, _Exception {
 		// setParentDocumentID(String.valueOf(pDocId));
 
-		parentDocID = pDocId;
 		docType = Integer.parseInt(XMLUtil.getTextContent(xmlDoc, "document/@doctype"));
 		dbID = XMLUtil.getTextContent(xmlDoc, "document/@dbid");
-		parentDocType = Integer.parseInt(XMLUtil.getTextContent(xmlDoc, "document/@parentdoctype"));
+
 		setAuthor(XMLUtil.getTextContent(xmlDoc, "document/@author"));
 		ddbID = XMLUtil.getTextContent(xmlDoc, "document/@ddbid");
 		regDate = Util.convertStringToDateTimeSilently(XMLUtil.getTextContent(xmlDoc, "document/@regdate"));
@@ -1281,8 +1249,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 					if (matcher.find()) {
 						className = matcher.group();
 					}
-					IComplexObject object = AbstractComplexObject.unmarshall(className, value);
-					addComplexObjectField(k.getNodeName().trim(), object);
+
 					break;
 				case "files":
 					break; // нет необходимости обрабатывать
@@ -1314,17 +1281,6 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 		viewTexts = viewTexts.replace("viewtext0", "viewtext");
 
 		String xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><document ";
-		for (Field field : fields()) {
-			String value = field.getType() == FieldType.COMPLEX_OBJECT ?
-			// field.valueAsObject.getPersistentValue()
-			AbstractComplexObject.marshall(field.valueAsObject.getClass().getName(), field.valueAsObject)
-			        : field.valueAsText;
-			value = value.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&apos;", "'")
-			        .replace("&nbsp;", " ");
-			value = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;");
-			xmlFragment.append("<" + field.name + RuntimeObjUtil.getTypeAttribute(field.getTypeAsDatabaseType()) + ">" + value + "</" + field.name
-			        + ">");
-		}
 
 		for (BlobField field : blobFieldsMap.values()) {
 			xmlFragment.append("<" + field.name + RuntimeObjUtil.getTypeAttribute(7) + ">");
@@ -1355,12 +1311,7 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 				xmlFragment.append("<user>" + a + "</user>");
 			}
 			xmlFragment.append("</editors>");
-			xml += " doctype = \"" + docType + "\" form= \"" + form + "\" dbid= \"" + dbID + "\" docid = \"" + docID + "\" " + "parentdocid = \""
-			        + parentDocID + "\" parentdoctype = \"" + parentDocType + "\"" + " author=\"" + authorID + "\" ddbid = \"" + ddbID + "\" "
-			        + "regdate=\"" + Util.convertDataTimeToString(regDate) + "\" " + "lastupdate=\"" + Util.convertDataTimeToString(lastUpdate)
-			        + "\" " + viewTexts + "defaultreuleid= \"" + defaultRuleID + "\" viewnumber= \"" + getViewNumber() + "\" " + "viewdate= \""
-			        + Util.convertDataTimeToString(getViewDate()) + "\" sign= \"" + getSign() + "\" " + "hastopic= \"" + (hasDiscussion ? 1 : 0)
-			        + "\" signfields= \"" + getSignedFields() + "\">" + xmlFragment;
+
 		} else {
 			String hasDescendant = this.hasResponse(Const.sysGroupAsSet, Const.sysUser);
 			xml += " hasDescendant=\""
@@ -1488,13 +1439,4 @@ public class BaseDocument extends AbstractComplexObject implements Const, Serial
 		this.parentDocumentID = parentDocumentID;
 	}
 
-	@Override
-	public void init(IDatabase db, String initString) throws ComplexObjectException {
-
-	}
-
-	@Override
-	public String getContent() {
-		return null;
-	}
 }

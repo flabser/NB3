@@ -10,15 +10,12 @@ import java.util.Set;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.ISystemDatabase;
-import kz.flabs.dataengine.h2.UserApplicationProfile;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.exception.WebFormValueExceptionType;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.BlobFile;
 import kz.flabs.util.Util;
-import kz.flabs.util.XMLUtil;
-import kz.flabs.webrule.form.ISaveField;
 import kz.lof.appenv.AppEnv;
 
 import org.apache.catalina.realm.RealmBase;
@@ -26,7 +23,6 @@ import org.apache.catalina.realm.RealmBase;
 @Deprecated
 public class User extends BaseDocument implements Const {
 	public int docID;
-	public HashMap<String, UserApplicationProfile> enabledApps = new HashMap<String, UserApplicationProfile>();
 	public boolean authorized;
 	public boolean authorizedByHash;
 
@@ -127,11 +123,6 @@ public class User extends BaseDocument implements Const {
 			userGroups.add(userID);
 		}
 		return userGroups;
-	}
-
-	public boolean addEnabledApp(String app, UserApplicationProfile ap) {
-		enabledApps.put(app, ap);
-		return true;
 	}
 
 	public void fill(ResultSet rs) throws SQLException {
@@ -256,40 +247,6 @@ public class User extends BaseDocument implements Const {
 		return hash;
 	}
 
-	@Override
-	public void fillFieldsToSave(HashMap<String, ISaveField> saveFieldsMap, HashMap<String, String[]> fields) throws WebFormValueException {
-		setUserID(getWebFormValue("userid", fields, userID)[0]);
-		setEmail(getWebFormValue("email", fields, email)[0]);
-		setPassword(getWebFormValue("pwd", fields, password)[0]);
-		setPasswordHash(getWebFormValue("pwd", fields, password)[0]);
-		setAdmin(getWebFormValue("isadmin", fields, "0"));
-		String app[] = fields.get("enabledapps");
-		String lm[] = fields.get("loginmode");
-		this.enabledApps.clear();
-		if (app != null) {
-			for (int i = 0; i < app.length; i++) {
-				if (!app[i].equals("")) {
-					int loginMode = 0;
-					try {
-						loginMode = Integer.parseInt(lm[i]);
-					} catch (NumberFormatException e) {
-						loginMode = 0;
-					}
-					UserApplicationProfile ap = new UserApplicationProfile(app[i], loginMode);
-					if (loginMode == 1) {
-						String[] q = fields.get("question_" + ap.appName);
-						String[] a = fields.get("answer_" + ap.appName);
-						for (int i1 = 0; i1 < q.length; i1++) {
-							UserApplicationProfile.QuestionAnswer qa = ap.new QuestionAnswer(q[i1].trim(), a[i1].trim());
-							ap.getQuestionAnswer().add(qa);
-						}
-					}
-					addEnabledApp(ap.appName, ap);
-				}
-			}
-		}
-	}
-
 	public void fillFieldsToSaveLight(HashMap<String, String[]> fields) throws WebFormValueException {
 		setUserID(getWebFormValue("userid", fields, userID)[0]);
 		setEmail(getWebFormValue("email", fields, email)[0]);
@@ -330,18 +287,6 @@ public class User extends BaseDocument implements Const {
 
 	public String usersByKeytoXML() {
 		return "<userid>" + userID + "</userid>" + "<key>" + docID + "</key>" + "<email>" + email + "</email>";
-	}
-
-	public String getAppURLAsXml() {
-		StringBuffer xmlContent = new StringBuffer(1000);
-		for (Map.Entry<String, UserApplicationProfile> app : enabledApps.entrySet()) {
-			xmlContent.append("<entry " + "url=\"" + enabledApps.get(app) + "\">" + XMLUtil.getAsTagValue(app.getKey()));
-			if (app.getValue() != null) {
-				xmlContent.append(app.getValue().toXML());
-			}
-			xmlContent.append("</entry>");
-		}
-		return xmlContent.toString();
 	}
 
 	public void setUserName(String name) {

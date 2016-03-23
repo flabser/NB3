@@ -103,7 +103,7 @@ public class SourceSupplier implements Const {
 		User user = new User(userID);
 		this.user = user;
 		scriptProcessor = new SessionScriptProcessor(db, user);
-		env = db.getParent();
+
 	}
 
 	public SourceSupplier(IDatabase db, User user) {

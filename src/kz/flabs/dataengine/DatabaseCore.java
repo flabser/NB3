@@ -57,30 +57,7 @@ public abstract class DatabaseCore {
 		}
 	}
 
-	private boolean fillViewText(ResultSet rs, String vtName, BaseDocument doc) {
-		try {
-			String val = rs.getString(vtName).replace("''", "'").trim();
-			// if (!val.equals("-") && !val.equals("")) {
-			doc.addViewText(val);
-			return true;
-			// } else {
-			// return false;
-			// }
-		} catch (Exception e) {
-			return false;
-		}
-
-	}
-
 	protected void fillSysData(ResultSet rs, BaseDocument doc) {
-
-		try {
-			doc.parentDocID = rs.getInt("PARENTDOCID");
-			doc.parentDocType = rs.getInt("PARENTDOCTYPE");
-		} catch (SQLException e) {
-			doc.parentDocID = 0;
-			doc.parentDocType = Const.DOCTYPE_UNKNOWN;
-		}
 
 		try {
 			try {
