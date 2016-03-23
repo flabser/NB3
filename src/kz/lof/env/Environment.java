@@ -117,7 +117,7 @@ public class Environment implements Const, ICache {
 			saxParser.parse(file, cfgXMLhandler);
 			Document xmlDocument = getDocument();
 
-			logger.infoLogEntry("Initialize runtime environment");
+			logger.infoLogEntry("initialize runtime environment");
 			initMimeTypes();
 
 			orgName = XMLUtil.getTextContent(xmlDocument, "/nextbase/orgname");
@@ -190,9 +190,9 @@ public class Environment implements Const, ICache {
 					smtpUser = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpuser");
 					smtpPassword = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtppassword");
 					smtpPort = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpport");
-					logger.infoLogEntry("MailAgent is going to redirect some messages to host: " + SMTPHost);
+					logger.infoLogEntry("mailAgent is going to redirect some messages to host: " + SMTPHost);
 				} else {
-					logger.infoLogEntry("MailAgent is switch off");
+					logger.infoLogEntry("mailAgent is switch off");
 				}
 			} catch (NumberFormatException nfe) {
 				logger.infoLogEntry("MailAgent is not set");

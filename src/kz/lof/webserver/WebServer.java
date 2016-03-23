@@ -31,7 +31,7 @@ public class WebServer {
 	// "index.htm" };
 
 	public void init(String defaultHostName) throws MalformedURLException, LifecycleException {
-		Server.logger.debugLogEntry("Init webserver ...");
+		Server.logger.debugLogEntry("init webserver ...");
 
 		tomcat = new Tomcat();
 		tomcat.setPort(Environment.httpPort);

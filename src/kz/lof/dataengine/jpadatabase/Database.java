@@ -56,9 +56,10 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 		try {
 			if (!hasDatabase(EnvConst.APP_NAME, sysDbURL, props)) {
-				Server.logger.infoLogEntry("Creating database \"" + EnvConst.APP_NAME + "\"...");
+				Server.logger.infoLogEntry("creating database \"" + EnvConst.APP_NAME + "\"...");
 				registerUser(dbUser, dbPwd, sysDbURL, props);
 				if (createDatabase(EnvConst.APP_NAME, dbUser, sysDbURL, props) == 0) {
+					Server.logger.infoLogEntry("the database has been created");
 					isNascence = true;
 				}
 			}
@@ -101,22 +102,25 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 				AppEnv env = new AppEnv(EnvConst.ADMINISTRATOR_APP_NAME);
 				env.setDataBase(this);
 				_Session ses = new _Session(env, new SuperUser());
-
+				Server.logger.infoLogEntry("setup localization environment...");
 				LanguageDAO dao = new LanguageDAO(ses);
 				for (LanguageCode lc : Environment.langs) {
 					Language entity = ServerConst.getLanguage(lc);
 					try {
 						dao.add(entity);
+						Server.logger.infoLogEntry("add " + entity.getCode() + " language");
 					} catch (SecureException e) {
 						Server.logger.errorLogEntry(e);
 					}
 				}
 
+				Server.logger.infoLogEntry("setup applications...");
 				ApplicationDAO aDao = new ApplicationDAO(ses);
 				for (Site site : Environment.webAppToStart.values()) {
 					Application entity = ServerConst.getApplication(site);
 					try {
 						aDao.add(entity);
+						Server.logger.infoLogEntry("register \"" + entity.getName() + "\" application");
 					} catch (SecureException e) {
 						Server.logger.errorLogEntry(e);
 					}
@@ -162,7 +166,8 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 				st.executeUpdate("CREATE USER  " + dbUser + " WITH password '" + dbPwd + "'");
 				return 0;
 			} catch (PSQLException sqle) {
-				Server.logger.warningLogEntry("database user \"" + dbUser + "\" already exists");
+				// Server.logger.warningLogEntry("database user \"" + dbUser +
+				// "\" already exists");
 				return 1;
 			} catch (Exception e) {
 				Server.logger.errorLogEntry(e.getMessage());
@@ -228,7 +233,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 	}
 
 	private int theFirst(_Session ses) {
-		List<String> lwd = Console.getValFromConsole("enter user name> ", StringUtil.USERNAME_PATTERN);
+		List<String> lwd = Console.getValFromConsole("enter adminstrator user name> ", StringUtil.USERNAME_PATTERN);
 		if (lwd != null) {
 			if (lwd.contains("quit")) {
 				Server.shutdown();

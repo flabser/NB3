@@ -28,7 +28,7 @@ public class Server {
 		logger.infoLogEntry(serverTitle + " start");
 		if (Environment.isDevMode) {
 			Environment.verboseLogging = true;
-			logger.warningLogEntry("Debug logging is turned on");
+			logger.warningLogEntry("debug logging is turned on");
 		}
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
 		logger.infoLogEntry("Copyright(c) Lab of the Future 2015. All Right Reserved");
@@ -43,7 +43,7 @@ public class Server {
 		}
 
 		String info = webServerInst.initConnectors();
-		Server.logger.debugLogEntry("Web server started (" + info + ")");
+		Server.logger.debugLogEntry("web server started (" + info + ")");
 		webServerInst.startContainer();
 
 		Environment.periodicalServices = new PeriodicalServices();
