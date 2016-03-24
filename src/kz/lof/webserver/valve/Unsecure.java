@@ -43,7 +43,7 @@ public class Unsecure extends ValveBase {
 				} else {
 					if (ru.isPage()) {
 						try {
-							if (request.getMethod().equalsIgnoreCase("get") && env.ruleProvider.getRule(ru.getPageID()).isAnonymousAccessAllowed()) {
+							if (env.ruleProvider.getRule(ru.getPageID()).isAnonymousAccessAllowed()) {
 								gettingSession(request, response, env);
 								getNext().getNext().invoke(request, response);
 							} else {
