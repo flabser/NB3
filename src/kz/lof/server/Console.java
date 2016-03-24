@@ -142,7 +142,7 @@ public class Console implements Runnable {
 				} catch (IOException e) {
 					System.err.println(e);
 				}
-				System.out.println("done");
+				System.out.println("the batch has been done");
 			}
 		} else if (command.equalsIgnoreCase("show file to delete") || command.equalsIgnoreCase("sfd")) {
 			if (Environment.fileToDelete.size() == 0) {
