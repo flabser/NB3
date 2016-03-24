@@ -28,7 +28,7 @@ public class EnvConst {
 	public static final String TIME_FIELD_NAME = "time";
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";
 	public static final int DEFAULT_HTTP_PORT = 38700;
-	public static final String ADMINISTRATOR_SERVICE_CLASS = "kz.lof.administrator.services.UserServices";
+	public static final String ADMINISTRATOR_SERVICE_CLASS = "staff.services.UserServices";
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static int DEFAULT_PAGE_SIZE = 20;
@@ -46,6 +46,7 @@ public class EnvConst {
 	public static String NB_JAR_FILE = "nb.jar";
 	public static String STRUCTDB_USER = "postgres";
 	public static String STRUCTDB_PWD = "";
-	//public static String STRUCTDB_URL = "jdbc:postgresql://172.16.251.7:5432/CIS";
+	// public static String STRUCTDB_URL =
+	// "jdbc:postgresql://172.16.251.7:5432/CIS";
 	public static String STRUCTDB_URL = "";
 }

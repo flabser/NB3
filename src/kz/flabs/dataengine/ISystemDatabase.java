@@ -6,11 +6,8 @@ import java.util.HashMap;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.system.IEmployeeDAO;
-import kz.lof.user.IUser;
 
 public interface ISystemDatabase {
-	IUser<Long> getUser(String login, String pwd);
-
 	User checkUser(String userID, String pwd, User user);
 
 	User checkUser(String userID, String pwd, String hash, User user);

@@ -17,7 +17,7 @@ import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
-import kz.lof.administrator.services.UserServices;
+import kz.lof.administrator.services.Connect;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.SessionPool;
@@ -46,7 +46,7 @@ public class Login extends HttpServlet implements Const {
 
 			Cookies appCookies = new Cookies(request);
 
-			IUser<Long> user = new UserServices().getUser(login, pwd);
+			IUser<Long> user = new Connect().getUser(login, pwd);
 
 			if (user != null && user.isAuthorized()) {
 				jses = request.getSession(true);

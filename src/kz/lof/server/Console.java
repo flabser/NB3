@@ -152,21 +152,23 @@ public class Console implements Runnable {
 					System.out.println(ci);
 				}
 			}
-		} else if (command.equalsIgnoreCase("import from h2") || command.equalsIgnoreCase("ifh2") || command.equalsIgnoreCase("ifos")) {
+		} else if (command.equalsIgnoreCase("import from h2") || command.equalsIgnoreCase("import from old structure")
+		        || command.equalsIgnoreCase("ifh2") || command.equalsIgnoreCase("ifos")) {
 			try {
 				Class<?> clazz = Class.forName(EnvConst.ADMINISTRATOR_SERVICE_CLASS);
 				Constructor<?> contructor = clazz.getConstructor();
 				Method method;
 				switch (command) {
-					case "ifh2":
-					case "import from h2":
-						method = clazz.getMethod("importFromH2");
-						break;
-					case "ifos":
-						method = clazz.getMethod("importFromOldStructure");
-						break;
-					default:
-						method = clazz.getMethod("importFromH2");
+				case "ifh2":
+				case "import from h2":
+					method = clazz.getMethod("importFromH2");
+					break;
+				case "ifos":
+				case "import from old structure":
+					method = clazz.getMethod("importFromOldStructure");
+					break;
+				default:
+					method = clazz.getMethod("importFromH2");
 				}
 				Object instance = contructor.newInstance();
 				method.invoke(instance);

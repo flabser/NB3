@@ -18,13 +18,10 @@ import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
-import kz.lof.administrator.services.UserServices;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.server.Server;
-import kz.lof.user.IUser;
-import kz.lof.util.StringUtil;
 
 import org.apache.catalina.realm.RealmBase;
 
@@ -58,40 +55,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 		} finally {
 			dbPool.returnConnection(conn);
 		}
-	}
-
-	@Override
-	public IUser<Long> getUser(String login, String pwd) {
-		IUser<Long> user = null;
-
-		UserServices us = new UserServices();
-		// user = us.getUser(login);
-
-		if (user != null) {
-			String pwdHash = StringUtil.encode(pwd);
-			if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
-				user.setAuthorized(true);
-			} else {
-				Server.logger.errorLogEntry("password has not been encoded");
-			}
-
-			if (user.isAuthorized()) {
-				if (eDao != null) {
-					IEmployee emp = eDao.getEmployee(user.getId());
-					if (emp != null) {
-						user.setUserName(emp.getName());
-					} else {
-						user.setUserName(user.getLogin());
-					}
-				}
-			}
-
-		} else {
-			Server.logger.warningLogEntry("\"" + login + "\" user not found");
-		}
-
-		return user;
-
 	}
 
 	@Override
