@@ -47,11 +47,11 @@ public class _Helper {
 		return getDateAsString(new Date());
 	}
 
-	public static String getDateAsString(Date date) throws _Exception {
+	public static String getDateAsString(Date date) {
 		try {
 			return Util.simpleDateFormat.format(date);
 		} catch (Exception e) {
-			throw new _Exception(_ExceptionType.SCRIPT_ENGINE_ERROR, "Date has not parsed :getDateAsString(" + date + ")");
+			return date.toString();
 		}
 	}
 

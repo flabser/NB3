@@ -9,6 +9,7 @@ import java.util.UUID;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
 import kz.flabs.scriptprocessor.ScriptShowField;
 import kz.flabs.servlets.PublishAsType;
+import kz.flabs.util.Util;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.dataengine.jpa.IAppEntity;
 import kz.lof.exception.SecureException;
@@ -22,8 +23,6 @@ import kz.lof.scripting._Validation;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.ScriptHelper;
 import kz.nextbase.script._Exception;
-import kz.nextbase.script._Helper;
-import kz.nextbase.script._IXMLContent;
 import kz.nextbase.script.actions._Action;
 import kz.nextbase.script.actions._ActionBar;
 import kz.nextbase.script.actions._ActionType;
@@ -43,18 +42,13 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 		result.setSession(ses);
 	}
 
-	@Deprecated
-	public void publishElement(String entryName, Object value) throws _Exception {
+	public void addValue(String entryName, Object value) {
 		if (value == null) {
 			result.addContent(new ScriptShowField(entryName, ""));
 		} else if (value instanceof String) {
 			result.addContent(new ScriptShowField(entryName, (String) value));
-		} else if (value instanceof _IXMLContent) {
-			result.addContent(new ScriptShowField(entryName, (_IXMLContent) value));
 		} else if (value instanceof Date) {
-			result.addContent(new ScriptShowField(entryName, _Helper.getDateAsString((Date) value)));
-		} else if (value instanceof Enum) {
-			result.addContent(new ScriptShowField(entryName, ((Enum) value).name()));
+			result.addContent(new ScriptShowField(entryName, Util.convertDataTimeToString(((Date) value))));
 		} else if (value instanceof BigDecimal) {
 			result.addContent(new ScriptShowField(entryName, value.toString()));
 		}

@@ -58,9 +58,6 @@ public class Util {
 		try {
 			return dateTimeFormat.format(date);
 		} catch (Exception e) {
-			// AppEnv.logger.errorLogEntry("Util, Не удалось преобразовать время
-			// в текст " + date);
-			// AppEnv.logger.errorLogEntry(e);
 			return "null";
 		}
 	}
