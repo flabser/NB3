@@ -98,7 +98,7 @@ public class _WebFormData {
 		if (value != null) {
 			return value;
 		} else {
-			String val[] = { "" };
+			String val[] = {};
 			return val;
 		}
 

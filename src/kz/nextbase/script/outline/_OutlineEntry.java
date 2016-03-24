@@ -27,7 +27,7 @@ public class _OutlineEntry {
     public _OutlineEntry(String caption, String entityName) {
         this.caption = caption;
         this.hint = caption;
-        this.url = "Provider?id=" + entityName;
+        this.url = "p?id=" + entityName;
         this.customID = entityName;
     }
 
