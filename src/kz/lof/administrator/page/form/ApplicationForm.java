@@ -3,6 +3,7 @@ package kz.lof.administrator.page.form;
 import java.util.Date;
 import java.util.UUID;
 
+import kz.flabs.util.Util;
 import kz.lof.administrator.dao.ApplicationDAO;
 import kz.lof.administrator.model.Application;
 import kz.lof.dataengine.jpa.constants.AppCode;
@@ -65,12 +66,17 @@ public class ApplicationForm extends _DoPage {
 			entity = dao.findById(UUID.fromString(id));
 		}
 
+		entity.setName(formData.getValueSilently("name"));
+		entity.setPosition(Util.convertStringToInt(formData.getValueSilently("position"), 99));
+		entity.setDefaultURL(formData.getValueSilently("defaulturl").replace("&", "&amp;"));
+
 		try {
 			if (isNew) {
 				dao.add(entity);
 			} else {
 				dao.update(entity);
 			}
+			setRedirect("Provider?id=application-view");
 		} catch (DatabaseException | SecureException e) {
 			setError(e);
 		}
