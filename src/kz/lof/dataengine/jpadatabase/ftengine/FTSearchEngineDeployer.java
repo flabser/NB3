@@ -14,7 +14,7 @@ public class FTSearchEngineDeployer {
 		this.dbPool = dbPool;
 	}
 
-	public void deploy() {
+	public void init() {
 		Connection conn = dbPool.getConnection();
 		try {
 			conn.setAutoCommit(false);

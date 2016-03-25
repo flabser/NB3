@@ -25,7 +25,7 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 		try {
 			checkAndCreateTable(DDEScripts.getCountersTableDDE(), "COUNTERS");
 			FTSearchEngineDeployer ftEngine = new FTSearchEngineDeployer(dbPool);
-			ftEngine.deploy();
+			ftEngine.init();
 			deployed = true;
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
