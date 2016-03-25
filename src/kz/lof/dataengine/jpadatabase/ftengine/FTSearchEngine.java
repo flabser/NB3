@@ -47,7 +47,7 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 			StringBuilder sql = new StringBuilder();
 
 			String tsVectorTemplate = "to_tsvector('" + lang + "', %s::character varying)";
-			String sqlPart = "select '%s' as table_name, id from %s where %s @@ to_tsquery('" + lang + "', '" + keyWord + "') union all ";
+			String sqlPart = "select '%s' as table_name, id from %s where (%s) @@ to_tsquery('" + lang + "', '" + keyWord + "') union all ";
 
 			for (FTEntity table : indexTables) {
 				String tsVectors = table.getFieldNames().stream().map(colName-> String.format(tsVectorTemplate, colName)).collect(Collectors.joining("||"));
@@ -93,10 +93,6 @@ public class FTSearchEngine implements IFTIndexEngine, Const {
 		} finally {
 			dbPool.returnConnection(conn);
 		}
-
-//		List res = new ArrayList<>();
-//		result.stream().forEach(v -> res.addAll(v.getResult()));
-//		ViewPage<?> tem = new ViewPage<>(res, 0, 0, 0);
 
 		return result.size() > 0 ? new ViewPage<>(result, result.size(), pageNum, pageSize) : null;
 
