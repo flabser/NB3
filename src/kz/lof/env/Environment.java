@@ -25,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
+import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.exception.RuleException;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
@@ -32,7 +33,6 @@ import kz.flabs.runtimeobj.caching.ICache;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.lof.appenv.AppEnv;
-import kz.lof.dataengine.jpadatabase.Database;
 import kz.lof.localization.LanguageCode;
 import kz.lof.log.ILogger;
 import kz.lof.scheduler.PeriodicalServices;
@@ -100,7 +100,10 @@ public class Environment implements Const, ICache {
 		loadProperties();
 		initProcess();
 		try {
-			Environment.dataBase = new Database();
+			IDatabase db = new kz.lof.dataengine.jpadatabase.Database();
+			IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(db);
+			dd.deploy();
+			Environment.dataBase = db;
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
 			Server.shutdown();

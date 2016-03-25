@@ -7,25 +7,25 @@ import java.sql.Statement;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
+import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.lof.appenv.AppEnv;
-import kz.lof.env.Environment;
+import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngineDeployer;
 
 public class DatabaseDeployer implements IDatabaseDeployer {
 	public boolean deployed;
-
 	private IDBConnectionPool dbPool;
 
-	public DatabaseDeployer(AppEnv env) throws InstantiationException, IllegalAccessException, ClassNotFoundException, DatabasePoolException {
-		dbPool = Environment.dataBase.getConnectionPool();
+	public DatabaseDeployer(IDatabase db) throws InstantiationException, IllegalAccessException, ClassNotFoundException, DatabasePoolException {
+		dbPool = db.getConnectionPool();
 	}
 
 	@Override
 	public boolean deploy() {
 		try {
 			checkAndCreateTable(DDEScripts.getCountersTableDDE(), "COUNTERS");
-			String dbVersion = dbPool.getDatabaseVersion();
-			dbVersion = dbVersion.substring(dbVersion.indexOf(" ") + 1, dbVersion.indexOf(","));
+			FTSearchEngineDeployer ftEngine = new FTSearchEngineDeployer(dbPool);
+			ftEngine.deploy();
 			deployed = true;
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
@@ -47,38 +47,6 @@ public class DatabaseDeployer implements IDatabaseDeployer {
 				}
 			}
 			s.close();
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-		return false;
-	}
-
-	public boolean createTrigger(String triggerDDE) {
-		Connection conn = dbPool.getConnection();
-		try {
-			Statement s = conn.createStatement();
-			s.execute(triggerDDE);
-			s.close();
-			conn.commit();
-			return true;
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-		return false;
-	}
-
-	public boolean createIndex(String indexDDE) {
-		Connection conn = dbPool.getConnection();
-		try {
-			Statement s = conn.createStatement();
-			s.execute(indexDDE);
-			s.close();
-			conn.commit();
-			return true;
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
 		} finally {

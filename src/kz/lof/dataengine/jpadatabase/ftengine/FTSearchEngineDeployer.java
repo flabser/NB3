@@ -6,56 +6,28 @@ import java.sql.Statement;
 
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
-import kz.lof.appenv.AppEnv;
 
 public class FTSearchEngineDeployer {
 	private IDBConnectionPool dbPool;
-	private String schema = "PUBLIC";
-	
-	
-	public FTSearchEngineDeployer(IDBConnectionPool dbPool) {		
+
+	public FTSearchEngineDeployer(IDBConnectionPool dbPool) {
 		this.dbPool = dbPool;
 	}
-	
-	public void initEngine(){
-		Connection conn = dbPool.getConnection();		
-		try{
-			conn.setAutoCommit(false);
-			String sql = "CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\";" +
-					" CALL FTL_INIT()";  
 
-			Statement s = conn.createStatement();
-			s.execute(sql);
-			s.close();
-			conn.commit();
-		}catch(SQLException e){
-			DatabaseUtil.debugErrorPrint(e);
-		} finally {	
-			dbPool.returnConnection(conn);		
-		}
-
-	}
-
-	public void createFTIndex(String tableName, String columnName){
+	public void deploy() {
 		Connection conn = dbPool.getConnection();
-		try{
+		try {
 			conn.setAutoCommit(false);
-			String sql = "";			
-			if (columnName == null){				
-				sql = "CALL FTL_CREATE_INDEX('" + schema + "', '" + tableName + "', NULL);";
-			}else{
-				sql = "CALL FTL_CREATE_INDEX('" + schema + "', '" + tableName + "', '" + columnName + "');";
-			}
-			
+
 			Statement s = conn.createStatement();
-			s.execute(sql);
-			AppEnv.logger.debugLogEntry("FT index for " + tableName + " has not created");
+			// s.execute(sql);
 			s.close();
 			conn.commit();
-		}catch(SQLException e){
-			//DatabaseUtil.errorPrint(e);
-		} finally {		
-			dbPool.returnConnection(conn);		
+		} catch (SQLException e) {
+			DatabaseUtil.debugErrorPrint(e);
+		} finally {
+			dbPool.returnConnection(conn);
 		}
+
 	}
 }

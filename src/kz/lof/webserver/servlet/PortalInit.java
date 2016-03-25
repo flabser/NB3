@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.IDatabaseDeployer;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
@@ -32,9 +31,7 @@ public class PortalInit extends HttpServlet {
 		AppEnv env = new AppEnv(app);
 
 		try {
-			IDatabaseDeployer dd = new kz.lof.dataengine.jpadatabase.DatabaseDeployer(env);
 			IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
-			dd.deploy();
 			env.setDataBase(db);
 
 			try {
