@@ -1,6 +1,5 @@
 package kz.flabs.runtimeobj;
 
-import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.RuleException;
@@ -22,8 +21,7 @@ public class FormActions {
 		this.captionTextSupplier = captionTextSupplier;
 	}
 
-	public String getActions(BaseDocument doc, User currentUser) throws DocumentException, DocumentAccessException, RuleException,
-	        ComplexObjectException {
+	public String getActions(BaseDocument doc, User currentUser) throws DocumentException, DocumentAccessException, RuleException {
 		String caption = "";
 		StringBuffer xmlText = new StringBuffer(100);
 		ss = new SourceSupplier(doc, currentUser, doc.getAppEnv());
@@ -41,7 +39,7 @@ public class FormActions {
 		return xmlText.toString();
 	}
 
-	public String getActions(User currentUser, AppEnv env) throws DocumentException, DocumentAccessException, RuleException, ComplexObjectException {
+	public String getActions(User currentUser, AppEnv env) throws DocumentException, DocumentAccessException, RuleException {
 		String caption = "";
 		StringBuffer xmlText = new StringBuffer(100);
 		ss = new SourceSupplier(null, currentUser, env);
@@ -58,8 +56,7 @@ public class FormActions {
 		return xmlText.toString();
 	}
 
-	private boolean isGranted(FormActionRule entry, String userID) throws DocumentException, DocumentAccessException, RuleException,
-	        ComplexObjectException {
+	private boolean isGranted(FormActionRule entry, String userID) throws DocumentException, DocumentAccessException, RuleException {
 
 		return false;
 	}
