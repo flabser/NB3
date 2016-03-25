@@ -7,20 +7,13 @@ import java.util.HashMap;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.ComplexObjectException;
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
-import kz.flabs.exception.RuleException;
 import kz.flabs.localization.SentenceCaption;
 import kz.flabs.localization.Vocabulary;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.scriptprocessor.IScriptProcessor;
-import kz.flabs.scriptprocessor.SessionScriptProcessor;
-import kz.flabs.scriptprocessor.SimpleScriptProcessor;
-import kz.flabs.scriptprocessor.SimpleScriptProcessorWithLang;
 import kz.flabs.users.User;
 import kz.flabs.util.Util;
-import kz.flabs.webrule.IRuleValue;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.lof.appenv.AppEnv;
@@ -46,7 +39,7 @@ public class SourceSupplier implements Const {
 		contextType = SourceSupplierContextType.APP_ENVIRONMENT;
 		user = new User(Const.sysUser);
 		_Session session = new _Session(env, new AnonymousUser());
-		scriptProcessor = new SimpleScriptProcessor(session);
+
 		this.env = env;
 	}
 
@@ -63,7 +56,7 @@ public class SourceSupplier implements Const {
 		contextType = SourceSupplierContextType.DOCUMENT;
 		if (doc2 == null) {
 			_Session session = new _Session(env, new AnonymousUser());
-			scriptProcessor = new SimpleScriptProcessor(session);
+
 		} else {
 
 			this.doc = doc2;
@@ -78,7 +71,7 @@ public class SourceSupplier implements Const {
 		contextType = SourceSupplierContextType.DOCUMENT_WITH_LANG;
 		if (doc == null) {
 			_Session session = new _Session(env, new AnonymousUser());
-			scriptProcessor = new SimpleScriptProcessorWithLang(session, lang);
+
 		} else {
 
 			this.doc = doc;
@@ -93,7 +86,6 @@ public class SourceSupplier implements Const {
 		vocabulary = env.vocabulary;
 		contextType = SourceSupplierContextType.SIMPLE_WITH_LANG;
 		_Session session = new _Session(env, new AnonymousUser());
-		scriptProcessor = new SimpleScriptProcessorWithLang(session, lang);
 
 	}
 
@@ -102,7 +94,6 @@ public class SourceSupplier implements Const {
 		this.db = db;
 		User user = new User(userID);
 		this.user = user;
-		scriptProcessor = new SessionScriptProcessor(db, user);
 
 	}
 
@@ -110,33 +101,14 @@ public class SourceSupplier implements Const {
 		contextType = SourceSupplierContextType.DATABASE;
 		this.db = db;
 		this.user = user;
-		scriptProcessor = new SessionScriptProcessor(db, user);
+
 	}
 
 	public SourceSupplier(String userID) {
 		contextType = SourceSupplierContextType.SIMPLE;
-		scriptProcessor = new SimpleScriptProcessor();
+
 		User user = new User(userID);
 		this.user = user;
-	}
-
-	public ArrayList<BaseDocument> getDocuments(IRuleValue sourceVal, User user) throws DocumentException, DocumentAccessException, RuleException,
-	        ComplexObjectException {
-		ArrayList<BaseDocument> col = new ArrayList<BaseDocument>();
-		switch (sourceVal.getSourceType()) {
-		case QUERY:
-
-			break;
-		case MACRO:
-
-			break;
-		case STATIC:
-			break;
-		case SCRIPT:
-			break;
-		}
-		return col;
-
 	}
 
 	public String getValueAsIdAttr(String value) throws DocumentException {

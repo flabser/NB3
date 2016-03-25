@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.PortalException;
@@ -178,7 +177,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult edit(HttpServletRequest request, String app, String element, String id, String key) throws NumberFormatException,
-	        RuleException, DocumentException, DocumentAccessException, LocalizatorException, ComplexObjectException {
+	        RuleException, DocumentException, DocumentAccessException, LocalizatorException {
 		ProviderResult result = new ProviderResult();
 		result.publishAs = PublishAsType.HTML;
 
@@ -231,7 +230,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult view(HttpServletRequest request, String dbID, String app, String element, String id) throws RuleException,
-	        DocumentException, DocumentAccessException, ComplexObjectException, _Exception {
+	        DocumentException, DocumentAccessException, _Exception {
 		ProviderResult result = new ProviderResult();
 		result.publishAs = PublishAsType.HTML;
 		String content = "";
@@ -299,7 +298,7 @@ public class AdminProvider extends HttpServlet implements Const {
 	}
 
 	private ProviderResult save(HttpServletRequest request, String app, String dbID, String element, String id) throws WebFormValueException,
-	        RuleException, DocumentException, DocumentAccessException, ComplexObjectException {
+	        RuleException, DocumentException, DocumentAccessException {
 		ProviderResult result = new ProviderResult();
 
 		if (element.equalsIgnoreCase("user_profile")) {

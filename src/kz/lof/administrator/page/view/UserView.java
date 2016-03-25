@@ -31,7 +31,7 @@ public class UserView extends _DoPage {
 		String keyword = formData.getValueSilently("keyword");
 		addContent(actionBar);
 		ViewPage<User> vp = dao.findAll(keyword, pageNum, pageSize);
-		addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
+		addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session, keyword));
 	}
 
 	@Override

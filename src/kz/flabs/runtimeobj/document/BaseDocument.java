@@ -29,7 +29,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.ComplexObjectException;
 import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.DocumentExceptionType;
@@ -1042,7 +1041,7 @@ public class BaseDocument implements Const, Serializable {
 	}
 
 	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentAccessException, DocumentException, ComplexObjectException {
+	        throws DocumentAccessException, DocumentException {
 		return responses;
 
 	}
@@ -1053,7 +1052,7 @@ public class BaseDocument implements Const, Serializable {
 	}
 
 	public ArrayList<BaseDocument> getDescendantsArray(int docID, int docType, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentException, ComplexObjectException {
+	        throws DocumentException {
 		return responses;
 
 	}
@@ -1158,7 +1157,7 @@ public class BaseDocument implements Const, Serializable {
 		return fieldsMap;
 	}
 
-	public int save(User user) throws DocumentAccessException, DocumentException, ComplexObjectException {
+	public int save(User user) throws DocumentAccessException, DocumentException {
 		return -1;
 	}
 
@@ -1167,8 +1166,8 @@ public class BaseDocument implements Const, Serializable {
 		return "form:" + form + ",docid:" + docID + ",docType:" + docType + "ddbid:" + ddbID + ":" + fieldsMap;
 	}
 
-	public void parseXml(org.w3c.dom.Document xmlDoc, int pDocId) throws ComplexObjectException, IllegalAccessException, InstantiationException,
-	        ClassNotFoundException, _Exception {
+	public void parseXml(org.w3c.dom.Document xmlDoc, int pDocId) throws IllegalAccessException, InstantiationException, ClassNotFoundException,
+	        _Exception {
 		// setParentDocumentID(String.valueOf(pDocId));
 
 		docType = Integer.parseInt(XMLUtil.getTextContent(xmlDoc, "document/@doctype"));
@@ -1265,7 +1264,7 @@ public class BaseDocument implements Const, Serializable {
 		}
 	}
 
-	public String toXML(boolean allDescendants) throws ComplexObjectException {
+	public String toXML(boolean allDescendants) {
 		StringBuffer xmlFragment = new StringBuffer(1000);
 		// String viewText = getViewText();
 		String[] viewTextList = getViewTextList().toArray(new String[getViewTextList().size()]);
@@ -1404,7 +1403,7 @@ public class BaseDocument implements Const, Serializable {
 
 	}
 
-	public void fillResponses() throws DocumentAccessException, DocumentException, ComplexObjectException {
+	public void fillResponses() throws DocumentAccessException, DocumentException {
 		responses = getResponses(docID, docType, Const.supervisorGroupAsSet, Const.sysUser);
 	}
 
