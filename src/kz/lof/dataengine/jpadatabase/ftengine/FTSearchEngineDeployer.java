@@ -33,12 +33,13 @@ public class FTSearchEngineDeployer {
 	private String createDict(){
 
 		String dictionaryTemplate = "" +
+				"DROP TEXT SEARCH DICTIONARY if exists %s_dict;" +
 				"CREATE TEXT SEARCH DICTIONARY public.%s_dict (\n" +
 				"   TEMPLATE = pg_catalog.simple,\n" +
 				"   STOPWORDS = %s\n" +
 				");";
 
-		return Environment.langs.stream().map(el -> String.format(dictionaryTemplate, el.name(), el.getLang()))
+		return Environment.langs.stream().map(el -> String.format(dictionaryTemplate, el.name(), el.name(), el.getLang()))
 				.reduce("", (acc, rec) -> acc + rec);
 	}
 }
