@@ -5,6 +5,7 @@
 	<persistence-unit name="MunicipalProperty" transaction-type="RESOURCE_LOCAL">
 		<!-- Specific application entities -->
 		<class>municipalproperty.model.Property</class>
+		<class>municipalproperty.model.Attachment</class>
 		<class>municipalproperty.model.Vehicle</class>
 		<class>municipalproperty.model.RealEstate</class>
 		<class>municipalproperty.model.PersonalEstate</class>
@@ -38,6 +39,7 @@
 	<persistence-unit name="Accountant" transaction-type="RESOURCE_LOCAL">
 		<!-- Specific application entities -->
 		<class>municipalproperty.model.Property</class>
+		<class>municipalproperty.model.Attachment</class>
 		<class>municipalproperty.model.Vehicle</class>
 		<class>municipalproperty.model.RealEstate</class>
 		<class>municipalproperty.model.PersonalEstate</class>
