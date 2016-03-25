@@ -14,20 +14,24 @@ public class FTSearchEngineDeployer {
 		this.dbPool = dbPool;
 	}
 
+	@SuppressWarnings("SqlNoDataSourceInspection")
 	public void init() {
 		Connection conn = dbPool.getConnection();
-		try {
+		try (Statement s = conn.createStatement();){
 			conn.setAutoCommit(false);
 
-			Statement s = conn.createStatement();
-			// s.execute(sql);
-			s.close();
+			String createDictionary = "" +
+					"CREATE TEXT SEARCH DICTIONARY public.simple_dict (\n" +
+					"   TEMPLATE = pg_catalog.simple,\n" +
+					"   STOPWORDS = russian\n" +
+					");";
+
+			s.executeUpdate(createDictionary);
 			conn.commit();
 		} catch (SQLException e) {
 			DatabaseUtil.debugErrorPrint(e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
-
 	}
 }
