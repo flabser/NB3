@@ -5,18 +5,24 @@ package kz.lof.localization;
  *
  */
 public enum LanguageCode {
-	UNKNOWN(0), ENG(45), RUS(570), KAZ(255), BUL(115), POR(545), SPA(230), CHI(315), DEU(316), @Deprecated
-	CHN(3150), @Deprecated
-	CHO(3151);
+	UNKNOWN(0, "english"), ENG(45, "english"), RUS(570, "russian"), KAZ(255, "english"), BUL(115, "english"),
+	POR(545, "portuguese"), SPA(230, "spanish"), CHI(315, "english"), DEU(316, "german"), @Deprecated
+	CHN(3150, "english"), @Deprecated
+	CHO(3151, "english");
 
 	private int code;
+	private String lang;
 
-	LanguageCode(int code) {
+	LanguageCode(int code, String lang) {
 		this.code = code;
+		this.lang = lang;
 	}
 
 	public int getCode() {
 		return code;
+	}
+	public String getLang(){
+		return lang;
 	}
 
 	public static LanguageCode getType(int code) {

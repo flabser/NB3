@@ -6,6 +6,8 @@ import java.sql.Statement;
 
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
+import kz.lof.env.Environment;
+import kz.lof.localization.LanguageCode;
 
 public class FTSearchEngineDeployer {
 	private IDBConnectionPool dbPool;
@@ -19,19 +21,24 @@ public class FTSearchEngineDeployer {
 		Connection conn = dbPool.getConnection();
 		try (Statement s = conn.createStatement();){
 			conn.setAutoCommit(false);
-
-			String createDictionary = "" +
-					"CREATE TEXT SEARCH DICTIONARY public.simple_dict (\n" +
-					"   TEMPLATE = pg_catalog.simple,\n" +
-					"   STOPWORDS = russian\n" +
-					");";
-
-			s.executeUpdate(createDictionary);
+			s.executeUpdate(createDict());
 			conn.commit();
 		} catch (SQLException e) {
 			DatabaseUtil.debugErrorPrint(e);
 		} finally {
 			dbPool.returnConnection(conn);
 		}
+	}
+
+	private String createDict(){
+
+		String dictionaryTemplate = "" +
+				"CREATE TEXT SEARCH DICTIONARY public.%s_dict (\n" +
+				"   TEMPLATE = pg_catalog.simple,\n" +
+				"   STOPWORDS = %s\n" +
+				");";
+
+		return Environment.langs.stream().map(el -> String.format(dictionaryTemplate, el.name(), el.getLang()))
+				.reduce("", (acc, rec) -> acc + rec);
 	}
 }
