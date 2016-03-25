@@ -15,7 +15,8 @@ public class LanguageView extends _DoPage {
 	public void doGET(_Session session, _WebFormData formData) {
 
 		LanguageDAO dao = new LanguageDAO(session);
+		String keyword = formData.getValueSilently("keyword");
 		List<? extends IPOJOObject> list = dao.findAll();
-		addContent(new _POJOListWrapper(list, 0, dao.getCount(), 0, session));
+		addContent(new _POJOListWrapper(list, 0, dao.getCount(), 0, session, keyword));
 	}
 }
