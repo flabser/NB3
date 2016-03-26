@@ -34,25 +34,6 @@ public class Vocabulary {
 		}
 	}
 
-	@Deprecated
-	public String[] getWord(String keyWord, String lang) {
-		String returnVal[] = new String[2];
-		Sentence sent = words.get(keyWord);
-		if (sent == null && keyWord != "№") {
-
-			logger.warningLogEntry("Translation of word \"" + keyWord + "\" to " + lang + ", has not found in vocabulary (" + appName + ")");
-
-			returnVal[0] = keyWord;
-			returnVal[1] = "";
-			return returnVal;
-		} else {
-			SentenceCaption caption = sent.words.get(lang);
-			returnVal[0] = caption.word;
-			returnVal[1] = caption.hint;
-			return returnVal;
-		}
-	}
-
 	public String getWord(String keyWord, LanguageCode lang) {
 		try {
 			Sentence sent = words.get(keyWord);

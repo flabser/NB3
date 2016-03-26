@@ -119,29 +119,6 @@ public class SourceSupplier implements Const {
 		}
 	}
 
-	public String[] getValueAsString(ValueSourceType sourceType, String value) throws DocumentException {
-		String returnVal[] = { "" };
-
-		try {
-			switch (sourceType) {
-			case SCRIPT:
-				return scriptProcessor.processString(value);
-			case KEYWORD:
-				returnVal = vocabulary.getWord(value, lang);
-				return returnVal;
-			case DOCFIELD:
-				return doc.getValueAsString(value);
-			case STATIC:
-				returnVal[0] = value;
-				return returnVal;
-			}
-			return returnVal;
-		} catch (Exception e) {
-			return returnVal;
-		}
-
-	}
-
 	public SentenceCaption getValueAsCaption(ValueSourceType sourceType, String value) throws DocumentException {
 		try {
 			switch (sourceType) {
