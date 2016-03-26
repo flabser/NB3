@@ -24,6 +24,8 @@ import kz.lof.user.IUser;
 import org.eclipse.persistence.annotations.Cache;
 import org.eclipse.persistence.config.CacheIsolationType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "_users")
 @NamedQuery(name = "User.findAll", query = "SELECT m FROM User AS m ORDER BY m.regDate")
@@ -57,6 +59,16 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	private int status;
 
+	@Column(name = "i_su")
+	private boolean isSuperUser;
+
+	@Transient
+	private boolean isAuthorized;
+
+	@JsonIgnore
+	@Transient
+	protected boolean isEditable;
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -66,9 +78,6 @@ public class User implements IUser<Long>, IPOJOObject {
 	public Long getId() {
 		return id;
 	}
-
-	@Transient
-	private boolean isAuthorized;
 
 	@PrePersist
 	private void prePersist() {
@@ -128,6 +137,7 @@ public class User implements IUser<Long>, IPOJOObject {
 		this.pwdHash = pwdHash;
 	}
 
+	@Override
 	public List<Application> getAllowedApps() {
 		return allowedApps;
 	}
@@ -138,6 +148,15 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	public int getStatus() {
 		return status;
+	}
+
+	@Override
+	public boolean isSuperUser() {
+		return isSuperUser;
+	}
+
+	public void setSuperUser(boolean isSuperUser) {
+		this.isSuperUser = isSuperUser;
 	}
 
 	public void setStatus(int status) {
@@ -152,6 +171,15 @@ public class User implements IUser<Long>, IPOJOObject {
 	@Override
 	public void setAuthorized(boolean isAuthorized) {
 		this.isAuthorized = isAuthorized;
+	}
+
+	@Override
+	public boolean isEditable() {
+		return isEditable;
+	}
+
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
 	}
 
 	@Override
@@ -170,6 +198,7 @@ public class User implements IUser<Long>, IPOJOObject {
 		chunk.append("<regdate>" + Util.simpleDateTimeFormat.format(regDate) + "</regdate>");
 		chunk.append("<login>" + login + "</login>");
 		chunk.append("<email>" + email + "</email>");
+		chunk.append("<issuperuser>" + isSuperUser + "</issuperuser>");
 		chunk.append("<apps>");
 		try {
 			String asText = "";
@@ -190,17 +219,13 @@ public class User implements IUser<Long>, IPOJOObject {
 		chunk.append("<regdate>" + Util.simpleDateTimeFormat.format(regDate) + "</regdate>");
 		chunk.append("<login>" + login + "</login>");
 		chunk.append("<email>" + email + "</email>");
+		chunk.append("<issuperuser>" + isSuperUser + "</issuperuser>");
 		return chunk.toString();
 	}
 
 	@Override
 	public Object getJSONObj(_Session ses) {
 		return this;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return false;
 	}
 
 	@Override

@@ -1,5 +1,10 @@
 package kz.lof.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import kz.lof.administrator.model.Application;
+
 /**
  * @author Kayra on 17/03/16.
  */
@@ -40,6 +45,16 @@ public abstract class SystemUser implements IUser<Long> {
 	@Override
 	public void setId(Long id) {
 
+	}
+
+	@Override
+	public boolean isSuperUser() {
+		return false;
+	}
+
+	@Override
+	public List<Application> getAllowedApps() {
+		return new ArrayList<Application>();
 	}
 
 	@Override

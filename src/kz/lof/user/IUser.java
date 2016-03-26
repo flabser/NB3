@@ -1,5 +1,8 @@
 package kz.lof.user;
 
+import java.util.List;
+
+import kz.lof.administrator.model.Application;
 import kz.lof.dataengine.jpa.ISimpleAppEntity;
 
 public interface IUser<K> extends ISimpleAppEntity<K> {
@@ -19,5 +22,9 @@ public interface IUser<K> extends ISimpleAppEntity<K> {
 	String getUserName();
 
 	void setUserName(String name);
+
+	boolean isSuperUser();
+
+	List<Application> getAllowedApps();
 
 }

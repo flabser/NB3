@@ -27,13 +27,11 @@ public class PortalInit extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		ServletContext context = config.getServletContext();
-		String app = context.getServletContextName();
-		AppEnv env = new AppEnv(app);
-
+		String contextName = context.getServletContextName();
+		Server.logger.infoLogEntry("# Start application \"" + contextName + "\"");
 		try {
-			IDatabase db = new kz.lof.dataengine.jpadatabase.Database(env);
-			env.setDataBase(db);
-
+			IDatabase db = new kz.lof.dataengine.jpadatabase.Database(contextName);
+			AppEnv env = new AppEnv(contextName, db);
 			try {
 				Class<?> c = Class.forName(env.appName.toLowerCase() + ".init.AppConst");
 
@@ -54,16 +52,16 @@ public class PortalInit extends HttpServlet {
 
 			isValid = true;
 
+			if (isValid) {
+				Environment.addApplication(env);
+			}
+
+			if (isValid) {
+				context.setAttribute(EnvConst.APP_ATTR, env);
+			}
+
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
-		}
-
-		if (isValid) {
-			Environment.addApplication(env);
-		}
-
-		if (isValid) {
-			context.setAttribute(EnvConst.APP_ATTR, env);
 		}
 
 	}
