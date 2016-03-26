@@ -7,10 +7,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import kz.lof.administrator.model.Application;
+import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpa.DAO;
+import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
+import kz.lof.user.SuperUser;
 
 public class ApplicationDAO extends DAO<Application, UUID> {
+
+	public ApplicationDAO() {
+		super(Application.class, new _Session(new AppEnv(EnvConst.ADMINISTRATOR_APP_NAME, Environment.dataBase), new SuperUser()));
+	}
 
 	public ApplicationDAO(_Session session) {
 		super(Application.class, session);

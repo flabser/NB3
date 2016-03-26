@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,29 +19,32 @@ import kz.lof.administrator.model.User;
 import kz.lof.dataengine.jpa.ViewPage;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
+import kz.lof.user.AnonymousUser;
 import kz.lof.user.IUser;
+import kz.lof.user.SuperUser;
 import kz.lof.util.StringUtil;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 public class UserDAO {
-	public User user;
+	private IUser<Long> user;
 	private EntityManagerFactory emf;
-	protected _Session ses;
 
 	public UserDAO(_Session ses) {
-		this.ses = ses;
 		IDatabase db = Environment.dataBase;
 		emf = db.getEntityManagerFactory();
+		user = ses.getUser();
 	}
 
 	public UserDAO(IDatabase db) {
 		emf = db.getEntityManagerFactory();
+		user = new AnonymousUser();
 	}
 
 	public UserDAO() {
 		IDatabase db = Environment.dataBase;
 		emf = db.getEntityManagerFactory();
+		user = new AnonymousUser();
 	}
 
 	public List<User> findAll() {
@@ -108,13 +112,20 @@ public class UserDAO {
 
 	public User findById(long id) {
 		EntityManager em = emf.createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		try {
-			String jpql = "SELECT m FROM User AS m WHERE m.id = :id";
-			TypedQuery<User> q = em.createQuery(jpql, User.class);
-			q.setParameter("id", id);
-			List<User> res = q.getResultList();
-			return res.get(0);
-		} catch (IndexOutOfBoundsException e) {
+			CriteriaQuery<User> cq = cb.createQuery(User.class);
+			Root<User> c = cq.from(User.class);
+			cq.select(c);
+			Predicate condition = c.get("id").in(id);
+			cq.where(condition);
+			Query query = em.createQuery(cq);
+			User entity = (User) query.getSingleResult();
+			if (user.getId() == SuperUser.ID) {
+				entity.setEditable(true);
+			}
+			return entity;
+		} catch (NoResultException e) {
 			return null;
 		} finally {
 			em.close();
@@ -128,7 +139,11 @@ public class UserDAO {
 			TypedQuery<User> q = em.createQuery(jpql, User.class);
 			q.setParameter("login", login);
 			List<User> res = q.getResultList();
-			return res.get(0);
+			IUser<Long> user = res.get(0);
+			if (user.isSuperUser()) {
+				user = new SuperUser(user.getLogin());
+			}
+			return user;
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		} finally {
