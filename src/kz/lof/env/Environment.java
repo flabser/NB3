@@ -34,7 +34,6 @@ import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.util.XMLUtil;
 import kz.lof.appenv.AppEnv;
 import kz.lof.localization.LanguageCode;
-import kz.lof.log.ILogger;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
@@ -61,7 +60,6 @@ public class Environment implements Const, ICache {
 	public static String tmpDir;
 	public static String trash;
 	public static ArrayList<String> fileToDelete = new ArrayList<String>();
-	public static ILogger logger;
 
 	public static Boolean isSSLEnable = false;
 	public static int secureHttpPort;
@@ -96,7 +94,6 @@ public class Environment implements Const, ICache {
 	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
 
 	public static void init() {
-		logger = Server.logger;
 		loadProperties();
 		initProcess();
 		try {
@@ -120,7 +117,7 @@ public class Environment implements Const, ICache {
 			saxParser.parse(file, cfgXMLhandler);
 			Document xmlDocument = getDocument();
 
-			logger.infoLogEntry("initialize runtime environment");
+			Server.logger.infoLogEntry("initialize runtime environment");
 			initMimeTypes();
 
 			orgName = XMLUtil.getTextContent(xmlDocument, "/nextbase/orgname");
@@ -136,9 +133,9 @@ public class Environment implements Const, ICache {
 			String portAsText = XMLUtil.getTextContent(xmlDocument, "/nextbase/port");
 			try {
 				httpPort = Integer.parseInt(portAsText);
-				logger.infoLogEntry("WebServer is going to use port: " + httpPort);
+				Server.logger.infoLogEntry("WebServer is going to use port: " + httpPort);
 			} catch (NumberFormatException nfe) {
-				logger.infoLogEntry("WebServer is going to use default port (" + httpPort + ")");
+				Server.logger.infoLogEntry("WebServer is going to use default port (" + httpPort + ")");
 			}
 
 			NodeList nodeList = XMLUtil.getNodeList(xmlDocument, "/nextbase/applications");
@@ -174,11 +171,11 @@ public class Environment implements Const, ICache {
 						trustStore = XMLUtil.getTextContent(xmlDocument, "/nextbase/ssl/clientauth/truststorefile");
 						trustStorePwd = XMLUtil.getTextContent(xmlDocument, "/nextbase/ssl/clientauth/truststorepass");
 					}
-					logger.infoLogEntry("TLS is enabled");
+					Server.logger.infoLogEntry("TLS is enabled");
 					httpSchema = "https";
 				}
 			} catch (Exception ex) {
-				logger.infoLogEntry("TLS configiration error");
+				Server.logger.infoLogEntry("TLS configiration error");
 				isSSLEnable = false;
 				keyPwd = "";
 				keyStore = "";
@@ -193,12 +190,12 @@ public class Environment implements Const, ICache {
 					smtpUser = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpuser");
 					smtpPassword = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtppassword");
 					smtpPort = XMLUtil.getTextContent(xmlDocument, "/nextbase/mailagent/smtpport");
-					logger.infoLogEntry("mailAgent is going to redirect some messages to host: " + SMTPHost);
+					Server.logger.infoLogEntry("mailAgent is going to redirect some messages to host: " + SMTPHost);
 				} else {
-					logger.infoLogEntry("mailAgent is switch off");
+					Server.logger.infoLogEntry("mailAgent is switch off");
 				}
 			} catch (NumberFormatException nfe) {
-				logger.infoLogEntry("MailAgent is not set");
+				Server.logger.infoLogEntry("MailAgent is not set");
 				SMTPHost = "";
 				defaultSender = "";
 			}
@@ -224,11 +221,11 @@ public class Environment implements Const, ICache {
 			}
 
 		} catch (SAXException se) {
-			logger.errorLogEntry(se);
+			Server.logger.errorLogEntry(se);
 		} catch (ParserConfigurationException pce) {
-			logger.errorLogEntry(pce);
+			Server.logger.errorLogEntry(pce);
 		} catch (IOException ioe) {
-			logger.errorLogEntry(ioe);
+			Server.logger.errorLogEntry(ioe);
 		}
 	}
 
@@ -287,11 +284,11 @@ public class Environment implements Const, ICache {
 			builder = domFactory.newDocumentBuilder();
 			return builder.parse("cfg.xml");
 		} catch (SAXException e) {
-			logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e);
 		} catch (IOException e) {
-			logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e);
 		} catch (ParserConfigurationException e) {
-			logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e);
 		}
 		return null;
 	}

@@ -19,7 +19,6 @@ import kz.lof.user.IUser;
 import kz.nextbase.script._AppEntourage;
 import kz.nextbase.script._ViewEntryCollectionParam;
 import kz.nextbase.script.actions._ActionBar;
-import kz.nextbase.script.mail._MailAgent;
 
 public class _Session extends PageCacheAdapter {
 	private IDatabase dataBase;
@@ -77,10 +76,6 @@ public class _Session extends PageCacheAdapter {
 
 	public IDatabase getDatabase() {
 		return dataBase;
-	}
-
-	public _MailAgent getMailAgent() {
-		return new _MailAgent(this);
 	}
 
 	public IUser<Long> getUser() {

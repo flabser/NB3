@@ -73,7 +73,7 @@ public class Memo {
 						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 						hasRecipients = true;
 					} catch (AddressException ae) {
-						Environment.logger.errorLogEntry("Incorrect e-mail \"" + recipient + "\"");
+						Server.logger.errorLogEntry("incorrect e-mail \"" + recipient + "\"");
 						continue;
 					}
 				}
@@ -87,7 +87,7 @@ public class Memo {
 					msg.setContent(mp);
 					isValid = true;
 				} else {
-					Server.logger.errorLogEntry("Unable to send the message. List of recipients is empty or consist is incorrect data");
+					Server.logger.errorLogEntry("unable to send the message. List of recipients is empty or consist is incorrect data");
 				}
 			} catch (MessagingException e) {
 				Server.logger.errorLogEntry(e);
@@ -104,10 +104,10 @@ public class Memo {
 				return true;
 			}
 		} catch (SendFailedException se) {
-			if (se.getMessage().contains("Relay rejected for policy reasons")) {
-				Server.logger.warningLogEntry("Relay rejected for policy reasons by SMTP server. Message has not sent");
+			if (se.getMessage().contains("relay rejected for policy reasons")) {
+				Server.logger.warningLogEntry("relay rejected for policy reasons by SMTP server. Message has not sent");
 			} else {
-				Server.logger.errorLogEntry("Unable to send a message, probably SMTP host did not set");
+				Server.logger.errorLogEntry("unable to send a message, probably SMTP host did not set");
 				Server.logger.errorLogEntry(se);
 			}
 		} catch (MessagingException e) {
