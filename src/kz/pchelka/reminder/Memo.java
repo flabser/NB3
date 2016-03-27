@@ -22,7 +22,6 @@ import javax.mail.internet.MimeMultipart;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
 
-
 public class Memo {
 
 	private MimeMessage msg;
@@ -34,15 +33,15 @@ public class Memo {
 	private boolean isValid;
 	private boolean hasRecipients;
 
-	public Memo(String sender, List <String> recipients, String subj, String body) {
+	public Memo(String sender, List<String> recipients, String subj, String body) {
 		_Memo(sender, null, recipients, subj, body);
 	}
 
-	public Memo(String sender, String personal, List <String> recipients, String subj, String body) {
+	public Memo(String sender, String personal, List<String> recipients, String subj, String body) {
 		_Memo(sender, personal, recipients, subj, body);
 	}
 
-	private void _Memo(String sender, String personal, List <String> recipients, String subj, String body) {
+	private void _Memo(String sender, String personal, List<String> recipients, String subj, String body) {
 		if (Environment.mailEnable) {
 			Properties props = new Properties();
 			props.put("mail.smtp.host", smtpServer);
@@ -88,13 +87,12 @@ public class Memo {
 					msg.setContent(mp);
 					isValid = true;
 				} else {
-					Environment.logger
-							.errorLogEntry("Unable to send the message. List of recipients is empty or consist is incorrect data");
+					Server.logger.errorLogEntry("Unable to send the message. List of recipients is empty or consist is incorrect data");
 				}
 			} catch (MessagingException e) {
-				Environment.logger.errorLogEntry(e);
+				Server.logger.errorLogEntry(e);
 			} catch (UnsupportedEncodingException e) {
-				Environment.logger.errorLogEntry(e);
+				Server.logger.errorLogEntry(e);
 			}
 		}
 	}
@@ -109,17 +107,18 @@ public class Memo {
 			if (se.getMessage().contains("Relay rejected for policy reasons")) {
 				Server.logger.warningLogEntry("Relay rejected for policy reasons by SMTP server. Message has not sent");
 			} else {
-				Environment.logger.errorLogEntry("Unable to send a message, probably SMTP host did not set");
-				Environment.logger.errorLogEntry(se);
+				Server.logger.errorLogEntry("Unable to send a message, probably SMTP host did not set");
+				Server.logger.errorLogEntry(se);
 			}
 		} catch (MessagingException e) {
-			Environment.logger.errorLogEntry(e);
+			Server.logger.errorLogEntry(e);
 		}
 		return false;
 	}
 
 	class SMTPAuthenticator extends javax.mail.Authenticator {
 
+		@Override
 		public PasswordAuthentication getPasswordAuthentication() {
 			return new PasswordAuthentication(smtpUser, smtpPassword);
 		}
