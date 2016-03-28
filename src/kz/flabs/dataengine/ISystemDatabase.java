@@ -3,7 +3,6 @@ package kz.flabs.dataengine;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.dataengine.system.IEmployeeDAO;
 
@@ -27,8 +26,6 @@ public interface ISystemDatabase {
 	int insert(User user);
 
 	ArrayList<User> getAllUsers(String condition, int start, int end);
-
-	IViewEntryCollection getUsers(String condition, int start, int end);
 
 	int getUsersCount(String condition);
 

@@ -5,11 +5,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.exception.WebFormValueExceptionType;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
@@ -28,7 +26,7 @@ public class User extends BaseDocument implements Const {
 
 	private static final long serialVersionUID = 1L;
 	public final static String ANONYMOUS_USER = "anonymous";
-	private transient ISystemDatabase sysDatabase;
+
 	private String userID;
 
 	private String password;
@@ -55,41 +53,6 @@ public class User extends BaseDocument implements Const {
 		setUserID(u);
 	}
 
-	public User(String u, AppEnv env) {
-		this(u, env.getDataBase());
-		this.env = env;
-	}
-
-	public User(String u, IDatabase db) {
-
-		sysDatabase.reloadUserData(this, u);
-		if (db != null) {
-			/*
-			 * struct = db.getStructure(); appUser = struct.getAppUser(userID);
-			 * if (appUser == null) { appUser = new Employer(struct); }
-			 * appUser.setUser(this);
-			 */
-		}
-
-	}
-
-	public User(int userHash, AppEnv env) throws AuthFailedException {
-		this.env = env;
-
-		try {
-			sysDatabase.reloadUserData(this, userHash);
-		} catch (Exception e) {
-			throw new AuthFailedException(AuthFailedExceptionType.SYSTEM_DATABASE_HAS_NOT_ANSWERED, "app=" + env);
-		}
-		IDatabase db = env.getDataBase();
-		if (db != null) {
-			/*
-			 * struct = env.getDataBase().getStructure(); appUser =
-			 * struct.getAppUser(userID); if (appUser == null) { appUser = new
-			 * Employer(struct); } appUser.setUser(this);
-			 */
-		}
-	}
 
 	public String getPublicKey() {
 		return publicKey;
@@ -266,14 +229,6 @@ public class User extends BaseDocument implements Const {
 
 		}
 		// this.appUser.setReplacers(fields);
-	}
-
-	public int save(Set<String> complexUserID, String absoluteUserID) {
-		if (docID == 0) {
-			return sysDatabase.insert(this);
-		} else {
-			return sysDatabase.update(this);
-		}
 	}
 
 	@Override

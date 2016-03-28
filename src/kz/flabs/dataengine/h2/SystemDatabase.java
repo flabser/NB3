@@ -15,11 +15,8 @@ import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.ISystemDatabase;
 import kz.flabs.exception.WebFormValueException;
-import kz.flabs.runtimeobj.viewentry.IViewEntryCollection;
-import kz.flabs.runtimeobj.viewentry.ViewEntryCollection;
 import kz.flabs.users.User;
 import kz.lof.appenv.AppEnv;
-import kz.lof.dataengine.system.IEmployee;
 import kz.lof.dataengine.system.IEmployeeDAO;
 import kz.lof.server.Server;
 
@@ -285,23 +282,10 @@ public class SystemDatabase implements ISystemDatabase, Const {
 	}
 
 	private User initUser(Connection conn, ResultSet rs, AppEnv env, String login) throws SQLException {
-		boolean isNext = true;
-		User user = new User(login, env);
-		if (eDao != null) {
-			IEmployee emp = eDao.getEmployee(0);
-			if (emp != null) {
-				user.setUserName(emp.getName());
-			}
-			user.fill(rs);
-			while (isNext || rs.next()) {
 
-				isNext = false;
-			}
-			return user;
-		} else {
-			Server.logger.errorLogEntry("Any Staff module has not been initialized");
-			return new User();
-		}
+		Server.logger.errorLogEntry("Any Staff module has not been initialized");
+		return new User();
+
 	}
 
 	@Override
@@ -366,38 +350,6 @@ public class SystemDatabase implements ISystemDatabase, Const {
 			s.close();
 			conn.commit();
 			return users;
-		} catch (Throwable e) {
-			DatabaseUtil.debugErrorPrint(e);
-			return null;
-		} finally {
-			dbPool.returnConnection(conn);
-		}
-	}
-
-	@Override
-	public IViewEntryCollection getUsers(String condition, int start, int end) {
-		String dbFields[] = { "userid", "isadmin", "email", "instmsgaddr" };
-		ViewEntryCollection col = new ViewEntryCollection(end);
-		String wherePiece = "";
-		Connection conn = dbPool.getConnection();
-		try {
-			conn.setAutoCommit(false);
-			if (!condition.equals("")) {
-				wherePiece = "WHERE " + condition;
-			}
-			Statement s = conn.createStatement();
-			String sql = "select * from USERS " + wherePiece + " ORDER BY userid asc LIMIT " + end + " OFFSET " + start;
-			ResultSet rs = s.executeQuery(sql);
-
-			while (rs.next()) {
-				// IViewEntry entry = new ViewEntry(rs, dbFields);
-				// col.add(entry);
-			}
-
-			rs.close();
-			s.close();
-			conn.commit();
-			return col;
 		} catch (Throwable e) {
 			DatabaseUtil.debugErrorPrint(e);
 			return null;

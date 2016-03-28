@@ -15,8 +15,6 @@ import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.runtimeobj.document.DocID;
 import kz.flabs.runtimeobj.document.Document;
-import kz.flabs.runtimeobj.viewentry.IViewEntry;
-import kz.flabs.runtimeobj.viewentry.ViewEntry;
 import kz.flabs.users.User;
 import kz.flabs.util.PageResponse;
 import kz.flabs.webrule.constants.TagPublicationFormatType;
@@ -145,12 +143,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	}
 
 	public BaseDocument getDocumentByDdbID(String ddbID, Set<String> complexUserID, String absoluteUserID) throws DocumentException,
-	        DocumentAccessException {
-
-		return null;
-	}
-
-	public IViewEntry getDocumentByDocID(String docID, Set<String> complexUserID, String absoluteUserID) throws DocumentException,
 	        DocumentAccessException {
 
 		return null;
@@ -318,11 +310,6 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	public void addCounter(String key, int num) {
 
-	}
-
-	public ArrayList<ViewEntry> getGroupedEntries(String fieldName, int offset, int pageSize, User user) {
-
-		return null;
 	}
 
 }
