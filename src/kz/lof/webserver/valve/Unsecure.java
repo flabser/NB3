@@ -64,11 +64,15 @@ public class Unsecure extends ValveBase {
 					}
 				}
 			} else {
-				String msg = "unknown application type \"" + appType + "\"";
-				Server.logger.warningLogEntry(msg);
-				ApplicationException ae = new ApplicationException(ru.getAppType(), msg, LanguageCode.valueOf(EnvConst.DEFAULT_LANG));
-				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-				response.getWriter().println(ae.getHTMLMessage());
+				if (appType.equals("favicon")) {
+					getNext().getNext().invoke(request, response);
+				} else {
+					String msg = "unknown application type \"" + appType + "\"";
+					Server.logger.warningLogEntry(msg);
+					ApplicationException ae = new ApplicationException(ru.getAppType(), msg, LanguageCode.valueOf(EnvConst.DEFAULT_LANG));
+					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					response.getWriter().println(ae.getHTMLMessage());
+				}
 			}
 		} else {
 			getNext().getNext().invoke(request, response);

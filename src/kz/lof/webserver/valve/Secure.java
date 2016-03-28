@@ -41,17 +41,21 @@ public class Secure extends ValveBase {
 			HttpSession jses = http.getSession(false);
 			if (jses != null) {
 				_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
-				IUser<Long> user = ses.getUser();
-				if (ses != null && !user.getUserID().equals(AnonymousUser.USER_NAME)) {
-					if (isAllowed(user.getAllowedApps(), appType)) {
-						getNext().invoke(request, response);
-					} else {
-						Server.logger.warningLogEntry("work with the application was restricted");
-						if (jses != null) {
-							jses.invalidate();
+				if (ses != null) {
+					IUser<Long> user = ses.getUser();
+					if (!user.getUserID().equals(AnonymousUser.USER_NAME)) {
+						if (isAllowed(user.getAllowedApps(), appType)) {
+							getNext().invoke(request, response);
+						} else {
+							Server.logger.warningLogEntry("work with the application was restricted");
+							if (jses != null) {
+								jses.invalidate();
+							}
+							response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+							request.getRequestDispatcher("/Error?type=application_was_restricted").forward(request, response);
 						}
-						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-						request.getRequestDispatcher("/Error?type=application_was_restricted").forward(request, response);
+					} else {
+						gettingSession(request, response);
 					}
 				} else {
 					gettingSession(request, response);
