@@ -105,6 +105,7 @@ public class User implements IUser<Long>, IPOJOObject {
 		this.userName = userName;
 	}
 
+	@Override
 	public List<String> getRoles() {
 		return roles;
 	}
@@ -247,7 +248,7 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	@Override
 	public void setRoles(List<String> allRoles) {
-		// TODO Auto-generated method stub
+		roles = allRoles;
 
 	}
 
