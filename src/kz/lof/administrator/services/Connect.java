@@ -2,6 +2,7 @@ package kz.lof.administrator.services;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import kz.lof.administrator.dao.UserDAO;
 import kz.lof.appenv.AppEnv;
@@ -48,8 +49,10 @@ public class Connect {
 					IEmployee emp = eDao.getEmployee(user.getId());
 					if (emp != null) {
 						user.setUserName(emp.getName());
+						user.setRoles(emp.getAllRoles());
 					} else {
 						user.setUserName(user.getLogin());
+						user.setRoles(new ArrayList<String>());
 					}
 				}
 			}

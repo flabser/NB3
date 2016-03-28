@@ -43,6 +43,9 @@ public class User implements IUser<Long>, IPOJOObject {
 	@Transient
 	private String userName;
 
+	@Transient
+	private List<String> roles;
+
 	@Column(length = 64, unique = true)
 	private String login;
 
@@ -100,6 +103,10 @@ public class User implements IUser<Long>, IPOJOObject {
 	@Override
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public List<String> getRoles() {
+		return roles;
 	}
 
 	@Override
@@ -236,6 +243,12 @@ public class User implements IUser<Long>, IPOJOObject {
 		} else {
 			return getId().toString();
 		}
+	}
+
+	@Override
+	public void setRoles(List<String> allRoles) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

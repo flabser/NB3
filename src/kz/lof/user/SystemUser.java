@@ -58,6 +58,16 @@ public abstract class SystemUser implements IUser<Long> {
 	}
 
 	@Override
+	public void setRoles(List<String> allRoles) {
+
+	}
+
+	@Override
+	public List<String> getRoles() {
+		return new ArrayList<String>();
+	}
+
+	@Override
 	public abstract Long getId();
 
 	@Override

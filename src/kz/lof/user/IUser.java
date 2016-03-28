@@ -27,4 +27,8 @@ public interface IUser<K> extends ISimpleAppEntity<K> {
 
 	List<Application> getAllowedApps();
 
+	void setRoles(List<String> allRoles);
+
+	List<String> getRoles();
+
 }
