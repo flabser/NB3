@@ -1,9 +1,9 @@
-package kz.lof.common.dao;
+package kz.lof.administrator.dao;
 
 import java.util.UUID;
 
+import kz.lof.administrator.model.Sentence;
 import kz.lof.appenv.AppEnv;
-import kz.lof.common.model.Sentence;
 import kz.lof.dataengine.jpa.DAO;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;

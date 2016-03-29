@@ -37,29 +37,22 @@ public class ScriptHelper {
 		}
 	}
 
+	public String getLocalizedWord(String word, LanguageCode lang) {
+		return getWord(word, vocabulary, lang.name());
+	}
+
+	public void devPrint(Object text) {
+		if (Environment.isDevMode) {
+			System.out.println(text.toString());
+		}
+	}
+
 	public void println(Object text) {
 		System.out.println(text.toString());
 	}
 
 	public void log(String text) {
 		Server.logger.infoLogEntry(text);
-	}
-
-	public String getGroovyError(StackTraceElement stack[]) {
-		for (int i = 0; i < stack.length; i++) {
-			if (stack[i].getClassName().contains(this.getClass().getName())) {
-				return stack[i].getClassName() + " method=" + stack[i].getMethodName() + " > " + Integer.toString(stack[i].getLineNumber()) + "\n";
-			}
-		}
-		return "";
-	}
-
-	public String getLocalizedWord(String word, LanguageCode lang) {
-		return getWord(word, vocabulary, lang.name());
-	}
-
-	public static void log(Object logText) {
-		ScriptProcessor.logger.infoLogEntry(logText.toString());
 	}
 
 	public static void error(Exception e) {

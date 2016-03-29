@@ -46,7 +46,7 @@ public class ApplicationForm extends Form {
 
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
-		println(formData);
+		devPrint(formData);
 		_Validation ve = validate(formData, session.getLang());
 		if (ve.hasError()) {
 			setBadRequest();

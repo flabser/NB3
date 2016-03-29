@@ -19,9 +19,10 @@ public class MainNavigator extends _DoPage {
 		List<IOutcomeObject> list = new ArrayList<IOutcomeObject>();
 
 		_Outline common_outline = new _Outline(getLocalizedWord("administrator", lang), "common");
-		common_outline.addEntry(new _OutlineEntry(getLocalizedWord("user", lang), "user-view"));
-		common_outline.addEntry(new _OutlineEntry(getLocalizedWord("application", lang), "application-view"));
-		common_outline.addEntry(new _OutlineEntry("Language", "language-view"));
+		common_outline.addEntry(new _OutlineEntry("User", "user-view"));
+		common_outline.addEntry(new _OutlineEntry("Applications", "application-view"));
+		common_outline.addEntry(new _OutlineEntry("Languages", "language-view"));
+		common_outline.addEntry(new _OutlineEntry("Sentences", "sentence-view"));
 		// common_outline.addEntry(new _OutlineEntry("Log", "log-view"));
 
 		list.add(common_outline);

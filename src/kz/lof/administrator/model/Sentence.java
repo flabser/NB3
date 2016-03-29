@@ -1,8 +1,10 @@
-package kz.lof.common.model;
+package kz.lof.administrator.model;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import kz.lof.common.model.SimpleEntity;
 
 @Entity
 @Table(name = "_sentences")
