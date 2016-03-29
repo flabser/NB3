@@ -6,13 +6,13 @@ import java.util.UUID;
 import kz.flabs.util.Util;
 import kz.lof.administrator.dao.ApplicationDAO;
 import kz.lof.administrator.model.Application;
+import kz.lof.common.page.form.Form;
 import kz.lof.dataengine.jpa.constants.AppCode;
 import kz.lof.exception.SecureException;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._Validation;
 import kz.lof.scripting._WebFormData;
-import kz.lof.scripting.event._DoPage;
 import kz.nextbase.script._EnumWrapper;
 import kz.nextbase.script.actions._Action;
 import kz.nextbase.script.actions._ActionBar;
@@ -20,7 +20,7 @@ import kz.nextbase.script.actions._ActionType;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
-public class ApplicationForm extends _DoPage {
+public class ApplicationForm extends Form {
 
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
@@ -69,6 +69,7 @@ public class ApplicationForm extends _DoPage {
 		entity.setName(formData.getValueSilently("name"));
 		entity.setPosition(Util.convertStringToInt(formData.getValueSilently("position"), 99));
 		entity.setDefaultURL(formData.getValueSilently("defaulturl").replace("&", "&amp;"));
+		entity.setLocalizedName(getLocalizedNames(session, formData));
 
 		try {
 			if (isNew) {

@@ -1,4 +1,4 @@
-package kz.lof.common.model.page.view;
+package kz.lof.common.page.view;
 
 import java.util.UUID;
 
