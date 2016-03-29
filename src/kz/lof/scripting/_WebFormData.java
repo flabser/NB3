@@ -64,7 +64,7 @@ public class _WebFormData {
 	public float getFloatValueSilently(String fn, int defaultValue) {
 		try {
 			String value[] = formData.get(fn);
-			return Float.parseFloat(value[0].trim());
+			return Float.parseFloat(value[0].trim().replace(" ", "").replace(",", "."));
 		} catch (Exception e) {
 			return defaultValue;
 		}
