@@ -30,7 +30,6 @@ import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseUtil;
 import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.exception.DocumentExceptionType;
 import kz.flabs.exception.WebFormValueException;
@@ -988,8 +987,7 @@ public class BaseDocument implements Const, Serializable {
 		return editors;
 	}
 
-	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentAccessException, DocumentException {
+	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID) throws DocumentException {
 		return responses;
 
 	}
@@ -1105,7 +1103,7 @@ public class BaseDocument implements Const, Serializable {
 		return fieldsMap;
 	}
 
-	public int save(User user) throws DocumentAccessException, DocumentException {
+	public int save(User user) throws DocumentException {
 		return -1;
 	}
 
@@ -1273,8 +1271,7 @@ public class BaseDocument implements Const, Serializable {
 
 				try {
 					descendantDoc = this.getResponses(this.getDocID(), this.docType, Const.sysGroupAsSet, Const.sysUser);
-				} catch (DocumentAccessException e) {
-					e.printStackTrace();
+
 				} catch (DocumentException e) {
 					e.printStackTrace();
 				}
@@ -1344,7 +1341,7 @@ public class BaseDocument implements Const, Serializable {
 
 	}
 
-	public void fillResponses() throws DocumentAccessException, DocumentException {
+	public void fillResponses() throws DocumentException {
 		responses = getResponses(docID, docType, Const.supervisorGroupAsSet, Const.sysUser);
 	}
 

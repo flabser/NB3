@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import kz.flabs.exception.DocumentAccessException;
 import kz.flabs.exception.DocumentException;
 import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.document.BaseDocument;
@@ -74,20 +73,19 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentAccessException, DocumentException {
+	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID) {
 
 		return null;
 	}
 
 	public ArrayList<BaseDocument> getAllDocuments(int docType, Set<String> complexUserID, String absoluteUserID, String[] fields, int offset,
-	        int pageSize) throws DocumentException, DocumentAccessException {
+	        int pageSize) throws DocumentException {
 
 		return null;
 	}
 
 	public ArrayList<BaseDocument> getAllDocuments(int docType, Set<String> complexUserID, String absoluteUserID, int offset, int pageSize)
-	        throws DocumentException, DocumentAccessException {
+	        throws DocumentException {
 
 		return null;
 	}
@@ -104,19 +102,18 @@ public abstract class AbstractDatabase implements IDatabase {
 	}
 
 	public ArrayList<BaseDocument> getDocumentsByCondition(String form, String query, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentException, DocumentAccessException {
+	        throws DocumentException {
 
 		return null;
 	}
 
 	public ArrayList<BaseDocument> getDocumentsByCondition(String query, Set<String> complexUserID, String absoluteUserID, int limit, int offset)
-	        throws DocumentException, DocumentAccessException {
+	        throws DocumentException {
 
 		return null;
 	}
 
-	public int getDocumentsCountByCondition(String query, Set<String> complexUserID, String absoluteUserID) throws DocumentException,
-	        DocumentAccessException {
+	public int getDocumentsCountByCondition(String query, Set<String> complexUserID, String absoluteUserID) throws DocumentException {
 
 		return 0;
 	}
@@ -131,19 +128,17 @@ public abstract class AbstractDatabase implements IDatabase {
 		return false;
 	}
 
-	public BaseDocument getDocumentByComplexID(int docType, int docID, Set<String> complexUserID, String absoluteUserID)
-	        throws DocumentAccessException, DocumentException {
+	public BaseDocument getDocumentByComplexID(int docType, int docID, Set<String> complexUserID, String absoluteUserID) {
 
 		return null;
 	}
 
-	public BaseDocument getDocumentByComplexID(int docType, int docID) throws DocumentException, DocumentAccessException {
+	public BaseDocument getDocumentByComplexID(int docType, int docID) throws DocumentException {
 
 		return null;
 	}
 
-	public BaseDocument getDocumentByDdbID(String ddbID, Set<String> complexUserID, String absoluteUserID) throws DocumentException,
-	        DocumentAccessException {
+	public BaseDocument getDocumentByDdbID(String ddbID, Set<String> complexUserID, String absoluteUserID) throws DocumentException {
 
 		return null;
 	}
@@ -153,13 +148,13 @@ public abstract class AbstractDatabase implements IDatabase {
 		return false;
 	}
 
-	public void deleteDocument(int docType, int docID, User user, boolean completely) throws DocumentException, DocumentAccessException,
-	        SQLException, DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public void deleteDocument(int docType, int docID, User user, boolean completely) throws DocumentException, SQLException, DatabasePoolException,
+	        InstantiationException, IllegalAccessException, ClassNotFoundException {
 
 	}
 
-	public void deleteDocument(String id, boolean completely, User user) throws DocumentException, DocumentAccessException, SQLException,
-	        DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public void deleteDocument(String id, boolean completely, User user) throws DocumentException, SQLException, DatabasePoolException,
+	        InstantiationException, IllegalAccessException, ClassNotFoundException {
 
 	}
 
@@ -168,12 +163,12 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public boolean unDeleteDocument(String id, User user) throws DocumentAccessException {
+	public boolean unDeleteDocument(String id, User user) {
 
 		return false;
 	}
 
-	public boolean unDeleteDocument(int aid, User user) throws DocumentException, DocumentAccessException {
+	public boolean unDeleteDocument(int aid, User user) throws DocumentException {
 
 		return false;
 	}
@@ -183,8 +178,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public Document getMainDocumentByID(int docID, Set<String> complexUserID, String absoluteUserID) throws DocumentAccessException,
-	        DocumentException {
+	public Document getMainDocumentByID(int docID, Set<String> complexUserID, String absoluteUserID) {
 
 		return null;
 	}
@@ -194,7 +188,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return 0;
 	}
 
-	public int updateMainDocument(Document doc, User user) throws DocumentAccessException, DocumentException {
+	public int updateMainDocument(Document doc, User user) {
 
 		return 0;
 	}
@@ -235,13 +229,13 @@ public abstract class AbstractDatabase implements IDatabase {
 	}
 
 	public ArrayList<Integer> getAllDocumentsIDS(int docType, Set<String> complexUserID, String absoluteUserID, String[] fields, int offset,
-	        int pageSize) throws DocumentException, DocumentAccessException {
+	        int pageSize) throws DocumentException {
 
 		return null;
 	}
 
 	public ArrayList<Integer> getAllDocumentsIDS(int docType, Set<String> complexUserID, String absoluteUserID, int start, int end)
-	        throws DocumentException, DocumentAccessException {
+	        throws DocumentException {
 
 		return null;
 	}
@@ -251,8 +245,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		return null;
 	}
 
-	public String getMainDocumentFieldValueByID(int docID, Set<String> complexUserID, String absoluteUserID, String fieldName)
-	        throws DocumentAccessException {
+	public String getMainDocumentFieldValueByID(int docID, Set<String> complexUserID, String absoluteUserID, String fieldName) {
 
 		return null;
 	}

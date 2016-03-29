@@ -12,7 +12,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -45,8 +44,6 @@ import sun.misc.BASE64Encoder;
 public class GlobalSetting {
 	public String description;
 	public String id = "";
-	// TODO it need to check whether it necessary
-	public String databaseName;
 	public boolean databaseEnable;
 	public boolean isWorkspace;
 	public String driver;
@@ -121,63 +118,6 @@ public class GlobalSetting {
 			orgName = XMLUtil.getTextContent(doc, "/rule/orgname");
 			logo = XMLUtil.getTextContent(doc, "/rule/logo");
 			// appName = XMLUtil.getTextContent(doc, "/rule/appname");
-
-			try {
-				databaseName = XMLUtil.getTextContent(doc, "/rule/database/name");
-				driver = XMLUtil.getTextContent(doc, "/rule/database/driver");
-				if (!databaseName.trim().equals("") && !driver.trim().equals("")) {
-					if (XMLUtil.getTextContent(doc, "/rule/database/@autodeploy").equalsIgnoreCase("on")) {
-						autoDeployEnable = true;
-					}
-
-					dbURL = XMLUtil.getTextContent(doc, "/rule/database/url");
-					dbUserName = XMLUtil.getTextContent(doc, "/rule/database/username");
-					dbPassword = XMLUtil.getTextContent(doc, "/rule/database/password");
-
-					Node username = doc.getElementsByTagName("username").item(0);
-					Node pss = doc.getElementsByTagName("password").item(0);
-					Node database = doc.getElementsByTagName("database").item(0);
-					Node pw = doc.getElementsByTagName("connectionid").item(0);
-
-					if (!dbUserName.trim().equals("") || !dbPassword.trim().equals("")
-					        || database.getLastChild().getNodeName().contains("connectionid")) {
-
-						if (dbUserName.trim().equals("") && dbPassword.trim().equals("")) {
-							String temp = pw.getTextContent();
-							StringTokenizer tknz = new StringTokenizer(temp, "@@@");
-							userNameEnco = tknz.nextToken();
-							pwdEnco = tknz.nextToken();
-						} else if (!dbUserName.trim().equals("") && dbPassword.trim().equals("")) {
-							String temp = pw.getTextContent();
-							StringTokenizer tknz = new StringTokenizer(temp, "@@@");
-							dbUserName = username.getTextContent();
-							tknz.nextToken();
-							pwdEnco = tknz.nextToken();
-						} else if (dbUserName.trim().equals("") && !dbPassword.trim().equals("")) {
-							String temp = pw.getTextContent();
-							StringTokenizer tknz = new StringTokenizer(temp, "@@@");
-							userNameEnco = tknz.nextToken();
-							dbPassword = pss.getTextContent();
-						}
-
-						if (!dbUserName.trim().equals("") && !dbPassword.trim().equals("")
-						        && database.getLastChild().getNodeName().contains("connectionid")) {
-							database.removeChild(pw);
-						}
-						deserializeKey();
-					}
-
-					databaseHost = XMLUtil.getTextContent(doc, "/rule/database/host");
-					databaseEnable = true;
-
-				} else {
-					AppEnv.logger.errorLogEntry("Unable to determine name of database");
-				}
-
-			} catch (Exception e) {
-				AppEnv.logger.errorLogEntry("Unable to determine parameters of the database");
-				databaseName = "";
-			}
 
 			entryPoint = XMLUtil.getTextContent(doc, "/rule/entrypoint");
 			defaultRedirectURL = XMLUtil.getTextContent(doc, "/rule/defaultredirecturl");

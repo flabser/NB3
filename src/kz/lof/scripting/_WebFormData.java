@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import kz.flabs.dataengine.Const;
 import kz.flabs.util.Util;
 import kz.nextbase.script._Exception;
 import kz.nextbase.script._ExceptionType;
@@ -148,41 +147,6 @@ public class _WebFormData {
 			return value.length;
 		} catch (Exception e) {
 			return 0;
-		}
-	}
-
-	@Deprecated
-	public int[] getParentDocID() throws _Exception {
-		int[] prop = new int[2];
-		try {
-			prop[0] = Integer.parseInt(getValue("parentdocid"));
-		} catch (Exception nfe) {
-			prop[0] = 0;
-		}
-		try {
-			prop[1] = Integer.parseInt(getValue("parentdoctype"));
-		} catch (Exception nfe) {
-			prop[1] = Const.DOCTYPE_UNKNOWN;
-		}
-		return prop;
-	}
-
-	public String getSign() throws _Exception {
-		try {
-			String value[] = formData.get("srctext");
-			return value[0].trim();
-		} catch (Exception e) {
-			throw new _Exception(_ExceptionType.FORMDATA_INCORRECT, "value of field= sign has not resolved");
-		}
-	}
-
-	public String getAppletType() throws _Exception {
-		try {
-			String value[] = formData.get("applettype");
-			System.out.println("value: " + value[0].trim());
-			return value[0].trim();
-		} catch (Exception e) {
-			throw new _Exception(_ExceptionType.FORMDATA_INCORRECT, "value of field= applettype has not resolved");
 		}
 	}
 
