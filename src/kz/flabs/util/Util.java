@@ -125,7 +125,7 @@ public class Util {
 
 	public static String convertDateToStringSilently(Date date) {
 		try {
-			return dateFormat.format(date);
+			return simpleDateFormat.format(date);
 		} catch (Exception e) {
 			return "";
 		}
