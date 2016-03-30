@@ -1,8 +1,6 @@
 package kz.lof.rule;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.webrule.GlobalSetting;
-import kz.flabs.webrule.IRule;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.handler.HandlerRule;
 import kz.lof.appenv.AppEnv;
@@ -44,65 +41,6 @@ public class RuleProvider implements Const {
 		loadGlobal(globalFileName);
 	}
 
-	public IRule getRule(String ruleType, String ruleID) throws RuleException {
-		File docFile;
-		try {
-			if (ruleID != null) {
-				ruleID = ruleID.toLowerCase();
-			}
-			IRule rule = null;
-
-			if (ruleType.equalsIgnoreCase("page")) {
-				if (pageRuleMap.containsKey(ruleID)) {
-					rule = pageRuleMap.get(ruleID);
-				} else {
-					docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
-					PageRule pageRule = new PageRule(env, docFile);
-					pageRuleMap.put(ruleID.toLowerCase(), pageRule);
-					rule = pageRule;
-				}
-			} else if (ruleType.equalsIgnoreCase("handler")) {
-				if (handlerRuleMap.containsKey(ruleID)) {
-					rule = handlerRuleMap.get(ruleID);
-				} else {
-					docFile = new File(global.rulePath + File.separator + "Handler" + File.separator + ruleID + ".xml");
-					HandlerRule handlerRule = new HandlerRule(env, docFile);
-					handlerRuleMap.put(ruleID.toLowerCase(), handlerRule);
-					rule = handlerRule;
-				}
-			}
-			if (rule != null) {
-				rule.plusHit();
-			}
-			return rule;
-		} catch (FileNotFoundException fnf) {
-			throw new RuleException("rule \"" + ruleID + "\"(type:" + ruleType + "), not found ");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		return null;
-	}
-
-	public IRule getRule(int ruleType, String ruleID) throws RuleException {
-		File docFile;
-
-		ruleID = ruleID.toLowerCase();
-		IRule rule = null;
-
-		if (pageRuleMap.containsKey(ruleID)) {
-			rule = pageRuleMap.get(ruleID);
-		} else {
-			docFile = new File(global.rulePath + File.separator + "Page" + File.separator + ruleID + ".xml");
-			PageRule pageRule = new PageRule(env, docFile);
-			pageRuleMap.put(ruleID.toLowerCase(), pageRule);
-			rule = pageRule;
-		}
-
-		rule.plusHit();
-		return rule;
-
-	}
-
 	public Collection<HandlerRule> getHandlerRules(boolean reload) throws RuleException {
 		if (reload) {
 			handlerRuleMap.clear();
@@ -123,12 +61,7 @@ public class RuleProvider implements Const {
 
 	public boolean resetRules() {
 		AppEnv.logger.infoLogEntry("Reload \"" + env.appName + "\" application rules ...");
-
 		pageRuleMap.clear();
-		// handlerRuleMap.clear();
-
-		// loadHandlers();
-
 		AppEnv.logger.infoLogEntry("Application rules have been reset");
 		return true;
 	}
@@ -194,7 +127,7 @@ public class RuleProvider implements Const {
 	}
 
 	public PageRule getRule(String id) throws RuleException {
-		File docFile;
+		File docFile = null;
 		if (id != null) {
 			String ruleID = id.toLowerCase();
 			PageRule rule = null;
@@ -202,7 +135,7 @@ public class RuleProvider implements Const {
 			if (pageRuleMap.containsKey(ruleID)) {
 				rule = pageRuleMap.get(ruleID);
 			} else {
-				docFile = new File("rule" + File.separator + env.appName + File.separator + "Page" + File.separator + ruleID + ".xml");
+				docFile = new File(env.getRulePath() + File.separator + env.appName + File.separator + "Page" + File.separator + ruleID + ".xml");
 				rule = new PageRule(env, docFile);
 				pageRuleMap.put(ruleID.toLowerCase(), rule);
 			}

@@ -29,6 +29,7 @@ public class EnvConst {
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";
 	public static final int DEFAULT_HTTP_PORT = 38700;
 	public static final String ADMINISTRATOR_SERVICE_CLASS = "staff.services.UserServices";
+	public static final String OFFICEFRAME = "Officeframe";
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static int DEFAULT_PAGE_SIZE = 20;
