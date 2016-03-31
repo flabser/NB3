@@ -83,7 +83,7 @@ public class ElementRule implements Const {
 			if (qsSourceType == ValueSourceType.GROOVY_FILE || qsSourceType == ValueSourceType.FILE) {
 				CompilerConfiguration compiler = new CompilerConfiguration();
 
-				if (Environment.isDevMode) {
+				if (Environment.isDevMode()) {
 					compiler.setTargetDirectory("bin");
 				} else {
 					compiler.setTargetDirectory(parentRule.getScriptDirPath());

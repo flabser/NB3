@@ -21,6 +21,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.AprLifecycleListener;
 import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tomcat.util.descriptor.web.ErrorPage;
 
 public class WebServer {
@@ -49,7 +50,12 @@ public class WebServer {
 	}
 
 	public Context getSharedResources(String URLPath) throws LifecycleException, MalformedURLException {
-		String db = new File("webapps/" + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
+		String db = null;
+		if (Environment.isDevMode()) {
+			db = new File(Environment.getOfficeFrameDir() + "webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
+		} else {
+			db = new File("webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
+		}
 		Context sharedResContext = tomcat.addContext(URLPath, db);
 		sharedResContext.setDisplayName(EnvConst.SHARED_RESOURCES_APP_NAME);
 
@@ -64,7 +70,17 @@ public class WebServer {
 
 	public Host addApplication(String siteName, String URLPath, String docBase) throws LifecycleException, MalformedURLException {
 		Context context = null;
-		String db = new File("webapps/" + docBase).getAbsolutePath();
+
+		String db = null;
+		if (Environment.isDevMode()) {
+			if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, docBase)) {
+				db = new File(Environment.getOfficeFrameDir() + "webapps" + File.separator + docBase).getAbsolutePath();
+			} else {
+				db = new File("webapps" + File.separator + docBase).getAbsolutePath();
+			}
+		} else {
+			db = new File("webapps" + File.separator + docBase).getAbsolutePath();
+		}
 
 		context = tomcat.addContext(URLPath, db);
 		context.setDisplayName(URLPath.substring(1));

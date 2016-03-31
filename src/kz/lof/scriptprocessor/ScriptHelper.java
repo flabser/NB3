@@ -42,7 +42,7 @@ public class ScriptHelper {
 	}
 
 	public void devPrint(Object text) {
-		if (Environment.isDevMode) {
+		if (Environment.isDevMode()) {
 			System.out.println(text.toString());
 		}
 	}

@@ -53,14 +53,24 @@ public class Console implements Runnable {
 			System.out.println("os=" + System.getProperty("os.name") + " " + System.getProperty("os.version") + "(" + System.getProperty("os.arch")
 			        + ")");
 			System.out.println("jvm=" + System.getProperty("java.version"));
+			System.out.println("started at=" + Util.convertDataTimeToString(Environment.startTime));
 			System.out.println("application server name=" + EnvConst.APP_NAME);
 			System.out.println("database=" + Environment.dataBase.getInfo());
-			if (Environment.isDevMode) {
-				System.out.println("developer mode is on");
-			}
+			System.out.println("web server port=" + Environment.httpPort);
 			System.out.println("default language=" + EnvConst.DEFAULT_LANG);
+			System.out.println("languages=" + Environment.langs);
 			File jarFile = new File(EnvConst.NB_JAR_FILE);
 			System.out.println("jar=" + EnvConst.NB_JAR_FILE + ", path=" + jarFile.getAbsolutePath() + ", exist=" + jarFile.exists());
+			System.out.println("smtp port=" + Environment.smtpPort);
+			System.out.println("smtp auth=" + Environment.smtpAuth);
+			System.out.println("smtp server=" + Environment.SMTPHost);
+			System.out.println("smtp user=" + Environment.smtpUser);
+			if (Environment.isDevMode()) {
+				System.out.println("developer mode is on");
+				System.out.println("external officeframe folder=" + Environment.getOfficeFrameDir());
+			} else {
+				System.out.println("developer mode is off");
+			}
 		} else if (command.equalsIgnoreCase("show users") || command.equalsIgnoreCase("su")) {
 
 		} else if (command.equalsIgnoreCase("reset rules") || command.equalsIgnoreCase("rr")) {

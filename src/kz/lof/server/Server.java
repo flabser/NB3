@@ -26,7 +26,7 @@ public class Server {
 		logger = new Log4jLogger("Server");
 		logger.infoLogEntry(":-)");
 		logger.infoLogEntry(serverTitle + " start");
-		if (Environment.isDevMode) {
+		if (Environment.isDevMode()) {
 			Environment.verboseLogging = true;
 			logger.warningLogEntry("debug logging is turned on");
 		}
@@ -57,7 +57,7 @@ public class Server {
 		try {
 			for (int i = 0; i < arg.length; i++) {
 				if (arg[i].equals("developing")) {
-					Environment.isDevMode = true;
+					Environment.setDevMode(true);
 				}
 			}
 			Server.start();

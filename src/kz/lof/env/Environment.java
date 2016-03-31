@@ -9,8 +9,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +52,7 @@ import org.xml.sax.SAXException;
 
 public class Environment implements Const, ICache {
 	public static boolean verboseLogging;
+	public static Date startTime;
 	public static String orgName;
 	public static String hostName;
 	public static int httpPort = EnvConst.DEFAULT_HTTP_PORT;
@@ -77,6 +81,11 @@ public class Environment implements Const, ICache {
 	public static String smtpUser;
 	public static String smtpPassword;
 	public static Boolean mailEnable = false;
+	public static Vocabulary vocabulary;
+	public static String workspaceName = "Workspace";
+	public static String primaryAppDir = "";
+	public static PeriodicalServices periodicalServices;
+	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
 
 	private static String defaultRedirectURL;
 
@@ -86,14 +95,11 @@ public class Environment implements Const, ICache {
 	private static HashMap<String, Object> cache = new HashMap<String, Object>();
 	private static ArrayList<IDatabase> delayedStart = new ArrayList<IDatabase>();
 	private static ArrayList<_Session> sess = new ArrayList<_Session>();
-	public static boolean isDevMode;
-	public static Vocabulary vocabulary;
-	public static String workspaceName = "Workspace";
-	public static String primaryAppDir = "";
-	public static PeriodicalServices periodicalServices;
-	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
+	private static boolean isDevMode;
+	private static String officeFrameDir = "";
 
 	public static void init() {
+		startTime = new Date();
 		loadProperties();
 		initProcess();
 		try {
@@ -395,5 +401,19 @@ public class Environment implements Const, ICache {
 			return (PageOutcome) obj;
 		}
 
+	}
+
+	public static boolean isDevMode() {
+		return isDevMode;
+	}
+
+	public static void setDevMode(boolean isDevMode) {
+		Environment.isDevMode = isDevMode;
+		Path parent = Paths.get(System.getProperty("user.dir")).getParent();
+		officeFrameDir = parent + File.separator + EnvConst.OFFICEFRAME + File.separator;
+	}
+
+	public static String getOfficeFrameDir() {
+		return officeFrameDir;
 	}
 }

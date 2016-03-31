@@ -14,7 +14,9 @@ import kz.flabs.webrule.constants.RuleType;
 import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.w3c.dom.NodeList;
 
 public class PageRule extends Rule implements IElement, Const {
@@ -42,7 +44,17 @@ public class PageRule extends Rule implements IElement, Const {
 				}
 			}
 
-			String xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
+			String xsltAppsPath = "";
+			if (Environment.isDevMode()) {
+				if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, env.appName)) {
+					xsltAppsPath = Environment.getOfficeFrameDir() + "webapps" + File.separator + env.appName + File.separator + "xsl";
+				} else {
+					xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
+				}
+			} else {
+				xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";
+			}
+
 			type = RuleType.PAGE;
 
 			// TODO need to improve

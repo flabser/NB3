@@ -1,25 +1,20 @@
 package kz.lof.appenv;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.localization.Localizator;
 import kz.flabs.localization.Vocabulary;
-import kz.lof.administrator.dao.ApplicationDAO;
-import kz.lof.administrator.model.Application;
 import kz.lof.caching.PageCacheAdapter;
-import kz.lof.dataengine.jpa.constants.AppCode;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.log.ILogger;
 import kz.lof.rule.RuleProvider;
-import kz.lof.scripting._Session;
 import kz.lof.server.Server;
-import kz.lof.user.SuperUser;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
@@ -36,17 +31,9 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		this.appName = n;
 		this.dataBase = db;
 
-		if (Environment.isDevMode) {
-			ApplicationDAO aDao = new ApplicationDAO(new _Session(this, new SuperUser()));
-			Application appliaction = aDao.findByName(appName);
-			if (appliaction != null
-			        && (appliaction.getCode() == AppCode.ADMINISTRATOR || appliaction.getCode() == AppCode.REFERENCE
-			                || appliaction.getCode() == AppCode.WORKSPACE || appliaction.getCode() == AppCode.STAFF)) {
-				Path parent = Paths.get(System.getProperty("user.dir")).getParent();
-				String extModule = parent + File.separator + EnvConst.OFFICEFRAME;
-				rulePath = extModule + File.separator + "rule";
-				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + extModule + ")");
-			}
+		if (Environment.isDevMode() && ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, appName)) {
+			rulePath = Environment.getOfficeFrameDir() + "rule";
+			Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir() + ")");
 		}
 
 		try {
