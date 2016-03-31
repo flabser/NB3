@@ -100,8 +100,12 @@ public class DailyRollingFileAppenderChanged extends RollingFileAppender {
 			File file = new File(fileName);
 			// scheduledFilename = fileName+sdf.format(new
 			// Date(file.lastModified()));//changed tch_stas
-			scheduledFilename = fileName.split("\\\\")[0] + File.separator
+//			scheduledFilename = fileName.split("\\\\")[0] + File.separator
+//					+ sdf.format(new Date(file.lastModified()));
+
+			scheduledFilename = new File(fileName).getParent() + File.separator
 					+ sdf.format(new Date(file.lastModified()));
+
 		} else {
 			LogLog.error("Either File or DatePattern options are not set for appender ["
 					+ name + "].");
@@ -182,8 +186,12 @@ public class DailyRollingFileAppenderChanged extends RollingFileAppender {
 		}
 
 		// String datedFilename = fileName+sdf.format(now);
-		String datedFilename = fileName.split("\\\\")[0] + File.separator
-				+ sdf.format(now);// Changed by tch_stas
+//		String datedFilename = new File(fileName).getParent() + File.separator
+//				+ sdf.format(now);
+
+		String datedFilename = new File(fileName).getParent() + File.separator
+				+ sdf.format(now);
+
 		// It is too early to roll over because we are still within the
 		// bounds of the current interval. Rollover will occur once the
 		// next interval is reached.
