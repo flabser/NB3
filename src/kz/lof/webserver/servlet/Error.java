@@ -14,58 +14,63 @@ import kz.flabs.servlets.SaxonTransformator;
 import kz.lof.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
 
-public class Error extends HttpServlet{
-	private static final long serialVersionUID = 1207733369437122383L;	
+public class Error extends HttpServlet {
+	private static final long serialVersionUID = 1207733369437122383L;
 
-	protected void  doPost(HttpServletRequest request, HttpServletResponse response){
-		String type = request.getParameter("type");	
-		String msg = request.getParameter("msg");	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		String type = request.getParameter("type");
+		String msg = request.getParameter("msg");
 		String xslt = "xsl" + File.separator + "error.xsl";
 		try {
 			request.setCharacterEncoding("utf-8");
 			String outputContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
-			if(type.equals("ws_auth_error")){
+			if (type.equals("ws_auth_error")) {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				xslt = "xsl" + File.separator + "authfailed.xsl";
-				outputContent = outputContent + "<request><error type=\"authfailed\">" +
-						"<message>" + msg + "</message><version>" +  Server.serverVersion + "</version></error></request>";
-			}else if(type.equals("default_url_not_defined")){
+				outputContent = outputContent + "<request><error type=\"authfailed\">" + "<message>" + msg + "</message><version>"
+				        + Server.serverVersion + "</version></error></request>";
+			} else if (type.equals("application_was_restricted")) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				msg = "work with the application was restricted";
+				outputContent = outputContent + "<request><error type=\"" + type + "\">" + "<message>" + msg + "</message><version>"
+				        + Server.serverVersion + "</version></error></request>";
+			} else if (type.equals("default_url_not_defined")) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				msg = "default URL has not defined in global setting";
-				outputContent = outputContent + "<request><error type=\"" + type + "\">" +
-						"<message>" + msg + "</message><version>" +  Server.serverVersion + "</version></error></request>";
-
-			}else{
+				outputContent = outputContent + "<request><error type=\"" + type + "\">" + "<message>" + msg + "</message><version>"
+				        + Server.serverVersion + "</version></error></request>";
+			} else {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				outputContent = outputContent + "<request><error type=\"" + type + "\">" +
-						"<message>" + msg + "</message><version>" +  Server.serverVersion + "</version></error></request>";
+				outputContent = outputContent + "<request><error type=\"" + type + "\">" + "<message>" + msg + "</message><version>"
+				        + Server.serverVersion + "</version></error></request>";
 			}
 
-			if (request.getParameter("onlyxml") != null){
-				response.setContentType("text/xml;charset=utf-8");		
+			if (request.getParameter("as") != null) {
+				response.setContentType("text/xml;charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.println(outputContent);
 				out.close();
-			}else{			
+			} else {
 				response.setContentType("text/html");
 				File errorXslt = new File(xslt);
 				new SaxonTransformator().toTrans(response, errorXslt, outputContent);
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (IOException e) {		
+		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SaxonApiException e) {	
+		} catch (SaxonApiException e) {
 			e.printStackTrace();
-		} catch (TransformatorException e) {	
+		} catch (TransformatorException e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void  doGet(HttpServletRequest request, HttpServletResponse response){
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		doPost(request, response);
 	}
-
 
 }

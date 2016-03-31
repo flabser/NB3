@@ -25,20 +25,15 @@ public class AppEnv extends PageCacheAdapter implements Const {
 
 	private IDatabase dataBase;
 
-	public AppEnv(String n) {
+	public AppEnv(String n, IDatabase db) {
 		this.appName = n;
 		try {
-			Server.logger.infoLogEntry("# Start application \"" + appName + "\"");
 			ruleProvider = new RuleProvider(this);
 			loadVocabulary();
 			isValid = true;
-
 		} catch (Exception e) {
 			Server.logger.errorLogEntry(e);
 		}
-	}
-
-	public void setDataBase(IDatabase db) {
 		this.dataBase = db;
 	}
 

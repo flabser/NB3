@@ -115,7 +115,7 @@ public class Util {
 		return null;
 	}
 
-	public static String convertDateTimeToDerbyFormat(Date date) throws DataConversionException {
+	public static String convertDateTimeToStringSilently(Date date) throws DataConversionException {
 		try {
 			return simpleDateTimeFormat.format(date);
 		} catch (Exception e) {
@@ -123,13 +123,11 @@ public class Util {
 		}
 	}
 
-	public static String convertDataToString(Date date) {
+	public static String convertDateToStringSilently(Date date) {
 		try {
 			return dateFormat.format(date);
 		} catch (Exception e) {
-			AppEnv.logger.errorLogEntry("Util, Не удалось преобразовать дату в текст " + date);
-			// AppEnv.logger.errorLogEntry(e);
-			return "err date";
+			return "";
 		}
 	}
 

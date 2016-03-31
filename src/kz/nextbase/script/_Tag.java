@@ -96,12 +96,6 @@ public class _Tag<UUID> implements IPOJOObject {
 		return new _Tag(tag);
 	}
 
-	public _Tag addViewEntry(_ViewEntry entry) {
-		Tag tag = entry.toTag().runtimeTag;
-		runtimeTag.tags.add(tag);
-		return new _Tag(tag);
-	}
-
 	public void setTagValue(String tagValue) {
 		runtimeTag.value = tagValue;
 	}

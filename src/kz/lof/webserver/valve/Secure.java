@@ -1,6 +1,7 @@
 package kz.lof.webserver.valve;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
+import kz.lof.administrator.model.Application;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
@@ -16,6 +18,7 @@ import kz.lof.env.SessionPool;
 import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
+import kz.lof.user.IUser;
 import kz.lof.webserver.servlet.SessionCooks;
 
 import org.apache.catalina.connector.Request;
@@ -38,8 +41,22 @@ public class Secure extends ValveBase {
 			HttpSession jses = http.getSession(false);
 			if (jses != null) {
 				_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
-				if (ses != null && !ses.getUser().getUserID().equals(AnonymousUser.USER_NAME)) {
-					getNext().invoke(request, response);
+				if (ses != null) {
+					IUser<Long> user = ses.getUser();
+					if (!user.getUserID().equals(AnonymousUser.USER_NAME)) {
+						if (isAllowed(user.getAllowedApps(), appType)) {
+							getNext().invoke(request, response);
+						} else {
+							Server.logger.warningLogEntry("work with the application was restricted");
+							if (jses != null) {
+								jses.invalidate();
+							}
+							response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+							request.getRequestDispatcher("/Error?type=application_was_restricted").forward(request, response);
+						}
+					} else {
+						gettingSession(request, response);
+					}
 				} else {
 					gettingSession(request, response);
 				}
@@ -81,4 +98,16 @@ public class Secure extends ValveBase {
 			request.getRequestDispatcher("/Error?type=ws_auth_error").forward(request, response);
 		}
 	}
+
+	// TODO needed to optimize
+	private boolean isAllowed(List<Application> apps, String currentApp) {
+		for (Application app : apps) {
+			if (app.getName().equals(currentApp)) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+
 }

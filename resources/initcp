@@ -8,6 +8,7 @@ stini reference.init.FillDistricts
 stini reference.init.FillLocalities
 stini reference.init.FillCityDistricts
 stini reference.init.FillStreets
+stini reference.init.FillDepartmentType
 stini reference.init.FillPositions
 stini reference.init.FillKufs
 stini reference.init.FillPropertyCode

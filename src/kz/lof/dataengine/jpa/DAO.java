@@ -252,15 +252,17 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			TypedQuery<T> typedQuery = em.createQuery(cq);
 			Query query = em.createQuery(countCq);
 			long count = (long) query.getSingleResult();
-			int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-			if (pageNum == 0) {
-				pageNum = maxPage;
+			int maxPage = 1;
+			if (pageNum != 0 || pageSize != 0) {
+				maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+				if (pageNum == 0) {
+					pageNum = maxPage;
+				}
+				int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+				typedQuery.setFirstResult(firstRec);
+				typedQuery.setMaxResults(pageSize);
 			}
-			int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-			typedQuery.setFirstResult(firstRec);
-			typedQuery.setMaxResults(pageSize);
 			List<T> result = typedQuery.getResultList();
-
 			ViewPage<T> r = new ViewPage<T>(result, count, maxPage, pageNum);
 			return r;
 		} finally {

@@ -14,6 +14,7 @@ import kz.flabs.exception.PortalException;
 import kz.flabs.servlets.ProviderExceptionType;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
+import kz.lof.env.SessionPool;
 import kz.lof.scripting._Session;
 
 public class Logout extends HttpServlet implements Const {
@@ -47,7 +48,7 @@ public class Logout extends HttpServlet implements Const {
 				_Session ses = (_Session) jses.getAttribute(EnvConst.SESSION_ATTR);
 				if (ses != null) {
 					ses.getUser().setAuthorized(false);
-
+					SessionPool.remove(ses);
 				}
 				jses.removeAttribute(EnvConst.SESSION_ATTR);
 				jses.invalidate();
@@ -63,7 +64,7 @@ public class Logout extends HttpServlet implements Const {
 	private String getRedirect() {
 		if (env != null) {
 
-			return "/Workspace/Provider?id=workspace";
+			return "/Workspace/p?id=workspace";
 
 		} else {
 			return "";

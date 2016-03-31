@@ -3,6 +3,7 @@ package kz.flabs.runtimeobj.document;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -35,7 +36,6 @@ import kz.flabs.exception.DocumentExceptionType;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.runtimeobj.DocumentCollection;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
-import kz.flabs.users.Reader;
 import kz.flabs.users.User;
 import kz.flabs.util.ListConvertor;
 import kz.flabs.util.Util;
@@ -635,11 +635,6 @@ public class BaseDocument implements Const, Serializable {
 	public void setAuthor(String author) {
 		if (author != null) {
 			this.authorID = author;
-			readers.add(new Reader(author));
-			// addStringField("author", author);
-			// if (author.equalsIgnoreCase(Const.anonUser)) {
-			// this.addReaders(Const.anonGroupAsList);
-			// }
 
 		}
 	}
@@ -750,13 +745,13 @@ public class BaseDocument implements Const, Serializable {
 					addReaders(val.valuesAsStringList);
 				} else {
 					addEditor(val.valueAsText);
-					addReader(val.valueAsText);
+
 				}
 			} else if (saveField.type == FieldType.READER) {
 				if (val.getType() == FieldType.TEXTLIST) {
 					addReaders(val.valuesAsStringList);
 				} else {
-					addReader(val.valueAsText);
+
 				}
 			}
 		}
@@ -958,19 +953,12 @@ public class BaseDocument implements Const, Serializable {
 	}
 
 	public void clearReaders() {
-		readers.clear();
-		readers.add(new Reader(authorID));
+
 	}
 
 	public void addReaders(Collection<String> values) {
 		for (String value : values) {
-			addReader(value);
-		}
-	}
 
-	public void addReaders(HashSet<Reader> r) {
-		for (Reader value : r) {
-			addReader(value.getUserID());
 		}
 	}
 
@@ -979,34 +967,6 @@ public class BaseDocument implements Const, Serializable {
 			editors.add(name);
 			if (!name.startsWith("[") && !name.startsWith("]")) {
 				editors.add("[" + name + "]");
-			}
-		}
-
-	}
-
-	public void replaceReader(String name, boolean isFavourite) {
-		if (!name.equals("")) {
-			Reader reader = new Reader(name, isFavourite);
-			if (!readers.add(reader)) {
-				readers.remove(reader);
-				readers.add(reader);
-			}
-		}
-
-		if (!name.startsWith("[") && !name.endsWith("]")) {
-			Reader reader_group = new Reader("[" + name + "]", isFavourite);
-			if (!readers.add(reader_group)) {
-				readers.remove(reader_group);
-				readers.add(reader_group);
-			}
-		}
-	}
-
-	public void addReader(String name) {
-		if (!name.equals("") && !name.equalsIgnoreCase("[]")) {
-			readers.add(new Reader(name));
-			if (!name.startsWith("[") && !name.startsWith("]")) {
-				readers.add(new Reader("[" + name + "]"));
 			}
 		}
 
@@ -1024,20 +984,8 @@ public class BaseDocument implements Const, Serializable {
 		this.fieldsMap.remove(fieldName);
 	}
 
-	public void deleteReader(String name) {
-		readers.remove(name);
-		boolean isGroup = name.startsWith("[") && name.endsWith("]");
-		if (!isGroup && readers.contains("[" + name + "]")) {
-			readers.remove("[" + name + "]");
-		}
-	}
-
 	public HashSet<String> getEditors() {
 		return editors;
-	}
-
-	public HashSet<Reader> getReaders() {
-		return readers;
 	}
 
 	public ArrayList<BaseDocument> getResponses(int docID, int docType, Set<String> complexUserID, String absoluteUserID)
@@ -1201,12 +1149,7 @@ public class BaseDocument implements Const, Serializable {
 			switch (k.getNodeName().trim()) {
 			case "#text":
 				break;
-			case "readers":
-				NodeList readersList = XMLUtil.getNodeList(k, "user");
-				for (int a = 0; a < readersList.getLength(); a++) {
-					addReader(readersList.item(a).getTextContent());
-				}
-				break;
+
 			case "editors":
 				NodeList editorsList = XMLUtil.getNodeList(k, "user");
 				for (int a = 0; a < editorsList.getLength(); a++) {
@@ -1300,9 +1243,7 @@ public class BaseDocument implements Const, Serializable {
 
 		if (allDescendants == false) {
 			xmlFragment.append("<readers>");
-			for (Reader r : getReaders()) {
-				xmlFragment.append("<user>" + r + "</user>");
-			}
+
 			xmlFragment.append("</readers>");
 
 			xmlFragment.append("<editors>");

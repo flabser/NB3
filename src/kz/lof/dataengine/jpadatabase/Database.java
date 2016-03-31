@@ -13,8 +13,10 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 
 import kz.flabs.dataengine.Const;
+import kz.flabs.dataengine.DatabaseCore;
 import kz.flabs.dataengine.DatabasePoolException;
 import kz.flabs.dataengine.DatabaseUtil;
+import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.h2.DBConnectionPool;
@@ -42,13 +44,16 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import org.postgresql.util.PSQLException;
 
-public class Database extends kz.flabs.dataengine.h2.Database implements IDatabase, Const {
+public class Database extends DatabaseCore implements IDatabase, Const {
+	protected static String dbUser = EnvConst.APP_DB_USER;
+	protected static String dbPwd = EnvConst.APP_DB_PWD;
+	protected static String connectionURL = "";
+	protected IDBConnectionPool dbPool;
 	protected EntityManagerFactory factory;
 	private FTSearchEngine ftEngine;
 	private boolean isNascence;
 
 	public Database() {
-
 		Properties props = new Properties();
 		props.setProperty("user", EnvConst.DB_USER);
 		props.setProperty("password", EnvConst.DB_PWD);
@@ -99,8 +104,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 
 			if (isNascence) {
 				Server.logger.infoLogEntry("Loading primary data...");
-				AppEnv env = new AppEnv(EnvConst.ADMINISTRATOR_APP_NAME);
-				env.setDataBase(this);
+				AppEnv env = new AppEnv(EnvConst.ADMINISTRATOR_APP_NAME, this);
 				_Session ses = new _Session(env, new SuperUser());
 				Server.logger.infoLogEntry("setup localization environment...");
 				LanguageDAO dao = new LanguageDAO(ses);
@@ -131,8 +135,9 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		}
 	}
 
-	public Database(AppEnv env) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		super(env);
+	public Database(String appName) throws DatabasePoolException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		dbPool = new DBConnectionPool();
+		dbPool.initConnectionPool(EnvConst.JDBC_DRIVER, connectionURL, dbUser, dbPwd);
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(PersistenceUnitProperties.JDBC_DRIVER, EnvConst.JDBC_DRIVER);
 		properties.put(PersistenceUnitProperties.JDBC_USER, dbUser);
@@ -149,9 +154,9 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
 
 		PersistenceProvider pp = new PersistenceProvider();
-		factory = pp.createEntityManagerFactory(env.appName, properties);
+		factory = pp.createEntityManagerFactory(appName, properties);
 		if (factory == null) {
-			Server.logger.errorLogEntry("the entity manager of \"" + env.appName + "\" has not been initialized");
+			Server.logger.errorLogEntry("the entity manager of \"" + appName + "\" has not been initialized");
 
 		}
 		ftEngine = new FTSearchEngine(this);
@@ -249,6 +254,7 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 				System.out.println("user \"" + userName + "\" has been registered");
 
 				User entity = new User();
+				entity.setSuperUser(true);
 				entity.setLogin(userName);
 				entity.setPwd(pwd);
 				ApplicationDAO aDao = new ApplicationDAO(ses);
@@ -260,6 +266,21 @@ public class Database extends kz.flabs.dataengine.h2.Database implements IDataba
 		}
 		return 0;
 
+	}
+
+	@Override
+	public IDBConnectionPool getConnectionPool() {
+		return dbPool;
+	}
+
+	@Override
+	public IDatabase getBaseObject() {
+		return this;
+	}
+
+	@Override
+	public String getInfo() {
+		return connectionURL;
 	}
 
 }
