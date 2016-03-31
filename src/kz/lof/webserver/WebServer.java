@@ -44,12 +44,12 @@ public class WebServer {
 		AprLifecycleListener listener = new AprLifecycleListener();
 		server.addLifecycleListener(listener);
 
-		getSharedResources("/" + EnvConst.SHARED_RESOURCES_APP_NAME);
+		initSharedResources("/" + EnvConst.SHARED_RESOURCES_APP_NAME);
 		initDefaultURL();
 
 	}
 
-	public Context getSharedResources(String URLPath) throws LifecycleException, MalformedURLException {
+	public Context initSharedResources(String URLPath) throws LifecycleException, MalformedURLException {
 		String db = null;
 		if (Environment.isDevMode()) {
 			db = new File(Environment.getOfficeFrameDir() + "webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();

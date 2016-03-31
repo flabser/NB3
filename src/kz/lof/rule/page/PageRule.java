@@ -66,10 +66,22 @@ public class PageRule extends Rule implements IElement, Const {
 				} else if (xsltFile.startsWith("\\")) {
 					xsltFile = "webapps" + File.separator + xsltFile;
 				} else if (xsltFile.equalsIgnoreCase("default_staff")) {
-					String xsltStaffAppsPath = "webapps" + File.separator + EnvConst.STAFF_APP_NAME + File.separator + "xsl";
+					String xsltStaffAppsPath = "";
+					if (Environment.isDevMode()) {
+						xsltStaffAppsPath = Environment.getOfficeFrameDir() + "webapps" + File.separator + EnvConst.STAFF_APP_NAME + File.separator
+						        + "xsl";
+					} else {
+						xsltStaffAppsPath = "webapps" + File.separator + EnvConst.STAFF_APP_NAME + File.separator + "xsl";
+					}
 					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else if (xsltFile.equalsIgnoreCase("default_MunicipalProperty")) {
-					String xsltStaffAppsPath = "webapps" + File.separator + "MunicipalProperty" + File.separator + "xsl";
+					String xsltStaffAppsPath = "";
+					if (Environment.isDevMode()) {
+						xsltStaffAppsPath = Environment.getOfficeFrameDir() + "webapps" + File.separator + "MunicipalProperty" + File.separator
+						        + "xsl";
+					} else {
+						xsltStaffAppsPath = "webapps" + File.separator + "MunicipalProperty" + File.separator + "xsl";
+					}
 					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else {
 					xsltFile = xsltAppsPath + File.separator + xsltFile;
