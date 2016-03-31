@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import kz.flabs.exception.RuleException;
-import kz.flabs.exception.WebFormValueException;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.ActionType;
@@ -147,19 +145,6 @@ public abstract class Rule implements IElement, IRule {
 	public String getAsXML() {
 		return "";
 	}
-
-	@Override
-	public String getRuleAsXML(String app) {
-		String xmlText = "<rule id=\"" + id + "\" isvalid=\"" + isValid + "\" app=\"" + app + "\" ison=\"" + isOn + "\">" + "<description>"
-		        + description + "</description>";
-		return xmlText + "</fields></rule>";
-	}
-
-	@Override
-	abstract public void update(Map<String, String[]> fields) throws WebFormValueException;
-
-	@Override
-	abstract public boolean save();
 
 	@Override
 	public boolean isAnonymousAccessAllowed() {

@@ -2,11 +2,9 @@ package kz.lof.rule.page;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
-import kz.flabs.exception.WebFormValueException;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.Rule;
@@ -63,8 +61,6 @@ public class PageRule extends Rule implements IElement, Const {
 				publishAs = PublishAsType.HTML;
 				if (xsltFile.equalsIgnoreCase("default") || xsltFile.equals("*")) {
 					xsltFile = xsltAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
-				} else if (xsltFile.startsWith("\\")) {
-					xsltFile = "webapps" + File.separator + xsltFile;
 				} else if (xsltFile.equalsIgnoreCase("default_staff")) {
 					String xsltStaffAppsPath = "";
 					if (Environment.isDevMode()) {
@@ -97,26 +93,6 @@ public class PageRule extends Rule implements IElement, Const {
 	@Override
 	public String toString() {
 		return "PAGE id=" + id + ", ison=" + isOn;
-	}
-
-	@Override
-	public boolean save() {
-		return false;
-	}
-
-	@Override
-	public String getRuleAsXML(String app) {
-		String xmlText = "";
-
-		xmlText = "<ison>" + isOn + "</ison><cache>" + caching + "</cache>" + "<elements>" + elements + "</elements>" + "<hits>" + hits + "</hits>"
-		        + "<app>" + app + "</app>";
-
-		return xmlText;
-	}
-
-	@Override
-	public void update(Map<String, String[]> fields) throws WebFormValueException {
-
 	}
 
 }
