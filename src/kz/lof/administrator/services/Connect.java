@@ -14,6 +14,7 @@ import kz.lof.scripting._Session;
 import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
 import kz.lof.user.IUser;
+import kz.lof.user.SuperUser;
 import kz.lof.util.StringUtil;
 
 public class Connect {
@@ -28,8 +29,12 @@ public class Connect {
 			String pwdHash = StringUtil.encode(pwd);
 			if (user.getPwdHash() != null && user.getPwdHash().equals(pwdHash)) {
 				user.setAuthorized(true);
+				if (user.isSuperUser()) {
+					user = new SuperUser(user.getLogin());
+				}
 			} else {
 				Server.logger.errorLogEntry("password has not been encoded");
+				user.setAuthorized(false);
 			}
 
 			if (user.isAuthorized()) {

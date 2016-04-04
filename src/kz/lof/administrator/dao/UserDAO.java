@@ -171,9 +171,6 @@ public class UserDAO {
 			q.setParameter("login", login);
 			List<User> res = q.getResultList();
 			IUser<Long> user = res.get(0);
-			if (user.isSuperUser()) {
-				user = new SuperUser(user.getLogin());
-			}
 			return user;
 		} catch (IndexOutOfBoundsException e) {
 			return null;
