@@ -50,7 +50,7 @@ public class Connect {
 					Server.logger.errorLogEntry(e);
 				}
 
-				if (eDao != null) {
+				if (user.getId() != SuperUser.ID && eDao != null) {
 					IEmployee emp = eDao.getEmployee(user.getId());
 					if (emp != null) {
 						user.setUserName(emp.getName());
