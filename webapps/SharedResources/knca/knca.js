@@ -3,7 +3,17 @@ var knca = (function() {
     var wd = window.document,
         noty,
         initialized = false,
-        isReady = false;
+        isReady = false,
+        t_o,
+        LOCALE_STORAGE_PATH_KEY = 'sign_storage_path';
+
+    var storage = {
+        alias: 'PKCS12',
+        keyAlias: '627b042ba9d21a10f724d7a6b5c68cdb21fbd899',
+        keyType: 'SIGN',
+        path: '/home/medin/Загрузки/keulimjai/RSA_627b042ba9d21a10f724d7a6b5c68cdb21fbd899.p12',
+        pwd: '123456'
+    };
 
     function init() {
         if (initialized) {
@@ -14,7 +24,7 @@ var knca = (function() {
         if (!navigator.javaEnabled()) {
             nb.notify({
                 type: 'error',
-                message: nb.getText('java_disabled', 'Поддержка Java в браузере не включена! Включите или <a href=\"http://java.com/ru/download/\" target=\"blank\">установите Java</a> и вновь обратитесь к этой странице.')
+                message: nb.getText('java_unavailable', 'Поддержка Java в браузере не включена! Включите или <a href=\"http://java.com/ru/download/\" target=\"blank\">установите Java</a> и вновь обратитесь к этой странице.')
             }).show(5000);
 
             log('java disabled');
@@ -34,12 +44,20 @@ var knca = (function() {
             return true;
         }
 
+        clearTimeout(t_o);
+
         isReady = true;
         nb.uiUnblock();
         noty && noty.remove();
         noty = null;
 
         log('is ready');
+
+        // add api
+        window.knca.chooseStoragePath = chooseStoragePath;
+
+        // restore path from storage
+
 
         return true;
     }
@@ -50,7 +68,7 @@ var knca = (function() {
         nb.notify({
             type: 'info',
             message: 'knca > ' + msg
-        }).show(2000);
+        }).show(800);
     }
 
     function insertApplet() {
@@ -80,12 +98,49 @@ var knca = (function() {
         d.innerHTML = htm.join('');
         wd.getElementsByTagName('body')[0].appendChild(d);
 
+        log('applet inserted');
+
         nb.uiBlock();
 
         noty = nb.notify({
             type: 'process',
-            message: 'Подождите, идет загрузка Java-апплета...'
+            message: nb.getText('wait_applet_loading', 'Подождите, идет загрузка Java-апплета...')
         }).show();
+
+        t_o = setTimeout(function() {
+            nb.notify({
+                type: 'info',
+                message: nb.getText('applet_loading_too_long', 'Процесс загрузки затянулся... :(')
+            }).show(3000);
+        }, 30 * 1000);
+    }
+
+    function invalidateStorage() {
+        // storage.alias = 'NONE';
+        // storage.path = '';
+        localeStorage.setItem(LOCALE_STORAGE_PATH_KEY, storage.path);
+    }
+
+    function chooseStoragePath() {
+        if (storage.alias !== 'NONE') {
+            var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
+            if (rw.getErrorCode() === 'NONE') {
+                storage.path = rw.getResult();
+                if (!storage.path) {
+                    invalidateStorage();
+                } else {
+                    localeStorage.setItem(LOCALE_STORAGE_PATH_KEY, storage.path);
+                }
+            } else {
+                invalidateStorage();
+                nb.notify({
+                    type: 'error',
+                    message: rw.getErrorCode()
+                }).show('click');
+            }
+        } else {
+            invalidateStorage();
+        }
     }
 
     return {
