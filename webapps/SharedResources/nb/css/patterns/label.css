@@ -1,0 +1,26 @@
+label {
+    font-weight: normal;
+}
+
+label > input + span {
+    margin-left: .3em;
+    vertical-align: middle;
+}
+
+label:not(.btn) > input + span {
+    color: #555;
+}
+
+label:hover > input + span,
+label > input:checked + span {
+    color: #000;
+}
+
+label.input {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 3px 3px 0;
+    min-height: auto;
+    padding: 5px 6px;
+    width: auto;
+}

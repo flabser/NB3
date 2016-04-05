@@ -1,0 +1,22 @@
+{{> pagination}}
+<ul class=nb-dialog-list>
+{{#each models as |m|}}
+    <li class=nb-dialog-list-it>
+        <label data-role="dialog-list-item">
+            {{#if ../isMulti}}
+                <input data-type="select" type="checkbox" name="select_{{../dialogId}}" value="{{m.id}}"/>
+            {{else}}
+                <input data-type="select" type="radio" name="select_{{../dialogId}}" value="{{m.id}}"/>
+            {{/if}}
+            <span>{{m.name}}</span>
+            {{#each ../fields as |mfield|}}
+                {{#if mfield.[1]}}
+                    <input data-id="{{m.id}}" name="{{mfield.[0]}}" value="{{mapValue m mfield.[0]}}" data-text="{{mapValue m mfield.[1]}}" type="hidden"/>
+                {{else}}
+                    <input data-id="{{m.id}}" name="{{mfield.[0]}}" value="{{mapValue m mfield.[0]}}" type="hidden"/>
+                {{/if}}
+            {{/each}}
+        </label>
+    </li>
+{{/each}}
+</ul>

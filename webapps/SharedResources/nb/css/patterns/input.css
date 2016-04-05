@@ -1,0 +1,169 @@
+.input,
+input,
+textarea,
+select {
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: #000;
+    display: inline-block;
+    min-height: 34px;
+    font-size: 1em;
+    max-width: 100%;
+    outline: 0;
+    padding: 7px;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.input,
+input,
+textarea,
+select {
+    border-top: 1px solid #c0c0c0;
+}
+
+
+/* select {
+    background: #FFF linear-gradient(#FFF, #F7F7F7);
+} */
+
+input[type=date] {
+    height: 28px;
+}
+
+input[type=color] {
+    box-shadow: none;
+    height: 48px !important;
+    padding: 1px;
+    width: 48px !important;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    border: 1px solid #CCC;
+    box-shadow: none;
+    margin: 0;
+    max-width: 16px;
+    min-height: auto;
+    padding: 1px;
+    width: auto !important;
+}
+
+input[type=radio] {
+    border: 1px solid transparent;
+}
+
+textarea {
+    min-height: 5em;
+    width: 100%;
+}
+
+.input:hover,
+input:hover,
+textarea:hover,
+select:hover {
+    border-color: #888;
+}
+
+.input:focus,
+.input:active,
+input:focus,
+input:active,
+textarea:focus,
+textarea:active,
+select:focus,
+select:active {
+    border-color: #4D90FE;
+    box-shadow: 0px 0px 1px rgba(39, 128, 248, 0.196);
+}
+
+.input.disabled,
+.input[disabled],
+input.disabled,
+input[disabled],
+textarea.disabled,
+textarea[disabled],
+select.disabled,
+select[disabled] {
+    background: #F6F6F6;
+    cursor: not-allowed !important;
+}
+
+input[type=checkbox][disabled],
+input[type=radio][disabled] {
+    background: #DDD;
+}
+
+.fieldset[disabled] .input,
+.fieldset[disabled] input,
+.fieldset[disabled] textarea,
+.fieldset[disabled] select {
+    background-color: #F6F6F6;
+    cursor: not-allowed;
+}
+
+.tablet input,
+.tablet textarea,
+.phone input,
+.phone textarea {
+    width: 100%;
+}
+
+.tablet input[type=checkbox],
+.tablet input[type=radio],
+.phone input[type=checkbox],
+.phone input[type=radio] {
+    padding: 2px;
+}
+
+@media ( max-width: 768px) {
+    .input,
+    input,
+    textarea,
+    select {
+        width: 100%;
+    }
+    input[type=checkbox],
+    input[type=radio] {
+        padding: 2px;
+    }
+}
+
+
+/* input[required]:invalid:not(:focus),
+textarea[required]:invalid:not(:focus) {
+    box-shadow: 0 0 1px rgba(255, 0, 0, 0.3);
+    border-color: #FF845D;
+} */
+
+.has-error > .input.required,
+.has-error > select.required:invalid,
+.has-error > input[required]:not(:focus),
+.has-error > textarea[required]:not(:focus),
+.has-error > select[required]:invalid,
+input.invalid,
+textarea.invalid,
+select.invalid {
+    box-shadow: 0 0 1px rgba(255, 0, 0, 0.3);
+    border-color: #FF845D;
+}
+
+.error-message {
+    color: #F00;
+    display: none;
+    padding: 2px;
+}
+
+.has-error > .error-message {
+    display: block;
+}
+
+.input-placeholder {
+    display: inline-block;
+    min-height: 30px;
+    font-size: 1em;
+    padding: 6px;
+}

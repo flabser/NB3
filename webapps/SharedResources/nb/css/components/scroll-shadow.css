@@ -1,0 +1,6 @@
+.scroll-shadow {
+    background: linear-gradient(to top, white, white), radial-gradient(at 50% 0, rgba(0, 0, 0, .2), transparent 70%);
+    background-repeat: no-repeat;
+    background-size: 100% 5px;
+    background-attachment: local, scroll;
+}

@@ -7,15 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -37,9 +34,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 public class GlobalSetting {
 	public String description;
@@ -262,51 +256,39 @@ public class GlobalSetting {
 	public void encode() {
 		String userNameEncode = "";
 		String passwordEncode = "";
-		try {
-			initAlgorithm(1);
-			BASE64Encoder enc = new BASE64Encoder();
-			byte[] encodeBytes = cipherAlgo.doFinal(dbUserName.getBytes(Charset.forName("UTF-8")));
-			byte[] encodeBytes2 = cipherAlgo.doFinal(dbPassword.getBytes(Charset.forName("UTF-8")));
-			userNameEncode = enc.encode(encodeBytes);
-			passwordEncode = enc.encode(encodeBytes2);
-			writeXml("", userNameEncode, "", passwordEncode);
-
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * try { initAlgorithm(1); // BASE64Encoder enc = new BASE64Encoder();
+		 * // byte[] encodeBytes =
+		 * cipherAlgo.doFinal(dbUserName.getBytes(Charset.forName("UTF-8"))); //
+		 * byte[] encodeBytes2 =
+		 * cipherAlgo.doFinal(dbPassword.getBytes(Charset.forName("UTF-8"))); //
+		 * userNameEncode = enc.encode(encodeBytes); // passwordEncode =
+		 * enc.encode(encodeBytes2); writeXml("", userNameEncode, "",
+		 * passwordEncode);
+		 * 
+		 * } catch (IllegalBlockSizeException e) { e.printStackTrace(); } catch
+		 * (BadPaddingException e) { e.printStackTrace(); }
+		 */
 	}
 
 	@SuppressWarnings("restriction")
 	public void decode() {
-		try {
-			String userNameDecode = "";
-			String passwordDecode = "";
-			initAlgorithm(2);
-			BASE64Decoder decoder = new BASE64Decoder();
-
-			byte[] tmp1 = decoder.decodeBuffer(userNameEnco);
-			byte[] encodeBytes = cipherAlgo.doFinal(tmp1);
-			userNameDecode = new String(encodeBytes);
-
-			byte[] tmp2 = decoder.decodeBuffer(pwdEnco);
-			byte[] encodeBytes2 = cipherAlgo.doFinal(tmp2);
-			passwordDecode = new String(encodeBytes2);
-
-			if (dbPassword.equals("")) {
-				dbPassword = passwordDecode;
-			}
-			if (dbUserName.equals("")) {
-				dbUserName = userNameDecode;
-			}
-
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * try { String userNameDecode = ""; String passwordDecode = "";
+		 * initAlgorithm(2); BASE64Decoder decoder = new BASE64Decoder();
+		 * 
+		 * byte[] tmp1 = decoder.decodeBuffer(userNameEnco); byte[] encodeBytes
+		 * = cipherAlgo.doFinal(tmp1); userNameDecode = new String(encodeBytes);
+		 * 
+		 * byte[] tmp2 = decoder.decodeBuffer(pwdEnco); byte[] encodeBytes2 =
+		 * cipherAlgo.doFinal(tmp2); passwordDecode = new String(encodeBytes2);
+		 * 
+		 * if (dbPassword.equals("")) { dbPassword = passwordDecode; } if
+		 * (dbUserName.equals("")) { dbUserName = userNameDecode; }
+		 * 
+		 * } catch (IllegalBlockSizeException e) { e.printStackTrace(); } catch
+		 * (BadPaddingException e) { e.printStackTrace(); } catch (IOException
+		 * e) { e.printStackTrace(); }
+		 */
 	}
 }

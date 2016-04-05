@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" mode="on">
+    <caching>CACHING_IN_SERVER_SCOPE</caching>
+
+    <caption name="brand"/>
+
+    <caption name="logout"/>
+    <caption name="user_profile"/>
+    <caption name="search"/>
+
+    <caption name="administrator"/>
+    <caption name="user"/>
+    <caption name="application"/>
+    <caption name="language"/>
+
+    <caption name="applications"/>
+    <caption name="name"/>
+    <caption name="default_url"/>
+    <caption name="code"/>
+
+    <caption name="properties"/>
+    <caption name="interface"/>
+    <caption name="change_skin"/>
+    <caption name="position"/>
+    <caption name="user_name"/>
+    <caption name="login_name"/>
+    <caption name="email"/>
+    <caption name="employee"/>
+    <caption name="password"/>
+    <caption name="password_confirm"/>
+    <caption name="password_confirm_not_equals"/>
+    <caption name="email"/>
+    <caption name="org_name"/>
+    <caption name="department"/>
+    <caption name="roles"/>
+    <caption name="countdocinview"/>
+    <caption name="interface_lang"/>
+</rule>

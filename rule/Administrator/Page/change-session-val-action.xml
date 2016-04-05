@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" mode="on">
+    <description/>
+    <caching>NO_CACHING</caching>
+    <element mode="ON" type="SCRIPT">
+        <events>
+            <doscript source="JAVA_CLASS">staff.page.action.ChangeSessionVal</doscript>
+        </events>
+    </element>
+</rule>

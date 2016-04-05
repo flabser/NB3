@@ -1,0 +1,76 @@
+.layout {
+    margin: 0px auto;
+    min-height: 100%;
+    min-width: 320px;
+    position: relative;
+    width: 100%;
+}
+
+.header {
+    border: none;
+    display: block;
+    max-width: inherit;
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+}
+
+.header:after {
+    content: ' ';
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.aside {
+    background-color: #F7F7F7;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    top: 50px;
+    transition: all .15s;
+    width: 280px;
+    z-index: 4;
+}
+
+.tablet .aside,
+.phone .aside {
+    border: none;
+    top: 0;
+    z-index: 99;
+}
+
+.content {
+    background: #FFF;
+    border: none;
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, .2); */
+    height: auto;
+    margin: 0 0 10px 0;
+    padding: 0 0 20px 0;
+    padding-top: 50px;
+    position: relative;
+    transition: margin-left .15s;
+}
+
+body:not(.side-nav-toggle) .aside + .content {
+    margin-left: 280px;
+}
+
+.tablet .content,
+.phone .content {
+    margin-left: 0 !important;
+}
+
+.content-overlay {
+    background: rgba(0, 0, 0, .3);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}

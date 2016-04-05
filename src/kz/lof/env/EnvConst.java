@@ -13,6 +13,7 @@ import kz.lof.localization.LanguageCode;
 
 // TODO need to secure this class
 public class EnvConst {
+	public static final String FRAMEWORK_NAME = "NB3";
 	public static final String SUPPOSED_CODE_PAGE = "utf-8";
 	public static final String DEFAULT_XML_ENC = "utf-8";
 	public static final String APP_ATTR = "app";
@@ -30,7 +31,7 @@ public class EnvConst {
 	public static final int DEFAULT_HTTP_PORT = 38700;
 	public static final String ADMINISTRATOR_SERVICE_CLASS = "staff.services.UserServices";
 	public static final String OFFICEFRAME = "Officeframe";
-	public static final String[] OFFICEFRAME_APPS = { "Staff", "Reference", "Workspace", "Administrator" };
+	public static final String[] OFFICEFRAME_APPS = { "Staff", "Reference", "Workspace" };
 
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static int DEFAULT_PAGE_SIZE = 20;

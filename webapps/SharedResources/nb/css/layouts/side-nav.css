@@ -1,0 +1,203 @@
+.side-nav {
+    border-right: 1px solid #DDD;
+    box-shadow: inset -3px 0 3px -3px rgba(0, 0, 0, 0.1);
+    padding: 8px 4px;
+    word-wrap: normal;
+}
+
+.tablet .side-nav,
+.phone .side-nav {
+    background: #FFF;
+    left: -280px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 8px 4px;
+    top: 0;
+    transition: all .15s;
+    z-index: 7;
+}
+
+.tablet.side-nav-toggle,
+.phone.side-nav-toggle {
+    overflow: hidden;
+}
+
+.tablet.side-nav-toggle .content-overlay,
+.phone.side-nav-toggle .content-overlay {
+    display: block;
+}
+
+
+/* desktop */
+
+.side-nav-toggle .side-nav {
+    display: none;
+    /* -moz-transform: translate(-280px, 0);
+    -webkit-transform: translate(-280px, 0);
+    transform: translate(-280px, 0);
+    transform: translate3d(-280px, 0, 0); */
+}
+
+
+/* device */
+
+.tablet.side-nav-toggle .side-nav,
+.phone.side-nav-toggle .side-nav {
+    display: block;
+    -moz-transform: translate(280px, 0);
+    -webkit-transform: translate(280px, 0);
+    transform: translate(280px, 0);
+    transform: translate3d(280px, 0, 0);
+}
+
+
+/* .side-nav tree */
+
+.side-nav section > header {
+    border-radius: 2px;
+    font-weight: bold;
+    padding: 6px 12px 6px 30px;
+    position: relative;
+}
+
+.side-nav header[data-role=side-tree-toggle]:hover {
+    background-color: #DDD;
+    color: #303333;
+}
+
+.side-nav ul {
+    list-style: none;
+    margin: 0 0 0px 18px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.side-nav > section > ul,
+.side-nav > ul {
+    margin-left: 0;
+}
+
+.side-nav li {
+    padding: 0;
+    position: relative;
+}
+
+.side-nav li.divider {
+    margin: 5px 0;
+}
+
+
+/* .side-nav .nav-link */
+
+.side-nav .nav-link {
+    border-radius: 2px;
+    color: #303333;
+    cursor: pointer;
+    display: block;
+    font-weight: normal;
+    margin: 0;
+    overflow: hidden;
+    padding: 6px 16px 6px 30px;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.tablet .side-nav .nav-link,
+.phone .side-nav .nav-link {
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+.side-nav .nav-link.active {
+    background-color: #E5EEF7;
+    border: 1px solid #B6D8F8;
+    font-weight: bold;
+}
+
+.side-nav .nav-link:active {
+    background-color: #DDD !important;
+    color: #303333;
+}
+
+.side-nav .nav-link:hover {
+    background-color: #DDD;
+    color: #303333;
+}
+
+.side-nav .nav-link > i {
+    color: inherit;
+    display: inline-block;
+    font-size: 14px;
+    text-align: left;
+    vertical-align: middle;
+    width: 20px;
+}
+
+.side-nav .nav-link > span {
+    display: inline-block;
+}
+
+.side-nav .nav-link > i + span {
+    padding-left: 2px;
+    vertical-align: top;
+    white-space: normal;
+}
+
+
+/* .side-tree-collapsible */
+
+.side-nav .side-tree-collapsible {
+    padding: 0px;
+}
+
+.side-nav .side-tree-collapsible ul {
+    max-height: 3000px;
+    transition: max-height .15s;
+}
+
+.side-nav .side-tree-collapsible.side-tree-collapsed ul {
+    max-height: 0px;
+}
+
+
+/* .side-tree-toggle */
+
+[data-role=side-tree-toggle] {
+    cursor: pointer;
+}
+
+.side-nav i.side-tree-toggle {
+    height: 100%;
+    left: 0;
+    padding: 9px 11px;
+    position: absolute;
+    top: 0;
+    width: 28px !important;
+}
+
+.tablet .side-nav i.side-tree-toggle,
+.phone .side-nav i.side-tree-toggle {
+    padding-bottom: 11px;
+    padding-top: 11px;
+}
+
+.side-nav i.side-tree-toggle:hover {
+    color: inherit;
+}
+
+.side-nav header > i.side-tree-toggle:before {
+    content: "\f0d7";
+}
+
+.side-nav .side-tree-collapsed > header > i.side-tree-toggle:before {
+    content: "\f0da";
+}
+
+.side-nav i.side-tree-toggle:before {
+    content: "\f147";
+}
+
+.side-nav .side-tree-collapsed > .nav-link > i.side-tree-toggle:before {
+    content: "\f196";
+}

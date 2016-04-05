@@ -1,0 +1,341 @@
+.navbar {
+    background: #FEEA84 url(../img/main_header_bg.png) 0 0 no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-bottom: 1px solid transparent;
+    box-shadow: 0 0px 2px rgba(0, 0, 0, .2);
+    color: #303030;
+    font-size: 0;
+    height: 50px;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.navbar .navbar-header {
+    display: inline-block;
+    float: left;
+    margin: 0;
+    max-width: 200px;
+}
+
+.brand-logo {
+    max-height: 48px;
+    vertical-align: middle;
+}
+
+@media ( max-width: 768px) {
+    .brand-logo {
+        /* display: none; */
+        max-width: 80px;
+    }
+}
+
+.brand-title {
+    display: inline-block;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: normal;
+    line-height: 50px;
+    overflow: hidden;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+@media ( max-width: 768px) {
+    .brand-title {
+        display: none;
+    }
+}
+
+.brand-logo + .brand-title {
+    margin-left: 10px;
+}
+
+.navbar-nav {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+.navbar-nav .nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-right {
+    float: right;
+    margin: 0;
+}
+
+.navbar a {
+    font-size: 13px;
+}
+
+.navbar a,
+.navbar a:hover {
+    color: #303333;
+    text-decoration: none;
+}
+
+.navbar button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+    padding: 0 8px;
+    vertical-align: top;
+}
+
+.navbar i.fa {
+    color: #646464;
+    display: inline-block;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.navbar i + span {
+    margin-left: 3px;
+}
+
+
+/* .btn-side-nav-toggle */
+
+button.btn-side-nav-toggle {
+    cursor: pointer;
+    display: inline-block;
+    height: 50px;
+    position: relative;
+    vertical-align: middle;
+}
+
+.tablet .btn-side-nav-toggle,
+.phone .btn-side-nav-toggle {
+    display: inline-block;
+}
+
+.btn-side-nav-toggle:hover:before,
+.btn-side-nav-toggle:hover:after {
+    border-color: #888;
+}
+
+.btn-side-nav-toggle:before {
+    border-bottom: 3px solid #AAA;
+    border-top: 3px solid #AAA;
+    content: '';
+    display: block;
+    padding: 2px 0;
+    width: 16px;
+}
+
+.btn-side-nav-toggle:after {
+    border-top: 3px solid #AAA;
+    content: '';
+    display: block;
+    margin-top: 4px;
+    width: 16px;
+}
+
+
+/* .navbar .dropdown */
+
+.navbar .dropdown .dropdown-toggle {
+    display: none;
+    line-height: 20px;
+    margin: 0;
+    min-width: 48px;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar .dropdown .dropdown-menu {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    display: inline-block;
+    font-size: 0;
+    float: left;
+    line-height: inherit;
+    list-style: none;
+    margin: 0;
+    padding: 0 8px;
+    position: relative;
+    text-align: left;
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown .dropdown-menu li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+.navbar .dropdown .dropdown-menu > li > a {
+    color: #333;
+    font-size: 13px;
+    padding: 15px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.navbar .dropdown .dropdown-menu > li > a:focus,
+.navbar .dropdown .dropdown-toggle:focus,
+.navbar .dropdown .dropdown-menu > li > a:hover,
+.navbar .dropdown .dropdown-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.navbar .dropdown li.divider {
+    display: none;
+}
+
+@media ( max-width: 970px) {
+    .navbar .dropdown .dropdown-toggle {
+        display: block;
+    }
+    .navbar .dropdown .dropdown-menu > li > a:hover,
+    .navbar .dropdown .dropdown-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    .navbar .dropdown .dropdown-menu {
+        background: #FFF;
+        box-shadow: 0 6px 9px #ccc;
+        display: none;
+        padding: 6px 0;
+        position: absolute;
+    }
+    .navbar .dropdown .dropdown-menu li {
+        display: block;
+    }
+    .navbar .dropdown .dropdown-menu > li > a {
+        color: #333;
+        text-align: left;
+    }
+    .navbar .dropdown li.divider {
+        display: block;
+    }
+}
+
+
+/* .navbar-search */
+
+.navbar-search input::-webkit-input-placeholder {
+    color: #333;
+}
+
+.navbar-search input::-moz-input-placeholder {
+    color: #333;
+}
+
+.navbar-search input:-moz-input-placeholder {
+    color: #333;
+}
+
+.navbar-search input:-ms-input-placeholder {
+    color: #333;
+}
+
+.navbar-search {
+    display: inline-block;
+    font-size: 13px;
+    margin: 0;
+    overflow: hidden;
+    padding: 10px 0;
+    position: relative;
+    width: 200px;
+}
+
+.navbar-search .search-target {
+    height: 28px;
+    min-height: auto;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    width: 80px;
+}
+
+.navbar-search [type=submit] {
+    display: none;
+}
+
+.navbar-search button[type=reset] {
+    background: transparent;
+    border: 0;
+    display: none;
+    height: 28px;
+    min-height: auto;
+    padding: 0;
+    position: absolute;
+    right: 0px;
+    text-align: center;
+    top: 10px;
+    width: 22px;
+}
+
+.navbar-search .resetwithselect {
+    margin-right: 80px;
+}
+
+.navbar-search [type=search]:valid + button[type=reset] {
+    display: block;
+}
+
+.navbar-search button[type=reset] > .fa {
+    color: #888;
+    font-size: .85em;
+}
+
+.navbar-search .q {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.196), inset 0px 1px 1px rgba(0, 0, 0, 0.102);
+    border: 0;
+    border-radius: 3px;
+    box-sizing: border-box;
+    min-height: auto;
+    padding: 6px;
+    width: 100%;
+}
+
+.navbar-search .q:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-search .q:focus {
+    background: rgba(255, 255, 255, 1);
+}
+
+@media ( max-width: 768px) {
+    .navbar-search {
+        width: 60px;
+    }
+    .search-open .navbar-search .q,
+    .navbar-search .q:focus {
+        background: rgba(255, 255, 255, 1);
+        border-radius: 0;
+        box-shadow: 0 0 6px #888;
+        position: fixed;
+        left: 0;
+        height: 50px;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+    }
+    .search-open .content-overlay {
+        display: block;
+    }
+}
+
+.search-open .header {
+    z-index: 9;
+}

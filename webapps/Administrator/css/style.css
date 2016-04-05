@@ -1,0 +1,10 @@
+.navbar {
+    background: #D7E0E4;
+    border-bottom-color: #B1BCC1;
+}
+
+form[data-edit=false] .on-edit,
+form[data-edit=false] [data-action=save_and_close],
+form[data-edit=false] [data-upload] {
+    display: none;
+}

@@ -1,0 +1,142 @@
+/* content-header */
+
+.content-header {
+    border-bottom: 1px solid #E6E6E6;
+    margin: 0;
+    padding: 0;
+}
+
+.content-header.content-horizontal {}
+
+.content-header:after {
+    content: ' ';
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+
+/* btn-back */
+
+.btn-back {
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    height: 36px;
+    margin: 7px 2px;
+    outline: 0;
+    width: 36px;
+}
+
+.btn-back:hover {
+    background: #f2f2f2;
+}
+
+.btn-back i {
+    color: #999;
+    font-size: 1em;
+    margin: 0;
+}
+
+.btn-back:hover i {
+    color: #666;
+}
+
+
+/* header-title */
+
+.header-title {
+    color: #303333;
+    font-size: 20px;
+    font-weight: normal;
+    margin: 0;
+    padding: 14px 16px;
+}
+
+.tablet .header-title,
+.phone .header-title {
+    font-size: 16px;
+}
+
+.btn-back + .header-title {
+    padding-left: 0;
+}
+
+.content-header.content-horizontal .header-title {
+    float: left;
+}
+
+
+/* content-actions */
+
+.content-actions {
+    border-top: 1px solid #E6E6E6;
+    margin: 0;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+.content-header.content-horizontal .content-actions {
+    border: none;
+    float: right;
+}
+
+.content-actions:after {
+    content: ' ';
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+footer.content-actions {
+    border-top: 1px solid #E6E6E6;
+    padding-left: 243px;
+}
+
+@media ( max-width: 960px) {
+    footer.content-actions {
+        padding-left: 195px;
+    }
+}
+
+@media ( max-width: 768px) {
+    .content-actions {
+        padding: 4px;
+    }
+    footer.content-actions {
+        padding-left: 8px;
+        text-align: center;
+    }
+}
+
+
+/* content-body */
+
+.content-body {
+    margin: 0;
+    padding: 0;
+}
+
+.content-body:after {
+    content: ' ';
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+
+/* content-footer */
+
+.content-footer {
+    margin: 0;
+    padding: 0;
+}

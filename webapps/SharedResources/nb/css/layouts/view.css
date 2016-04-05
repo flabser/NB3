@@ -1,0 +1,270 @@
+.view {
+    position: relative;
+    width: 100%;
+}
+
+.view-empty {
+    color: #666;
+    font-size: 1.3em;
+}
+
+
+/* entries-head */
+
+.entries-head {
+    display: block;
+}
+
+.head-wrap {
+    background: #F8F8F8;
+    border-bottom: 1px solid #EEE;
+    border-top: 1px solid transparent;
+    display: block;
+    max-height: 90px;
+    min-height: 40px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.entry-captions {
+    display: inline-block;
+    padding: 9px 11px 9px 40px;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.entry-captions > span {
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 3px;
+    vertical-align: top;
+    white-space: normal;
+}
+
+
+/* entries */
+
+.entries {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.entry-wrap {
+    background: #F5F5F5;
+    border-bottom: 1px solid #F5F5F5;
+    display: block;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    vertical-align: top;
+    width: 100%;
+}
+
+.entry-wrap.entry-action-open,
+.entry-wrap:hover {
+    background: #F5F5F5;
+}
+
+
+/* entry */
+
+.entry {
+    background: #FFF;
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    transition: transform .20s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    white-space: nowrap;
+    width: 100%;
+    z-index: 3;
+}
+
+.entry-wrap:hover .entry,
+.entry:hover {
+    background: #F5F5F5;
+}
+
+.entry-action-open .entry {
+    background: #FFF;
+    box-shadow: 0 0 6px #666;
+    direction: rtl;
+    -moz-transform: translate(-70px, 0);
+    -webkit-transform: translate(-70px, 0);
+    transform: translate(-70px, 0);
+}
+
+.entry a {
+    color: #333;
+    text-decoration: none;
+}
+
+.entry:hover a {
+    color: #0000EE;
+    text-decoration: none;
+}
+
+
+/* entry-select */
+
+.entry-select {
+    display: inline-block;
+    height: 100%;
+    line-height: inherit;
+    margin: 0;
+    padding: 11px 0;
+    position: absolute;
+    text-align: center;
+    vertical-align: top;
+    width: 36px;
+    z-index: 1;
+}
+
+.entry-select > input {
+    height: auto;
+    min-height: auto;
+    vertical-align: baseline;
+}
+
+.entry-action-open .entry-select {
+    display: none;
+}
+
+.tablet .entry .entry-select,
+.phone .entry .entry-select {
+    padding: 15px 0;
+}
+
+
+/* entry-link */
+
+.entry-link {
+    display: inline-block;
+    padding: 11px;
+    position: relative;
+    vertical-align: top;
+    width: 100%;
+}
+
+.entry-select + .entry-link {
+    padding-left: 40px;
+}
+
+.tablet .entry-link,
+.phone .entry-link {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.entry-link.active {
+    background-color: #F5F5F5;
+}
+
+.entry-fields {
+    position: relative;
+}
+
+.entry-fields > span {
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 3px;
+    vertical-align: top;
+    white-space: normal;
+    word-break: break-all;
+}
+
+
+/* entry-actions */
+
+.entry-actions {
+    bottom: 0;
+    display: block;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+    z-index: 2;
+}
+
+.entry-action-open .entry-actions {
+    display: block !important;
+}
+
+.entry-wrap:hover .entry-actions {
+    display: block;
+    z-index: 4;
+}
+
+.tablet .entry-wrap:hover .entry-actions,
+.phone .entry-wrap:hover .entry-actions {
+    z-index: 2;
+}
+
+.entry-action {
+    border: none;
+    display: inline-block;
+    font-size: 14px;
+    height: 100%;
+    line-height: 100%;
+    padding: 4px 16px;
+    position: relative;
+    text-align: center;
+}
+
+.action-delete {
+    background: white;
+    color: red;
+}
+
+.action-delete:hover {
+    background: red;
+    color: white;
+}
+
+.action-delete:hover .fa {
+    color: white;
+}
+
+
+/* child */
+
+.child .indent {
+    display: inline-block;
+    padding-left: 16px;
+}
+
+.child .child .indent {
+    padding-left: 32px;
+}
+
+.child .child .child .indent {
+    padding-left: 48px;
+}
+
+.child .child .child .child .indent {
+    padding-left: 54px;
+}
+
+i.has-parent {
+    border-bottom: 1px solid #AAA;
+    border-left: 1px solid #AAA;
+    display: inline-block;
+    height: 11px;
+    vertical-align: top;
+    width: 11px;
+}
+
+.entry-action-open i.has-parent {
+    display: none;
+}

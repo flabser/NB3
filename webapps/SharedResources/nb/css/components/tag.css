@@ -1,0 +1,16 @@
+.tag {
+    background: white;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+    display: inline-block;
+    padding: 4px 6px;
+}
+
+.tag + .tag {
+    margin-left: 2px;
+}
+
+.tag.tag-xs {
+    font-size: .85em;
+    padding: 1px 2px;
+}

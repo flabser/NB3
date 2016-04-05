@@ -1,0 +1,32 @@
+.user-avatar {
+    border: none;
+    box-shadow: 0 0 2px #666;
+    margin: 0;
+    min-height: 100px;
+    min-width: 100px;
+    padding: 4px;
+}
+
+.fieldset-user-avatar {
+    display: block;
+    max-height: 160px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.fieldset-user-fields {
+    display: block;
+    vertical-align: top;
+}
+
+@media (min-width: 768px) {
+    .fieldset-user-avatar {
+        display: inline-block !important;
+        margin-left: 10px;
+    }
+    .fieldset-user-fields {
+        display: inline-block !important;
+        float: left;
+        max-width: 600px;
+    }
+}

@@ -16,7 +16,7 @@ public class Min5ScheduledTask extends ScheduledTask implements Job {
 			processCode("staff.scheduled.BirtdayReminder");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 

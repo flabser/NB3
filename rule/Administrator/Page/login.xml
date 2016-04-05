@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule type="page" mode="on" anonymous="on">
+    <description></description>
+    <caching>NO_CACHING</caching>
+    <xsltfile>DEFAULT</xsltfile>
+    <element mode="ON" type="SCRIPT">
+        <events>
+            <doscript source="JAVA_CLASS">kz.lof.administrator.page.form.LoginForm</doscript>
+        </events>
+    </element>
+    <caption name="logout"/>
+    <caption name="another_comp"/>
+    <caption name="user"/>
+    <caption name="password"/>
+    <caption name="login"/>
+    <caption name="sign_in"/>
+    <caption name="sign_up"/>
+</rule>

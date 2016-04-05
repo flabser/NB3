@@ -1,0 +1,151 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #FFF;
+    font: 13px/1.43 Verdana, Arial, Helvetica, sans-serif;
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+a {
+    color: #2222CC;
+    margin: auto;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #EE0000;
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.no_transition * {
+    transition: none !important;
+}
+
+
+/* .hidden-md */
+
+.hidden-md {}
+
+html body.phone .hidden-md {
+    display: none !important;
+}
+
+@media ( max-width: 768px) {
+    html body .hidden-md {
+        display: none !important;
+    }
+}
+
+
+/* .fa */
+
+.fa {
+    color: #666;
+    font-size: 14px;
+}
+
+
+/* floating */
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+
+/* .clearfix */
+
+.clearfix:after {
+    content: ' ';
+    clear: both;
+    display: block !important;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+.clearfix {
+    display: block !important;
+}
+
+.disabled,
+[disabled] {
+    cursor: not-allowed;
+}
+
+.divider {
+    background-color: #E6E6E6;
+    display: block;
+    font-size: 0;
+    height: 1px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.inline {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.list-style-none {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.text-muted {
+    color: #888;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-thumbnail {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    height: auto;
+    line-height: 1.42857143;
+    max-width: 100%;
+    padding: 4px;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
