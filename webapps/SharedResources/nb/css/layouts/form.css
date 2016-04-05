@@ -149,7 +149,7 @@ fieldset.fieldset[disabled] {
     display: block;
 }
 
-@media ( max-width: 960px) {
+@media ( max-width: 1024px) {
     .form-group .control-label {
         width: 170px;
     }

@@ -33,6 +33,7 @@
 
 .btn:hover {
     border-color: #aaa;
+    color: currentColor;
     text-decoration: none;
 }
 

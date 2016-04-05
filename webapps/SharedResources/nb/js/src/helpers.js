@@ -2,6 +2,10 @@ Handlebars.registerHelper('mapValue', function(context, options) {
     return context[options];
 });
 
+Handlebars.registerHelper('unescapeXml', function(data) {
+    return data.replace('&amp;', '&');
+});
+
 Handlebars.registerPartial('pagination', function(data) {
     return nb.html.pagination(data);
 });

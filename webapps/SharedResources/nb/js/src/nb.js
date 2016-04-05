@@ -276,14 +276,14 @@ $(document).ready(function() {
 
     //
     $(window).resize(function() {
-        if (window.innerWidth <= 800 || nb.isMobile()) {
+        if (window.innerWidth <= 1024 || nb.isMobile()) {
             $('body').addClass('phone');
         } else {
             $('body').removeClass('phone');
         }
     });
 
-    if (nb.isMobile() || window.innerWidth <= 800) {
+    if (nb.isMobile() || window.innerWidth <= 1024) {
         $('body').addClass('phone');
     }
 

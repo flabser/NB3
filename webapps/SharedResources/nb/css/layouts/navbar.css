@@ -20,7 +20,13 @@
     display: inline-block;
     float: left;
     margin: 0;
-    max-width: 200px;
+    max-width: 80%;
+}
+
+@media ( max-width: 768px) {
+    .navbar .navbar-header {
+        width: 45%;
+    }
 }
 
 .brand-logo {
@@ -42,14 +48,10 @@
     font-weight: normal;
     line-height: 50px;
     overflow: hidden;
+    text-overflow: ellipsis;
     vertical-align: middle;
     white-space: nowrap;
-}
-
-@media ( max-width: 768px) {
-    .brand-title {
-        display: none;
-    }
+    width: 100%;
 }
 
 .brand-logo + .brand-title {
@@ -200,7 +202,7 @@ button.btn-side-nav-toggle {
     display: none;
 }
 
-@media ( max-width: 970px) {
+@media ( max-width: 1024px) {
     .navbar .dropdown .dropdown-toggle {
         display: block;
     }

@@ -24,6 +24,10 @@
     visibility: hidden;
 }
 
+main {
+    display: block;
+}
+
 .aside {
     background-color: #F7F7F7;
     bottom: 0;

@@ -14,63 +14,65 @@ var handlebars = require('gulp-handlebars');
 // gulp --production
 //
 // remove all node modules
-// npm remove yargs gulp gulp-if gulp-jshint gulp-concat gulp-rename gulp-uglify gulp-csso gulp-wrap gulp-declare gulp-handlebars jshint
+// npm remove yargs gulp gulp-if gulp-jshint gulp-concat gulp-rename gulp-uglify gulp-csso gulp-wrap gulp-declare gulp-handlebars handlebars jshint
 
-var modules = ['Administrator', 'Accountant', 'Staff', 'Reference', 'MunicipalProperty', 'PropertyLeasing', 'Registry'];
+var modules = require('./modules.json');
+// var modules = ['Administrator', 'Accountant', 'Staff', 'Reference', 'MunicipalProperty', 'PropertyLeasing', 'Registry'];
+
+// -----
 var _styles = {};
 var _templates = {};
 var _scripts = {};
-var webAppsPath = '../../';
 var isProduction = argv.production;
 
 // create module task
 for (var i = 0; i < modules.length; i++) {
     var module = modules[i];
     // _styles
-    _styles[module] = ['../css/normalize.css',
+    _styles[module.name] = ['../css/normalize.css',
         '../vendor/select2/css/select2.min.css',
         'css/nb.min.css',
-        webAppsPath + module + '/css/**/*.css',
-        '!' + webAppsPath + module + '/css/*.min.css'
+        module.path + '/css/**/*.css',
+        '!' + module.path + '/css/*.min.css'
     ];
     // _templates
-    _templates[module] = [webAppsPath + module + '/js/templates/*.hbs'];
+    _templates[module.name] = [module.path + '/js/templates/*.hbs'];
     // _scripts
-    _scripts[module] = ['js/nb.build.js',
+    _scripts[module.name] = ['js/nb.build.js',
         '../vendor/select2/js/select2.full.min.js',
         '../vendor/select2/js/i18n/ru.js',
-        webAppsPath + module + '/js/**/*.js',
-        '!' + webAppsPath + module + '/js/app.bundle.js'
+        module.path + '/js/**/*.js',
+        '!' + module.path + '/js/app.bundle.js'
     ];
 
     (function() { // scope
         var m = module;
-        gulp.task(m + '_styles', function() {
-            gulp.src(_styles[m])
+        gulp.task(m.name + '_styles', function() {
+            gulp.src(_styles[m.name])
                 .pipe(concat('all.min.css'))
                 .pipe(csso())
-                .pipe(gulp.dest(webAppsPath + m + '/css'));
+                .pipe(gulp.dest(m.path + '/css'));
         });
 
-        gulp.task(m + '_templates', function() {
-            gulp.src(_templates[m])
+        gulp.task(m.name + '_templates', function() {
+            gulp.src(_templates[m.name])
                 .pipe(handlebars({
                     handlebars: require('handlebars')
                 }))
                 .pipe(wrap('Handlebars.template(<%= contents %>)'))
                 .pipe(declare({
                     namespace: 'nb.templates',
-                    noRedeclare: true,
+                    noRedeclare: false,
                 }))
                 .pipe(concat('templates.js'))
-                .pipe(gulp.dest(webAppsPath + m + '/js/templates/compiled'));
+                .pipe(gulp.dest(m.path + '/js/templates/compiled'));
         });
 
-        gulp.task(m + '_scripts', function() {
-            gulp.src(_scripts[m])
+        gulp.task(m.name + '_scripts', function() {
+            gulp.src(_scripts[m.name])
                 .pipe(concat('app.bundle.js'))
                 .pipe(gulpif(isProduction, uglify()))
-                .pipe(gulp.dest(webAppsPath + m + '/js'));
+                .pipe(gulp.dest(m.path + '/js'));
         });
     })();
 }
@@ -138,21 +140,21 @@ gulp.task('default', ['styles', 'templates', 'lint', 'scripts'], function() {
 
     // create module watch
     for (var i = 0; i < modules.length; i++) {
-        var module = modules[i];
+        var m_name = modules[i].name;
 
-        console.log('watch', module, '\n_styles:\n', _styles[module], '\n_templates:\n', _templates[module], '\n_scripts:\n', _scripts[module]);
+        console.log('watch', m_name, '\n_styles:\n', _styles[m_name], '\n_templates:\n', _templates[m_name], '\n_scripts:\n', _scripts[m_name]);
         console.log('---------------------------------');
 
-        (function() {
-            var m = module;
-            gulp.watch(_styles[m], function() {
-                gulp.run(m + '_styles');
+        (function() { // scope
+            var mName = m_name;
+            gulp.watch(_styles[mName], function() {
+                gulp.run(mName + '_styles');
             });
-            gulp.watch(_templates[m], function() {
-                gulp.run(m + '_templates');
+            gulp.watch(_templates[mName], function() {
+                gulp.run(mName + '_templates');
             });
-            gulp.watch(_scripts[m], function() {
-                gulp.run(m + '_scripts');
+            gulp.watch(_scripts[mName], function() {
+                gulp.run(mName + '_scripts');
             });
         })();
     }

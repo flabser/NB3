@@ -13,7 +13,8 @@
 
 .nav-tabs > li > a {
     color: #666;
-    padding: 6px 12px;
+    margin-right: 1px;
+    padding: 6px 8px;
 }
 
 .tab-pane {
