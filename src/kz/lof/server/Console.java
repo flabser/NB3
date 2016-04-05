@@ -67,6 +67,7 @@ public class Console implements Runnable {
 			System.out.println("smtp user=" + Environment.smtpUser);
 			if (Environment.isDevMode()) {
 				System.out.println("developer mode is on");
+				System.out.println("external core folder=" + Environment.getKernelDir());
 				System.out.println("external Officeframe folder=" + Environment.getOfficeFrameDir());
 			} else {
 				System.out.println("developer mode is off");

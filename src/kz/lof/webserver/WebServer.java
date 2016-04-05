@@ -52,7 +52,7 @@ public class WebServer {
 	public Context initSharedResources(String URLPath) throws LifecycleException, MalformedURLException {
 		String db = null;
 		if (Environment.isDevMode()) {
-			db = new File(EnvConst.FRAMEWORK_NAME + "webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
+			db = new File(Environment.getKernelDir() + "webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
 		} else {
 			db = new File("webapps" + File.separator + EnvConst.SHARED_RESOURCES_APP_NAME).getAbsolutePath();
 		}
@@ -74,7 +74,7 @@ public class WebServer {
 		String db = null;
 		if (Environment.isDevMode()) {
 			if (EnvConst.ADMINISTRATOR_APP_NAME.equals(docBase)) {
-				db = new File(EnvConst.FRAMEWORK_NAME + File.separator + "webapps" + File.separator + docBase).getAbsolutePath();
+				db = new File(Environment.getKernelDir() + "webapps" + File.separator + docBase).getAbsolutePath();
 			} else if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, docBase)) {
 				db = new File(Environment.getOfficeFrameDir() + "webapps" + File.separator + docBase).getAbsolutePath();
 			} else {

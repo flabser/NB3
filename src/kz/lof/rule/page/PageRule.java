@@ -44,7 +44,9 @@ public class PageRule extends Rule implements IElement, Const {
 
 			String xsltAppsPath = "";
 			if (Environment.isDevMode()) {
-				if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, env.appName)) {
+				if (EnvConst.ADMINISTRATOR_APP_NAME.equalsIgnoreCase(env.appName)) {
+					xsltAppsPath = Environment.getKernelDir() + "webapps" + File.separator + env.appName + File.separator + "xsl";
+				} else if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, env.appName)) {
 					xsltAppsPath = Environment.getOfficeFrameDir() + "webapps" + File.separator + env.appName + File.separator + "xsl";
 				} else {
 					xsltAppsPath = "webapps" + File.separator + env.appName + File.separator + "xsl";

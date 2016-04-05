@@ -97,6 +97,7 @@ public class Environment implements Const, ICache {
 	private static ArrayList<_Session> sess = new ArrayList<_Session>();
 	private static boolean isDevMode;
 	private static String officeFrameDir = "";
+	private static String kernelDir = "";
 
 	public static void init() {
 		startTime = new Date();
@@ -411,9 +412,14 @@ public class Environment implements Const, ICache {
 		Environment.isDevMode = isDevMode;
 		Path parent = Paths.get(System.getProperty("user.dir")).getParent();
 		officeFrameDir = parent + File.separator + EnvConst.OFFICEFRAME + File.separator;
+		kernelDir = parent + File.separator + EnvConst.FRAMEWORK_NAME + File.separator;
 	}
 
 	public static String getOfficeFrameDir() {
 		return officeFrameDir;
+	}
+
+	public static String getKernelDir() {
+		return kernelDir;
 	}
 }
