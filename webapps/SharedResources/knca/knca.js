@@ -9,13 +9,13 @@ var knca = (function() {
 
     var storage = {
         alias: 'PKCS12',
-        keyAlias: '627b042ba9d21a10f724d7a6b5c68cdb21fbd899',
+        keyAlias: '',
         keyType: 'SIGN',
-        path: '/home/medin/Загрузки/keulimjai/RSA_627b042ba9d21a10f724d7a6b5c68cdb21fbd899.p12',
-        pwd: '123456'
+        path: '',
+        pwd: ''
     };
 
-    function init() {
+    function init(options) {
         if (initialized) {
             log('already initialized');
             return;
@@ -56,8 +56,9 @@ var knca = (function() {
         // add api
         window.knca.chooseStoragePath = chooseStoragePath;
 
-        // restore path from storage
+        restorePrefsFromLocalStorage();
 
+        log(storage);
 
         return true;
     }
@@ -115,12 +116,39 @@ var knca = (function() {
         }, 30 * 1000);
     }
 
+    function savePrefsOnLocalStorage() {
+        localStorage.setItem(LOCALE_STORAGE_PATH_KEY, JSON.stringify({
+            alias: storage.alias,
+            keyType: storage.keyType,
+            keyAlias: storage.keyAlias,
+            path: storage.path
+        }));
+
+        log('save prefs on LocalStorage');
+    }
+
+    function restorePrefsFromLocalStorage() {
+        var ls = localStorage.getItem(LOCALE_STORAGE_PATH_KEY);
+        if (ls) {
+            ls = JSON.parse(ls);
+            storage = {
+                alias: ls.alias,
+                keyType: ls.keyType,
+                keyAlias: ls.keyAlias,
+                path: ls.path
+            };
+
+            log('restored prefs from LocalStorage');
+        }
+    }
+
     function invalidateStorage() {
         // storage.alias = 'NONE';
         // storage.path = '';
-        localeStorage.setItem(LOCALE_STORAGE_PATH_KEY, storage.path);
+        // localStorage.removeItem(LOCALE_STORAGE_PATH_KEY);
     }
 
+    // applet api
     function chooseStoragePath() {
         if (storage.alias !== 'NONE') {
             var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
@@ -129,7 +157,7 @@ var knca = (function() {
                 if (!storage.path) {
                     invalidateStorage();
                 } else {
-                    localeStorage.setItem(LOCALE_STORAGE_PATH_KEY, storage.path);
+                    savePrefsOnLocalStorage();
                 }
             } else {
                 invalidateStorage();
@@ -145,7 +173,10 @@ var knca = (function() {
 
     return {
         init: init,
-        ready: ready
+        ready: ready,
+        chooseStoragePath: function() {
+            log('uninitialized; click knca init');
+        }
     }
 })();
 
