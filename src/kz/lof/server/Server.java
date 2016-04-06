@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 
 import kz.flabs.dataengine.IDatabase;
+import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.env.Site;
 import kz.lof.log.Log4jLogger;
@@ -31,7 +32,7 @@ public class Server {
 			logger.warningLogEntry("debug logging is turned on");
 		}
 		compilationTime = ((Log4jLogger) logger).getBuildDateTime();
-		logger.infoLogEntry("Copyright(c) Lab of the Future 2015. All Right Reserved");
+		logger.infoLogEntry(EnvConst.COPYRIGHT);
 
 		Environment.init();
 

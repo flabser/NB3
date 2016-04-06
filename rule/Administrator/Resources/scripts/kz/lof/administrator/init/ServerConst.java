@@ -85,7 +85,7 @@ public class ServerConst {
 				entity.setCode(AppCode.ADMINISTRATOR);
 				entity.setDefaultURL("p?id=user-view");
 			} else {
-				Server.logger.errorLogEntry(e.toString());
+				Server.logger.warningLogEntry(e.toString() + "=. Server will use default parameters for the application");
 				entity.setCode(AppCode.CUSTOM);
 			}
 		}

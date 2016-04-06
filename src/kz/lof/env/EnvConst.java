@@ -1,6 +1,5 @@
 package kz.lof.env;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 import kz.lof.localization.LanguageCode;
@@ -14,6 +13,7 @@ import kz.lof.localization.LanguageCode;
 // TODO need to secure this class
 public class EnvConst {
 	public static final String FRAMEWORK_NAME = "NB3";
+	public static final String COPYRIGHT = "Copyright(c) Lab of the Future 2015. All Right Reserved";
 	public static final String SUPPOSED_CODE_PAGE = "utf-8";
 	public static final String DEFAULT_XML_ENC = "utf-8";
 	public static final String APP_ATTR = "app";
@@ -24,7 +24,7 @@ public class EnvConst {
 	public static final String AUTH_COOKIE_NAME = "nb3ses";
 	public static final String ADMINISTRATOR_APP_NAME = "Administrator";
 	public final static String SHARED_RESOURCES_APP_NAME = "SharedResources";
-	public static final String ERROR_XSLT = "xsl" + File.separator + "errors" + File.separator + "error.xsl";
+	public static final String ERROR_XSLT = "error.xsl";
 	public static final String FSID_FIELD_NAME = "fsid";
 	public static final String TIME_FIELD_NAME = "time";
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";
@@ -49,7 +49,5 @@ public class EnvConst {
 	public static String NB_JAR_FILE = "nb.jar";
 	public static String STRUCTDB_USER = "postgres";
 	public static String STRUCTDB_PWD = "";
-	// public static String STRUCTDB_URL =
-	// "jdbc:postgresql://172.16.251.7:5432/CIS";
 	public static String STRUCTDB_URL = "";
 }
