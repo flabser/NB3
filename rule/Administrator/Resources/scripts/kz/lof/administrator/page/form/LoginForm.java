@@ -1,5 +1,8 @@
 package kz.lof.administrator.page.form;
 
-public class LoginForm {
+import kz.lof.scripting.event._DoPage;
+
+
+public class LoginForm extends _DoPage {
 
 }

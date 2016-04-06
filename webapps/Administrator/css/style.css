@@ -8,3 +8,86 @@ form[data-edit=false] [data-action=save_and_close],
 form[data-edit=false] [data-upload] {
     display: none;
 }
+
+
+/* .sign-in */
+
+.sign-in {
+    font-size: 14px;
+    margin: 5% auto 0;
+    max-width: 96%;
+    padding: 4px;
+    position: relative;
+    width: 360px;
+}
+
+.sign-in h1 {
+    color: #666;
+    font-size: 22px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.sign-in .login,
+.sign-in .pwd {
+    display: block;
+    float: none;
+    margin: 12px 0px;
+    position: relative;
+    width: 100%;
+}
+
+.sign-in .login input,
+.sign-in .pwd input {
+    min-height: auto;
+    padding: 13px 13px 13px 42px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sign-in .login input:invalid,
+.sign-in .pwd input:invalid {
+    box-shadow: none;
+}
+
+.sign-in i.fa {
+    color: #9E9E9E;
+    font-size: 18px;
+    height: 100%;
+    left: 0;
+    padding: 13px 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 42px;
+    z-index: 1;
+}
+
+.sign-in .noauth {
+    float: left;
+    padding: 0 4px;
+}
+
+.sign-in .noauth span {
+    color: #333;
+}
+
+.sign-in button[type=submit] {
+    float: right;
+    font-size: 14px;
+    line-height: 1;
+    margin: 0px;
+    padding: 8px 12px;
+}
+
+.sign-in button[type=submit]:hover {
+    background-color: rgba(255, 255, 255, .3);
+}
+
+.btn-sign-in,
+a.btn-sign-up {
+    display: block;
+    padding: 16px;
+    margin-top: 16px;
+    text-align: center;
+}
