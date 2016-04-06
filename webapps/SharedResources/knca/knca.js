@@ -188,7 +188,7 @@ var knca = (function() {
 
         if (storage.path && storage.alias) {
             if (storage.pwd) {
-                var rw = document.getElementById('KncaApplet').getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
+                var rw = wd.getElementById('KncaApplet').getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
                 if (rw.getErrorCode() === 'NONE') {
                     var slots = rw.getResult().split('\n');
                     for (var i = 0; i < slots.length; i++) {
@@ -236,469 +236,192 @@ var knca = (function() {
         $("#keyAlias").val(alias);
     }
 
-    function getNotBefore() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var rw = document.getElementById('KncaApplet').getNotBefore(storageAlias, storagePath, alias, password);
-                    if (rw.getErrorCode() === "NONE") {
-                        $("#notbefore").val(rw.getResult());
-                    } else {
-                        if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                            alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                        } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                            alert("Неправильный пароль!");
-                        } else {
-                            alert(rw.getErrorCode());
-                        }
-                    }
-                } else {
-                    alert("Вы не выбран ключ!");
-                }
+    // plain data
+    function signPlainData(data) {
+        if (!data) {
+            throw new Error('invalid_data_for_sign');
+        }
+
+        var rw = wd.getElementById('KncaApplet').signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function verifyPlainData(data, signature) {
+        if (!signature) {
+            throw new Error('invalid_signature_for_verify');
+        }
+
+        var rw = wd.getElementById('KncaApplet').verifyPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, signature);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
+                return true;
             } else {
-                alert("Введите пароль к хранилищу");
+                return false;
             }
         } else {
-            alert("Не выбран хранилище!");
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    // xml data
+    function signXml(xmlData) {
+        if (!xmlData) {
+            throw new Error('invalid_data_for_verify');
+        }
+
+        var rw = wd.getElementById('KncaApplet').signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function verifyXml(xmlSignature) {
+        if (!xmlSignature) {
+            throw new Error('invalid_xml_signature_for_verify');
+        }
+
+        var rw = wd.getElementById('KncaApplet').verifyXml(xmlSignature);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    // file
+    function createCMSSignatureFromFile(fileInput) {
+        if (!fileInput || !fileInput.files) {
+            throw new Error('invalid_file_input_for_sign');
+        }
+
+        var filePath = fileInput.files[0].path;
+        var attached = false;
+        var rw = wd.getElementById('KncaApplet').createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, attached);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function verifyCMSSignatureFromFile(signatureCMSFile, filePath) {
+        if (!signatureCMSFile) {
+            throw new Error('invalid_signature_for_verify');
+        }
+
+        var rw = wd.getElementById('KncaApplet').verifyCMSSignatureFromFile(signatureCMSFile, filePath);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    // CMSSignature
+    function createCMSSignature(data) {
+        if (!data) {
+            throw new Error('invalid_data_for_sign');
+        }
+
+        var attached = false;
+        var rw = wd.getElementById('KncaApplet').createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, attached);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function verifyCMSSignature(signatureCMS, data) {
+        if (!signatureCMS) {
+            throw new Error('invalid_signature_for_verify');
+        }
+
+        var rw = wd.getElementById('KncaApplet').verifyCMSSignature(signatureCMS, data);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    // storage data
+    function getNotBefore() {
+        var rw = wd.getElementById('KncaApplet').getNotBefore(storage.alias, storage.path, storage.keyAlias, storage.pwd);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
         }
     }
 
     function getNotAfter() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var rw = document.getElementById('KncaApplet').getNotAfter(storageAlias, storagePath, alias, password);
-                    if (rw.getErrorCode() === "NONE") {
-                        $("#notafter").val(rw.getResult());
-                    } else {
-                        if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                            alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                        } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                            alert("Неправильный пароль!");
-                        } else {
-                            alert(rw.getErrorCode());
-                        }
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
+        var rw = wd.getElementById('KncaApplet').getNotAfter(storage.alias, storage.path, storage.keyAlias, storage.pwd);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
         } else {
-            alert("Не выбран хранилище!");
+            throw new Error(rw.getErrorCode());
         }
     }
 
     function getSubjectDN() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var rw = document.getElementById('KncaApplet').getSubjectDN(storageAlias, storagePath, alias, password);
-
-                    if (rw.getErrorCode() === "NONE") {
-                        $("#subjectDn").text(rw.getResult());
-                    } else {
-                        if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                            alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                        } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                            alert("Неправильный пароль!");
-                        } else {
-                            alert(rw.getErrorCode());
-                        }
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
+        var rw = wd.getElementById('KncaApplet').getSubjectDN(storage.alias, storage.path, storage.keyAlias, storage.pwd);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
         } else {
-            alert("Не выбран хранилище!");
+            throw new Error(rw.getErrorCode());
         }
     }
 
     function getIssuerDN() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var rw = document.getElementById('KncaApplet').getIssuerDN(storageAlias, storagePath, alias, password);
-
-                    if (rw.getErrorCode() === "NONE") {
-                        $("#issuerDn").text(rw.getResult());
-                    } else {
-                        if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                            alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                        } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                            alert("Неправильный пароль!");
-                        } else {
-                            alert(rw.getErrorCode());
-                        }
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
+        var rw = wd.getElementById('KncaApplet').getIssuerDN(storage.alias, storage.path, storage.keyAlias, storage.pwd);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
         } else {
-            alert("Не выбран хранилище!");
+            throw new Error(rw.getErrorCode());
         }
     }
 
-    function signPlainData() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        $("#identifier").text("Не проверено");
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var data = $("#date").val();
-                    if (data !== null && data !== "") {
-                        var rw = document.getElementById('KncaApplet').signPlainData(storageAlias, storagePath, alias, password, data);
-                        if (rw.getErrorCode() === "NONE") {
-                            $("#signature").text(rw.getResult());
-                        } else {
-                            if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                                alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                            } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                                alert("Неправильный пароль!");
-                            } else {
-                                $("#signature").text("");
-                                alert(rw.getErrorCode());
-                            }
-                        }
-                    } else {
-                        alert("Вы не ввели данные!")
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
+    function getRdnByOid(oid) {
+        var rw = wd.getElementById('KncaApplet').getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0);
+        if (rw.getErrorCode() === 'NONE') {
+            return rw.getResult();
         } else {
-            alert("Не выбран хранилище!");
+            throw new Error(rw.getErrorCode());
         }
     }
 
-    function createCMSSignature() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        $("#identifierCMS").text("Не проверено");
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var data = $("#dateCMS").val();
-                    var flag = $("#flag").is(':checked');
-
-                    if (data !== null && data !== "") {
-                        if (flag) {
-                            var rw = document.getElementById('KncaApplet').createCMSSignature(storageAlias, storagePath, alias, password, data, true);
-                        } else {
-                            var rw = document.getElementById('KncaApplet').createCMSSignature(storageAlias, storagePath, alias, password, data, false);
-                        }
-
-                        if (rw.getErrorCode() === "NONE") {
-                            $("#signatureCMS").text(rw.getResult());
-                        } else {
-                            if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                                alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                            } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                                alert("Неправильный пароль!");
-                            } else {
-                                $("#signatureCMS").text("");
-                                alert(rw.getErrorCode());
-                            }
-                        }
-                    } else {
-                        alert("Вы не ввели данные!");
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            alert("Не выбран хранилище!");
-        }
-    }
-
-    function signXml() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        $("#identifierXML").text("Не проверено");
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var data = document.getElementById("dateXML").value;
-                    if (data !== null && data !== "") {
-                        var rw = document.getElementById('KncaApplet').signXml(storageAlias, storagePath, alias, password, data);
-                        if (rw.getErrorCode() === "NONE") {
-                            document.getElementById("signatureXML").value = rw.getResult();
-                        } else {
-                            if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                                alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                            } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                                alert("Неправильный пароль!");
-                            } else {
-                                document.getElementById("signatureXML").value = "";
-                                alert(rw.getErrorCode());
-                            }
-                        }
-                    } else {
-                        alert("Вы не ввели данные!");
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            alert("Не выбран хранилище!");
-        }
-    }
-
-    function verifyXml() {
-        //                var signature = $("#signatureXML").text();
-        var signature = document.getElementById("signatureXML").value;
-        if (signature !== null && signature !== "") {
-            var rw = document.getElementById('KncaApplet').verifyXml(signature);
-            if (rw.getErrorCode() === "NONE") {
-                if (rw.getResult()) {
-                    $("#identifierXML").text("Валидная подпись");
-                } else {
-                    $("#identifierXML").text("Неправильная подпись");
-                }
-            } else {
-                if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                    alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                    alert("Неправильный пароль!");
-                } else {
-                    $("#identifierXML").text("Неправильная подпись");
-                    alert(rw.getErrorCode());
-                }
-            }
-        } else {
-            alert("Не найден подписанный XML!");
-        }
-    }
-
-    function verifyPlainData() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var data = $("#date").val();
-                    var signature = $("#signature").val();
-                    if (data !== null && data !== "" && signature !== null && signature !== "") {
-                        var rw = document.getElementById('KncaApplet').verifyPlainData(storageAlias, storagePath, alias, password, data, signature);
-                        if (rw.getErrorCode() === "NONE") {
-                            if (rw.getResult()) {
-                                $("#identifier").text("Валидная подпись");
-                            } else {
-                                $("#identifier").text("Неправильная подпись");
-                            }
-                        } else {
-                            if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                                alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                            } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                                alert("Неправильный пароль!");
-                            } else {
-                                alert(rw.getErrorCode());
-                            }
-                        }
-                    } else {
-                        alert("Вы не ввели данные, или подписанные данные не найдены!");
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            alert("Не выбран хранилище!");
-        }
-    }
-
-    function verifyCMSSignature() {
-        var data = $("#dateCMS").val();
-        var signatureCMS = $("#signatureCMS").val();
-        if (signatureCMS !== null && signatureCMS !== "") {
-            var rw = null;
-            rw = document.getElementById('KncaApplet').verifyCMSSignature(signatureCMS, data);
-            if (rw.getErrorCode() === "NONE") {
-                if (rw.getResult()) {
-                    $("#identifierCMS").text("Валидная подпись");
-                } else {
-                    $("#identifierCMS").text("Неправильная подпись");
-                }
-            } else {
-                $("#identifierCMS").text("Неправильная подпись");
-                alert(rw.getErrorCode());
-            }
-        } else {
-            alert("Вы не ввели данные, или подписанные данные не найдены!");
-        }
-    }
-
-    function getRdnByOid() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-                    var oid = "";
-                    var selected = $("input[type='radio'][name='oid']:checked");
-                    if (selected.length > 0) {
-                        oid = selected.val();
-                    }
-                    var rw = document.getElementById('KncaApplet').getRdnByOid(storageAlias, storagePath, alias, password, oid, 0);
-                    if (rw.getErrorCode() === "NONE") {
-                        $("#rdnvalue").val(rw.getResult());
-                    } else {
-                        if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                            alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                        } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                            alert("Неправильный пароль!");
-                        } else {
-                            $("#rdnvalue").val("RDN не найден!");
-                            alert(rw.getErrorCode());
-                        }
-                    }
-
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            alert("Не выбран хранилище!");
-        }
-    }
-
-    function selectFileToSign() {
-        try {
-            var rw = document.getElementById('KncaApplet').showFileChooser("ALL", "");
-            if (rw.getErrorCode() === "NONE") {
-                document.getElementById("filePath").value = rw.getResult();
-            } else {
-                alert(rw.getErrorCode());
-            }
-            return;
-        } catch (e) {
-            alert(e);
-        }
-    }
-
-    function createCMSSignatureFromFile() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var alias = $("#keyAlias").val();
-        var rw = null;
-
-
-        $("#identifierCMSFile").text("Не проверено");
-        if (storagePath !== null && storagePath !== "" && storageAlias !== null && storageAlias !== "") {
-            if (password !== null && password !== "") {
-                if (alias !== null && alias !== "") {
-
-                    var filePath = $("#filePath").val();
-                    var flag = $("#flagFile").is(':checked');
-
-                    if (filePath !== null && filePath !== "") {
-                        if (flag) {
-                            rw = document.getElementById('KncaApplet').createCMSSignatureFromFile(storageAlias, storagePath, alias, password, filePath, true);
-                        } else {
-                            rw = document.getElementById('KncaApplet').createCMSSignatureFromFile(storageAlias, storagePath, alias, password, filePath, false);
-                        }
-
-                        if (rw.getErrorCode() === "NONE") {
-                            $("#signatureCMSFile").text(rw.getResult());
-                        } else {
-                            if (rw.getErrorCode() === "WRONG_PASSWORD" && rw.getResult() > -1) {
-                                alert("Неправильный пароль! Количество оставшихся попыток: " + rw.getResult());
-                            } else if (rw.getErrorCode() === "WRONG_PASSWORD") {
-                                alert("Неправильный пароль!");
-                            } else {
-                                $("#signatureCMS").text("");
-                                alert(rw.getErrorCode());
-                            }
-                        }
-                    } else {
-                        alert("Вы не ввели путь к файлу");
-                    }
-                } else {
-                    alert("Вы не выбрали ключ!");
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            alert("Не выбрано хранилище!");
-        }
-    }
-
-    function verifyCMSSignatureFromFile() {
-        var signatureCMSFile = $("#signatureCMSFile").val();
-        var filePath = $("#filePath").val();
-        if (signatureCMS !== null && signatureCMS !== "") {
-            var rw = null;
-            rw = document.getElementById('KncaApplet').verifyCMSSignatureFromFile(signatureCMSFile, filePath);
-            if (rw.getErrorCode() === "NONE") {
-                if (rw.getResult()) {
-                    $("#identifierCMSFile").text("Валидная подпись");
-                } else {
-                    $("#identifierCMSFile").text("Неправильная подпись");
-                }
-            } else {
-                $("#identifierCMSFile").text("Неправильная подпись");
-                alert(rw.getErrorCode());
-            }
-        } else {
-            alert("Вы не ввели данные, или подписанные данные не найдены!");
-        }
-    }
-
+    // public api
     return {
         init: init,
         ready: ready,
         chooseStoragePath: function() {
             log('uninitialized; click knca init');
-        }
+        },
+        signPlainData: signPlainData,
+        verifyPlainData: verifyPlainData
     }
 })();
 
