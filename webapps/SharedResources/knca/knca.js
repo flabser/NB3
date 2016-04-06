@@ -47,18 +47,13 @@ var knca = (function() {
 
         clearTimeout(t_o);
 
+        restorePrefsFromLocalStorage();
         isReady = true;
         nb.uiUnblock();
         noty && noty.remove();
         noty = null;
 
         log('is ready');
-
-        // add applet api
-        window.knca.chooseStoragePath = chooseStoragePath;
-
-        restorePrefsFromLocalStorage();
-
         log(storage);
 
         return true;
@@ -70,11 +65,12 @@ var knca = (function() {
         nb.notify({
             type: 'info',
             message: 'knca > ' + msg
-        }).show(800);
+        }).show(1000);
     }
 
     function insertApplet() {
         if (wd.getElementById('KncaApplet')) {
+            log('applet already inserted');
             return;
         }
 
@@ -117,7 +113,7 @@ var knca = (function() {
         }, 30 * 1000);
     }
 
-    function savePrefsOnLocalStorage() {
+    function savePrefsToLocalStorage() {
         localStorage.setItem(LOCAL_STORAGE_PREFS_KEY, JSON.stringify({
             alias: storage.alias,
             keyType: storage.keyType,
@@ -143,14 +139,33 @@ var knca = (function() {
         }
     }
 
-    function render() {
-
-    }
-
     function invalidateStorage() {
         // storage.alias = 'NONE';
         // storage.path = '';
         // localStorage.removeItem(LOCAL_STORAGE_PREFS_KEY);
+    }
+
+    function fillKeys() {
+        var rw = wd.getElementById('KncaApplet').getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
+        if (rw.getErrorCode() === 'NONE') {
+            var slots = rw.getResult().split('\n');
+            for (var i = 0; i < slots.length; i++) {
+                if (slots[i]) {
+                    keys.push(new Option(slots[i], i));
+                }
+            }
+
+            render();
+        } else {
+            storage.keys = [];
+            render();
+
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function render() {
+        log(storage);
     }
 
     // applet api
@@ -162,7 +177,7 @@ var knca = (function() {
                 if (!storage.path) {
                     invalidateStorage();
                 } else {
-                    savePrefsOnLocalStorage();
+                    savePrefsToLocalStorage();
                 }
             } else {
                 invalidateStorage();
@@ -174,66 +189,6 @@ var knca = (function() {
         } else {
             invalidateStorage();
         }
-    }
-
-    function _fillKeys() {
-        var storageAlias = $("#storageAlias").val();
-        var storagePath = $("#storagePath").val();
-        var password = $("#password").val();
-        var keyType = "";
-        var selected = $("input[type='radio'][name='keyType']:checked");
-        if (selected.length > 0) {
-            keyType = selected.val();
-        }
-
-        if (storage.path && storage.alias) {
-            if (storage.pwd) {
-                var rw = wd.getElementById('KncaApplet').getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
-                if (rw.getErrorCode() === 'NONE') {
-                    var slots = rw.getResult().split('\n');
-                    for (var i = 0; i < slots.length; i++) {
-                        if (!slots[i]) {
-                            continue;
-                        }
-                        keys.push(new Option(slots[i], i));
-                    }
-
-                    _keysOptionChanged();
-                    render();
-                } else {
-                    if (rw.getErrorCode() === 'WRONG_PASSWORD' && rw.getResult() > -1) {
-                        nb.notify({
-                            type: 'error',
-                            message: 'Неправильный пароль! Количество оставшихся попыток: ' + rw.getResult()
-                        }).show(3000);
-                    } else if (rw.getErrorCode() === 'WRONG_PASSWORD') {
-                        nb.notify({
-                            type: 'error',
-                            message: 'Неправильный пароль!'
-                        }).show(2000);
-                    } else {
-                        nb.notify({
-                            type: 'error',
-                            message: rw.getErrorCode()
-                        }).show(2000);
-                    }
-
-                    storage.keys = [];
-                    render();
-                }
-            } else {
-                alert("Введите пароль к хранилищу");
-            }
-        } else {
-            // TODO show select storage
-            alert("Не выбран хранилище!");
-        }
-    }
-
-    function _keysOptionChanged() {
-        var str = $("#keys :selected").text();
-        var alias = str.split("|")[3];
-        $("#keyAlias").val(alias);
     }
 
     // plain data
@@ -303,13 +258,12 @@ var knca = (function() {
     }
 
     // file
-    function createCMSSignatureFromFile(fileInput) {
+    function createCMSSignatureFromFile(fileInput, attached) {
         if (!fileInput || !fileInput.files) {
             throw new Error('invalid_file_input_for_sign');
         }
 
         var filePath = fileInput.files[0].path;
-        var attached = false;
         var rw = wd.getElementById('KncaApplet').createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, attached);
         if (rw.getErrorCode() === 'NONE') {
             return rw.getResult();
@@ -336,12 +290,11 @@ var knca = (function() {
     }
 
     // CMSSignature
-    function createCMSSignature(data) {
+    function createCMSSignature(data, attached) {
         if (!data) {
             throw new Error('invalid_data_for_sign');
         }
 
-        var attached = false;
         var rw = wd.getElementById('KncaApplet').createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, attached);
         if (rw.getErrorCode() === 'NONE') {
             return rw.getResult();
@@ -417,11 +370,11 @@ var knca = (function() {
     return {
         init: init,
         ready: ready,
-        chooseStoragePath: function() {
-            log('uninitialized; click knca init');
-        },
+        chooseStoragePath: chooseStoragePath,
         signPlainData: signPlainData,
-        verifyPlainData: verifyPlainData
+        verifyPlainData: verifyPlainData,
+        createCMSSignatureFromFile: createCMSSignatureFromFile,
+        verifyCMSSignatureFromFile: verifyCMSSignatureFromFile
     }
 })();
 
