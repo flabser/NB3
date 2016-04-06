@@ -58,14 +58,11 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 	public String getHTMLMessage(int code) {
 		ExceptionXML document = new ExceptionXML(getMessage(), code, location, type, servletName, exception);
 		document.setAppType(appType);
-		String xslt = "webapps" + File.separator + appType + File.separator + EnvConst.ERROR_XSLT;
+		String xslt = Environment.getKernelDir() + "xsl" + File.separator + EnvConst.ERROR_XSLT;
 		File errorXslt = new File(xslt);
-		if (!errorXslt.exists()) {
-			errorXslt = new File("webapps" + File.separator + Environment.workspaceName + File.separator + EnvConst.ERROR_XSLT);
-		}
 
 		try {
-			new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
+			return new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
 		} catch (IOException | SaxonApiException e) {
 			Server.logger.errorLogEntry(e);
 		}
@@ -79,23 +76,9 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 
 	@Override
 	public String toXML() {
-		String xmlText = null;
-
 		ExceptionXML document = new ExceptionXML(getMessage(), code, location, type, servletName, exception);
 		document.setAppType(appType);
-		String xslt = "webapps" + File.separator + appType + File.separator + EnvConst.ERROR_XSLT;
-		File errorXslt = new File(xslt);
-		if (!errorXslt.exists()) {
-			errorXslt = new File("webapps" + File.separator + Environment.workspaceName + File.separator + EnvConst.ERROR_XSLT);
-		}
-
-		try {
-			xmlText = new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
-		} catch (IOException | SaxonApiException e) {
-			Server.logger.errorLogEntry(e);
-		}
-
-		return xmlText;
+		return document.toXML(lang);
 	}
 
 	@Override

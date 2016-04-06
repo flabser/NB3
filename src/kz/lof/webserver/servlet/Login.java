@@ -17,6 +17,8 @@ import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
+import kz.lof.administrator.dao.ApplicationDAO;
+import kz.lof.administrator.model.Application;
 import kz.lof.administrator.services.Connect;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
@@ -99,8 +101,15 @@ public class Login extends HttpServlet implements Const {
 		}
 	}
 
-	private String getRedirect(HttpSession jses, Cookies appCookies) {
-		return "p?id=workspace";
+	private String getRedirect(HttpSession jses, Cookies appCookies) throws AuthFailedException {
+		ApplicationDAO aDao = new ApplicationDAO();
+		Application app = aDao.findByName(env.appName);
+		if (app != null) {
+			return app.getDefaultURL();
+		} else {
+			AppEnv.logger.infoLogEntry("Authorization failed, redirecting page has been not pointed");
+			throw new AuthFailedException(AuthFailedExceptionType.NO_REDIRECT, "");
+		}
 
 	}
 

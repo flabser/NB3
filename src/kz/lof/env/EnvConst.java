@@ -1,6 +1,5 @@
 package kz.lof.env;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 import kz.lof.localization.LanguageCode;
@@ -24,7 +23,7 @@ public class EnvConst {
 	public static final String AUTH_COOKIE_NAME = "nb3ses";
 	public static final String ADMINISTRATOR_APP_NAME = "Administrator";
 	public final static String SHARED_RESOURCES_APP_NAME = "SharedResources";
-	public static final String ERROR_XSLT = "xsl" + File.separator + "errors" + File.separator + "error.xsl";
+	public static final String ERROR_XSLT = "error.xsl";
 	public static final String FSID_FIELD_NAME = "fsid";
 	public static final String TIME_FIELD_NAME = "time";
 	public static final String JDBC_DRIVER = "org.postgresql.Driver";

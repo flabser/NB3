@@ -31,13 +31,16 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		this.appName = n;
 		this.dataBase = db;
 
-		if (Environment.isDevMode() && EnvConst.ADMINISTRATOR_APP_NAME.equals(appName)) {
-			rulePath = Environment.getKernelDir() + "rule";
-			Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module");
+		if (Environment.isDevMode()) {
+			if (EnvConst.ADMINISTRATOR_APP_NAME.equals(appName)) {
+				rulePath = Environment.getKernelDir() + "rule";
+				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module");
 
-		} else if (Environment.isDevMode() && ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, appName)) {
-			rulePath = Environment.getOfficeFrameDir() + "rule";
-			Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir() + ")");
+			} else if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, appName)) {
+				rulePath = Environment.getOfficeFrameDir() + "rule";
+				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir()
+				        + ")");
+			}
 		}
 
 		try {
