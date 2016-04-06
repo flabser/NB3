@@ -9,18 +9,19 @@ import kz.lof.scripting.event._DoPage;
 import kz.nextbase.script._AppEntourage;
 import kz.nextbase.script._Exception;
 
+
 public class LoginForm extends _DoPage {
-	@Override
-	public void doGET(_Session session, _WebFormData formData) throws _Exception {
-		_AppEntourage ent = session.getAppEntourage();
-		addValue("serverversion", ent.getServerVersion());
-		addValue("build", ent.getBuildTime());
+    @Override
+    public void doGET(_Session session, _WebFormData formData) throws _Exception {
+        _AppEntourage ent = session.getAppEntourage();
+        addValue("serverversion", ent.getServerVersion());
+        addValue("build", ent.getBuildTime());
 
-		String lang = formData.getValueSilently("lang");
-		if (!lang.isEmpty()) {
-			session.setLang(LanguageCode.valueOf(lang));
-		}
+        String lang = formData.getValueSilently("lang");
+        if (!lang.isEmpty()) {
+            session.setLang(LanguageCode.valueOf(lang));
+        }
 
-		addContent(new _POJOListWrapper(new LanguageDAO(session).findAll(), session));
-	}
+        addContent(new _POJOListWrapper(new LanguageDAO(session).findAll(), session));
+    }
 }
