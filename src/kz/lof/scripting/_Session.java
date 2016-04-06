@@ -24,7 +24,7 @@ public class _Session extends PageCacheAdapter {
 	private IDatabase dataBase;
 	private IUser<Long> user;
 	private AppEnv env;
-	private LanguageCode lang;
+	private LanguageCode lang = LanguageCode.RUS;
 	public int pageSize = EnvConst.DEFAULT_PAGE_SIZE;
 	private AuthModeType authMode;
 	private ArrayList<_Session> descendants = new ArrayList<_Session>();
