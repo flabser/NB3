@@ -57,6 +57,8 @@ var knca = (function() {
 
         log('is ready');
 
+        render();
+
         return true;
     }
 
@@ -203,7 +205,11 @@ var knca = (function() {
         }
     }
 
-    // applet api
+    /**
+     * applet api 
+     */
+
+    // choose storage
     function chooseStoragePath() {
         var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
         if (rw.getErrorCode() === 'NONE') {
@@ -214,7 +220,7 @@ var knca = (function() {
         } else {
             invalidateStorage();
 
-            log(rw);
+            log(rw.getErrorCode());
             nb.notify({
                 type: 'error',
                 message: rw.getErrorCode()
@@ -312,6 +318,11 @@ var knca = (function() {
         return appletResult(wd.getElementById('KncaApplet').getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0));
     }
 
+    function resolveStorage() {
+        var promise = $.Deferred();
+        return promise.resolve(true);
+    }
+
     // proxy
     function doAction(action, args) {
         if (!isReady) {
@@ -319,25 +330,22 @@ var knca = (function() {
             return false;
         }
 
-        // getStorage();
+        return resolveStorage().then(function(result) {
+            log(result);
 
-        switch (action) {
-            case 'chooseStoragePath':
-                chooseStoragePath();
-                break;
-            case 'signPlainData':
-                signPlainData(args[0]);
-                break;
-            case 'verifyPlainData':
-                verifyPlainData(args[0], args[1]);
-                break;
-            case 'createCMSSignatureFromFile':
-                createCMSSignatureFromFile(args[0], args[1]);
-                break;
-            case 'verifyCMSSignatureFromFile':
-                verifyCMSSignatureFromFile(args[0], args[1]);
-                break;
-        }
+            switch (action) {
+                case 'chooseStoragePath':
+                    return chooseStoragePath();
+                case 'signPlainData':
+                    return signPlainData(args[0]);
+                case 'verifyPlainData':
+                    return verifyPlainData(args[0], args[1]);
+                case 'createCMSSignatureFromFile':
+                    return createCMSSignatureFromFile(args[0], args[1]);
+                case 'verifyCMSSignatureFromFile':
+                    return verifyCMSSignatureFromFile(args[0], args[1]);
+            }
+        });
     }
 
     // public api
