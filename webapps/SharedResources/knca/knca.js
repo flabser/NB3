@@ -1,5 +1,7 @@
 var knca = (function() {
 
+    'use strict';
+
     var wd = window.document,
         noty,
         initialized = false,
@@ -8,10 +10,10 @@ var knca = (function() {
         LOCAL_STORAGE_PREFS_KEY = 'knca_storage_prefs';
 
     var storage = {
-        alias: 'PKCS12',
+        alias: 'NONE',
         path: '',
         keyAlias: '',
-        keyType: 'SIGN',
+        keyType: 'ALL',
         pwd: '',
         keys: []
     };
@@ -54,13 +56,13 @@ var knca = (function() {
         noty = null;
 
         log('is ready');
-        log(storage);
 
         return true;
     }
 
     function log(msg) {
         console.log('knca > ', msg);
+        console.log(storage);
 
         nb.notify({
             type: 'info',
@@ -143,6 +145,7 @@ var knca = (function() {
         // storage.alias = 'NONE';
         // storage.path = '';
         // localStorage.removeItem(LOCAL_STORAGE_PREFS_KEY);
+        render();
     }
 
     function fillKeys() {
@@ -168,201 +171,172 @@ var knca = (function() {
         log(storage);
     }
 
+    // process rw
+    function appletResult(rw) {
+        if (rw.getErrorCode() === 'NONE') {
+            log(rw.getResult());
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function signResult(rw) {
+        if (rw.getErrorCode() === 'NONE') {
+            log(rw.getResult());
+            return rw.getResult();
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
+    function verifyResult(rw) {
+        if (rw.getErrorCode() === 'NONE') {
+            log(rw.getResult());
+            if (rw.getResult()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
+
     // applet api
     function chooseStoragePath() {
-        if (storage.alias !== 'NONE') {
-            var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
-            if (rw.getErrorCode() === 'NONE') {
+        var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
+        if (rw.getErrorCode() === 'NONE') {
+            if (rw.getResult()) {
                 storage.path = rw.getResult();
-                if (!storage.path) {
-                    invalidateStorage();
-                } else {
-                    savePrefsToLocalStorage();
-                }
-            } else {
-                invalidateStorage();
-                nb.notify({
-                    type: 'error',
-                    message: rw.getErrorCode()
-                }).show('click');
+                savePrefsToLocalStorage();
             }
         } else {
             invalidateStorage();
+
+            log(rw);
+            nb.notify({
+                type: 'error',
+                message: rw.getErrorCode()
+            }).show('click');
         }
     }
 
     // plain data
     function signPlainData(data) {
         if (!data) {
-            throw new Error('invalid_data_for_sign');
+            throw new Error('invalid_data');
         }
 
-        var rw = wd.getElementById('KncaApplet').signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return signResult(wd.getElementById('KncaApplet').signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
     function verifyPlainData(data, signature) {
         if (!signature) {
-            throw new Error('invalid_signature_for_verify');
+            throw new Error('invalid_signature');
         }
 
-        var rw = wd.getElementById('KncaApplet').verifyPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, signature);
-        if (rw.getErrorCode() === 'NONE') {
-            if (rw.getResult()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return verifyResult(wd.getElementById('KncaApplet').verifyPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, signature));
     }
 
     // xml data
     function signXml(xmlData) {
         if (!xmlData) {
-            throw new Error('invalid_data_for_verify');
+            throw new Error('invalid_data');
         }
 
-        var rw = wd.getElementById('KncaApplet').signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data);
-        if (rw.getErrorCode() === 'NONE') {
-            if (rw.getResult()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return signResult(wd.getElementById('KncaApplet').signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
     function verifyXml(xmlSignature) {
         if (!xmlSignature) {
-            throw new Error('invalid_xml_signature_for_verify');
+            throw new Error('invalid_signature');
         }
 
-        var rw = wd.getElementById('KncaApplet').verifyXml(xmlSignature);
-        if (rw.getErrorCode() === 'NONE') {
-            if (rw.getResult()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return verifyResult(wd.getElementById('KncaApplet').verifyXml(xmlSignature));
     }
 
     // file
     function createCMSSignatureFromFile(fileInput, attached) {
         if (!fileInput || !fileInput.files) {
-            throw new Error('invalid_file_input_for_sign');
+            throw new Error('invalid_data');
         }
 
         var filePath = fileInput.files[0].path;
-        var rw = wd.getElementById('KncaApplet').createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, attached);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return signResult(wd.getElementById('KncaApplet').createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, !!attached));
     }
 
     function verifyCMSSignatureFromFile(signatureCMSFile, filePath) {
         if (!signatureCMSFile) {
-            throw new Error('invalid_signature_for_verify');
+            throw new Error('invalid_signature');
         }
 
-        var rw = wd.getElementById('KncaApplet').verifyCMSSignatureFromFile(signatureCMSFile, filePath);
-        if (rw.getErrorCode() === 'NONE') {
-            if (rw.getResult()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return verifyResult(wd.getElementById('KncaApplet').verifyCMSSignatureFromFile(signatureCMSFile, filePath));
     }
 
     // CMSSignature
     function createCMSSignature(data, attached) {
         if (!data) {
-            throw new Error('invalid_data_for_sign');
+            throw new Error('invalid_data');
         }
 
-        var rw = wd.getElementById('KncaApplet').createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, attached);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return signResult(wd.getElementById('KncaApplet').createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, !!attached));
     }
 
     function verifyCMSSignature(signatureCMS, data) {
         if (!signatureCMS) {
-            throw new Error('invalid_signature_for_verify');
+            throw new Error('invalid_signature');
         }
 
-        var rw = wd.getElementById('KncaApplet').verifyCMSSignature(signatureCMS, data);
-        if (rw.getErrorCode() === 'NONE') {
-            if (rw.getResult()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return verifyResult(wd.getElementById('KncaApplet').verifyCMSSignature(signatureCMS, data));
     }
 
     // storage data
     function getNotBefore() {
-        var rw = wd.getElementById('KncaApplet').getNotBefore(storage.alias, storage.path, storage.keyAlias, storage.pwd);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return appletResult(wd.getElementById('KncaApplet').getNotBefore(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getNotAfter() {
-        var rw = wd.getElementById('KncaApplet').getNotAfter(storage.alias, storage.path, storage.keyAlias, storage.pwd);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return appletResult(wd.getElementById('KncaApplet').getNotAfter(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getSubjectDN() {
-        var rw = wd.getElementById('KncaApplet').getSubjectDN(storage.alias, storage.path, storage.keyAlias, storage.pwd);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return appletResult(wd.getElementById('KncaApplet').getSubjectDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getIssuerDN() {
-        var rw = wd.getElementById('KncaApplet').getIssuerDN(storage.alias, storage.path, storage.keyAlias, storage.pwd);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
-        }
+        return appletResult(wd.getElementById('KncaApplet').getIssuerDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getRdnByOid(oid) {
-        var rw = wd.getElementById('KncaApplet').getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0);
-        if (rw.getErrorCode() === 'NONE') {
-            return rw.getResult();
-        } else {
-            throw new Error(rw.getErrorCode());
+        return appletResult(wd.getElementById('KncaApplet').getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0));
+    }
+
+    // proxy
+    function doAction(action, args) {
+        if (!isReady) {
+            log('not_ready');
+            return false;
+        }
+
+        // getStorage();
+
+        switch (action) {
+            case 'chooseStoragePath':
+                chooseStoragePath();
+                break;
+            case 'signPlainData':
+                signPlainData(args[0]);
+                break;
+            case 'verifyPlainData':
+                verifyPlainData(args[0], args[1]);
+                break;
+            case 'createCMSSignatureFromFile':
+                createCMSSignatureFromFile(args[0], args[1]);
+                break;
+            case 'verifyCMSSignatureFromFile':
+                verifyCMSSignatureFromFile(args[0], args[1]);
+                break;
         }
     }
 
@@ -370,12 +344,22 @@ var knca = (function() {
     return {
         init: init,
         ready: ready,
-        chooseStoragePath: chooseStoragePath,
-        signPlainData: signPlainData,
-        verifyPlainData: verifyPlainData,
-        createCMSSignatureFromFile: createCMSSignatureFromFile,
-        verifyCMSSignatureFromFile: verifyCMSSignatureFromFile
-    }
+        chooseStoragePath: function() {
+            return doAction('chooseStoragePath', arguments);
+        },
+        signPlainData: function() {
+            return doAction('signPlainData', arguments);
+        },
+        verifyPlainData: function() {
+            return doAction('verifyPlainData', arguments);
+        },
+        createCMSSignatureFromFile: function() {
+            return doAction('createCMSSignatureFromFile', arguments);
+        },
+        verifyCMSSignatureFromFile: function() {
+            return doAction('verifyCMSSignatureFromFile', arguments);
+        }
+    };
 })();
 
 // called from knca applet
