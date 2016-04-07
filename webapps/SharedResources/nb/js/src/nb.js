@@ -136,6 +136,20 @@ nb.template = function(templateId, data) {
     return nb.templates[templateId].call(this, data);
 };
 
+/**
+ * createElement
+ */
+nb.createElement = function(tagName, attributes, html) {
+    var element = document.createElement(tagName);
+    var el;
+    for (el in attributes) {
+        element.setAttribute(el, attributes[el]);
+    }
+    element.innerHTML = html;
+
+    return element;
+};
+
 // Global ajax error handling
 $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
     if (jqxhr.responseJSON) {

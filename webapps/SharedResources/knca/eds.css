@@ -1,0 +1,81 @@
+.eds {
+    background: #fff;
+    border: 1px solid #888;
+    box-shadow: 0 0 3px #888;
+    position: fixed;
+    left: 50%;
+    margin-left: -160px;
+    top: 5%;
+    -moz-transform: translate(0, -800px);
+    -webkit-transform: translate(0, -800px);
+    transform: translate(0, -800px);
+    transform: translate3d(0, -800px, 0);
+    transition: all .25s;
+    width: 320px;
+    z-index: 9999;
+}
+
+.eds.open {
+    -moz-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.eds-overlay {
+    background: rgba(0, 0, 0, .3);
+    display: none;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9998;
+}
+
+.eds.open + .eds-overlay {
+    display: block;
+}
+
+.eds header {
+    background: #efefef;
+    font-size: 1.5em;
+    padding: 1rem;
+    width: 100%;
+}
+
+.eds section {
+    padding: 1rem;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.eds footer {
+    border-top: 1px solid #eee;
+    bottom: 0;
+    font-size: 0;
+    padding: 0;
+    position: absolute;
+    text-align: right;
+    width: 100%;
+}
+
+.eds footer button {
+    border: 0;
+    border-radius: 0;
+    font-size: 14px;
+    margin: 0;
+    padding: 10px;
+    width: 50%;
+}
+
+.eds section select,
+.eds section input,
+.eds section label,
+.eds section button {
+    margin: .4em 0 0;
+}
+
+.eds [name=keyType] {
+    display: none;
+}

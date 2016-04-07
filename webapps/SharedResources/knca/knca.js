@@ -7,13 +7,15 @@ var knca = (function() {
         initialized = false,
         isReady = false,
         t_o,
+        appletPath = '/SharedResources/knca/',
         LOCAL_STORAGE_PREFS_KEY = 'knca_storage_prefs';
+    var currentPromise;
 
     var storage = {
-        alias: 'NONE',
+        alias: 'PKCS12',
         path: '',
         keyAlias: '',
-        keyType: 'ALL',
+        keyType: 'SIGN',
         pwd: '',
         keys: []
     };
@@ -73,21 +75,22 @@ var knca = (function() {
     }
 
     function insertApplet() {
-        if (wd.getElementById('KncaApplet')) {
+        if (applet()) {
             log('applet already inserted');
             return;
         }
 
         var htm = [];
         htm.push('<applet width="1" height="1"');
-        htm.push(' codebase="."');
         htm.push(' code="kz.gov.pki.knca.applet.MainApplet"');
-        htm.push(' archive="/SharedResources/knca/knca_applet.jar"');
+        htm.push(' codebase="' + appletPath + '"');
+        htm.push(' archive="knca_applet.jar"');
         htm.push(' type="application/x-java-applet"');
         htm.push(' mayscript="true"');
         htm.push(' id="KncaApplet" name="KncaApplet">');
         htm.push('<param name="code" value="kz.gov.pki.knca.applet.MainApplet">');
-        htm.push('<param name="archive" value="/SharedResources/knca/knca_applet.jar">');
+        htm.push('<param name="codebase" value="' + appletPath + '">');
+        htm.push('<param name="archive" value="knca_applet.jar">');
         htm.push('<param name="mayscript" value="true">');
         htm.push('<param name="scriptable" value="true">');
         htm.push('<param name="language" value="ru">');
@@ -151,12 +154,12 @@ var knca = (function() {
     }
 
     function fillKeys() {
-        var rw = wd.getElementById('KncaApplet').getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
+        var rw = applet().getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
         if (rw.getErrorCode() === 'NONE') {
             var slots = rw.getResult().split('\n');
             for (var i = 0; i < slots.length; i++) {
                 if (slots[i]) {
-                    keys.push(new Option(slots[i], i));
+                    keys.push(slots[i]);
                 }
             }
 
@@ -167,10 +170,6 @@ var knca = (function() {
 
             throw new Error(rw.getErrorCode());
         }
-    }
-
-    function render() {
-        log(storage);
     }
 
     // process rw
@@ -205,16 +204,21 @@ var knca = (function() {
         }
     }
 
+    function applet() {
+        return wd.KncaApplet;
+    }
+
     /**
      * applet api 
      */
 
     // choose storage
-    function chooseStoragePath() {
-        var rw = wd.getElementById('KncaApplet').browseKeyStore(storage.alias, 'P12', storage.path);
+    function chooseStorageP12() {
+        var rw = applet().browseKeyStore(storage.alias, 'P12', storage.path);
         if (rw.getErrorCode() === 'NONE') {
             if (rw.getResult()) {
                 storage.path = rw.getResult();
+                fillKeys();
                 savePrefsToLocalStorage();
             }
         } else {
@@ -234,7 +238,7 @@ var knca = (function() {
             throw new Error('invalid_data');
         }
 
-        return signResult(wd.getElementById('KncaApplet').signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
+        return signResult(applet().signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
     function verifyPlainData(data, signature) {
@@ -242,7 +246,7 @@ var knca = (function() {
             throw new Error('invalid_signature');
         }
 
-        return verifyResult(wd.getElementById('KncaApplet').verifyPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, signature));
+        return verifyResult(applet().verifyPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, signature));
     }
 
     // xml data
@@ -251,7 +255,7 @@ var knca = (function() {
             throw new Error('invalid_data');
         }
 
-        return signResult(wd.getElementById('KncaApplet').signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
+        return signResult(applet().signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
     function verifyXml(xmlSignature) {
@@ -259,17 +263,16 @@ var knca = (function() {
             throw new Error('invalid_signature');
         }
 
-        return verifyResult(wd.getElementById('KncaApplet').verifyXml(xmlSignature));
+        return verifyResult(applet().verifyXml(xmlSignature));
     }
 
     // file
-    function createCMSSignatureFromFile(fileInput, attached) {
-        if (!fileInput || !fileInput.files) {
+    function createCMSSignatureFromFile(filePath, attached) {
+        if (!fileInput) {
             throw new Error('invalid_data');
         }
 
-        var filePath = fileInput.files[0].path;
-        return signResult(wd.getElementById('KncaApplet').createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, !!attached));
+        return signResult(applet().createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, !!attached));
     }
 
     function verifyCMSSignatureFromFile(signatureCMSFile, filePath) {
@@ -277,7 +280,7 @@ var knca = (function() {
             throw new Error('invalid_signature');
         }
 
-        return verifyResult(wd.getElementById('KncaApplet').verifyCMSSignatureFromFile(signatureCMSFile, filePath));
+        return verifyResult(applet().verifyCMSSignatureFromFile(signatureCMSFile, filePath));
     }
 
     // CMSSignature
@@ -286,7 +289,7 @@ var knca = (function() {
             throw new Error('invalid_data');
         }
 
-        return signResult(wd.getElementById('KncaApplet').createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, !!attached));
+        return signResult(applet().createCMSSignature(storage.alias, storage.path, storage.keyAlias, storage.pwd, data, !!attached));
     }
 
     function verifyCMSSignature(signatureCMS, data) {
@@ -294,78 +297,135 @@ var knca = (function() {
             throw new Error('invalid_signature');
         }
 
-        return verifyResult(wd.getElementById('KncaApplet').verifyCMSSignature(signatureCMS, data));
+        return verifyResult(applet().verifyCMSSignature(signatureCMS, data));
     }
 
     // storage data
     function getNotBefore() {
-        return appletResult(wd.getElementById('KncaApplet').getNotBefore(storage.alias, storage.path, storage.keyAlias, storage.pwd));
+        return appletResult(applet().getNotBefore(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getNotAfter() {
-        return appletResult(wd.getElementById('KncaApplet').getNotAfter(storage.alias, storage.path, storage.keyAlias, storage.pwd));
+        return appletResult(applet().getNotAfter(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getSubjectDN() {
-        return appletResult(wd.getElementById('KncaApplet').getSubjectDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
+        return appletResult(applet().getSubjectDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getIssuerDN() {
-        return appletResult(wd.getElementById('KncaApplet').getIssuerDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
+        return appletResult(applet().getIssuerDN(storage.alias, storage.path, storage.keyAlias, storage.pwd));
     }
 
     function getRdnByOid(oid) {
-        return appletResult(wd.getElementById('KncaApplet').getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0));
+        return appletResult(applet().getRdnByOid(storage.alias, storage.path, storage.keyAlias, storage.pwd, oid, 0));
+    }
+
+    //
+    function render() {
+        if (!wd.getElementById('eds-property')) {
+            // html
+            var htm = [];
+            htm.push('<header>Sign property</header>');
+            htm.push('<section>');
+            htm.push('  <select name="storageAlias" class="native" style="display:none">');
+            htm.push('    <option value="PKCS12" selected="selected">Ваш Компьютер</option>');
+            htm.push('    <option value="AKKaztokenStore">Казтокен</option>');
+            htm.push('    <option value="AKKZIDCardStore">Личное Удостоверение</option>');
+            htm.push('    <option value="AKEToken72KStore">EToken Java 72k</option>');
+            htm.push('    <option value="AKJaCartaStore">AK JaCarta</option>');
+            htm.push('  </select>');
+            htm.push('  <input type="radio" value="SIGN" name="keyType" checked="checked"/>');
+            htm.push('  <button class="btn" name="chooseStorage" type="button">Выбрать ЭЦП</button>');
+            // htm.push('  <label class="btn" for="edsFile" type="button">Выбрать ЭЦП</label>');
+            // htm.push('  <input type="file" id="edsFile" style="display:none"/>');
+            htm.push('  <input type="password" name="pwd" placeholder="Password" style="display:none"/>');
+            htm.push('  <select name="keys" class="native" style="display:none"></select>');
+            htm.push('</section>');
+            htm.push('<footer>');
+            htm.push('  <button class="btn" type="button" name="cancel">Cancel</button>');
+            htm.push('  <button class="btn btn-primary" type="button" name="ok" disabled>Ok</button>');
+            htm.push('</footer>');
+
+            var el = wd.createElement('div');
+            el.id = 'eds-property';
+            el.className = 'eds';
+            el.innerHTML = htm.join('');
+            wd.getElementsByTagName('body')[0].appendChild(el);
+            //
+            var overlay = wd.createElement('div');
+            overlay.className = 'eds-overlay';
+            el.parentNode.insertBefore(overlay, el.nextSibling);
+            //
+            $(el).find('[name=chooseStorage]').on('click', function() {
+                chooseStorageP12();
+            });
+            $(el).find('[name=cancel]').on('click', function() {
+                hidePropertyModal();
+                currentPromise.reject('cancel');
+            });
+            $(el).find('[name=ok]').on('click', function() {
+                hidePropertyModal();
+            });
+        }
+
+        // show/hide mode
+        console.log('render');
+    }
+
+    function showPropertyModal() {
+        wd.getElementById('eds-property').classList.add('open');
+    }
+
+    function hidePropertyModal() {
+        wd.getElementById('eds-property').classList.remove('open');
     }
 
     function resolveStorage() {
         var promise = $.Deferred();
-        return promise.resolve(true);
-    }
-
-    // proxy
-    function doAction(action, args) {
-        if (!isReady) {
+        if (isReady) {
+            if (storage.alias && storage.path && storage.keyAlias && storage.keyType && storage.pwd) {
+                return promise.resolve();
+            } else {
+                // show select property dialog
+                log('show select property dialog');
+                currentPromise = promise;
+                showPropertyModal();
+            }
+        } else {
             log('not_ready');
-            return false;
+            return promise.reject('knca_not_ready');
         }
 
-        return resolveStorage().then(function(result) {
-            log(result);
-
-            switch (action) {
-                case 'chooseStoragePath':
-                    return chooseStoragePath();
-                case 'signPlainData':
-                    return signPlainData(args[0]);
-                case 'verifyPlainData':
-                    return verifyPlainData(args[0], args[1]);
-                case 'createCMSSignatureFromFile':
-                    return createCMSSignatureFromFile(args[0], args[1]);
-                case 'verifyCMSSignatureFromFile':
-                    return verifyCMSSignatureFromFile(args[0], args[1]);
-            }
-        });
+        return promise;
     }
 
     // public api
     return {
+        showPropertyModal: showPropertyModal,
+        hidePropertyModal: hidePropertyModal,
+        //
         init: init,
         ready: ready,
-        chooseStoragePath: function() {
-            return doAction('chooseStoragePath', arguments);
+        signPlainData: function(data) {
+            return resolveStorage().then(function() {
+                return signPlainData(data);
+            });
         },
-        signPlainData: function() {
-            return doAction('signPlainData', arguments);
+        verifyPlainData: function(data, signature) {
+            return resolveStorage().then(function() {
+                return verifyPlainData(data, signature);
+            });
         },
-        verifyPlainData: function() {
-            return doAction('verifyPlainData', arguments);
+        createCMSSignatureFromFile: function(filePath, attached) {
+            return resolveStorage().then(function() {
+                return createCMSSignatureFromFile(filePath, attached);
+            });
         },
-        createCMSSignatureFromFile: function() {
-            return doAction('createCMSSignatureFromFile', arguments);
-        },
-        verifyCMSSignatureFromFile: function() {
-            return doAction('verifyCMSSignatureFromFile', arguments);
+        verifyCMSSignatureFromFile: function(signatureCMSFile, filePath) {
+            return resolveStorage().then(function() {
+                return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
+            });
         }
     };
 })();
@@ -374,3 +434,5 @@ var knca = (function() {
 function AppletIsReady() {
     knca.ready();
 }
+
+$(document).ready(knca.init);
