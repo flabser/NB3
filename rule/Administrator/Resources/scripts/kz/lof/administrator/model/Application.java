@@ -38,6 +38,8 @@ public class Application extends AppEntity<UUID> {
 	@Column(name = "localized_name")
 	private Map<LanguageCode, String> localizedName;
 
+	private String authURL;
+
 	private String defaultURL;
 
 	private int position;
@@ -72,6 +74,14 @@ public class Application extends AppEntity<UUID> {
 
 	public void setLocalizedName(Map<LanguageCode, String> name) {
 		this.localizedName = name;
+	}
+
+	public String getAuthURL() {
+		return authURL;
+	}
+
+	public void setAuthURL(String authURL) {
+		this.authURL = authURL;
 	}
 
 	public String getDefaultURL() {
