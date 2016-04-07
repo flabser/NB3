@@ -365,7 +365,7 @@ var knca = (function() {
                 currentPromise.reject('cancel');
             });
             $(el).find('[name=ok]').on('click', function() {
-                hidePropertyModal();
+                currentPromise.resolve();
             });
         }
 
@@ -402,9 +402,6 @@ var knca = (function() {
 
     // public api
     return {
-        showPropertyModal: showPropertyModal,
-        hidePropertyModal: hidePropertyModal,
-        //
         init: init,
         ready: ready,
         signPlainData: function(data) {
