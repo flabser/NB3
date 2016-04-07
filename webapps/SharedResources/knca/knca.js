@@ -328,7 +328,7 @@ var knca = (function() {
             htm.push('</section>');
             htm.push('<footer>');
             htm.push('  <button class="btn" type="button" name="cancel">' + nb.getText('cancel', 'Отмена') + '</button>');
-            htm.push('  <button class="btn btn-primary" type="submit" name="ok"></button>');
+            htm.push('  <button class="btn btn-primary" type="submit" name="ok" disabled></button>');
             htm.push('</footer>');
 
             edsNode = wd.createElement('form');
@@ -370,7 +370,9 @@ var knca = (function() {
                 if (isValidStorage()) {
                     savePrefsToLocalStorage();
                     try {
-                        currentPromise.resolve();
+                        currentPromise.resolve().then(function() {
+                            hidePropertyModal();
+                        });
                     } catch (e) {
                         log(e.message);
                     }
@@ -397,7 +399,7 @@ var knca = (function() {
         }
 
         // show/hide
-        // $(edsNode).find('[name=ok]').attr('disabled', isValidStorage());
+        $(edsNode).find('[name=ok]').attr('disabled', !isValidStorage());
         if (storage.path && !storage.pwd) {
             $(edsNode).find('[name=pwd]').show();
         }
