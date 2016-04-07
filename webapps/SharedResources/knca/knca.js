@@ -9,7 +9,6 @@ var knca = (function() {
         t_o,
         appletPath = '/SharedResources/knca/',
         LOCAL_STORAGE_PREFS_KEY = 'knca_storage_prefs';
-    var currentPromise;
 
     var storage = {
         alias: 'PKCS12',
@@ -66,7 +65,6 @@ var knca = (function() {
 
     function log(msg) {
         console.log('knca > ', msg);
-        console.log(storage);
 
         nb.notify({
             type: 'info',
@@ -153,23 +151,8 @@ var knca = (function() {
         render();
     }
 
-    function fillKeys() {
-        var rw = applet().getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
-        if (rw.getErrorCode() === 'NONE') {
-            var slots = rw.getResult().split('\n');
-            for (var i = 0; i < slots.length; i++) {
-                if (slots[i]) {
-                    keys.push(slots[i]);
-                }
-            }
-
-            render();
-        } else {
-            storage.keys = [];
-            render();
-
-            throw new Error(rw.getErrorCode());
-        }
+    function isValidStorage() {
+        return storage.alias && storage.path && storage.keyAlias && storage.keyType && storage.pwd;
     }
 
     // process rw
@@ -209,8 +192,24 @@ var knca = (function() {
     }
 
     /**
-     * applet api 
+     * applet api
      */
+
+    // fillKeys
+    function fillKeys() {
+        storage.keys = [];
+        var rw = applet().getKeys(storage.alias, storage.path, storage.pwd, storage.keyType);
+        if (rw.getErrorCode() === 'NONE') {
+            var slots = rw.getResult().split('\n');
+            for (var i = 0; i < slots.length; i++) {
+                if (slots[i]) {
+                    storage.keys.push(slots[i]);
+                }
+            }
+        } else {
+            throw new Error(rw.getErrorCode());
+        }
+    }
 
     // choose storage
     function chooseStorageP12() {
@@ -218,26 +217,15 @@ var knca = (function() {
         if (rw.getErrorCode() === 'NONE') {
             if (rw.getResult()) {
                 storage.path = rw.getResult();
-                fillKeys();
-                savePrefsToLocalStorage();
+                return true;
             }
-        } else {
-            invalidateStorage();
-
-            log(rw.getErrorCode());
-            nb.notify({
-                type: 'error',
-                message: rw.getErrorCode()
-            }).show('click');
         }
+
+        return false;
     }
 
     // plain data
     function signPlainData(data) {
-        if (!data) {
-            throw new Error('invalid_data');
-        }
-
         return signResult(applet().signPlainData(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
@@ -251,10 +239,6 @@ var knca = (function() {
 
     // xml data
     function signXml(xmlData) {
-        if (!xmlData) {
-            throw new Error('invalid_data');
-        }
-
         return signResult(applet().signXml(storage.alias, storage.path, storage.keyAlias, storage.pwd, data));
     }
 
@@ -268,7 +252,7 @@ var knca = (function() {
 
     // file
     function createCMSSignatureFromFile(filePath, attached) {
-        if (!fileInput) {
+        if (!filePath) {
             throw new Error('invalid_data');
         }
 
@@ -323,10 +307,11 @@ var knca = (function() {
 
     //
     function render() {
-        if (!wd.getElementById('eds-property')) {
+        var edsNode = wd.getElementById('eds-property');
+        if (!edsNode) {
             // html
             var htm = [];
-            htm.push('<header>Sign property</header>');
+            htm.push('<header>' + nb.getText('eds_title', 'ЭЦП') + '</header>');
             htm.push('<section>');
             htm.push('  <select name="storageAlias" class="native" style="display:none">');
             htm.push('    <option value="PKCS12" selected="selected">Ваш Компьютер</option>');
@@ -337,43 +322,89 @@ var knca = (function() {
             htm.push('  </select>');
             htm.push('  <input type="radio" value="SIGN" name="keyType" checked="checked"/>');
             htm.push('  <button class="btn" name="chooseStorage" type="button">Выбрать ЭЦП</button>');
-            // htm.push('  <label class="btn" for="edsFile" type="button">Выбрать ЭЦП</label>');
-            // htm.push('  <input type="file" id="edsFile" style="display:none"/>');
-            htm.push('  <input type="password" name="pwd" placeholder="Password" style="display:none"/>');
+            htm.push('  <p class="eds-info"></p>');
+            htm.push('  <input type="password" name="pwd" placeholder="Password" required style="display:none"/>');
             htm.push('  <select name="keys" class="native" style="display:none"></select>');
             htm.push('</section>');
             htm.push('<footer>');
-            htm.push('  <button class="btn" type="button" name="cancel">Cancel</button>');
-            htm.push('  <button class="btn btn-primary" type="button" name="ok" disabled>Ok</button>');
+            htm.push('  <button class="btn" type="button" name="cancel">' + nb.getText('cancel', 'Отмена') + '</button>');
+            htm.push('  <button class="btn btn-primary" type="submit" name="ok"></button>');
             htm.push('</footer>');
 
-            var el = wd.createElement('div');
-            el.id = 'eds-property';
-            el.className = 'eds';
-            el.innerHTML = htm.join('');
-            wd.getElementsByTagName('body')[0].appendChild(el);
+            edsNode = wd.createElement('form');
+            edsNode.id = 'eds-property';
+            edsNode.className = 'eds';
+            edsNode.innerHTML = htm.join('');
+            wd.getElementsByTagName('body')[0].appendChild(edsNode);
             //
             var overlay = wd.createElement('div');
             overlay.className = 'eds-overlay';
-            el.parentNode.insertBefore(overlay, el.nextSibling);
+            edsNode.parentNode.insertBefore(overlay, edsNode.nextSibling);
             //
-            $(el).find('[name=chooseStorage]').on('click', function() {
-                chooseStorageP12();
+            $(edsNode).on('submit', function(event) {
+                event.preventDefault();
             });
-            $(el).find('[name=cancel]').on('click', function() {
+            $(edsNode).find('[name=chooseStorage]').on('click', function() {
+                chooseStorageP12();
+                render();
+            });
+            $(edsNode).find('[name=pwd]').on('change, blur', function() {
+                storage.pwd = this.value;
+                try {
+                    fillKeys();
+                    render();
+                } catch (e) {
+                    edsNode.classList.add('has-error');
+
+                    nb.notify({
+                        type: 'error',
+                        message: e.message
+                    }).show(3000);
+                }
+            });
+            $(edsNode).find('[name=cancel]').on('click', function() {
                 hidePropertyModal();
                 currentPromise.reject('cancel');
             });
-            $(el).find('[name=ok]').on('click', function() {
-                currentPromise.resolve();
+            $(edsNode).find('[name=ok]').on('click', function() {
+                if (isValidStorage()) {
+                    savePrefsToLocalStorage();
+                    try {
+                        currentPromise.resolve();
+                    } catch (e) {
+                        log(e.message);
+                    }
+                } else {
+                    log('invalid storage');
+                    log(storage);
+                }
             });
         }
 
-        // show/hide mode
-        console.log('render');
+        // ['RSA'|name|?|alias]
+        if (storage.keys && storage.keys.length) {
+            var key;
+            var keysEl = $(edsNode).find('[name=keys]');
+            keysEl.empty();
+            for (var k in storage.keys) {
+                key = storage.keys[k].split('|');
+                $('<option value=' + key[3] + '>' + key[1] + '</option>').appendTo(keysEl);
+                storage.keyAlias = key[3];
+            }
+            keysEl.show();
+        } else {
+            $(edsNode).find('[name=keys]').empty().hide();
+        }
+
+        // show/hide
+        // $(edsNode).find('[name=ok]').attr('disabled', isValidStorage());
+        if (storage.path && !storage.pwd) {
+            $(edsNode).find('[name=pwd]').show();
+        }
     }
 
-    function showPropertyModal() {
+    function showPropertyModal(okBtnText) {
+        $(wd.getElementById('eds-property')).find('[name=ok]').text(okBtnText);
         wd.getElementById('eds-property').classList.add('open');
     }
 
@@ -381,16 +412,19 @@ var knca = (function() {
         wd.getElementById('eds-property').classList.remove('open');
     }
 
-    function resolveStorage() {
+    //
+    var currentPromise;
+
+    function resolveStorage(okBtnText) {
         var promise = $.Deferred();
         if (isReady) {
-            if (storage.alias && storage.path && storage.keyAlias && storage.keyType && storage.pwd) {
+            if (isValidStorage()) {
                 return promise.resolve();
             } else {
                 // show select property dialog
                 log('show select property dialog');
                 currentPromise = promise;
-                showPropertyModal();
+                showPropertyModal(okBtnText);
             }
         } else {
             log('not_ready');
@@ -405,22 +439,32 @@ var knca = (function() {
         init: init,
         ready: ready,
         signPlainData: function(data) {
-            return resolveStorage().then(function() {
+            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
                 return signPlainData(data);
             });
         },
         verifyPlainData: function(data, signature) {
-            return resolveStorage().then(function() {
+            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
                 return verifyPlainData(data, signature);
             });
         },
+        signXml: function(xmlData) {
+            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
+                return signXml(xmlData);
+            });
+        },
+        verifyXml: function(xmlSignature) {
+            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
+                return verifyXml(xmlSignature);
+            });
+        },
         createCMSSignatureFromFile: function(filePath, attached) {
-            return resolveStorage().then(function() {
+            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
                 return createCMSSignatureFromFile(filePath, attached);
             });
         },
         verifyCMSSignatureFromFile: function(signatureCMSFile, filePath) {
-            return resolveStorage().then(function() {
+            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
                 return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
             });
         }
@@ -432,4 +476,11 @@ function AppletIsReady() {
     knca.ready();
 }
 
-$(document).ready(knca.init);
+$(document).ready(function() {
+    $('[data-action=sign]').click(function() {
+        var tfs = document.getElementById('text_for_sign').innerText;
+        knca.signPlainData(tfs).then(function(sign) {
+            document.getElementById('text_sign').innerHTML = sign;
+        })
+    });
+});
