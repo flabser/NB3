@@ -16,6 +16,7 @@ var knca = (function() {
         keyAlias: '',
         keyType: 'SIGN',
         pwd: '',
+        name: '',
         keys: []
     };
 
@@ -123,7 +124,8 @@ var knca = (function() {
             alias: storage.alias,
             keyType: storage.keyType,
             keyAlias: storage.keyAlias,
-            path: storage.path
+            path: storage.path,
+            name: storage.name
         }));
 
         log('save prefs to LocalStorage');
@@ -137,7 +139,8 @@ var knca = (function() {
                 alias: ls.alias,
                 keyType: ls.keyType,
                 keyAlias: ls.keyAlias,
-                path: ls.path
+                path: ls.path,
+                name: ls.name
             };
 
             log('restored prefs from LocalStorage');
@@ -322,13 +325,12 @@ var knca = (function() {
             htm.push('  </select>');
             htm.push('  <input type="radio" value="SIGN" name="keyType" checked="checked"/>');
             htm.push('  <button class="btn" name="chooseStorage" type="button">Выбрать ЭЦП</button>');
-            htm.push('  <p class="eds-info"></p>');
             htm.push('  <input type="password" name="pwd" placeholder="Password" required style="display:none"/>');
             htm.push('  <select name="keys" class="native" style="display:none"></select>');
             htm.push('</section>');
             htm.push('<footer>');
             htm.push('  <button class="btn" type="button" name="cancel">' + nb.getText('cancel', 'Отмена') + '</button>');
-            htm.push('  <button class="btn btn-primary" type="submit" name="ok" disabled></button>');
+            htm.push('  <button class="btn btn-primary" type="button" name="ok" disabled></button>');
             htm.push('</footer>');
 
             edsNode = wd.createElement('form');
@@ -384,18 +386,23 @@ var knca = (function() {
         }
 
         // ['RSA'|name|?|alias]
+        var keysEl = $(edsNode).find('[name=keys]');
         if (storage.keys && storage.keys.length) {
             var key;
-            var keysEl = $(edsNode).find('[name=keys]');
             keysEl.empty();
             for (var k in storage.keys) {
                 key = storage.keys[k].split('|');
                 $('<option value=' + key[3] + '>' + key[1] + '</option>').appendTo(keysEl);
                 storage.keyAlias = key[3];
+                storage.name = key[1];
             }
             keysEl.show();
         } else {
-            $(edsNode).find('[name=keys]').empty().hide();
+            keysEl.empty().hide();
+            if (storage.keyAlias && storage.name) {
+                $('<option value=' + storage.keyAlias + '>' + storage.name + '</option>').appendTo(keysEl);
+                keysEl.show();
+            }
         }
 
         // show/hide
@@ -405,8 +412,12 @@ var knca = (function() {
         }
     }
 
-    function showPropertyModal(okBtnText) {
-        $(wd.getElementById('eds-property')).find('[name=ok]').text(okBtnText);
+    function showPropertyModal(action) {
+        if (action === 'sign') {
+            $(wd.getElementById('eds-property')).find('[name=ok]').text(nb.getText('sign', 'Подписать'));
+        } else if (action === 'verify') {
+            $(wd.getElementById('eds-property')).find('[name=ok]').text(nb.getText('verify_sign', 'Проверить'));
+        }
         wd.getElementById('eds-property').classList.add('open');
     }
 
@@ -417,7 +428,7 @@ var knca = (function() {
     //
     var currentPromise;
 
-    function resolveStorage(okBtnText) {
+    function resolveStorage(action) {
         var promise = $.Deferred();
         if (isReady) {
             if (isValidStorage()) {
@@ -426,7 +437,7 @@ var knca = (function() {
                 // show select property dialog
                 log('show select property dialog');
                 currentPromise = promise;
-                showPropertyModal(okBtnText);
+                showPropertyModal(action);
             }
         } else {
             log('not_ready');
@@ -441,32 +452,32 @@ var knca = (function() {
         init: init,
         ready: ready,
         signPlainData: function(data) {
-            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
+            return resolveStorage('sign').then(function() {
                 return signPlainData(data);
             });
         },
         verifyPlainData: function(data, signature) {
-            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
+            return resolveStorage('verify').then(function() {
                 return verifyPlainData(data, signature);
             });
         },
         signXml: function(xmlData) {
-            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
+            return resolveStorage('sign').then(function() {
                 return signXml(xmlData);
             });
         },
         verifyXml: function(xmlSignature) {
-            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
+            return resolveStorage('verify').then(function() {
                 return verifyXml(xmlSignature);
             });
         },
         createCMSSignatureFromFile: function(filePath, attached) {
-            return resolveStorage(nb.getText('sign', 'Подписать')).then(function() {
+            return resolveStorage('sign').then(function() {
                 return createCMSSignatureFromFile(filePath, attached);
             });
         },
         verifyCMSSignatureFromFile: function(signatureCMSFile, filePath) {
-            return resolveStorage(nb.getText('verify_sign', 'Проверить')).then(function() {
+            return resolveStorage('verify').then(function() {
                 return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
             });
         }
@@ -481,8 +492,17 @@ function AppletIsReady() {
 $(document).ready(function() {
     $('[data-action=sign]').click(function() {
         var tfs = document.getElementById('text_for_sign').innerText;
+
         knca.signPlainData(tfs).then(function(sign) {
-            document.getElementById('text_sign').innerHTML = sign;
+            document.getElementById('text_sign').innerText = sign;
+        })
+    });
+    $('[data-action=verify]').click(function() {
+        var tfs = document.getElementById('text_for_sign').innerText;
+        var st = document.getElementById('text_sign').innerText;
+
+        knca.verifyPlainData(tfs, st).then(function(verifyResult) {
+            document.getElementById('verify-result').innerHTML = verifyResult;
         })
     });
 });
