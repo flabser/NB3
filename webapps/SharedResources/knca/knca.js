@@ -491,15 +491,15 @@ function AppletIsReady() {
 
 $(document).ready(function() {
     $('[data-action=sign]').click(function() {
-        var tfs = document.getElementById('text_for_sign').innerText;
+        var tfs = document.getElementById('text_for_sign').value;
 
         knca.signPlainData(tfs).then(function(sign) {
-            document.getElementById('text_sign').innerText = sign;
+            document.getElementById('text_sign').value = sign;
         })
     });
     $('[data-action=verify]').click(function() {
-        var tfs = document.getElementById('text_for_sign').innerText;
-        var st = document.getElementById('text_sign').innerText;
+        var tfs = document.getElementById('text_for_sign').value;
+        var st = document.getElementById('text_sign').value;
 
         knca.verifyPlainData(tfs, st).then(function(verifyResult) {
             document.getElementById('verify-result').innerHTML = verifyResult;
