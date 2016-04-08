@@ -64,21 +64,24 @@
     opacity: 0.65;
 }
 
-.btn-default {
-    background-color: #F5F6F7;
-}
-
 .btn-primary {
-    background: #FFED81;
+    background: #ffed81 linear-gradient(#FFF7AE, #FFEF66);
     border: 1px solid #FFCE00;
 }
 
-.btn-primary:hover {
-    background: #FFF1A8;
+.btn-primary:hover,
+.btn-primary:focus {
+    border-color: #aaa;
+    color: #333;
 }
 
+.btn-primary:active:focus,
+.btn-primary:active:hover,
 .btn-primary:active {
-    background: #FFED81;
+    background: #FFED4D;
+    border-color: #aaa;
+    box-shadow: inset 0px 2px 2px rgb(241, 216, 0);
+    color: #333;
 }
 
 .btn-warning {
