@@ -62,6 +62,8 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	private int status;
 
+	private String theme;
+
 	@Column(name = "i_su")
 	private boolean isSuperUser;
 
@@ -156,6 +158,14 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	public int getStatus() {
 		return status;
+	}
+
+	public String getTheme() {
+		return theme;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
 
 	@Override
