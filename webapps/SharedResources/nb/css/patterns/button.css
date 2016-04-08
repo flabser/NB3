@@ -71,6 +71,7 @@
 
 .btn-primary:hover,
 .btn-primary:focus {
+    background: #ffed81 linear-gradient(#fff7ae, #ffef66);
     border-color: #aaa;
     color: #333;
 }
