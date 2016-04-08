@@ -372,9 +372,7 @@ var knca = (function() {
                 if (isValidStorage()) {
                     savePrefsToLocalStorage();
                     try {
-                        currentPromise.resolve().then(function() {
-                            hidePropertyModal();
-                        });
+                        currentPromise.resolve();
                     } catch (e) {
                         log(e.message);
                     }
@@ -437,6 +435,7 @@ var knca = (function() {
                 // show select property dialog
                 log('show select property dialog');
                 currentPromise = promise;
+                promise.always(hidePropertyModal);
                 showPropertyModal(action);
             }
         } else {
@@ -473,7 +472,12 @@ var knca = (function() {
         },
         createCMSSignatureFromFile: function(filePath, attached) {
             return resolveStorage('sign').then(function() {
-                return createCMSSignatureFromFile(filePath, attached);
+                try {
+                    return createCMSSignatureFromFile(filePath, attached);
+                } catch (e) {
+                    log(e.message);
+                    throw e;
+                }
             });
         },
         verifyCMSSignatureFromFile: function(signatureCMSFile, filePath) {
@@ -491,13 +495,18 @@ function AppletIsReady() {
 
 // for test only
 $(document).ready(function() {
+
+    if (!$('[data-action=sign]').length) {
+        return;
+    }
+
     // plain
     $('[data-action=sign]').click(function() {
         var data = document.getElementById('text_for_sign').value;
 
         knca.signPlainData(data).then(function(sign) {
             document.getElementById('text_sign').value = sign;
-        })
+        });
     });
     $('[data-action=verify]').click(function() {
         var data = document.getElementById('text_for_sign').value;
@@ -505,12 +514,12 @@ $(document).ready(function() {
 
         knca.verifyPlainData(data, sign).then(function(verifyResult) {
             document.getElementById('verify-result').innerHTML = verifyResult;
-        })
+        });
     });
 
     // xml
     document.getElementById('text_for_sign').addEventListener('change', function(event) {
-        var xml = '<xmlforsign><description>' + event.target.value + '</description></xmlforsign>';
+        var xml = '<xmlsign><description>' + event.target.value + '</description></xmlsign>';
         document.getElementById('xml_for_sign').value = xml;
     }, false);
 
@@ -519,7 +528,7 @@ $(document).ready(function() {
 
         knca.signXml(xmlData).then(function(sign) {
             document.getElementById('xml_sign').value = sign;
-        })
+        });
     });
     $('[data-action=verify-xml]').click(function() {
         var xmlSignature = document.getElementById('xml_sign').value;
@@ -527,5 +536,18 @@ $(document).ready(function() {
         knca.verifyXml(xmlSignature).then(function(verifyResult) {
             document.getElementById('verify-xml-result').innerHTML = verifyResult;
         })
+    });
+
+    // file
+    $('[data-action=sign-files]').click(function() {
+        var file = $('input[name=fileid][data-path]');
+        var filePath = file.data('path');
+
+        knca.createCMSSignatureFromFile(filePath).then(function(sign) {
+            $('<p>' + sign + '</p>').appendAfter(file);
+        });
+    });
+    $('[data-action=verify-files]').click(function() {
+
     });
 });

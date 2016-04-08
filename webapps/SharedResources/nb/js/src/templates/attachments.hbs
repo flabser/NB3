@@ -1,13 +1,13 @@
 {{#each files as |file|}}
     <div class="attachments-file uploading">
-        <span class="file-name" data-file="{{file}}">
-            {{file}}
+        <span class="file-name" data-file="{{file.name}}">
+            {{file.name}}
             <div class="upload-progress"></div>
         </span>
         <span class="btn btn-sm btn-link btn-remove-file">
             <i class="fa fa-times"></i>
         </span>
-        <input type="hidden" name="fileid" value="{{file}}" disabled/>
+        <input type="hidden" name="fileid" value="{{file.name}}" data-path="{{file.path}}" />
     </div>
 {{else}}
     <div class="blink-anim">files empty</div>

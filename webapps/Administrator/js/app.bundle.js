@@ -2737,8 +2737,9 @@ nb.upload = function(fileInput) {
     var inputName = fileInput.name;
     var formData = new FormData(fileInput.form);
 
+    console.log(URL.createObjectURL(fileInput.files[0]));
     var $attNode = $(nb.template('attachments', {
-        files: [fileInput.files[0].name]
+        files: [{ name: fileInput.files[0].name, path: URL.createObjectURL(fileInput.files[0]) }]
     }));
     var $progress = $attNode.find('.upload-progress');
 
@@ -2884,15 +2885,17 @@ $(document).ready(function() {
 this["nb"] = this["nb"] || {};
 this["nb"]["templates"] = this["nb"]["templates"] || {};
 this["nb"]["templates"]["attachments"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams) {
-    var alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "    <div class=\"attachments-file uploading\">\r\n        <span class=\"file-name\" data-file=\""
-    + alias2(alias1(blockParams[0][0], depth0))
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? stack1.name : stack1), depth0))
     + "\">\r\n            "
-    + alias2(alias1(blockParams[0][0], depth0))
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? stack1.name : stack1), depth0))
     + "\r\n            <div class=\"upload-progress\"></div>\r\n        </span>\r\n        <span class=\"btn btn-sm btn-link btn-remove-file\">\r\n            <i class=\"fa fa-times\"></i>\r\n        </span>\r\n        <input type=\"hidden\" name=\"fileid\" value=\""
-    + alias2(alias1(blockParams[0][0], depth0))
-    + "\" disabled/>\r\n    </div>\r\n";
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? stack1.name : stack1), depth0))
+    + "\" data-path=\""
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? stack1.path : stack1), depth0))
+    + "\" />\r\n    </div>\r\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <div class=\"blink-anim\">files empty</div>\r\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {

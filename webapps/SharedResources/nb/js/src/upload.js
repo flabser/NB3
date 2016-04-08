@@ -2,8 +2,9 @@ nb.upload = function(fileInput) {
     var inputName = fileInput.name;
     var formData = new FormData(fileInput.form);
 
+    console.log(URL.createObjectURL(fileInput.files[0]));
     var $attNode = $(nb.template('attachments', {
-        files: [fileInput.files[0].name]
+        files: [{ name: fileInput.files[0].name, path: URL.createObjectURL(fileInput.files[0]) }]
     }));
     var $progress = $attNode.find('.upload-progress');
 
