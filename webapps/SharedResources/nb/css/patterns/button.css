@@ -59,6 +59,7 @@
 
 .btn[disabled],
 .btn.disabled {
+    border: 1px solid #ccc;
     cursor: not-allowed;
     pointer-events: none;
     opacity: 0.65;
