@@ -3038,10 +3038,10 @@ var knca = (function() {
     function log(msg) {
         console.log('knca > ', msg);
 
-        nb.notify({
+        /*nb.notify({
             type: 'info',
             message: 'knca > ' + msg
-        }).show(1000);
+        }).show(1000);*/
     }
 
     function insertApplet() {
@@ -3321,18 +3321,14 @@ var knca = (function() {
                 chooseStorageP12();
                 render();
             });
-            $(edsNode).find('[name=pwd]').on('change, blur', function() {
+            $(edsNode).find('[name=pwd]').on('change blur', function() {
                 storage.pwd = this.value;
                 try {
+                    this.classList.remove('invalid');
                     fillKeys();
                     render();
                 } catch (e) {
-                    edsNode.classList.add('has-error');
-
-                    nb.notify({
-                        type: 'error',
-                        message: e.message
-                    }).show(3000);
+                    this.classList.add('invalid');
                 }
             });
             $(edsNode).find('[name=cancel]').on('click', function() {
