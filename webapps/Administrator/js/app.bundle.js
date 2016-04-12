@@ -2982,6 +2982,7 @@ var knca = (function() {
         t_o,
         appletPath = '/SharedResources/knca/',
         LOCAL_STORAGE_PREFS_KEY = 'knca_storage_prefs';
+    var initPromise;
 
     var storage = {
         alias: 'PKCS12',
@@ -2993,10 +2994,11 @@ var knca = (function() {
         keys: []
     };
 
-    function init(options) {
+    function init() {
+        initPromise = initPromise || $.Deferred();
+
         if (initialized) {
-            log('already initialized');
-            return;
+            return initPromise;
         }
 
         if (!navigator.javaEnabled()) {
@@ -3006,9 +3008,11 @@ var knca = (function() {
             }).show(5000);
 
             log('java disabled');
+            return initPromise.reject('java_unavailable');
         } else {
             insertApplet();
             initialized = true;
+            return initPromise;
         }
     }
 
@@ -3019,6 +3023,7 @@ var knca = (function() {
         }
 
         if (isReady) {
+            initPromise && initPromise.resolve('ready');
             return true;
         }
 
@@ -3034,7 +3039,7 @@ var knca = (function() {
 
         render();
 
-        return true;
+        return initPromise.resolve('ready');
     }
 
     function log(msg) {
@@ -3401,7 +3406,6 @@ var knca = (function() {
             if (isValidStorage()) {
                 return promise.resolve();
             } else {
-                // show select property dialog
                 log('show select property dialog');
                 currentPromise = promise;
                 promise.always(hidePropertyModal);
@@ -3409,7 +3413,6 @@ var knca = (function() {
             }
         } else {
             log('not_ready');
-            return promise.reject('knca_not_ready');
         }
 
         return promise;
@@ -3420,115 +3423,73 @@ var knca = (function() {
         init: init,
         ready: ready,
         signPlainData: function(data) {
-            return resolveStorage('sign').then(function() {
-                return signPlainData(data);
+            return init().then(function() {
+                return resolveStorage('sign').then(function() {
+                    return signPlainData(data);
+                });
             });
         },
         verifyPlainData: function(data, signature) {
-            return resolveStorage('verify').then(function() {
-                return verifyPlainData(data, signature);
+            return init().then(function() {
+                return resolveStorage('verify').then(function() {
+                    return verifyPlainData(data, signature);
+                });
             });
         },
         signXml: function(xmlData) {
-            return resolveStorage('sign').then(function() {
-                return signXml(xmlData);
+            return init().then(function() {
+                return resolveStorage('sign').then(function() {
+                    return signXml(xmlData);
+                });
             });
         },
         verifyXml: function(xmlSignature) {
-            return resolveStorage('verify').then(function() {
-                return verifyXml(xmlSignature);
+            return init().then(function() {
+                return resolveStorage('verify').then(function() {
+                    return verifyXml(xmlSignature);
+                });
             });
         },
         createCMSSignatureFromFile: function(filePath, attached) {
-            return resolveStorage('sign').then(function() {
-                try {
-                    return createCMSSignatureFromFile(filePath, attached);
-                } catch (e) {
-                    log(e.message);
-                    throw e;
-                }
+            return init().then(function() {
+                return resolveStorage('sign').then(function() {
+                    try {
+                        return createCMSSignatureFromFile(filePath, attached);
+                    } catch (e) {
+                        log(e.message);
+                        throw e;
+                    }
+                });
             });
         },
         verifyCMSSignatureFromFile: function(signatureCMSFile, filePath) {
-            return resolveStorage('verify').then(function() {
-                return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
+            return init().then(function() {
+                return resolveStorage('verify').then(function() {
+                    return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
+                });
             });
         },
-        signFile: function() {
-            var filePath = appletResult(applet().showFileChooser('ALL', ''));
-            if (filePath) {
-                return knca.createCMSSignatureFromFile(filePath, false);
-            } else {
-                var promise = $.Deferred();
-                return promise.reject('cancel');
-            }
+        signFile: function(attached) {
+            return init().then(function() {
+                var filePath = appletResult(applet().showFileChooser('ALL', ''));
+                if (filePath) {
+                    return knca.createCMSSignatureFromFile(filePath, !!attached);
+                } else {
+                    return 'cancel';
+                }
+            });
         }
     };
 })();
 
 // called from knca applet
 function AppletIsReady() {
-    knca.ready();
-}
-
-// for test only
-$(document).ready(function() {
-
-    if (!$('[data-action=sign]').length) {
-        return;
+    try {
+        knca.ready();
+    } catch (e) {
+        // skip
     }
-
-    // plain
-    $('[data-action=sign]').click(function() {
-        var data = document.getElementById('text_for_sign').value;
-
-        knca.signPlainData(data).then(function(sign) {
-            document.getElementById('text_sign').value = sign;
-        });
-    });
-    $('[data-action=verify]').click(function() {
-        var data = document.getElementById('text_for_sign').value;
-        var sign = document.getElementById('text_sign').value;
-
-        knca.verifyPlainData(data, sign).then(function(verifyResult) {
-            document.getElementById('verify-result').innerHTML = verifyResult;
-        });
-    });
-
-    // xml
-    document.getElementById('text_for_sign').addEventListener('change', function(event) {
-        var xml = '<xmlsign><description>' + event.target.value + '</description></xmlsign>';
-        document.getElementById('xml_for_sign').value = xml;
-    }, false);
-
-    $('[data-action=sign-xml]').click(function() {
-        var xmlData = document.getElementById('xml_for_sign').value;
-
-        knca.signXml(xmlData).then(function(sign) {
-            document.getElementById('xml_sign').value = sign;
-        });
-    });
-    $('[data-action=verify-xml]').click(function() {
-        var xmlSignature = document.getElementById('xml_sign').value;
-
-        knca.verifyXml(xmlSignature).then(function(verifyResult) {
-            document.getElementById('verify-xml-result').innerHTML = verifyResult;
-        })
-    });
-
-    // file
-    $('[data-action=sign-files]').click(function() {
-        var file = $('input[name=fileid][data-path]');
-        var filePath = file.data('path');
-
-        knca.createCMSSignatureFromFile(filePath).then(function(sign) {
-            $('<p>' + sign + '</p>').appendAfter(file);
-        });
-    });
-    $('[data-action=verify-files]').click(function() {
-
-    });
-});
+}
 
 $(function() {
     $.datepicker.setDefaults($.datepicker.regional['ru']);
