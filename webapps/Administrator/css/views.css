@@ -1,0 +1,38 @@
+.vw-inv-number {
+    width: 130px;
+}
+
+.vw-regdate {
+    width: 180px;
+}
+
+.vw-object-name {
+    min-width: 260px;
+    width: 30%;
+}
+
+.vw-original-cost {
+    width: 135px;
+}
+
+.vw-balance-holder {
+    width: 320px;
+}
+
+.vw-tags {
+    width: 200px;
+}
+
+.vw-order-description {
+    min-width: 260px;
+    width: 30%;
+}
+
+.vw-order-status {
+    width: 200px;
+}
+
+.vw-icon {
+    text-align: center;
+    width: 26px;
+}
