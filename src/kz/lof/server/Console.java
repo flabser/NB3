@@ -21,6 +21,7 @@ import kz.lof.dataengine.jpa.deploying.InitializerHelper;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.exception.SecureException;
+import kz.lof.scheduler.SchedulerHelper;
 import kz.lof.util.StringUtil;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -107,6 +108,13 @@ public class Console implements Runnable {
 			InitializerHelper helper = new InitializerHelper();
 			try {
 				helper.getAllinitializers(true);
+			} catch (IOException e) {
+				System.err.println(e);
+			}
+		} else if (command.equalsIgnoreCase("show scheduled tasks") || command.equalsIgnoreCase("sst")) {
+			SchedulerHelper helper = new SchedulerHelper();
+			try {
+				helper.getAllScheduledTasks(true);
 			} catch (IOException e) {
 				System.err.println(e);
 			}

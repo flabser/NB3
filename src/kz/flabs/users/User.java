@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import kz.flabs.dataengine.Const;
-import kz.flabs.dataengine.IDatabase;
 import kz.flabs.exception.WebFormValueException;
 import kz.flabs.exception.WebFormValueExceptionType;
 import kz.flabs.runtimeobj.RuntimeObjUtil;
@@ -53,7 +52,6 @@ public class User extends BaseDocument implements Const {
 		setUserID(u);
 	}
 
-
 	public String getPublicKey() {
 		return publicKey;
 	}
@@ -76,15 +74,7 @@ public class User extends BaseDocument implements Const {
 
 	public HashSet<String> getAllUserGroups() {
 		HashSet<String> userGroups = new HashSet<String>();
-		if (userID.equals(sysUser)) {
-			userGroups = supervisorGroupAsSet;
-			userGroups.addAll(observerGroupAsList);
-		}
-		try {
-			// userGroups.addAll(appUser.getAllUserGroups());
-		} catch (Exception e) {
-			userGroups.add(userID);
-		}
+
 		return userGroups;
 	}
 

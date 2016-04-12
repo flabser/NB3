@@ -1,23 +1,13 @@
 package kz.lof.scriptprocessor.scheduled;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import kz.flabs.servlets.PublishAsType;
-import kz.flabs.servlets.SaxonTransformator;
-import kz.lof.env.Environment;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
-import kz.lof.scripting._Validation;
 import kz.lof.scriptprocessor.page.IOutcomeObject;
 import kz.lof.scriptprocessor.page.JSONClass;
 import kz.lof.scriptprocessor.page.OutcomeType;
-import net.sf.saxon.s9api.SaxonApiException;
-
-import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -27,35 +17,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ScheduledTaskOutcome {
 	public String name;
-	public boolean disableClientCache;
-	private PublishAsType publishAs;
-	private int httpStatus = HttpStatus.SC_OK;
-	private static final String xmlTextUTF8Header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	private List<ScheduledTaskOutcome> includedPage = new ArrayList<ScheduledTaskOutcome>();
 	private ArrayList<IOutcomeObject> objects = new ArrayList<IOutcomeObject>();
 	private _Session ses;
 	private LanguageCode lang;
 	private OutcomeType type = OutcomeType.OK;
-	private Map<String, String> captions = new HashMap<String, String>();
 	private boolean isScriptResult;
-	private String pageId;
-	private String redirectURL;
-	private String flash;
-	private String filePath, fileName;
-	private _Validation validation;
 	private Exception exception;
 
 	public void setSession(_Session ses) {
 		this.ses = ses;
 		lang = ses.getLang();
-	}
-
-	public PublishAsType getPublishAs() {
-		return publishAs;
-	}
-
-	public void setPublishAs(PublishAsType publishAs) {
-		this.publishAs = publishAs;
 	}
 
 	public String getName() {
@@ -79,72 +51,12 @@ public class ScheduledTaskOutcome {
 		objects.add(obj);
 	}
 
-	public void setValidation(_Validation obj) {
-		validation = obj;
-	}
-
-	public void setBadRequest() {
-		httpStatus = HttpStatus.SC_BAD_REQUEST;
-	}
-
-	public void setVeryBadRequest() {
-		httpStatus = HttpStatus.SC_INTERNAL_SERVER_ERROR;
-	}
-
-	public void setType(OutcomeType type) {
-		this.type = type;
-		String keyWord = "";
-		if (type == OutcomeType.OK) {
-			keyWord = "action_completed_successfully";
-		} else if (type == OutcomeType.DOCUMENT_SAVED) {
-			keyWord = "document_was_saved_succesfully";
-		} else if (type == OutcomeType.SERVER_ERROR) {
-			keyWord = "internal_server_error";
-		} else if (type == OutcomeType.VALIDATION_ERROR) {
-			keyWord = "validation_error";
-		}
-		captions.put("type", Environment.vocabulary.getWord(keyWord, lang));
-	}
-
 	public OutcomeType getType() {
 		return type;
 	}
 
 	public void setScriptResult(boolean isScriptResult) {
 		this.isScriptResult = isScriptResult;
-	}
-
-	public void setFile(String fp, String fn) {
-		filePath = fp;
-		fileName = fn;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public String getValue() throws IOException, SaxonApiException {
-		if (publishAs == PublishAsType.HTML) {
-			SaxonTransformator st = new SaxonTransformator();
-			return st.toTrans(null, toCompleteXML());
-		} else if (publishAs == PublishAsType.JSON) {
-			return getJSON();
-		} else {
-			return toCompleteXML();
-		}
-
-	}
-
-	public String getFlash() {
-		return flash;
-	}
-
-	public void setFlash(String flash) {
-		this.flash = flash;
 	}
 
 	public String toXML() {
@@ -155,10 +67,6 @@ public class ScheduledTaskOutcome {
 		}
 		if (isScriptResult) {
 			result.append("<response type=\"RESULT_OF_PAGE_SCRIPT\"><content>");
-		}
-
-		if (validation != null) {
-			result.append(validation.toXML());
 		}
 
 		for (IOutcomeObject xmlContent : objects) {
@@ -176,24 +84,7 @@ public class ScheduledTaskOutcome {
 			result.append("</" + name + ">");
 		}
 
-		StringBuffer captionsText = new StringBuffer(100);
-		for (String capKey : captions.keySet()) {
-			String translatedVal = captions.get(capKey);
-			captionsText.append("<" + capKey + " caption=\"" + translatedVal + "\"></" + capKey + ">");
-		}
-
-		result.append("<captions>" + captionsText.toString() + "</captions></page>");
 		return result.toString();
-	}
-
-	public String toCompleteXML() {
-		String localUserName = ses.getUser().getUserName();
-		String userId = ses.getUser().getUserID();
-		String lang = ses.getLang().name();
-
-		return xmlTextUTF8Header + "<request  lang=\"" + lang + "\" id=\"" + pageId + "\" userid=\"" + userId + "\" username=\"" + localUserName
-		        + "\">" + toXML() + "</request>";
-
 	}
 
 	public Exception getException() {
@@ -208,11 +99,8 @@ public class ScheduledTaskOutcome {
 		JSONClass clazz = new JSONClass();
 
 		clazz.setObjects(objects);
-		clazz.setCaptions(captions);
+
 		clazz.setType(type);
-		clazz.setRedirectURL(redirectURL);
-		clazz.setFlash(flash);
-		clazz.setValidation(validation);
 
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -247,23 +135,4 @@ public class ScheduledTaskOutcome {
 
 	}
 
-	public int getHttpStatus() {
-		return httpStatus;
-	}
-
-	public void setCaptions(HashMap<String, String> captions) {
-		this.captions.putAll(captions);
-	}
-
-	public void setPageId(String pageId) {
-		this.pageId = pageId;
-	}
-
-	public String getRedirectURL() {
-		return redirectURL;
-	}
-
-	public void setRedirectURL(String redirectURL) {
-		this.redirectURL = redirectURL;
-	}
 }

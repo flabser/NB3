@@ -32,6 +32,7 @@ public class EnvConst {
 	public static final String OFFICEFRAME = "Officeframe";
 	public static final String[] OFFICEFRAME_APPS = { "Staff", "Reference", "Workspace" };
 
+	public static String JPA_LOG_LEVEL = "OFF";
 	public static String DEFAULT_LANG = LanguageCode.ENG.name();
 	public static int DEFAULT_PAGE_SIZE = 20;
 	public static String DEFAULT_COUNTRY_OF_NUMBER_FORMAT = "ru";
@@ -46,9 +47,9 @@ public class EnvConst {
 	public static String STAFF_DAO_CLASS = "staff.dao.EmployeeDAO";
 	public static String RESOURCES_DIR = "resources";
 	public static String NB_JAR_FILE = "nb.jar";
-	public static String STRUCTDB_USER = "postgres";
-	public static String STRUCTDB_PWD = "";
+	public static String OLD_STRUCTDB_USER = "postgres";
+	public static String OLD_STRUCTDB_PWD = "";
 	// public static String STRUCTDB_URL =
 	// "jdbc:postgresql://172.16.251.7:5432/CIS";
-	public static String STRUCTDB_URL = "";
+	public static String OLD_STRUCTDB_URL = "";
 }

@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import kz.flabs.util.Util;
+import kz.lof.localization.LanguageCode;
 import kz.lof.scripting.IPOJOObject;
 import kz.lof.scripting._Session;
 import kz.lof.user.IUser;
@@ -63,6 +64,9 @@ public class User implements IUser<Long>, IPOJOObject {
 	private int status;
 
 	private String theme;
+
+	@Column(name = "default_lang")
+	private LanguageCode defaultLang;
 
 	@Column(name = "i_su")
 	private boolean isSuperUser;
@@ -166,6 +170,15 @@ public class User implements IUser<Long>, IPOJOObject {
 
 	public void setTheme(String theme) {
 		this.theme = theme;
+	}
+
+	@Override
+	public LanguageCode getDefaultLang() {
+		return defaultLang;
+	}
+
+	public void setDefaultLang(LanguageCode defaultLang) {
+		this.defaultLang = defaultLang;
 	}
 
 	@Override

@@ -91,7 +91,7 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		// OFF,
 		// ALL,
 		// CONFIG (developing)
-		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "OFF");
+		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, EnvConst.JPA_LOG_LEVEL);
 		properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
 		properties
 		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
@@ -148,7 +148,7 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		// OFF,
 		// ALL,
 		// CONFIG (developing)
-		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, "OFF");
+		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, EnvConst.JPA_LOG_LEVEL);
 		properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
 		properties
 		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);

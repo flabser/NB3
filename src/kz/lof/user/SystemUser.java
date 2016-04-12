@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kz.lof.administrator.model.Application;
+import kz.lof.localization.LanguageCode;
 
 /**
  * @author Kayra on 17/03/16.
@@ -65,6 +66,11 @@ public abstract class SystemUser implements IUser<Long> {
 	@Override
 	public List<String> getRoles() {
 		return new ArrayList<String>();
+	}
+
+	@Override
+	public LanguageCode getDefaultLang() {
+		return LanguageCode.ENG;
 	}
 
 	@Override

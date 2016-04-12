@@ -34,8 +34,6 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		if (Environment.isDevMode()) {
 			if (EnvConst.ADMINISTRATOR_APP_NAME.equals(appName)) {
 				rulePath = Environment.getKernelDir() + "rule";
-				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module");
-
 			} else if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, appName)) {
 				rulePath = Environment.getOfficeFrameDir() + "rule";
 				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir()

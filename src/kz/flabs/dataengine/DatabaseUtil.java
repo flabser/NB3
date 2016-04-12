@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
-import java.util.Set;
 
 import kz.flabs.runtimeobj.document.BaseDocument;
 import kz.flabs.webrule.constants.QueryType;
@@ -308,10 +307,6 @@ public class DatabaseUtil implements Const {
 			throw new IllegalArgumentException("Document type is unknown");
 		}
 		return tableName;
-	}
-
-	public static boolean hasAbsoluteReadAccess(Set<String> complexUserID) {
-		return complexUserID.contains(Const.observerGroup[0]) && complexUserID.contains(Const.supervisorGroup[0]);
 	}
 
 	public static boolean hasFTIndex(Connection conn, String tableName) {

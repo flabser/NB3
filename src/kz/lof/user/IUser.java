@@ -4,6 +4,7 @@ import java.util.List;
 
 import kz.lof.administrator.model.Application;
 import kz.lof.dataengine.jpa.ISimpleAppEntity;
+import kz.lof.localization.LanguageCode;
 
 public interface IUser<K> extends ISimpleAppEntity<K> {
 
@@ -30,5 +31,7 @@ public interface IUser<K> extends ISimpleAppEntity<K> {
 	void setRoles(List<String> allRoles);
 
 	List<String> getRoles();
+
+	LanguageCode getDefaultLang();
 
 }

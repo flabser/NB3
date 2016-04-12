@@ -9,4 +9,6 @@ public interface IScheduledScript {
 
 	ScheduledTaskOutcome processCode(ScheduleSchema schema);
 
+	String getName();
+
 }

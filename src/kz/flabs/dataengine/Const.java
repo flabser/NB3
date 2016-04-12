@@ -1,29 +1,10 @@
 package kz.flabs.dataengine;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
-import kz.flabs.users.User;
 
 public interface Const {
-	String[] supervisorGroup = { "[supervisor]" };
-	List<String> supervisorGroupAsList = Arrays.asList(supervisorGroup);
-	HashSet<String> supervisorGroupAsSet = new HashSet<>(supervisorGroupAsList);
-	@Deprecated
-	String[] observerGroup = { "[observer]" };
-	@Deprecated
-	List<String> observerGroupAsList = Arrays.asList(observerGroup);
-	@Deprecated
-	HashSet<String> sysGroupAsSet = new HashSet<>(observerGroupAsList);
-	/**
-	 * @deprecated use {@link #kz.lof.user.SuperUser()} instead.
-	 */
-	@Deprecated
-	String sysUser = "supervisor";
+
 	String DEFAULT_SORT_ORDER = "ASC";
 	String DEFAULT_SORT_COLUMN = "VIEWDATE";
-	User supervisorUser = new User(sysUser);
 
 	int UNKNOWN = 0;
 	int TEXT = 1;

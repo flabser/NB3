@@ -36,6 +36,11 @@ public abstract class AbstractScheduledTask extends ScriptHelper implements ISch
 		return outcome;
 	}
 
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName().toLowerCase();
+	}
+
 	public abstract void doEvery5Min(_Session session);
 
 	public abstract void doEvery1Hour(_Session session);

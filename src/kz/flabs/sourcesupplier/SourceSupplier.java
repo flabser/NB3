@@ -37,8 +37,6 @@ public class SourceSupplier implements Const {
 	public SourceSupplier(AppEnv env) {
 		vocabulary = env.vocabulary;
 		contextType = SourceSupplierContextType.APP_ENVIRONMENT;
-		user = new User(Const.sysUser);
-		_Session session = new _Session(env, new AnonymousUser());
 
 		this.env = env;
 	}
@@ -48,7 +46,7 @@ public class SourceSupplier implements Const {
 		contextType = SourceSupplierContextType.VOCABULARY;
 		this.vocabulary = env.vocabulary;
 		this.lang = lang;
-		user = new User(Const.sysUser);
+
 	}
 
 	public SourceSupplier(BaseDocument doc2, User user, AppEnv env) {

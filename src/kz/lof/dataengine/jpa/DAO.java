@@ -212,18 +212,60 @@ public abstract class DAO<T extends IAppEntity, K> implements IDAO<T, K> {
 			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(c.get("readers").in(user.getId()), condition);
 			}
+			cq.orderBy(cb.asc(c.get("regDate")));
 			cq.where(condition);
 			countCq.where(condition);
 			TypedQuery<T> typedQuery = em.createQuery(cq);
 			Query query = em.createQuery(countCq);
 			long count = (long) query.getSingleResult();
-			int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-			if (pageNum == 0) {
-				pageNum = maxPage;
+			int maxPage = 1;
+			if (pageNum != 0 || pageSize != 0) {
+				maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+				if (pageNum == 0) {
+					pageNum = maxPage;
+				}
+				int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+				typedQuery.setFirstResult(firstRec);
+				typedQuery.setMaxResults(pageSize);
 			}
-			int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-			typedQuery.setFirstResult(firstRec);
-			typedQuery.setMaxResults(pageSize);
+			List<T> result = typedQuery.getResultList();
+
+			ViewPage<T> r = new ViewPage<T>(result, count, maxPage, pageNum);
+			return r;
+		} finally {
+			em.close();
+		}
+	}
+
+	public ViewPage<T> findAllequal(String fieldName, Enum<?> value, int pageNum, int pageSize) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		try {
+			CriteriaQuery<T> cq = cb.createQuery(entityClass);
+			CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+			Root<T> c = cq.from(entityClass);
+			cq.select(c);
+			countCq.select(cb.count(c));
+			Predicate condition = cb.equal(c.get(fieldName), value);
+			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+				condition = cb.and(c.get("readers").in(user.getId()), condition);
+			}
+			cq.orderBy(cb.asc(c.get("regDate")));
+			cq.where(condition);
+			countCq.where(condition);
+			TypedQuery<T> typedQuery = em.createQuery(cq);
+			Query query = em.createQuery(countCq);
+			long count = (long) query.getSingleResult();
+			int maxPage = 1;
+			if (pageNum != 0 || pageSize != 0) {
+				maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+				if (pageNum == 0) {
+					pageNum = maxPage;
+				}
+				int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+				typedQuery.setFirstResult(firstRec);
+				typedQuery.setMaxResults(pageSize);
+			}
 			List<T> result = typedQuery.getResultList();
 
 			ViewPage<T> r = new ViewPage<T>(result, count, maxPage, pageNum);

@@ -934,11 +934,6 @@ public class BaseDocument implements Const, Serializable {
 		}
 	}
 
-	public void clearEditors() {
-		editors.clear();
-		addEditors(supervisorGroupAsList);
-	}
-
 	public void addEditors(List<String> listVal) {
 		for (String value : listVal) {
 			addEditor(value);
@@ -1251,36 +1246,7 @@ public class BaseDocument implements Const, Serializable {
 			xmlFragment.append("</editors>");
 
 		} else {
-			String hasDescendant = this.hasResponse(Const.sysGroupAsSet, Const.sysUser);
-			xml += " hasDescendant=\""
-			        + hasDescendant
-			        + "\" id=\""
-			        + ddbID
-			        + "\" lastupdate=\""
-			        + Util.convertDataTimeToString(lastUpdate)
-			        + "\" viewtext =\""
-			        + (viewTextList[0] != null && viewTextList[0].trim().length() > 0 ? viewTextList[0].trim().replace("&amp;", "&")
-			                .replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&apos;", "'").replace("&", "&amp;")
-			                .replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;") : "null") + "\">" + "<fields>"
-			        + xmlFragment + "</fields>";
 
-			if (hasDescendant == "true") {
-
-				String dxml = "<descendants> ";
-				ArrayList<BaseDocument> descendantDoc = null;
-
-				try {
-					descendantDoc = this.getResponses(this.getDocID(), this.docType, Const.sysGroupAsSet, Const.sysUser);
-
-				} catch (DocumentException e) {
-					e.printStackTrace();
-				}
-				for (int i = 0; i < descendantDoc.size(); i++) {
-					dxml += descendantDoc.get(i).toXML(allDescendants);
-				}
-				dxml += "</descendants>";
-				xml += dxml;
-			}
 		}
 
 		xml += "</document>";
@@ -1313,9 +1279,7 @@ public class BaseDocument implements Const, Serializable {
 
 	public void setEditMode(Set<String> groups) {
 		for (String group : groups) {
-			if (group.equalsIgnoreCase(observerGroup[0])) {
-				this.editMode = EDITMODE_EDIT;
-			}
+
 		}
 	}
 
@@ -1342,7 +1306,7 @@ public class BaseDocument implements Const, Serializable {
 	}
 
 	public void fillResponses() throws DocumentException {
-		responses = getResponses(docID, docType, Const.supervisorGroupAsSet, Const.sysUser);
+
 	}
 
 	public ArrayList<BaseDocument> getResponses() {
