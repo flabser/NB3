@@ -2737,9 +2737,11 @@ nb.upload = function(fileInput) {
     var inputName = fileInput.name;
     var formData = new FormData(fileInput.form);
 
-    console.log(URL.createObjectURL(fileInput.files[0]));
+    // console.log(fileInput.files[0].mozFullPath);
+    // console.log(URL.createObjectURL(fileInput.files[0]));
+
     var $attNode = $(nb.template('attachments', {
-        files: [{ name: fileInput.files[0].name, path: URL.createObjectURL(fileInput.files[0]) }]
+        files: [{ name: fileInput.files[0].name, path: '' }]
     }));
     var $progress = $attNode.find('.upload-progress');
 
@@ -3451,6 +3453,15 @@ var knca = (function() {
             return resolveStorage('verify').then(function() {
                 return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
             });
+        },
+        signFile: function() {
+            var filePath = appletResult(applet().showFileChooser('ALL', ''));
+            if (filePath) {
+                return knca.createCMSSignatureFromFile(filePath, false);
+            } else {
+                var promise = $.Deferred();
+                return promise.reject('cancel');
+            }
         }
     };
 })();

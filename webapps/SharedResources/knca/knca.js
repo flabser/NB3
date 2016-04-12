@@ -480,6 +480,15 @@ var knca = (function() {
             return resolveStorage('verify').then(function() {
                 return verifyCMSSignatureFromFile(signatureCMSFile, filePath);
             });
+        },
+        signFile: function() {
+            var filePath = appletResult(applet().showFileChooser('ALL', ''));
+            if (filePath) {
+                return knca.createCMSSignatureFromFile(filePath, false);
+            } else {
+                var promise = $.Deferred();
+                return promise.reject('cancel');
+            }
         }
     };
 })();
