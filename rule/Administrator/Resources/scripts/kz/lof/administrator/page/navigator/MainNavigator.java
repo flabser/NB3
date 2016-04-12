@@ -22,8 +22,9 @@ public class MainNavigator extends _DoPage {
 		common_outline.addEntry(new _OutlineEntry("User", "user-view"));
 		common_outline.addEntry(new _OutlineEntry("Applications", "application-view"));
 		common_outline.addEntry(new _OutlineEntry("Languages", "language-view"));
-		common_outline.addEntry(new _OutlineEntry("Sentences", "sentence-view"));
-		// common_outline.addEntry(new _OutlineEntry("Log", "log-view"));
+		// common_outline.addEntry(new _OutlineEntry("Sentences",
+		// "sentence-view"));
+		common_outline.addEntry(new _OutlineEntry("Log", "log-view"));
 
 		list.add(common_outline);
 

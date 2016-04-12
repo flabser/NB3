@@ -21,7 +21,7 @@ public class LogView extends _DoPage {
 		if (pageNum == 0) {
 			pageNum = maxPage;
 		}
-		ViewPage vp = new ViewPage(logs.getLogFileList(), count, maxPage, pageNum);
+		ViewPage vp = new ViewPage(logs.getLogFiles(), count, maxPage, pageNum);
 		addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
 	}
 }
