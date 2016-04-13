@@ -3332,16 +3332,23 @@ var knca = (function() {
                 render();
             });
             $(edsNode).find('[name=pwd]').on('keyup blur', function() {
+                var el = this;
                 storage.pwd = this.value;
-                try {
-                    this.classList.remove('invalid');
-                    fillKeys();
-                    render();
-                } catch (e) {
-                    this.classList.add('invalid');
-                    storage.pwd = '';
-                    render();
-                }
+
+                clearTimeout(t_o);
+                t_o = setTimeout(function() {
+                    try {
+                        if (storage.pwd) {
+                            el.classList.remove('invalid');
+                            fillKeys();
+                        }
+                        render();
+                    } catch (e) {
+                        el.classList.add('invalid');
+                        storage.pwd = '';
+                        render();
+                    }
+                }, 400);
             });
             $(edsNode).find('[name=cancel]').on('click', function() {
                 hidePropertyModal();
