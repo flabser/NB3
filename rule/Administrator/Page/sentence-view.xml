@@ -6,7 +6,7 @@
     <element mode="ON" type="SCRIPT">
         <name>view_content</name>
         <events>
-            <doscript source="JAVA_CLASS">kz.lof.administrator.page.view.SentenceView</doscript>
+            <doscript source="JAVA_CLASS">administrator.page.view.SentenceView</doscript>
         </events>
     </element>
     <element mode="ON" type="INCLUDED_PAGE">

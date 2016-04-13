@@ -5,7 +5,7 @@
     <xsltfile>DEFAULT</xsltfile>
     <element mode="ON" type="SCRIPT">
         <events>
-            <doscript source="JAVA_CLASS">kz.lof.administrator.page.form.UserForm</doscript>
+            <doscript source="JAVA_CLASS">administrator.page.form.UserForm</doscript>
         </events>
     </element>
     <element mode="ON" type="INCLUDED_PAGE">

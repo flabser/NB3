@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,25 +30,43 @@ public class Error extends HttpServlet {
 			request.setCharacterEncoding(EnvConst.SUPPOSED_CODE_PAGE);
 			String outputContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
-			if (type.equals("ws_auth_error")) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				xslt = Environment.getKernelDir() + "xsl" + File.separator + "authfailed.xsl";
-				outputContent = outputContent + "<request><error type=\"authfailed\"><message>" + msg + "</message><version>" + Server.serverVersion
-				        + "</version></error></request>";
-			} else if (type.equals("application_was_restricted")) {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				msg = "work with the application was restricted";
-				outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
-				        + Server.serverVersion + "</version></error></request>";
-			} else if (type.equals("default_url_not_defined")) {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				msg = "default URL has not defined in global setting";
-				outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
-				        + Server.serverVersion + "</version></error></request>";
+			if (type != null) {
+				if (type.equals("ws_auth_error")) {
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					xslt = Environment.getKernelDir() + "xsl" + File.separator + "authfailed.xsl";
+					outputContent = outputContent + "<request><error type=\"authfailed\"><message>" + msg + "</message><version>"
+					        + Server.serverVersion + "</version></error></request>";
+				} else if (type.equals("application_was_restricted")) {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					msg = "work with the application was restricted";
+					outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
+					        + Server.serverVersion + "</version></error></request>";
+				} else if (type.equals("default_url_not_defined")) {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					msg = "default URL has not defined in global setting";
+					outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
+					        + Server.serverVersion + "</version></error></request>";
+				} else {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
+					        + Server.serverVersion + "</version></error></request>";
+				}
 			} else {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				outputContent = outputContent + "<request><error type=\"" + type + "\"><message>" + msg + "</message><version>"
-				        + Server.serverVersion + "</version></error></request>";
+				msg = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+				int statusCode = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+				String location = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+				type = (String) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
+				Throwable exception = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+
+				Enumeration attrs = request.getAttributeNames();
+				while (attrs.hasMoreElements()) {
+					String name = (String) attrs.nextElement();
+					System.out.println(name + "=" + request.getAttribute(name));
+				}
+
+				response.setStatus(statusCode);
+				outputContent = outputContent + "<request><error type=\"INTERNAL\"><code>" + statusCode + "</code><message>" + msg + "<errortext>"
+				        + exception + "</errortext></message><version>" + Server.serverVersion + "</version></error></request>";
 			}
 
 			if (request.getParameter("as") != null) {

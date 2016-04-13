@@ -5,13 +5,6 @@ import java.net.MalformedURLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
-import kz.lof.server.Server;
-import kz.lof.webserver.valve.Logging;
-import kz.lof.webserver.valve.Secure;
-import kz.lof.webserver.valve.Unsecure;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.Engine;
 import org.apache.catalina.Host;
@@ -23,6 +16,13 @@ import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tomcat.util.descriptor.web.ErrorPage;
+
+import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
+import kz.lof.server.Server;
+import kz.lof.webserver.valve.Logging;
+import kz.lof.webserver.valve.Secure;
+import kz.lof.webserver.valve.Unsecure;
 
 public class WebServer {
 	private static Tomcat tomcat;
@@ -116,6 +116,8 @@ public class WebServer {
 		context.addMimeMapping("css", "text/css");
 		context.addMimeMapping("js", "text/javascript");
 
+		initErrorPages(context);
+
 		return null;
 	}
 
@@ -203,11 +205,11 @@ public class WebServer {
 		ErrorPage er400 = new ErrorPage();
 		er400.setErrorCode(HttpServletResponse.SC_BAD_REQUEST);
 		er400.setLocation("/Error");
-		context.addErrorPage(er);
+		context.addErrorPage(er400);
 		ErrorPage er500 = new ErrorPage();
 		er500.setErrorCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		er500.setLocation("/Error");
-		context.addErrorPage(er);
+		context.addErrorPage(er500);
 	}
 
 }

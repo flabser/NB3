@@ -32,7 +32,7 @@
 						<font style="font-size:1.9em;">NextBase</font>
 						<div style="clear:both; height:10px"/>
 						<font style="font-size:1.1em;">
-							version <xsl:value-of select="error/message/version"/> &#169; Lab of the Future 2012
+							version <xsl:value-of select="error/message/version"/> &#169; Lab of the Future 2015
 						</font>
 						<br/>
 					</td>
@@ -43,16 +43,11 @@
 							<tr>
 								<td>
 									<xsl:choose>
-										<xsl:when test="error/@type = 'INTERNAL'">
-											<xsl:choose>
-												<xsl:when test="contains (request/error/message/errortext, 'Old password has not match')">
-													<font style="font-size:2em;">Field "old password" is invalid </font>
-												</xsl:when>
-												<xsl:otherwise>
-													<font style="font-size:2em;">Internal server error</font>
-													<font style="font-size:1em;"><xsl:value-of select="request/error/message/errortext"/></font>
-												</xsl:otherwise>
-											</xsl:choose>
+										<xsl:when test="error/@type = 'INTERNAL'">	
+											<font style="font-size:3em;"><xsl:value-of select="error/code"/></font><br/><br/>							
+											<font style="font-size:2em;">Internal server error</font><br/><br/>
+											<font style="font-size:1em;"><xsl:value-of select="error/message"/></font><br/><br/>
+											<font style="font-size:1em;"><xsl:value-of select="error/message/errortext"/></font>												
 										</xsl:when>
 										<xsl:when test="error/@type = 'RULENOTFOUND'">
 											<font style="font-size:2em;">Rule not found</font>

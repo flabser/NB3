@@ -5,7 +5,7 @@
     <element mode="ON" type="SCRIPT">
         <name>app_menu</name>
         <events>
-            <doscript source="JAVA_CLASS">kz.lof.administrator.page.navigator.MainNavigator</doscript>
+            <doscript source="JAVA_CLASS">administrator.page.navigator.MainNavigator</doscript>
         </events>
     </element>
     <element mode="ON" type="INCLUDED_PAGE">
