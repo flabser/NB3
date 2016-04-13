@@ -34,4 +34,6 @@
     <caption name="roles"/>
     <caption name="countdocinview"/>
     <caption name="interface_lang"/>
+    <caption name="size"/>
+    <caption name="lastmodified"/>
 </rule>
