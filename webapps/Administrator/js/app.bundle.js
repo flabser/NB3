@@ -3237,7 +3237,10 @@ var knca = (function() {
             throw new Error('invalid_data');
         }
 
-        return signResult(applet().createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, !!attached));
+        return {
+            filePath: filePath,
+            sign: signResult(applet().createCMSSignatureFromFile(storage.alias, storage.path, storage.keyAlias, storage.pwd, filePath, !!attached))
+        };
     }
 
     function verifyCMSSignatureFromFile(signatureCMSFile, filePath) {
@@ -3328,7 +3331,7 @@ var knca = (function() {
                 chooseStorageP12();
                 render();
             });
-            $(edsNode).find('[name=pwd]').on('change blur', function() {
+            $(edsNode).find('[name=pwd]').on('keyup blur', function() {
                 storage.pwd = this.value;
                 try {
                     this.classList.remove('invalid');
@@ -3336,6 +3339,8 @@ var knca = (function() {
                     render();
                 } catch (e) {
                     this.classList.add('invalid');
+                    storage.pwd = '';
+                    render();
                 }
             });
             $(edsNode).find('[name=cancel]').on('click', function() {
