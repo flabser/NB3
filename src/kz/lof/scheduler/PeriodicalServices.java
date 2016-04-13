@@ -6,12 +6,6 @@ import static org.quartz.JobBuilder.newJob;
 import java.util.Date;
 import java.util.List;
 
-import kz.lof.scheduler.tasks.TempFileCleaner;
-import kz.lof.scriptprocessor.scheduled.HourScheduledTask;
-import kz.lof.scriptprocessor.scheduled.Min5ScheduledTask;
-import kz.lof.scriptprocessor.scheduled.NightScheduledTask;
-import kz.lof.server.Server;
-
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
@@ -22,10 +16,27 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import administrator.dao.ApplicationDAO;
+import administrator.model.Application;
+import kz.lof.scheduler.tasks.TempFileCleaner;
+import kz.lof.scriptprocessor.scheduled.HourScheduledTask;
+import kz.lof.scriptprocessor.scheduled.Min5ScheduledTask;
+import kz.lof.scriptprocessor.scheduled.NightScheduledTask;
+import kz.lof.server.Server;
+
 public class PeriodicalServices {
 	private Scheduler sched;
+	private static final String[] ext = { "groovy" };
 
 	public PeriodicalServices() {
+
+		ApplicationDAO aDao = new ApplicationDAO();
+		List<Application> list = aDao.findAll();
+		for (Application app : list) {
+			// FileUtils.listFiles(new File(app.getName().toLowerCase()),
+			// FileFilterUtils.nameFileFilter("temp"),
+			// FileFilterUtils.nameFileFilter("temp"));
+		}
 		SchedulerFactory sf = new StdSchedulerFactory();
 		try {
 			sched = sf.getScheduler();

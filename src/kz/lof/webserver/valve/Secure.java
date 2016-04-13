@@ -8,9 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.connector.Response;
+import org.apache.catalina.valves.ValveBase;
+
+import administrator.model.Application;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
-import kz.lof.administrator.model.Application;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
@@ -20,10 +24,6 @@ import kz.lof.server.Server;
 import kz.lof.user.AnonymousUser;
 import kz.lof.user.IUser;
 import kz.lof.webserver.servlet.SessionCooks;
-
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
-import org.apache.catalina.valves.ValveBase;
 
 public class Secure extends ValveBase {
 	String appType;

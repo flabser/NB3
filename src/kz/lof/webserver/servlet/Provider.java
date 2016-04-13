@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
+
 import kz.flabs.exception.RuleException;
 import kz.flabs.runtimeobj.page.Page;
 import kz.flabs.servlets.PublishAsType;
@@ -29,9 +32,6 @@ import kz.lof.scripting._Session.PersistValue;
 import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
-
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 
 public class Provider extends HttpServlet {
 
@@ -135,10 +135,11 @@ public class Provider extends HttpServlet {
 					response.setContentType("text/html");
 					new SaxonTransformator().toTrans(response, xslFile, outputContent);
 				} else {
-					response.setContentType("text/xml;charset=utf-8");
-					PrintWriter out = response.getWriter();
-					out.println(outputContent);
-					out.close();
+					String fn = xslFile.getName();
+					if (Environment.isDevMode()) {
+						fn = xslFile.getAbsolutePath();
+					}
+					throw new ApplicationException(context.getServletContextName(), "xslt_file_not_found (" + fn + ")", ses.getLang());
 				}
 			} else if (result.getPublishAs() == PublishAsType.JSON) {
 				response.setContentType("application/json;charset=utf-8");

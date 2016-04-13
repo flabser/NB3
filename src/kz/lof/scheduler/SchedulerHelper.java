@@ -10,14 +10,15 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import administrator.dao.ApplicationDAO;
+import administrator.model.Application;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.scriptprocessor.scheduled.IScheduledScript;
 import kz.lof.user.SuperUser;
-
-import com.eztech.util.JavaClassFinder;
+import kz.lof.util.ReflectionUtil;
 
 /**
  *
@@ -67,40 +68,47 @@ public class SchedulerHelper {
 			if (showConsoleOutput) {
 				System.out.println("checking class files...");
 			}
-			JavaClassFinder classFinder = new JavaClassFinder();
-			List<Class<? extends IScheduledScript>> classesList = null;
-			classesList = classFinder.findAllMatchingTypes(IScheduledScript.class);
-			for (Class<? extends IScheduledScript> taskClass : classesList) {
-				if (!taskClass.isInterface() && !Modifier.isAbstract(taskClass.getModifiers())) {
-					IScheduledScript pcInstance = null;
-					try {
-						pcInstance = (IScheduledScript) Class.forName(taskClass.getCanonicalName()).newInstance();
-						String name = pcInstance.getName();
-						String packageName = taskClass.getPackage().getName();
-						String p = packageName.substring(0, packageName.indexOf("."));
-						AppEnv env = Environment.getAppEnv(p);
-						if (env != null) {
-							_Session ses = new _Session(env, new SuperUser());
-							pcInstance.setSession(ses);
-							tasks.put(name, pcInstance);
-							if (showConsoleOutput) {
-								System.out.println(env.appName + ":" + taskClass.getCanonicalName());
+			ApplicationDAO aDao = new ApplicationDAO();
+			List<Application> list = aDao.findAll();
+			for (Application app : list) {
+				try {
+					Class[] classesList = ReflectionUtil.getClasses(app.getName().toLowerCase() + ".scheduled");
+					for (Class<? extends IScheduledScript> taskClass : classesList) {
+						if (!taskClass.isInterface() && !Modifier.isAbstract(taskClass.getModifiers())) {
+							IScheduledScript pcInstance = null;
+							try {
+								pcInstance = (IScheduledScript) Class.forName(taskClass.getCanonicalName()).newInstance();
+								String name = pcInstance.getName();
+								String packageName = taskClass.getPackage().getName();
+								String p = packageName.substring(0, packageName.indexOf("."));
+								AppEnv env = Environment.getAppEnv(p);
+								if (env != null) {
+									_Session ses = new _Session(env, new SuperUser());
+									pcInstance.setSession(ses);
+									tasks.put(name, pcInstance);
+									if (showConsoleOutput) {
+										System.out.println(env.appName + ":" + taskClass.getCanonicalName());
+									}
+								} else {
+									if (showConsoleOutput) {
+										System.out.println("null " + taskClass.getCanonicalName());
+									}
+								}
+							} catch (InstantiationException e) {
+								e.printStackTrace();
+							} catch (IllegalAccessException e) {
+								e.printStackTrace();
+							} catch (ClassNotFoundException e) {
+								e.printStackTrace();
+							} catch (IllegalArgumentException e) {
+								e.printStackTrace();
 							}
-						} else {
-							if (showConsoleOutput) {
-								System.out.println("null " + taskClass.getCanonicalName());
-							}
-						}
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					}
 
+						}
+					}
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

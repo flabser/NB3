@@ -2,10 +2,11 @@ package kz.lof.scriptprocessor.scheduled;
 
 import java.io.IOException;
 
-import kz.lof.scheduler.SchedulerHelper;
-
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import kz.lof.scheduler.SchedulerHelper;
+import kz.lof.server.Server;
 
 public class ScheduledTask {
 	protected ScheduleSchema schema;
@@ -23,7 +24,7 @@ public class ScheduledTask {
 			}
 
 		} catch (ClassNotFoundException | IOException e) {
-			// e.printStackTrace();
+			Server.logger.errorLogEntry(e);
 		}
 	}
 }

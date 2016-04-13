@@ -85,7 +85,8 @@
 											<font style="font-size:2em;">Server error</font>
 										</xsl:when>
 										<xsl:otherwise>
-											<font style="font-size:2em;">Error</font>
+											<font style="font-size:2em;">Error</font><br/><br/>
+											<font style="font-size:1em;"><xsl:value-of select="error/message"/></font>
 										</xsl:otherwise>
 									</xsl:choose>
 								</td>

@@ -5,15 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import kz.flabs.servlets.SaxonTransformator;
-import kz.lof.env.EnvConst;
-import kz.lof.env.Environment;
-import kz.lof.localization.LanguageCode;
-import kz.lof.scriptprocessor.page.IOutcomeObject;
-import kz.lof.scriptprocessor.page.PageOutcome;
-import kz.lof.server.Server;
-import net.sf.saxon.s9api.SaxonApiException;
-
 import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -22,6 +13,15 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import kz.flabs.servlets.SaxonTransformator;
+import kz.lof.env.EnvConst;
+import kz.lof.env.Environment;
+import kz.lof.localization.LanguageCode;
+import kz.lof.scriptprocessor.page.IOutcomeObject;
+import kz.lof.scriptprocessor.page.PageOutcome;
+import kz.lof.server.Server;
+import net.sf.saxon.s9api.SaxonApiException;
 
 public class ApplicationException extends Exception implements IOutcomeObject {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +62,8 @@ public class ApplicationException extends Exception implements IOutcomeObject {
 		File errorXslt = new File(xslt);
 
 		try {
-			return new SaxonTransformator().toTrans(errorXslt, document.toXML(lang));
+			String xml = document.toXML(lang);
+			return new SaxonTransformator().toTrans(errorXslt, xml);
 		} catch (IOException | SaxonApiException e) {
 			Server.logger.errorLogEntry(e);
 		}

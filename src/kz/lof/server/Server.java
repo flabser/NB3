@@ -4,14 +4,14 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
 
+import org.apache.catalina.LifecycleException;
+
 import kz.flabs.dataengine.IDatabase;
 import kz.lof.env.Environment;
 import kz.lof.env.Site;
 import kz.lof.log.Log4jLogger;
 import kz.lof.scheduler.PeriodicalServices;
 import kz.lof.webserver.WebServer;
-
-import org.apache.catalina.LifecycleException;
 
 public class Server {
 	public static kz.lof.log.ILogger logger;

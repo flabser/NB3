@@ -1,22 +1,30 @@
-package kz.lof.common.model;
+package administrator.model;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import administrator.dao.LanguageDAO;
-import administrator.model.Language;
 import kz.flabs.util.Util;
 import kz.lof.dataengine.jpa.AppEntity;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 
-@MappedSuperclass
-public class SimpleEntity extends AppEntity<UUID> {
-	@Column(length = 128)
+@Entity
+@Table(name = "_langs")
+@NamedQuery(name = "Language.findAll", query = "SELECT m FROM Language AS m ORDER BY m.regDate")
+public class Language extends AppEntity {
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = true, length = 7, unique = true)
+	private LanguageCode code = LanguageCode.UNKNOWN;
+
+	@Column(length = 128, unique = true)
 	private String name;
 
 	@Column(name = "localized_name")
@@ -39,14 +47,6 @@ public class SimpleEntity extends AppEntity<UUID> {
 		return localizedName;
 	}
 
-	public String getLocalizedName(LanguageCode lang) {
-		try {
-			return localizedName.get(lang);
-		} catch (Exception e) {
-			return name;
-		}
-	}
-
 	public void setLocalizedName(Map<LanguageCode, String> name) {
 		this.localizedName = name;
 	}
@@ -55,7 +55,8 @@ public class SimpleEntity extends AppEntity<UUID> {
 	public String getFullXMLChunk(_Session ses) {
 		StringBuilder chunk = new StringBuilder(1000);
 		chunk.append("<regdate>" + Util.simpleDateFormat.format(regDate) + "</regdate>");
-		chunk.append("<name>" + getName() + "</name>");
+		chunk.append("<name>" + name + "</name>");
+		chunk.append("<code>" + code + "</code>");
 		chunk.append("<localizednames>");
 		LanguageDAO lDao = new LanguageDAO(ses);
 		List<Language> list = lDao.findAll();
@@ -68,7 +69,23 @@ public class SimpleEntity extends AppEntity<UUID> {
 
 	@Override
 	public String getShortXMLChunk(_Session ses) {
-		return "<name>" + getLocalizedName(ses.getLang()) + "</name>";
+		return "<lang id=\"" + code + "\">" + localizedName.get(code) + "</lang>";
+	}
+
+	public LanguageCode getCode() {
+		return code;
+	}
+
+	public void setCode(LanguageCode code) {
+		this.code = code;
+	}
+
+	public String getLocalizedName(LanguageCode lang) {
+		try {
+			return localizedName.get(lang);
+		} catch (Exception e) {
+			return name;
+		}
 	}
 
 }

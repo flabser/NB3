@@ -3,6 +3,9 @@ package kz.lof.rule.page;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.w3c.dom.NodeList;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.RuleException;
 import kz.flabs.servlets.PublishAsType;
@@ -13,9 +16,6 @@ import kz.flabs.webrule.constants.RunMode;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.w3c.dom.NodeList;
 
 public class PageRule extends Rule implements IElement, Const {
 	public boolean isValid;
@@ -73,13 +73,7 @@ public class PageRule extends Rule implements IElement, Const {
 					}
 					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else if (xsltFile.equalsIgnoreCase("default_MunicipalProperty")) {
-					String xsltStaffAppsPath = "";
-					if (Environment.isDevMode()) {
-						xsltStaffAppsPath = Environment.getOfficeFrameDir() + "webapps" + File.separator + "MunicipalProperty" + File.separator
-						        + "xsl";
-					} else {
-						xsltStaffAppsPath = "webapps" + File.separator + "MunicipalProperty" + File.separator + "xsl";
-					}
+					String xsltStaffAppsPath = "webapps" + File.separator + "MunicipalProperty" + File.separator + "xsl";
 					xsltFile = xsltStaffAppsPath + File.separator + type.name().toLowerCase() + File.separator + id + ".xsl";
 				} else {
 					xsltFile = xsltAppsPath + File.separator + xsltFile;

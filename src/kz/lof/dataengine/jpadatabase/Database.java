@@ -12,6 +12,17 @@ import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.eclipse.persistence.jpa.PersistenceProvider;
+import org.postgresql.util.PSQLException;
+
+import administrator.dao.ApplicationDAO;
+import administrator.dao.LanguageDAO;
+import administrator.dao.UserDAO;
+import administrator.init.ServerConst;
+import administrator.model.Application;
+import administrator.model.Language;
+import administrator.model.User;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.DatabaseCore;
 import kz.flabs.dataengine.DatabasePoolException;
@@ -20,13 +31,6 @@ import kz.flabs.dataengine.IDBConnectionPool;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.flabs.dataengine.h2.DBConnectionPool;
-import kz.lof.administrator.dao.ApplicationDAO;
-import kz.lof.administrator.dao.LanguageDAO;
-import kz.lof.administrator.dao.UserDAO;
-import kz.lof.administrator.init.ServerConst;
-import kz.lof.administrator.model.Application;
-import kz.lof.administrator.model.Language;
-import kz.lof.administrator.model.User;
 import kz.lof.appenv.AppEnv;
 import kz.lof.dataengine.jpadatabase.ftengine.FTSearchEngine;
 import kz.lof.env.EnvConst;
@@ -39,10 +43,6 @@ import kz.lof.server.Console;
 import kz.lof.server.Server;
 import kz.lof.user.SuperUser;
 import kz.lof.util.StringUtil;
-
-import org.eclipse.persistence.config.PersistenceUnitProperties;
-import org.eclipse.persistence.jpa.PersistenceProvider;
-import org.postgresql.util.PSQLException;
 
 public class Database extends DatabaseCore implements IDatabase, Const {
 	protected static String dbUser = EnvConst.APP_DB_USER;
@@ -93,8 +93,8 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		// CONFIG (developing)
 		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, EnvConst.JPA_LOG_LEVEL);
 		properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
-		properties
-		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
+		properties.put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION,
+		        PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
 
 		PersistenceProvider pp = new PersistenceProvider();
 		factory = pp.createEntityManagerFactory(EnvConst.ADMINISTRATOR_APP_NAME, properties);
@@ -150,8 +150,8 @@ public class Database extends DatabaseCore implements IDatabase, Const {
 		// CONFIG (developing)
 		properties.put(PersistenceUnitProperties.LOGGING_LEVEL, EnvConst.JPA_LOG_LEVEL);
 		properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
-		properties
-		        .put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION, PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
+		properties.put(PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION,
+		        PersistenceUnitProperties.SCHEMA_GENERATION_DROP_AND_CREATE_ACTION);
 
 		PersistenceProvider pp = new PersistenceProvider();
 		factory = pp.createEntityManagerFactory(appName, properties);

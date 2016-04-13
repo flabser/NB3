@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kz.lof.administrator.dao.LanguageDAO;
-import kz.lof.administrator.model.Language;
+import administrator.dao.LanguageDAO;
+import administrator.model.Language;
 import kz.lof.localization.LanguageCode;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;

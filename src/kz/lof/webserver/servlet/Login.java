@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import administrator.dao.ApplicationDAO;
+import administrator.model.Application;
+import administrator.services.Connect;
 import kz.flabs.dataengine.Const;
 import kz.flabs.exception.PortalException;
 import kz.flabs.servlets.ProviderExceptionType;
 import kz.flabs.servlets.PublishAsType;
 import kz.flabs.users.AuthFailedException;
 import kz.flabs.users.AuthFailedExceptionType;
-import kz.lof.administrator.dao.ApplicationDAO;
-import kz.lof.administrator.model.Application;
-import kz.lof.administrator.services.Connect;
 import kz.lof.appenv.AppEnv;
 import kz.lof.env.EnvConst;
 import kz.lof.env.SessionPool;

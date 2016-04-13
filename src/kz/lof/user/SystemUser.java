@@ -3,7 +3,7 @@ package kz.lof.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.lof.administrator.model.Application;
+import administrator.model.Application;
 import kz.lof.localization.LanguageCode;
 
 /**

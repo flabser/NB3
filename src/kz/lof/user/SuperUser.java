@@ -2,8 +2,8 @@ package kz.lof.user;
 
 import java.util.List;
 
-import kz.lof.administrator.dao.ApplicationDAO;
-import kz.lof.administrator.model.Application;
+import administrator.dao.ApplicationDAO;
+import administrator.model.Application;
 
 /**
  * @author Kayra on 17/03/16.
