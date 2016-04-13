@@ -8,6 +8,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IFTIndexEngine;
 import kz.lof.appenv.AppEnv;
@@ -15,9 +18,6 @@ import kz.lof.dataengine.jpadatabase.ftengine.FTEntity;
 import kz.lof.env.EnvConst;
 import kz.lof.env.Environment;
 import kz.lof.server.Server;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PortalInit extends HttpServlet {
 

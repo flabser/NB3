@@ -1,8 +1,17 @@
 package kz.lof.appenv;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilerConfiguration;
+
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyObject;
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.localization.Localizator;
@@ -14,8 +23,6 @@ import kz.lof.log.ILogger;
 import kz.lof.rule.RuleProvider;
 import kz.lof.server.Server;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public class AppEnv extends PageCacheAdapter implements Const {
 	public boolean isValid;
 	public String appName;
@@ -26,6 +33,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 	public static ILogger logger = Server.logger;
 	private IDatabase dataBase;
 	private String rulePath = "rule";
+	private static final String[] extensions = { "groovy" };
 
 	public AppEnv(String n, IDatabase db) {
 		this.appName = n;
@@ -36,8 +44,8 @@ public class AppEnv extends PageCacheAdapter implements Const {
 				rulePath = Environment.getKernelDir() + "rule";
 			} else if (ArrayUtils.contains(EnvConst.OFFICEFRAME_APPS, appName)) {
 				rulePath = Environment.getOfficeFrameDir() + "rule";
-				Server.logger.debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir()
-				        + ")");
+				Server.logger
+				        .debugLogEntry("server going to use \"" + appName + "\" as external module (path=" + Environment.getOfficeFrameDir() + ")");
 			}
 		}
 
@@ -49,6 +57,7 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		}
 
 		loadVocabulary();
+		compileScenarios();
 	}
 
 	public IDatabase getDataBase() {
@@ -73,6 +82,33 @@ public class AppEnv extends PageCacheAdapter implements Const {
 		Localizator l = new Localizator();
 		String vocabuarFilePath = getRulePath() + File.separator + appName + File.separator + "Resources" + File.separator + "vocabulary.xml";
 		vocabulary = l.populate(appName, vocabuarFilePath);
+	}
+
+	private void compileScenarios() {
+		ClassLoader parent = getClass().getClassLoader();
+		CompilerConfiguration compiler = new CompilerConfiguration();
+		String scriptDirPath = rulePath + File.separator + appName + File.separator + "Resources" + File.separator + "scripts";
+		if (Environment.isDevMode()) {
+			compiler.setTargetDirectory("bin");
+		} else {
+			compiler.setTargetDirectory(scriptDirPath);
+		}
+		GroovyClassLoader loader = new GroovyClassLoader(parent, compiler);
+
+		File cur = new File(scriptDirPath);
+
+		// System.out.println(cur.getAbsolutePath());
+		Collection<File> scipts = FileUtils.listFiles(cur, extensions, true);
+		for (File groovyFile : scipts) {
+			try {
+				Server.logger.debugLogEntry("recompile " + groovyFile.getAbsolutePath() + "...");
+				Class<GroovyObject> clazz = loader.parseClass(groovyFile);
+			} catch (CompilationFailedException e) {
+				AppEnv.logger.errorLogEntry(e);
+			} catch (IOException e) {
+				AppEnv.logger.errorLogEntry(e);
+			}
+		}
 	}
 
 }

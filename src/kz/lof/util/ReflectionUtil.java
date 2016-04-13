@@ -4,12 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 
 public class ReflectionUtil {
 
@@ -48,24 +44,6 @@ public class ReflectionUtil {
 			}
 		}
 		return classes;
-
-	}
-
-	public static Collection getFiles() {
-		File cur = new File("bin\\staff\\scheduled");
-
-		System.out.println(cur.getAbsolutePath());
-		Collection s = FileUtils.listFiles(cur, FileFilterUtils.suffixFileFilter("groovy"), FileFilterUtils.nameFileFilter("*"));
-		return s;
-
-	}
-
-	public static void main(String[] args) {
-
-		Collection v = getFiles();
-		for (Object val : v) {
-			System.out.println(val.getClass().getName() + "  " + val.toString());
-		}
 
 	}
 }

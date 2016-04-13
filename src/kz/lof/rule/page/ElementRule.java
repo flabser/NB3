@@ -1,22 +1,13 @@
 package kz.lof.rule.page;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyObject;
-
-import java.io.File;
-import java.io.IOException;
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+import org.w3c.dom.Node;
 
 import kz.flabs.dataengine.Const;
 import kz.flabs.util.XMLUtil;
 import kz.flabs.webrule.constants.RunMode;
 import kz.flabs.webrule.constants.ValueSourceType;
 import kz.lof.appenv.AppEnv;
-import kz.lof.env.Environment;
-
-import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-import org.w3c.dom.Node;
 
 public class ElementRule implements Const {
 	public ElementType type;
@@ -74,36 +65,11 @@ public class ElementRule implements Const {
 
 	@SuppressWarnings({ "unchecked", "resource" })
 	private ElementScript getClassName(Node node, String normailzator) {
-		ClassLoader parent = getClass().getClassLoader();
-
 		String value = XMLUtil.getTextContent(node, ".", true);
 		ValueSourceType qsSourceType = ValueSourceType.valueOf(XMLUtil.getTextContent(node, "@source", true, "STATIC", true));
 		try {
-			Class<GroovyObject> querySave = null;
-			if (qsSourceType == ValueSourceType.GROOVY_FILE || qsSourceType == ValueSourceType.FILE) {
-				CompilerConfiguration compiler = new CompilerConfiguration();
-
-				if (Environment.isDevMode()) {
-					compiler.setTargetDirectory("bin");
-				} else {
-					compiler.setTargetDirectory(parentRule.getScriptDirPath());
-				}
-				GroovyClassLoader loader = new GroovyClassLoader(parent, compiler);
-				File groovyFile = new File(parentRule.getScriptDirPath() + File.separator + value.replace(".", File.separator) + ".groovy");
-				if (groovyFile.exists()) {
-					try {
-						querySave = loader.parseClass(groovyFile);
-						return new ElementScript(qsSourceType, querySave.getName());
-					} catch (CompilationFailedException e) {
-						AppEnv.logger.errorLogEntry(e);
-					} catch (IOException e) {
-						AppEnv.logger.errorLogEntry(e);
-					}
-				} else {
-					AppEnv.logger.errorLogEntry("File \"" + groovyFile.getAbsolutePath() + "\" not found");
-				}
-			} else if (qsSourceType == ValueSourceType.JAVA_CLASS) {
-				return new ElementScript(qsSourceType, XMLUtil.getTextContent(node, ".", true));
+			if (qsSourceType == ValueSourceType.GROOVY_FILE || qsSourceType == ValueSourceType.FILE || qsSourceType == ValueSourceType.JAVA_CLASS) {
+				return new ElementScript(qsSourceType, value);
 			} else {
 				AppEnv.logger.errorLogEntry("Included script did not implemented, form rule=" + parentRule.getID() + ", node=" + node.getBaseURI());
 			}

@@ -61,7 +61,8 @@ public class Error extends HttpServlet {
 				Enumeration attrs = request.getAttributeNames();
 				while (attrs.hasMoreElements()) {
 					String name = (String) attrs.nextElement();
-					System.out.println(name + "=" + request.getAttribute(name));
+					// System.out.println(name + "=" +
+					// request.getAttribute(name));
 				}
 
 				response.setStatus(statusCode);
