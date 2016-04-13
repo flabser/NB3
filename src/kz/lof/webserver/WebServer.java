@@ -122,7 +122,7 @@ public class WebServer {
 	}
 
 	public void initDefaultURL() {
-		String db = new File(Environment.primaryAppDir + "webapps/ROOT").getAbsolutePath();
+		String db = new File("webapps/ROOT").getAbsolutePath();
 		Context context = tomcat.addContext(tomcat.getHost(), "", db);
 		context.setDisplayName("root");
 

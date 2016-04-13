@@ -14,7 +14,7 @@
         <form name="{@entity}" action="" data-edit="{@editable}">
             <header class="content-header">
                 <h1 class="header-title">
-                    <xsl:value-of select="//captions/user/@caption"/>
+                    User <xsl:value-of select="fields/login"/>
                 </h1>
                 <div class="content-actions">
                     <xsl:apply-templates select="//actionbar"/>
@@ -24,7 +24,7 @@
                 <fieldset class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/login_name/@caption"/>
+                            Login
                         </div>
                         <div class="controls">
                             <input type="text" name="login" value="{fields/login}" class="span4" autofocus="true"/>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/email/@caption"/>
+                           E-mail
                         </div>
                         <div class="controls">
                             <input type="email" name="email" value="{fields/email}" class="span4"/>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/password/@caption"/>
+                           Password
                         </div>
                         <div class="controls">
                             <input type="password" name="pwd" value="" class="span3" autocomplete="off"/>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/password_confirm/@caption"/>
+                            Password comfirmation
                         </div>
                         <div class="controls">
                             <input type="password" name="pwd_confirm" value="" class="span3" autocomplete="off"/>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/applications/@caption"/>
+                            Allowed applications
                         </div>
                         <div class="controls">
                             <ul class="list-style-none">

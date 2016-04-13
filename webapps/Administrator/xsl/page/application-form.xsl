@@ -14,7 +14,7 @@
         <form name="{@entity}" action="" data-edit="{@editable}">
             <header class="content-header">
                 <h1 class="header-title">
-                    <xsl:value-of select="//captions/application/@caption"/>
+                    Application <xsl:value-of select="fields/name"/>
                 </h1>
                 <div class="content-actions">
                     <xsl:apply-templates select="//actionbar"/>
@@ -24,7 +24,7 @@
                 <fieldset class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/name/@caption"/>
+                           Name
                         </div>
                         <div class="controls">
                             <input type="text" name="name" value="{fields/name}" class="span6" autofocus="true"/>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/code/@caption"/>
+                            Code
                         </div>
                         <div class="controls">
                             <input type="text" name="appcode" value="{fields/appcode}" class="span6"
@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            Position
+                            Position on workspace
                         </div>
                         <div class="controls">
                             <input type="number" name="position" value="{fields/position}" class="span1"/>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/default_url/@caption"/>
+                           Default URL
                         </div>
                         <div class="controls">
                             <input type="text" name="defaulturl" value="{fields/defaulturl}" class="span7"/>
@@ -58,7 +58,7 @@
                 </fieldset>
                 <fieldset class="fieldset">
                     <legend class="legend" style="background:#fff">
-                        <xsl:value-of select="//captions/localized_names/@caption"/>
+                       Localized names
                     </legend>
                     <xsl:for-each select="fields/localizednames/entry">
                         <div class="form-group">

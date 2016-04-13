@@ -18,7 +18,8 @@ public class MainNavigator extends _DoPage {
 		LanguageCode lang = session.getLang();
 		List<IOutcomeObject> list = new ArrayList<IOutcomeObject>();
 
-		_Outline common_outline = new _Outline(getLocalizedWord("administrator", lang), "common");
+		_Outline common_outline = new _Outline(getLocalizedWord("Administrator", lang), "common");
+		common_outline.addEntry(new _OutlineEntry("Server", "", "server", "p?id=server-form"));
 		common_outline.addEntry(new _OutlineEntry("User", "user-view"));
 		common_outline.addEntry(new _OutlineEntry("Applications", "application-view"));
 		common_outline.addEntry(new _OutlineEntry("Languages", "language-view"));

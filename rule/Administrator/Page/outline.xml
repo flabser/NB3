@@ -8,7 +8,5 @@
             <doscript source="JAVA_CLASS">administrator.page.navigator.MainNavigator</doscript>
         </events>
     </element>
-    <element mode="ON" type="INCLUDED_PAGE">
-        <value>common-captions</value>
-    </element>
+   
 </rule>

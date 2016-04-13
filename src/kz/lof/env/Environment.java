@@ -26,6 +26,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.jdom.input.SAXHandler;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import kz.flabs.dataengine.Const;
 import kz.flabs.dataengine.IDatabase;
 import kz.flabs.dataengine.IDatabaseDeployer;
@@ -43,12 +49,6 @@ import kz.lof.scripting._WebFormData;
 import kz.lof.scriptprocessor.page.PageOutcome;
 import kz.lof.server.Server;
 import net.sf.saxon.s9api.SaxonApiException;
-
-import org.jdom.input.SAXHandler;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class Environment implements Const, ICache {
 	public static boolean verboseLogging;
@@ -83,11 +83,8 @@ public class Environment implements Const, ICache {
 	public static Boolean mailEnable = false;
 	public static Vocabulary vocabulary;
 	public static String workspaceName = "Workspace";
-	public static String primaryAppDir = "";
 	public static PeriodicalServices periodicalServices;
 	public static final String vocabuarFilePath = "resources" + File.separator + "vocabulary.xml";
-
-	private static String defaultRedirectURL;
 
 	private static HashMap<String, AppEnv> applications = new HashMap<String, AppEnv>();
 	private static ConcurrentHashMap<String, AppEnv> allApplications = new ConcurrentHashMap<String, AppEnv>();
@@ -262,10 +259,6 @@ public class Environment implements Const, ICache {
 		return httpSchema + "://" + Environment.hostName + ":" + Environment.httpPort;
 	}
 
-	public static String getDefaultRedirectURL() {
-		return defaultRedirectURL;
-	}
-
 	public static String getWorkspaceURL() {
 		return "Workspace";
 	}
@@ -385,8 +378,8 @@ public class Environment implements Const, ICache {
 	}
 
 	@Override
-	public PageOutcome getCachedPage(PageOutcome outcome, Page page, _WebFormData formData) throws ClassNotFoundException, RuleException,
-	        IOException, SaxonApiException {
+	public PageOutcome getCachedPage(PageOutcome outcome, Page page, _WebFormData formData)
+	        throws ClassNotFoundException, RuleException, IOException, SaxonApiException {
 		String cacheKey = page.getCacheID();
 		Object obj = cache.get(cacheKey);
 		String cacheParam[] = formData.getFormData().get("cache");

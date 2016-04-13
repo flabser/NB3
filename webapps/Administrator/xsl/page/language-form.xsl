@@ -14,7 +14,7 @@
         <form name="{@entity}" action="" data-edit="{@editable}">
             <header class="content-header">
                 <h1 class="header-title">
-                    <xsl:value-of select="//captions/language/@caption"/>
+                   Language <xsl:value-of select="fields/name"/>
                 </h1>
                 <div class="content-actions">
                     <xsl:apply-templates select="//actionbar"/>
@@ -24,7 +24,7 @@
                 <fieldset class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/name/@caption"/>
+                            Primary name
                         </div>
                         <div class="controls">
                             <input type="text" name="name" value="{fields/name}" class="span4" autofocus="true"/>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            <xsl:value-of select="//captions/code/@caption"/>
+                           Code
                         </div>
                         <div class="controls">
                             <input type="text" name="code" value="{fields/code}" class="span2"/>
@@ -41,7 +41,7 @@
                 </fieldset>
                 <fieldset class="fieldset">
                     <legend class="legend" style="background:#fff">
-                        <xsl:value-of select="//captions/localized_names/@caption"/>
+                        Localized names
                     </legend>
                     <xsl:for-each select="fields/localizednames/entry">
                         <div class="form-group">

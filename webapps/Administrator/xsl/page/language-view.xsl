@@ -10,7 +10,7 @@
     <xsl:template name="_content">
         <div class="content-header">
             <xsl:call-template name="page-info">
-                <xsl:with-param name="title" select="//captions/language/@caption"/>
+                <xsl:with-param name="title" select="'Languages'"/>
             </xsl:call-template>
         </div>
         <div class="content-body">
@@ -28,7 +28,7 @@
                 </label>
                 <div class="entry-captions">
                     <span>
-                        <xsl:value-of select="//captions/viewtext/@caption"/>
+                      
                     </span>
                 </div>
             </div>
