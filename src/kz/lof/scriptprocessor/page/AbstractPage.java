@@ -220,6 +220,8 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 		try {
 			if (method.equalsIgnoreCase("POST")) {
 				doPOST(getSes(), formData);
+			} else if (method.equalsIgnoreCase("PUT")) {
+				doPUT(getSes(), formData);
 			} else if (method.equalsIgnoreCase("DELETE")) {
 				doDELETE(getSes(), formData);
 			} else {
@@ -236,6 +238,8 @@ public abstract class AbstractPage extends ScriptHelper implements IPageScript {
 	}
 
 	public abstract void doGET(_Session session, _WebFormData formData) throws _Exception;
+
+	public abstract void doPUT(_Session session, _WebFormData formData) throws _Exception;
 
 	public abstract void doPOST(_Session session, _WebFormData formData) throws _Exception;
 

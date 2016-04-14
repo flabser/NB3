@@ -12,6 +12,10 @@ public abstract class _DoPage extends AbstractPage {
 	}
 
 	@Override
+	public void doPUT(_Session session, _WebFormData formData) throws _Exception {
+	}
+
+	@Override
 	public void doPOST(_Session session, _WebFormData formData) throws _Exception {
 	}
 
