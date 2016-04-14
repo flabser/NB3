@@ -5,6 +5,9 @@ import kz.lof.common.page.form.Form;
 import kz.lof.env.Environment;
 import kz.lof.scripting._Session;
 import kz.lof.scripting._WebFormData;
+import kz.nextbase.script.actions._Action;
+import kz.nextbase.script.actions._ActionBar;
+import kz.nextbase.script.actions._ActionType;
 
 public class ServerForm extends Form {
 
@@ -19,6 +22,9 @@ public class ServerForm extends Form {
 		addValue("officeframe", Environment.getOfficeFrameDir());
 		addValue("kernel", Environment.getKernelDir());
 		addValue("starttime", Util.convertDataTimeToString(Environment.startTime));
+		_ActionBar actionBar = new _ActionBar(session);
+		actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
+		addContent(actionBar);
 	}
 
 	@Override
